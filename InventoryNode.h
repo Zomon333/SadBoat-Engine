@@ -23,7 +23,7 @@ public:
 	void setIndex(int nIndex) { index = nIndex; }
 
 	InventoryNode* getNextNode() { return nextNode; }
-	void setNextNode(InventoryNode &nNextNode) { nextNode = &nNextNode; }
+	void setNextNode(InventoryNode nNextNode) { nextNode = &nNextNode; }
 
 	Item getContents() { return contents; }
 	void setContents(Item nContents) { contents = nContents; }

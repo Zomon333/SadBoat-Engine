@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include "Item.h"
-#include "Inventory.h"
 #include "InventoryNode.h"
+#include "Inventory.h"
 
-using namespace std;

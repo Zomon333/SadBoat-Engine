@@ -2,7 +2,7 @@
 #include "headers.h"
 using namespace std;
 
-Item::Item(string name = "", int id = 0, bool usesDurability = false, float durabilityPercent = 1)
+Item::Item(string name, int id, bool usesDurability, float durabilityPercent)
 {
 	this->name = name;
 	this->id = id;
