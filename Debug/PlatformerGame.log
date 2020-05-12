@@ -1,4 +1,5 @@
-﻿  Inventory.cpp
-  main.cpp
-  Generating Code...
+﻿  Line.cpp
+C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Line.cpp(7,18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Line.cpp(12,18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Line.cpp(90,26): warning C4305: '=': truncation from 'unsigned __int64' to 'float'
   PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Debug\PlatformerGame.exe
