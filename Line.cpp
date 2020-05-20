@@ -71,28 +71,38 @@ Point Line::whereIntersect(Line toCheck)
 
 bool Line::checkIntersect(Line toCheck, float tolerance)
 {
+	if (this->checkIntersect(toCheck, TOLERANCE) || toCheck.checkIntersect(Line(getStart(), getEnd()), TOLERANCE))
+		return true;
+	return false;
+}
+
+bool Line::checkIntersectSingular(Line toCheck, float tolerance)
+{
 	Point intersectPoint;
 	float m1, x1, y1, m2, x2, y2;
 	float x, y;
 
 	m1 = toCheck.getSlope();
 	m2 = getSlope();
-	cout << "m1, m2: " << m1 << ", " << m2 << endl;
+	//cout << "m1, m2: " << m1 << ", " << m2 << endl;
 
 	x1 = toCheck.start.getX();
 	y1 = toCheck.start.getY();
-	cout << "x1,y1: " << x1 << ", " << y1 << endl;
+	//cout << "x1,y1: " << x1 << ", " << y1 << endl;
 
 	x2 = start.getX();
 	y2 = start.getY();
 
-	cout << "x2,y2: " << x2 << ", " << y2 << endl;
+	//cout << "x2,y2: " << x2 << ", " << y2 << endl;
 
 	x = ((((m2 * x2) + y2 - y1 + (m1 * x1)) / ((-1 * m1) + m2)) * -1);
 	y = getY(x);
 
-	cout << "Intersect at: " << x << ", " << y << endl;
+	//cout << "Intersect at: " << x << ", " << y << endl;
 	intersectPoint = Point(x, y);
+
+	cout << "Line 1 has point? " << this->containsPoint(intersectPoint, TOLERANCE) << endl;
+	cout << "Line 2 has point? " << toCheck.containsPoint(intersectPoint, TOLERANCE) << endl;
 
 	if (this->containsPoint(intersectPoint, TOLERANCE) && toCheck.containsPoint(intersectPoint, TOLERANCE))
 		return true;

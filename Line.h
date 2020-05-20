@@ -8,6 +8,8 @@ private:
 	Point start;
 	Point end;
 	float m;
+	bool checkIntersectSingular(Line toCheck, float tolerance); // A unilateral intersect checker
+
 public:
 	Line();
 	Line(Point nStart, Point nEnd);
@@ -15,9 +17,10 @@ public:
 	bool containsPoint(Point toCheck, float tolerance);
 	bool containsPoint(Point toCheck);
 
-	bool checkIntersect(Line toCheck, float tolerance);
+	
 	Point whereIntersect(Line toCheck);
 
+	bool checkIntersect(Line toCheck, float tolerance); // A bilateral intersect checker, using the unilateral checker twice.
 	float getSlope();
 	float getX(float Y);
 	float getY(float X);
