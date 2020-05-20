@@ -1,5 +1,7 @@
 #pragma once
+#include "headers.h"
 using namespace std;
+class Shape;
 
 class Point
 {
@@ -15,5 +17,8 @@ public:
 
 	float getY() { return this->y; }
 	void setY(float y) { this->y = y; }
+
+	bool insideShape(Shape toCheck);
+
 };
 

@@ -1,5 +1,16 @@
 ﻿  Line.cpp
-C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Line.cpp(7,18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Line.cpp(12,18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Line.cpp(90,26): warning C4305: '=': truncation from 'unsigned __int64' to 'float'
-  PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\School\Programs\C++\PlatformerGame\PlatformerGame\PlatformerGame\Debug\PlatformerGame.exe
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Shape.h(9,16): warning C4200: nonstandard extension used: zero-sized array in struct/union
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Shape.h(9,16): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Line.cpp(7,18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Line.cpp(12,18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Line.cpp(30,29): warning C4305: 'initializing': truncation from 'long double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Line.cpp(97,5): warning C4305: 'argument': truncation from 'const long double' to 'float'
+  main.cpp
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Shape.h(9,16): warning C4200: nonstandard extension used: zero-sized array in struct/union
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Shape.h(9,16): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\main.cpp(20,40): warning C4305: 'argument': truncation from 'const long double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\main.cpp(24,41): warning C4305: 'argument': truncation from 'const long double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\main.cpp(31,41): warning C4305: 'argument': truncation from 'const long double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\main.cpp(35,41): warning C4305: 'argument': truncation from 'const long double' to 'float'
+  Generating Code...
+  PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\Debug\PlatformerGame.exe
