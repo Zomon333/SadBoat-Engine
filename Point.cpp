@@ -14,8 +14,55 @@ Point::Point(float x, float y)
 	this->y = y;
 }
 
+float Point::getDistance(Point toCheck)
+{
+	float largestX, smallestX, largestY, smallestY;
 
-bool Point::insideShape(Shape toCheck)
+	if (this->getX() > toCheck.getX())
+	{
+		largestX = this->getX();
+		smallestX = toCheck.getX();
+	}
+	else
+	{
+		largestX = toCheck.getX();
+		smallestX = this->getX();
+	}
+
+	if (this->getY() > toCheck.getY())
+	{
+		largestY = this->getY();
+		smallestX = toCheck.getY();
+	}
+	else
+	{
+		largestY = toCheck.getY();
+		smallestY = this->getY();
+	}
+
+	float dY, dX;
+	dY = largestY - smallestY;
+	dX = largestX - smallestX;
+
+	return sqrt((dX * dX) + (dY * dY));
+
+}
+/*
+float Point::FPSRaycast(float angle, string direction, Line toCheck[], int sides)
+{
+	
+
+}
+*/
+float Point::getDistance(float x, float y)
+{
+	return getDistance(Point(x, y));
+}
+
+
+
+/*
+bool Point::insideShape(Polygon toCheck)
 {
 	Point pointToCheck = Point(getX(), getY());
 	Point xStart = Point(pointToCheck.getX(), pointToCheck.getY());
@@ -32,9 +79,9 @@ bool Point::insideShape(Shape toCheck)
 	int intersectsX = 0;
 	int intersectsY = 0;
 	Line workingLine;
-	while (i<toCheck.lineCount)
+	while (i<toCheck.getLineCount())
 	{
-			workingLine = *toCheck.bounds[i];
+			workingLine = toCheck.getBounds()[i];
 			if (xBounds.checkIntersect(workingLine, TOLERANCE))
 			{
 				cout << "A X intersect occured!\n";
@@ -85,5 +132,5 @@ bool Point::insideShape(Shape toCheck)
 		//throw new exception("Raycasting failed, xRay and yRay held different results. Recheck your parameters and try again.", 0);
 	}
 	return false;
-}
+}*/
 

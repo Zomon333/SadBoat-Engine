@@ -2,13 +2,19 @@
 #include "headers.h"
 using namespace std;
 
-class Shape
+class Polygon //This used to be named Shape but SFML is a pain in the ass
 {
-public:
+private:
 	int lineCount;
 	Line* bounds[];
+public:
+	Line* getBounds();
+	void setBounds(Line nBounds[]);
 
-	Shape(Line nBounds[]);
-	bool collidingWith(Shape toCheck);
+	int getLineCount();
+	void setLineCount(int nLineCount);
+
+	Polygon(Line nBounds[]);
+	//bool collidingWith(Polygon toCheck);
 };
 

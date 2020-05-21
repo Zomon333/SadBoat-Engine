@@ -88,12 +88,13 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\zomon\Desktop\pps\SFML-2.5.1-windows-vc15-32-bit %281%29\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/analyze:stacksize1000000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\zomon\Desktop\pps\SFML-2.5.1-windows-vc15-32-bit %281%29\SFML-2.5.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;sfml-audio-s.lib;sfml-network-s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-graphics-s-d.lib;sfml-system-s-d.lib;sfml-window-s-d.lib;sfml-audio-s-d.lib;sfml-network-s-d.lib;kernel32.lib;user32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,10 +103,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\zomon\Desktop\pps\PPS\SFML-2.5.1-64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>flac.lib;freetype.lib;ogg.lib;openal32.lib;sfml-audio-s-d.lib;sfml-graphics-s-d.lib;sfml-main-s-d.lib;sfml-network-s-d.lib;sfml-system-s-d.lib;sfml-window-s-d.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FPSRaycast.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="InventoryNode.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -151,14 +155,124 @@
     <ClCompile Include="Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colormap.h" />
     <ClInclude Include="headers.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="InventoryNode.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="packages\SFML\Audio.hpp" />
+    <ClInclude Include="packages\SFML\Audio\AlResource.hpp" />
+    <ClInclude Include="packages\SFML\Audio\Export.hpp" />
+    <ClInclude Include="packages\SFML\Audio\InputSoundFile.hpp" />
+    <ClInclude Include="packages\SFML\Audio\Listener.hpp" />
+    <ClInclude Include="packages\SFML\Audio\Music.hpp" />
+    <ClInclude Include="packages\SFML\Audio\OutputSoundFile.hpp" />
+    <ClInclude Include="packages\SFML\Audio\Sound.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundBuffer.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundBufferRecorder.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundFileFactory.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundFileReader.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundFileWriter.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundRecorder.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundSource.hpp" />
+    <ClInclude Include="packages\SFML\Audio\SoundStream.hpp" />
+    <ClInclude Include="packages\SFML\Config.hpp" />
+    <ClInclude Include="packages\SFML\GpuPreference.hpp" />
+    <ClInclude Include="packages\SFML\Graphics.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\BlendMode.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\CircleShape.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Color.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\ConvexShape.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Drawable.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Export.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Font.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Glsl.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Glyph.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Image.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\PrimitiveType.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Rect.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\RectangleShape.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\RenderStates.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\RenderTexture.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\RenderWindow.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Shader.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Shape.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Sprite.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Text.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Texture.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Transform.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Transformable.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\Vertex.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\VertexArray.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\VertexBuffer.hpp" />
+    <ClInclude Include="packages\SFML\Graphics\View.hpp" />
+    <ClInclude Include="packages\SFML\Main.hpp" />
+    <ClInclude Include="packages\SFML\Network.hpp" />
+    <ClInclude Include="packages\SFML\Network\Export.hpp" />
+    <ClInclude Include="packages\SFML\Network\Ftp.hpp" />
+    <ClInclude Include="packages\SFML\Network\Http.hpp" />
+    <ClInclude Include="packages\SFML\Network\IpAddress.hpp" />
+    <ClInclude Include="packages\SFML\Network\Packet.hpp" />
+    <ClInclude Include="packages\SFML\Network\Socket.hpp" />
+    <ClInclude Include="packages\SFML\Network\SocketHandle.hpp" />
+    <ClInclude Include="packages\SFML\Network\SocketSelector.hpp" />
+    <ClInclude Include="packages\SFML\Network\TcpListener.hpp" />
+    <ClInclude Include="packages\SFML\Network\TcpSocket.hpp" />
+    <ClInclude Include="packages\SFML\Network\UdpSocket.hpp" />
+    <ClInclude Include="packages\SFML\OpenGL.hpp" />
+    <ClInclude Include="packages\SFML\System.hpp" />
+    <ClInclude Include="packages\SFML\System\Clock.hpp" />
+    <ClInclude Include="packages\SFML\System\Err.hpp" />
+    <ClInclude Include="packages\SFML\System\Export.hpp" />
+    <ClInclude Include="packages\SFML\System\FileInputStream.hpp" />
+    <ClInclude Include="packages\SFML\System\InputStream.hpp" />
+    <ClInclude Include="packages\SFML\System\Lock.hpp" />
+    <ClInclude Include="packages\SFML\System\MemoryInputStream.hpp" />
+    <ClInclude Include="packages\SFML\System\Mutex.hpp" />
+    <ClInclude Include="packages\SFML\System\NativeActivity.hpp" />
+    <ClInclude Include="packages\SFML\System\NonCopyable.hpp" />
+    <ClInclude Include="packages\SFML\System\Sleep.hpp" />
+    <ClInclude Include="packages\SFML\System\String.hpp" />
+    <ClInclude Include="packages\SFML\System\Thread.hpp" />
+    <ClInclude Include="packages\SFML\System\ThreadLocal.hpp" />
+    <ClInclude Include="packages\SFML\System\ThreadLocalPtr.hpp" />
+    <ClInclude Include="packages\SFML\System\Time.hpp" />
+    <ClInclude Include="packages\SFML\System\Utf.hpp" />
+    <ClInclude Include="packages\SFML\System\Vector2.hpp" />
+    <ClInclude Include="packages\SFML\System\Vector3.hpp" />
+    <ClInclude Include="packages\SFML\Window.hpp" />
+    <ClInclude Include="packages\SFML\Window\Clipboard.hpp" />
+    <ClInclude Include="packages\SFML\Window\Context.hpp" />
+    <ClInclude Include="packages\SFML\Window\ContextSettings.hpp" />
+    <ClInclude Include="packages\SFML\Window\Cursor.hpp" />
+    <ClInclude Include="packages\SFML\Window\Event.hpp" />
+    <ClInclude Include="packages\SFML\Window\Export.hpp" />
+    <ClInclude Include="packages\SFML\Window\GlResource.hpp" />
+    <ClInclude Include="packages\SFML\Window\Joystick.hpp" />
+    <ClInclude Include="packages\SFML\Window\Keyboard.hpp" />
+    <ClInclude Include="packages\SFML\Window\Mouse.hpp" />
+    <ClInclude Include="packages\SFML\Window\Sensor.hpp" />
+    <ClInclude Include="packages\SFML\Window\Touch.hpp" />
+    <ClInclude Include="packages\SFML\Window\VideoMode.hpp" />
+    <ClInclude Include="packages\SFML\Window\Window.hpp" />
+    <ClInclude Include="packages\SFML\Window\WindowHandle.hpp" />
+    <ClInclude Include="packages\SFML\Window\WindowStyle.hpp" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Range.h" />
     <ClInclude Include="Shape.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages\SFML\Audio\SoundFileFactory.inl" />
+    <None Include="packages\SFML\Graphics\Glsl.inl" />
+    <None Include="packages\SFML\Graphics\Rect.inl" />
+    <None Include="packages\SFML\System\String.inl" />
+    <None Include="packages\SFML\System\Thread.inl" />
+    <None Include="packages\SFML\System\ThreadLocalPtr.inl" />
+    <None Include="packages\SFML\System\Utf.inl" />
+    <None Include="packages\SFML\System\Vector2.inl" />
+    <None Include="packages\SFML\System\Vector3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

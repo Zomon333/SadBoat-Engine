@@ -2,7 +2,27 @@
 #include "headers.h"
 using namespace std;
 
-Shape::Shape(Line nBounds[])
+Line* Polygon::getBounds()
+{
+	return *(this->bounds);
+}
+
+void Polygon::setBounds(Line nBounds[])
+{
+	*this->bounds = nBounds;
+}
+
+int Polygon::getLineCount()
+{
+	return this->lineCount;
+}
+
+void Polygon::setLineCount(int nLineCount)
+{
+	this->lineCount = nLineCount;
+}
+
+Polygon::Polygon(Line nBounds[])
 {
 	*this->bounds = nBounds;
 	int i = 0;
@@ -13,7 +33,8 @@ Shape::Shape(Line nBounds[])
 	this->lineCount = i;
 }
 
-bool Shape::collidingWith(Shape toCheck)
+/*
+bool Polygon::collidingWith(Polygon toCheck)
 {
 	int i = 0;
 	Point a,b;
@@ -36,4 +57,7 @@ bool Shape::collidingWith(Shape toCheck)
 		}
 	}
 	return false;
-}
+}*/
+
+
+

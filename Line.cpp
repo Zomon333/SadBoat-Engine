@@ -2,15 +2,7 @@
 #include "headers.h"
 using namespace std;
 
-float radToDegree(float radians)
-{
-	return (radians * 57.2958);
-}
 
-float degreeToRad(float degrees)
-{
-	return (degrees / 57.2958);
-}
 
 Line::Line()
 {
@@ -34,6 +26,8 @@ bool Line::containsPoint(Point toCheck)
 		return false;
 
 }
+
+
 
 bool Line::containsPoint(Point toCheck, float tolerance=TOLERANCE)
 {
@@ -69,9 +63,19 @@ Point Line::whereIntersect(Line toCheck)
 	return intersectPoint;
 }
 
+Point Line::lineAverage()
+{
+	float startX = this->start.getX();
+	float startY = this->start.getY();
+	float endX = this->end.getX();
+	float endY = this->end.getY();
+
+	return Point(((startX + endX) / 2), ((startY + endY) / 2));
+}
+
 bool Line::checkIntersect(Line toCheck, float tolerance)
 {
-	if (this->checkIntersect(toCheck, TOLERANCE) || toCheck.checkIntersect(Line(getStart(), getEnd()), TOLERANCE))
+	if (this->checkIntersectSingular(toCheck, TOLERANCE) || toCheck.checkIntersectSingular(Line(getStart(), getEnd()), TOLERANCE))
 		return true;
 	return false;
 }

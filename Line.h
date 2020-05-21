@@ -1,6 +1,7 @@
 #pragma once
 #include "headers.h"
 using namespace std;
+using namespace sf;
 
 class Line
 {
@@ -17,8 +18,10 @@ public:
 	bool containsPoint(Point toCheck, float tolerance);
 	bool containsPoint(Point toCheck);
 
+	float FPSRaycast(float angle, string direction, Line toCheck[], int sides); // Returns distance from collision
 	
 	Point whereIntersect(Line toCheck);
+	Point lineAverage();
 
 	bool checkIntersect(Line toCheck, float tolerance); // A bilateral intersect checker, using the unilateral checker twice.
 	float getSlope();

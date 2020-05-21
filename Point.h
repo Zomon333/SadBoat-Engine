@@ -1,7 +1,6 @@
 #pragma once
 #include "headers.h"
 using namespace std;
-class Shape;
 
 class Point
 {
@@ -15,10 +14,12 @@ public:
 	float getX() { return this->x; }
 	void setX(float x) { this->x = x; }
 
+	float getDistance(Point toCheck);
+	float getDistance(float x, float y);
+
 	float getY() { return this->y; }
 	void setY(float y) { this->y = y; }
-
-	bool insideShape(Shape toCheck);
+	//bool insideShape(Polygon toCheck);
 
 };
 
