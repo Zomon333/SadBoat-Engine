@@ -5,22 +5,22 @@
 #include <fstream>
 
 /*SFML Headers*/
-
+/*
 #include "packages/SFML/Audio.hpp"
 #include "packages/SFML/Graphics.hpp"
 #include "packages/SFML/Main.hpp"
 #include "packages/SFML/Network.hpp"
 #include "packages/SFML/System.hpp"
 #include "packages/SFML/Window.hpp"
+*/
 
-/*
 #include "SFML/Audio.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/Main.hpp"
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
-*/
+
 
 /*Personal Headers*/
 #include "Range.h"
