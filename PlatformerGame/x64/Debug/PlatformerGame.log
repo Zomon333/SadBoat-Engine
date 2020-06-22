@@ -1,25 +1,12 @@
-﻿  main.cpp
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\keybinds.h(24,2): warning C4091: 'static ': ignored on left of 'keybibbles' when no variable is declared
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(18,23): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(23,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(37,18): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(41,18): warning C4305: '=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(76,17): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(86,17): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(90,32): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(91,32): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(97,13): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(102,13): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(107,13): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(112,13): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(208,6): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(208,6): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(208,15): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(208,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(209,10): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(209,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(210,6): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(210,6): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(210,15): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\main.cpp(210,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+﻿  Event.cpp
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+  Game.cpp
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+  Shader.cpp
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+  main.cpp
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+  Generating Code...
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.cpp(234): warning C4715: 'PPS::Game::exec': not all control paths return a value
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Event.cpp(145): warning C4715: 'Event::handle': not all control paths return a value
   PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\x64\Debug\PlatformerGame.exe

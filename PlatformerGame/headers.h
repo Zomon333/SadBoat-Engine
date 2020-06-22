@@ -1,20 +1,25 @@
 #pragma once
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 #include <string>
 #include <iostream>
-#include "keybinds.h"
+#include <fstream>
 #include <thread>
+#include <chrono>
+#include <ctime>
 
-//Globals
 
 
-//Function prototypes
-void error_callback(int error, const char* description);
-void physics();
+//Contains declaration of shader class & declaration of shader-related member functions.
+//Shader.cpp contains definition of said functions.
+#include "Shader.h" 
 
-//#include <stddef.h>
-//#include <Windows.h>
-//We'll need the header file above if we want Sleep();
+//Contains declaration of Event class, eventParameters class, eventType enumerator, and generic event handling functions.
+//Event.cpp contains definitions for the generic event handling functions. Event::handle is virtual and will be redefined by individual objects who inherit Event.
+#include "Event.h"
+
+//Contains declaration of main game loop, OpenGL startup, keybindings, and multithreading handler.
+//Game.cpp contains definition of these things, although most of them are through the Game::Game() constructor, which also initializes the exec loop.
+#include "Game.h"
+
+
