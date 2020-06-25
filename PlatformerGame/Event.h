@@ -91,7 +91,7 @@ enum eventType
 	private:
 		eventType type;
 		EventParameters params;
-		string ErrorTypes[332];
+		static string ErrorTypes[332];
 	public:
 		Event(eventType type, EventParameters params);
 		eventType getType();

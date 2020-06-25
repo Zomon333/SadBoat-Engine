@@ -1,12 +1,4 @@
-﻿  Event.cpp
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
-  Game.cpp
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
-  Shader.cpp
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
-  main.cpp
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(51,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
-  Generating Code...
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.cpp(234): warning C4715: 'PPS::Game::exec': not all control paths return a value
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Event.cpp(145): warning C4715: 'Event::handle': not all control paths return a value
+﻿  Game.cpp
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(54,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.cpp(259): warning C4715: 'PPS::Game::exec': not all control paths return a value
   PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\x64\Debug\PlatformerGame.exe

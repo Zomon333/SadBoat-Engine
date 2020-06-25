@@ -32,6 +32,7 @@ EventParameters::EventParameters()
 
 }
 
+string Event::ErrorTypes[332];
 
 Event::Event(eventType type, EventParameters params)
 {

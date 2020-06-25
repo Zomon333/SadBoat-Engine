@@ -38,6 +38,32 @@ namespace PPS
 		}
 	}
 
+	void Game::GLClearError()
+	{
+		while (glGetError() != GL_NO_ERROR);
+	}
+
+	bool Game::GLLogCall(const char* function, const char* file, int line)
+	{
+		GLenum error = glGetError();
+		bool hadError = false;
+		if (error)
+		{
+			hadError = true;
+		}
+		while (error)
+		{
+			EventParameters GLError;
+			GLError.ERROR_ErrorNumber = error;
+			GLError.ERROR_EventName = "OpenGLError";
+			GLError.ERROR_EventParent = (" file " + (string)(file) + " at line " + to_string(line));
+			Event GLErrorEvent = Event(ERROR, GLError);
+			GLErrorEvent.handle();
+			GLenum error = glGetError();
+		}
+		return hadError;
+	}
+
 	void Game::setKey(int index, bool state)
 	{
 		Game::keyPressed[index] = state;
@@ -140,7 +166,7 @@ namespace PPS
 			glfwSetErrorCallback(&Game::error_callback);
 			glfwSetKeyCallback(window, &Game::key_callback);
 			glfwSwapInterval(1);
-
+			
 			if (glewInit() != GLEW_OK)
 			{
 				EventParameters glewInitFail;
@@ -155,7 +181,6 @@ namespace PPS
 
 				throw glewInitFailEvent;
 			}
-
 
 		}
 		catch (Event e)
@@ -184,8 +209,8 @@ namespace PPS
 				cTick++;
 				ticker = chrono::milliseconds(0);
 
-				cout << Game::pressDuration[65].count() << endl;
-
+				cout << "Space: "<< Game::keyPressed[GLFW_KEY_SPACE] << endl;
+				cout << "A: " << Game::keyPressed[GLFW_KEY_A] << endl;
 
 				if (Game::keyPressed[GLFW_KEY_E])
 				{
@@ -210,7 +235,7 @@ namespace PPS
 			glfwPollEvents();
 			ticker += (chrono::steady_clock::now() - deltaT);
 		}
-		catch (Event e)
+		catch (Event &e)
 		{
 			if (e.getType() == EXIT)
 			{
