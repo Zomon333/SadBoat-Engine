@@ -46,6 +46,9 @@ namespace PPS
 		static void error_callback(int error, const char* description);
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+		static void GLClearError();
+		static bool GLLogCall(const char* function, const char* file, int line);
+
 		int exec();
 
 	};

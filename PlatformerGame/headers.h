@@ -7,7 +7,12 @@
 #include <thread>
 #include <chrono>
 #include <ctime>
+#include <intrin.h>
 
+#define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCall(x) PPS::Game::GLClearError();\
+	x;\
+	ASSERT(PPS::Game::GLLogCall(#x, __FILE__, __LINE__))
 
 
 //Contains declaration of shader class & declaration of shader-related member functions.

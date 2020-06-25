@@ -20,8 +20,7 @@ int main()
 	PPS::Game game;
 	int response = game.exec();
 
+
 	sleep(3);
 	return response;
 }
-
-
