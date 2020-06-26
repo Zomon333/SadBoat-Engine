@@ -152,9 +152,11 @@
   <ItemGroup>
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3.h" />
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3native.h" />
+    <ClInclude Include="Difficulty.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="headers.h" />
+    <ClInclude Include="Party.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>

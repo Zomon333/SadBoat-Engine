@@ -8,6 +8,7 @@
 #include <chrono>
 #include <ctime>
 #include <intrin.h>
+#include "Difficulty.h"
 
 #define ASSERT(x) if(!(x)) __debugbreak();
 #define GLCall(x) PPS::Game::GLClearError();\

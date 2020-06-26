@@ -1,4 +1,12 @@
 ﻿  Game.cpp
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.h(54,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\Game.cpp(259): warning C4715: 'PPS::Game::exec': not all control paths return a value
-  PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\PlatformerGame\x64\Debug\PlatformerGame.exe
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.h(60,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(355,25): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(366,19): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(372,19): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(373,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(374,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(384,19): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(385,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(386,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.cpp(576): warning C4715: 'PPS::Game::exec': not all control paths return a value
+  PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\x64\Debug\PlatformerGame.exe

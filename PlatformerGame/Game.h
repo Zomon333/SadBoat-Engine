@@ -7,13 +7,18 @@ namespace PPS
 	{
 	private:
 		chrono::steady_clock::time_point gameStart;
-		
+		static Difficulty gameDifficulty;
+
+		float spawnRate;
+		float enemyHealth;
+		float enemyDamage;
 
 		int cTick;
 		int tps;
 		chrono::duration<double, std::milli> tick;
 		chrono::steady_clock::duration ticker;
 		chrono::steady_clock::time_point deltaT;
+		static float THRESHOLD;
 
 		bool paused;
 		bool running;
@@ -21,7 +26,6 @@ namespace PPS
 
 		static bool keyPressed[348];
 		static chrono::steady_clock::time_point timePressInit[348];
-		static chrono::duration<double> pressDuration[348];
 		//static Point cursorPos;
 
 		
@@ -29,19 +33,18 @@ namespace PPS
 		Game();
 		GLFWwindow* window;
 
+		static void setDifficulty(Difficulty nDifficulty);
+		static Difficulty getDifficulty();
 
 		static void setKey(int index, bool state);
 		static bool getKey(int index);
 		static void toggleKey(int index);
 		
-		
 		//Implemented but did not solve problems
 		static chrono::steady_clock::time_point& getTimePress(int key); //Get when the key was depressed
-		static void setTimePress(int key, chrono::steady_clock::time_point nTime); //Set when the key was depressed
+		static chrono::duration<double> getKeyDuration(int key); //Get how long a key has been held
 
-		static chrono::duration<double>& getKeyDuration(int key); //Get how long a key has been held
-		static void setKeyDuration(int key, chrono::duration<double> pressDuration); //Set how long a key has been held
-		
+		string getKeyName(int key);
 
 		static void error_callback(int error, const char* description);
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -50,6 +53,9 @@ namespace PPS
 		static bool GLLogCall(const char* function, const char* file, int line);
 
 		int exec();
+		static int physics();
+		static int collision();
+		static int render();
 
 	};
 }
