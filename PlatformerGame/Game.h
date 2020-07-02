@@ -52,7 +52,9 @@ namespace PPS
 		static void GLClearError();
 		static bool GLLogCall(const char* function, const char* file, int line);
 
-		int exec();
+		int exec(Game game);
+
+		static int gamestate();
 		static int physics();
 		static int collision();
 		static int render();

@@ -300,7 +300,7 @@ namespace PPS
 			GLError.ERROR_ErrorNumber = error;
 			GLError.ERROR_EventName = "OpenGLError";
 			GLError.ERROR_EventParent = (" file " + (string)(file) + " at line " + to_string(line));
-			Event GLErrorEvent = Event(ERROR, GLError);
+			Event GLErrorEvent = Event(_ERROR, GLError);
 			GLErrorEvent.handle();
 			GLenum error = glGetError();
 		}
@@ -420,7 +420,7 @@ namespace PPS
 				glfwFailInit.ERROR_EventName = "glfwInit()";
 				glfwFailInit.ERROR_EventParent = "main()";
 
-				Event glfwFailInitEvent = Event(ERROR, glfwFailInit);
+				Event glfwFailInitEvent = Event(_ERROR, glfwFailInit);
 				glfwFailInitEvent.handle();
 				throw glfwFailInitEvent;
 			}
@@ -433,7 +433,7 @@ namespace PPS
 				windowFail.ERROR_EventName = "glfwCreateWindow()";
 				windowFail.ERROR_EventParent = "main()";
 
-				Event windowFailEvent = Event(ERROR, windowFail);
+				Event windowFailEvent = Event(_ERROR, windowFail);
 				windowFailEvent.handle();
 
 				glfwTerminate();
@@ -453,7 +453,7 @@ namespace PPS
 				glewInitFail.ERROR_EventName = "glewInit()";
 				glewInitFail.ERROR_EventParent = "main()";
 
-				Event glewInitFailEvent = Event(ERROR, glewInitFail);
+				Event glewInitFailEvent = Event(_ERROR, glewInitFail);
 				glewInitFailEvent.handle();
 
 				glfwTerminate();
@@ -480,7 +480,7 @@ namespace PPS
 		return Game::gameDifficulty;
 	}
 
-	int Game::exec()
+	int Game::exec(Game game)
 	{
 		EventParameters EXIT_PARAMS;
 		EXIT_PARAMS.EXIT_reason = "Player requested exit by holding escape for 1 second.";
@@ -489,68 +489,79 @@ namespace PPS
 		chrono::steady_clock::time_point lastPause = chrono::steady_clock::now();
 		int keyFixer = 0;
 		cTick = 0;
-		while (running) { while (!paused) { try {
+		while (running) 
+		{ 
+			while (!paused) 
+			{ 
+				try 
+				{
 					
-			chrono::steady_clock::time_point deltaT = chrono::steady_clock::now();
+					chrono::steady_clock::time_point deltaT = chrono::steady_clock::now();
 
-			if (ticker >= tick)
-			{
-				cTick++;
-				ticker = chrono::milliseconds(0);
+					if (ticker >= tick)
+					{
+						cTick++;
+						ticker = chrono::milliseconds(0);
+				
+						thread gamelogic = thread(Game::gamestate);
+						thread physics = thread(Game::physics);
+						thread collision = thread(Game::collision);
 
-				//cout << "Space: " << Game::getKeyDuration(GLFW_KEY_SPACE).count() << endl;
-				//cout << "A: " << Game::getKeyDuration(GLFW_KEY_A).count() << endl;
+			
+						while (!gamelogic.joinable());
+						gamelogic.join();
+			
+						while (!collision.joinable());
+						collision.join();
 
-				Game::physics();
-				Game::collision();
+						while (!physics.joinable());
+						physics.join();
+
+						thread render = thread(Game::render);
+
+						while (!render.joinable());
+						render.join();
+				
+						if (Game::keyPressed[GLFW_KEY_E])
+						{
+							EventParameters ERROR_TEST;
+							ERROR_TEST.ERROR_ErrorNumber = 1;
+							ERROR_TEST.ERROR_EventName = "Game::exec()";
+							ERROR_TEST.ERROR_EventParent = "Game::exec()";
+							Event ERROR_EVENT = Event(_ERROR, ERROR_TEST);
+							throw ERROR_EVENT;
+						}
+
+						if (Game::getKeyDuration(GLFW_KEY_ESCAPE).count() > 1 && Game::getKey(GLFW_KEY_ESCAPE))
+							throw EXIT_EVENT;
 
 
+						if (cTick == (tps - 1))
+						{
+							cTick = 0;
+						}
+					}
 
+					glfwPollEvents();
 
-
-
-				Game::render();
-
-				if (Game::keyPressed[GLFW_KEY_E])
-				{
-					EventParameters ERROR_TEST;
-					ERROR_TEST.ERROR_ErrorNumber = 1;
-					ERROR_TEST.ERROR_EventName = "Game::exec()";
-					ERROR_TEST.ERROR_EventParent = "Game::exec()";
-					Event ERROR_EVENT = Event(ERROR, ERROR_TEST);
-					throw ERROR_EVENT;
-				}
-
-				if (Game::getKeyDuration(GLFW_KEY_ESCAPE).count() > 1 && Game::getKey(GLFW_KEY_ESCAPE))
-					throw EXIT_EVENT;
-
-
-				if (cTick == (tps - 1))
-				{
-					cTick = 0;
-				}
-			}
-
-			glfwPollEvents();
-
-			keyFixer = 0;
-			while(keyFixer<348)
-			{
-				if (!getKey(keyFixer))
-				{
-					Game::timePressInit[keyFixer] = chrono::steady_clock::now();
-				}
-				else
-				{
-					cout.width(2);
-					cout.precision(3);
-					cout << " " << Game::getKeyName(keyFixer) << ": " << Game::getKeyDuration(keyFixer).count() << "	";
-				}
-				keyFixer++;
-			}
-			keyFixer = 0;
-			cout << endl;
-			ticker += (chrono::steady_clock::now() - deltaT);
+					keyFixer = 0;
+					while(keyFixer<348)
+					{
+						if (!getKey(keyFixer))
+						{
+							Game::timePressInit[keyFixer] = chrono::steady_clock::now();
+						}
+						else
+						{
+							cout.width(2);
+							cout.precision(3);
+							cout << " " << Game::getKeyName(keyFixer) << ": " << Game::getKeyDuration(keyFixer).count() << "	";
+						}
+						keyFixer++;
+					}
+					keyFixer = 0;
+					cout << endl;
+					ticker += (chrono::steady_clock::now() - deltaT);
 		}
 		catch (Event &e)
 		{
@@ -565,19 +576,32 @@ namespace PPS
 
 			if (e.getType() == ERROR)
 			{
-				e.handle();
+				thread eventThread = thread(&Event::handle, e);
+				while (!eventThread.joinable());
+				eventThread.join();
 				running = false;
 				paused = true;
 				glfwTerminate();
 				return e.getParams().ERROR_ErrorNumber;
 			}
+
+			if (e.getType() != ERROR && e.getType() != EXIT)
+			{
+				thread eventThread = thread(&Event::handle, e);
+				while (!eventThread.joinable());
+				eventThread.join();
+			}
 		}
 	}
 }}
 
+	int Game::gamestate()
+	{
+		return 0;
+	}
+
 	int Game::physics()
 	{
-		
 		return 0;
 	}
 

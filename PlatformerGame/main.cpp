@@ -2,10 +2,10 @@
 #include "headers.h"
 using namespace std;
 
-void sleep(int seconds)
+void sleep(int milliseconds)
 {
-	cout << "\nSleeping for " << seconds << " seconds.\n";
-	chrono::steady_clock::duration duration = chrono::seconds(seconds);
+	cout << "\nSleeping for " << milliseconds << " milliseconds. ("<<(((float)(milliseconds))/1000)<<" s)\n";
+	chrono::steady_clock::duration duration = chrono::milliseconds(milliseconds);
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 
 	do
@@ -17,10 +17,12 @@ void sleep(int seconds)
 
 int main()
 {
+	
 	PPS::Game game;
-	int response = game.exec();
+	
+	int response = game.exec(game);
+	
 
-
-	sleep(3);
+	sleep(3000);
 	return response;
 }

@@ -8,7 +8,12 @@
 #include <chrono>
 #include <ctime>
 #include <intrin.h>
+#include <windows.h>
 #include "Difficulty.h"
+#include "Point.h"
+#include "Line.h"
+#include "VertexBuffer.h"
+
 
 #define ASSERT(x) if(!(x)) __debugbreak();
 #define GLCall(x) PPS::Game::GLClearError();\

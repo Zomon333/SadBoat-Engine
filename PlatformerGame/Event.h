@@ -1,10 +1,10 @@
 #pragma once
 #include "headers.h"
 using namespace std;
-
-enum eventType
-{
-		ERROR, //ErrorNumber, ErrorName, EventName, EventParent
+namespace PPS {
+	enum eventType
+	{
+		_ERROR, //ErrorNumber, ErrorName, EventName, EventParent
 
 		COLLISION, //CollisionA, CollisionB
 
@@ -96,5 +96,7 @@ enum eventType
 		Event(eventType type, EventParameters params);
 		eventType getType();
 		EventParameters getParams();
-		virtual bool handle();
+		virtual void handle();
 	};
+
+}
