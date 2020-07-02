@@ -32,3 +32,12 @@
 *.app
 
 */PlatformerGame/.vs/*
+*.ipch
+*.db
+*.opendb
+PlatformerGame/.vs/PlatformerGame/v16/.suo
+*.ilk
+*.ilk
+*.pdb
+*.tlog
+*.tlog
