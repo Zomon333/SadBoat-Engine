@@ -20,7 +20,6 @@
 	x;\
 	ASSERT(PPS::Game::GLLogCall(#x, __FILE__, __LINE__))
 
-
 //Contains declaration of shader class & declaration of shader-related member functions.
 //Shader.cpp contains definition of said functions.
 #include "Shader.h" 
@@ -34,3 +33,4 @@
 #include "Game.h"
 
 
+static HWND Console;

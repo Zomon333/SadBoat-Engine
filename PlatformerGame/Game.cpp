@@ -16,17 +16,17 @@ namespace PPS
 			return "UNKNOWN";
 		}
 		if (key == 32)
-			return "space";
+			return "Space";
 		if (key == 39)
-			return "apostrophe";
+			return "Apostrophe";
 		if (key == 44)
-			return "comma";
+			return "Comma";
 		if (key == 45)
-			return "minus";
+			return "Minus";
 		if (key == 46)
-			return "period";
+			return "Period";
 		if (key == 47)
-			return "slash";
+			return "Slash";
 		if (key == 48)
 			return "0";
 		if (key == 49)
@@ -486,6 +486,8 @@ namespace PPS
 		EXIT_PARAMS.EXIT_reason = "Player requested exit by holding escape for 1 second.";
 		Event EXIT_EVENT = Event(EXIT, EXIT_PARAMS);
 
+		bool showConsole = false;
+
 		chrono::steady_clock::time_point lastPause = chrono::steady_clock::now();
 		int keyFixer = 0;
 		cTick = 0;
@@ -532,6 +534,7 @@ namespace PPS
 							throw ERROR_EVENT;
 						}
 
+
 						if (Game::getKeyDuration(GLFW_KEY_ESCAPE).count() > 1 && Game::getKey(GLFW_KEY_ESCAPE))
 							throw EXIT_EVENT;
 
@@ -574,7 +577,7 @@ namespace PPS
 				return -1;
 			}
 
-			if (e.getType() == ERROR)
+			if (e.getType() == _ERROR)
 			{
 				thread eventThread = thread(&Event::handle, e);
 				while (!eventThread.joinable());
@@ -585,7 +588,7 @@ namespace PPS
 				return e.getParams().ERROR_ErrorNumber;
 			}
 
-			if (e.getType() != ERROR && e.getType() != EXIT)
+			if (e.getType() != _ERROR && e.getType() != EXIT)
 			{
 				thread eventThread = thread(&Event::handle, e);
 				while (!eventThread.joinable());

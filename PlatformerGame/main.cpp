@@ -4,7 +4,7 @@ using namespace std;
 
 void sleep(int milliseconds)
 {
-	cout << "\nSleeping for " << milliseconds << " milliseconds. ("<<(((float)(milliseconds))/1000)<<" s)\n";
+	cout << "\nSleeping for " << milliseconds << " milliseconds. (" << (( (float)(milliseconds) ) / 1000.0 ) << " s)\n";
 	chrono::steady_clock::duration duration = chrono::milliseconds(milliseconds);
 	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 
@@ -17,11 +17,14 @@ void sleep(int milliseconds)
 
 int main()
 {
-	
+	Console = GetConsoleWindow();
+
+	ShowWindow(Console, false);
+
 	PPS::Game game;
-	
 	int response = game.exec(game);
 	
+	ShowWindow(Console, true);
 
 	sleep(3000);
 	return response;
