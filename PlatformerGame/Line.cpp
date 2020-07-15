@@ -32,6 +32,6 @@ void Line::setPoint(Point newPoint, int index)
 
 void Line::moveLine(float x, float y)
 {
-	LineBounds[0].movePoint(x, y);
-	LineBounds[1].movePoint(x, y);
+	LineBounds[0].translate(x, y);
+	LineBounds[1].translate(x, y);
 }

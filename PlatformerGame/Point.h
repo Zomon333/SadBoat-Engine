@@ -9,7 +9,9 @@ public:
 	Point();
 	Point(float x, float y);
 
-	void movePoint(float x, float y);
+	void translate(float x, float y);
 	float distanceTo(Point toCheck);
+
+	bool operator==(Point toCheck);
 };
 

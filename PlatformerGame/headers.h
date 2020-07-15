@@ -9,16 +9,35 @@
 #include <ctime>
 #include <intrin.h>
 #include <windows.h>
-#include "Difficulty.h"
-#include "Point.h"
-#include "Line.h"
-#include "VertexBuffer.h"
-
 
 #define ASSERT(x) if(!(x)) __debugbreak();
 #define GLCall(x) PPS::Game::GLClearError();\
 	x;\
 	ASSERT(PPS::Game::GLLogCall(#x, __FILE__, __LINE__))
+
+
+// Contains declaration of Difficulty enumerator
+#include "Difficulty.h"
+
+// Contains declaration of point class & declaration of point-related member functions
+// Point.cpp contains definition of said functions.
+#include "Point.h"
+
+// Contains declaration of line class & declaration of line-related member functions
+// Line.cpp contains definition of said functions.
+#include "Line.h"
+
+// Contains declaration of the range system: A rudimentary greater than/less than system overloaded to support operators.
+// range.cpp contains definition of said operators.
+#include "range.h"
+
+// Contains declaration of bounding box system: A rudimentary rectangle made of ranges, which can be tested to see if you're within.
+// BoundingBox.cpp contains definition of the testing operators.
+#include "BoundingBox.h"
+
+// Contains declaration of vertex buffer class & declaration of line-related member functions
+// VertexBuffer.cpp contains definition of said functions.
+#include "VertexBuffer.h"
 
 //Contains declaration of shader class & declaration of shader-related member functions.
 //Shader.cpp contains definition of said functions.

@@ -33,6 +33,19 @@ VertexBuffer::~VertexBuffer()
 	GLCall(glDeleteBuffers(1, &buffer));
 }
 
+void VertexBuffer::translate(float x, float y)
+{
+	int i = 0;
+	Point workingPoint;
+	while (i < vertexCount)
+	{
+		workingPoint = getVertex(i);
+		workingPoint.translate(x, y);
+		setVertex(i, workingPoint);
+		i++;
+	}
+}
+
 Point VertexBuffer::getVertex(int index)
 {
 	return vertexes[index];

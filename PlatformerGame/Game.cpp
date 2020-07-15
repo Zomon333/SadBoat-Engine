@@ -505,9 +505,9 @@ namespace PPS
 						cTick++;
 						ticker = chrono::milliseconds(0);
 				
-						thread gamelogic = thread(Game::gamestate);
-						thread physics = thread(Game::physics);
-						thread collision = thread(Game::collision);
+						thread gamelogic = thread(Game::gamestate, &gamelogic);
+						thread physics = thread(Game::physics, &physics);
+						thread collision = thread(Game::collision, &collision);
 
 			
 						while (!gamelogic.joinable());
@@ -598,22 +598,25 @@ namespace PPS
 	}
 }}
 
-	int Game::gamestate()
+	int Game::gamestate(thread& self)
+	{
+		EventParameters ThreadParams;
+		//ThreadParams.JOIN_FinishedThread = self;
+		//Event FinishedThread = Event(JOIN, ThreadParams);
+		return 0;
+	}
+
+	int Game::physics(thread& self)
 	{
 		return 0;
 	}
 
-	int Game::physics()
+	int Game::collision(thread& self)
 	{
 		return 0;
 	}
 
-	int Game::collision()
-	{
-		return 0;
-	}
-
-	int Game::render()
+	int Game::render(thread& self)
 	{
 		return 0;
 	}

@@ -146,15 +146,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="range.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3.h" />
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3native.h" />
     <ClInclude Include="Difficulty.h" />
@@ -164,6 +167,7 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="Party.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="range.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>

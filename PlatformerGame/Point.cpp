@@ -15,7 +15,7 @@ Point::Point(float x, float y)
 	this->y = y;
 }
 
-void Point::movePoint(float x, float y)
+void Point::translate(float x, float y)
 {
 	this->x += x;
 	this->y += y;
@@ -62,6 +62,13 @@ float Point::distanceTo(Point toCheck)
 
 	distance = sqrt((deltaX*deltaX)+(deltaY*deltaY));
 	return distance;
+}
+
+bool Point::operator==(Point toCheck)
+{
+	if (x == toCheck.x && y == toCheck.y)
+		return true;
+	else return false;
 }
 
 
