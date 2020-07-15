@@ -491,6 +491,10 @@ namespace PPS
 		chrono::steady_clock::time_point lastPause = chrono::steady_clock::now();
 		int keyFixer = 0;
 		cTick = 0;
+
+		bool Logic, Physics, Collision, Render;
+		bool logicJoined, physicsJoined, collisionJoined, renderJoined;
+
 		while (running) 
 		{ 
 			while (!paused) 
@@ -502,27 +506,61 @@ namespace PPS
 
 					if (ticker >= tick)
 					{
+
+
+						Logic = false;
+						Physics = false;
+						Collision = false;
+						Render = false;
+
+						logicJoined = false;
+						physicsJoined = false;
+						collisionJoined = false;
+						renderJoined = false;
+
 						cTick++;
 						ticker = chrono::milliseconds(0);
-				
-						thread gamelogic = thread(Game::gamestate, &gamelogic);
-						thread physics = thread(Game::physics, &physics);
-						thread collision = thread(Game::collision, &collision);
+						
 
-			
-						while (!gamelogic.joinable());
-						gamelogic.join();
-			
-						while (!collision.joinable());
-						collision.join();
+						thread gameLogic = thread(Game::gamestate);
+						thread gamePhysics = thread(Game::physics);
+						thread gameCollision = thread(Game::collision);
 
-						while (!physics.joinable());
-						physics.join();
+						while (!logicJoined || !physicsJoined || !collisionJoined)
+						{
+							if(gameLogic.joinable() && logicJoined==false)
+							{ 
+								logicJoined = true;
+								gameLogic.join();
+								//cout << "logic joined\n";
+							}
+							if (gamePhysics.joinable() && physicsJoined == false)
+							{
+								physicsJoined = true;
+								gamePhysics.join();
+								//cout << "physics joined\n";
+							}
+							if (gameCollision.joinable() && collisionJoined == false)
+							{
+								collisionJoined = true;
+								gameCollision.join();
+								//cout << "collision joined\n";
+							}
+						}
 
-						thread render = thread(Game::render);
+						thread gameRender = thread(Game::render);
 
-						while (!render.joinable());
-						render.join();
+						while (!renderJoined)
+						{
+							if (gameRender.joinable() && renderJoined == false)
+							{
+								renderJoined = true;
+								gameRender.join();
+								//cout << "render joined\n";
+							}
+						}
+
+						
 				
 						if (Game::keyPressed[GLFW_KEY_E])
 						{
@@ -595,28 +633,26 @@ namespace PPS
 				eventThread.join();
 			}
 		}
+
 	}
 }}
 
-	int Game::gamestate(thread& self)
-	{
-		EventParameters ThreadParams;
-		//ThreadParams.JOIN_FinishedThread = self;
-		//Event FinishedThread = Event(JOIN, ThreadParams);
-		return 0;
-	}
-
-	int Game::physics(thread& self)
+	int Game::gamestate()
 	{
 		return 0;
 	}
 
-	int Game::collision(thread& self)
+	int Game::physics()
 	{
 		return 0;
 	}
 
-	int Game::render(thread& self)
+	int Game::collision()
+	{
+		return 0;
+	}
+
+	int Game::render()
 	{
 		return 0;
 	}

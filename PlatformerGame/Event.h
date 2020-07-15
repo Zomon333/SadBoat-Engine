@@ -28,7 +28,8 @@ namespace PPS {
 		PAUSE,
 		EXIT,
 		SAVE,
-		LOAD
+		LOAD,
+		JOIN
 	};
 
 	struct EventParameters
@@ -40,6 +41,7 @@ namespace PPS {
 		string ERROR_EventName;
 		string ERROR_EventParent;
 
+		
 		//COLLISION
 		//Object* COLLISION_ObjectA;
 		//Object* COLLISION_ObjectB;

@@ -54,10 +54,10 @@ namespace PPS
 
 		int exec(Game game);
 
-		static int gamestate(thread& self);
-		static int physics(thread& self);
-		static int collision(thread& self);
-		static int render(thread& self);
+		static int gamestate();
+		static int physics();
+		static int collision();
+		static int render();
 
 	};
 }
