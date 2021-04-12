@@ -1,5 +1,21 @@
 #pragma once
 #include "headers.h"
+
+/*
+Dagan Poulin, SadBoat Entertainment, 4/12/2021
+ Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+	   http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
 using namespace std;
 
 namespace PPS
@@ -344,7 +360,7 @@ namespace PPS
 		return toReturn;
 	}
 
-	Game::Game()
+	Game::Game(string title)
 	{
 		cTick = 0;
 		tps = 60;
@@ -355,6 +371,8 @@ namespace PPS
 		Game::THRESHOLD = 0.01;
 		paused = false;
 		running = true;
+
+		gameTitle = title;
 
 		if (Game::gameDifficulty != BEGINNER && Game::gameDifficulty != EASY && Game::gameDifficulty != NORMAL && Game::gameDifficulty != HARD && Game::gameDifficulty != VERYHARD && Game::gameDifficulty != IMPOSSIBLE)
 		{
@@ -425,7 +443,7 @@ namespace PPS
 				throw glfwFailInitEvent;
 			}
 
-			window = glfwCreateWindow(width, height, "Bark", NULL, NULL);
+			window = glfwCreateWindow(width, height, gameTitle.c_str(), NULL, NULL);
 			if (!window)
 			{
 				EventParameters windowFail;
@@ -513,16 +531,16 @@ namespace PPS
 						Collision = false;
 						Render = false;
 
-						logicJoined = false;
+						/*logicJoined = false;
 						physicsJoined = false;
 						collisionJoined = false;
-						renderJoined = false;
+						renderJoined = false;*/
 
 						cTick++;
 						ticker = chrono::milliseconds(0);
 						
 
-						thread gameLogic = thread(Game::gamestate);
+						/*thread gameLogic = thread(Game::gamestate);
 						thread gamePhysics = thread(Game::physics);
 						thread gameCollision = thread(Game::collision);
 
@@ -559,7 +577,7 @@ namespace PPS
 								//cout << "render joined\n";
 							}
 						}
-
+						*/
 						
 				
 						if (Game::keyPressed[GLFW_KEY_E])

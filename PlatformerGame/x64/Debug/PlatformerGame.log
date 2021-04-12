@@ -1,6 +1,6 @@
 ﻿cl : command line warning D9002: ignoring unknown option '-mwindows'
   main.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Dependencies\GLFW\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\Game.h(62,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
-  PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\pps\PPS\PlatformerGame\SadBoat-Engine\PlatformerGame\x64\Debug\PlatformerGame.exe
+C:\Users\zomon\Desktop\SadBoat\Branch-Testing\1\PlatformerGame\Dependencies\GLFW\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
+C:\Users\zomon\Desktop\SadBoat\Branch-Testing\1\PlatformerGame\Game.h(63,3): warning C4091: 'static ': ignored on left of 'PPS::Game' when no variable is declared
+  PlatformerGame.vcxproj -> C:\Users\zomon\Desktop\SadBoat\Branch-Testing\1\PlatformerGame\x64\Debug\PlatformerGame.exe
