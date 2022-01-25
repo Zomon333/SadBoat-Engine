@@ -1,3 +1,6 @@
+#ifndef PX_H
+#define PX_H
+
 class pixel
 {
 private:
@@ -77,3 +80,5 @@ public:
 
     }
 };
+
+#endif

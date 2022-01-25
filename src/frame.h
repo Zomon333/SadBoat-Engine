@@ -1,3 +1,6 @@
+#ifndef F_H
+#define F_H
+
 using namespace std;
 
 class frame
@@ -48,3 +51,5 @@ class frame
             setPixel(coord.first, coord.second, data);
         }
 };
+
+#endif

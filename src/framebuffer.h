@@ -1,6 +1,7 @@
-using namespace std;
-#include <algorithm>
+#ifndef FB_H
+#define FB_H
 
+using namespace std;
 
 class framebuffer
 {
@@ -65,3 +66,5 @@ class framebuffer
 
 
 };
+
+#endif

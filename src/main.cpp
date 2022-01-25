@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <algorithm>
 #include "pixel.h"
 #include "frame.h"
 #include "framebuffer.h"
@@ -16,6 +17,8 @@ int main()
 
     frame* testFrame;
     testFrame = new frame(X_RES, Y_RES);
+
+
 
 
 
