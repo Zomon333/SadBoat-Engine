@@ -79,6 +79,17 @@ public:
     {
 
     }
+
+    bool operator==(pixel rhs)
+    {
+        if(this->r == rhs.r && this->g == rhs.g && this->b == rhs.b && this->a == rhs.a)
+        {
+            return true;
+        } 
+        return false;
+    }
+
+
 };
 
 #endif

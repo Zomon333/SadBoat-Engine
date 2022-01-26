@@ -29,6 +29,7 @@ class frame
             frameBuffer = new pixel[RESCOUNT];
         }
 
+        
         pixel getPixel(int x, int y)
         {
             int offset = X_RES * (y-1);
@@ -50,6 +51,8 @@ class frame
         {
             setPixel(coord.first, coord.second, data);
         }
+
+        
 };
 
 #endif

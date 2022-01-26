@@ -6,11 +6,15 @@
 #include <unordered_map>
 #include <deque>
 #include <string>
+//
+
 
 //For textures registry
 #include "globals.h"
 
 #include "cfgutility.h"
+
+//#include "shader.h"
 
 #include "pixel.h"
 #include "sprite.h"
@@ -43,12 +47,15 @@ int main()
     cout<<"Calculating RESCOUNT\n";
     int RESCOUNT = X_RES * Y_RES;
 
-    cout<<"\n X_RES: "<<X_RES<<"\n Y_RES: "<<Y_RES<<"\n";
+    //This loads the registry config into the registriesConfig Registry. Changing this value in config.cfg will change what registry file to load!
+    cout<<"Loading registries.cfg using 0x"<<configPtr<<"\n";
+    unordered_map<string, pair<string, pair<string, string>>> registriesRegistry = configPtr(config["REGISTRY_FILE"].second.second);
 
-    //Initialize the framebuffer
-    framebuffer* screen;
-    screen = new framebuffer(X_RES, Y_RES);
+    //This loads the phyiscs config into the physicsRegistry Registry. Changing this value in registries.cfg will change what physics properties to load!
+    cout<<"Loading physics.cfg using 0x"<<configPtr<<"\n";
+    unordered_map<string, pair<string, pair<string, string>>> physicsRegistry = configPtr(registriesRegistry["PHYSICS"].second.second);
 
+    
 
 
 
