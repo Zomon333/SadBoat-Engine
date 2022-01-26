@@ -79,7 +79,7 @@ unordered_map<string, pair<string, string>> readCFG(string fileName)
                     {
                         data="NULL";
                     }
-                    
+
                     cout<<"Writing "<<type<<", "<<data<<" to "<<name<<" in cfgContents\n";
                     cfgContents[name] = pair<string, string>(type, data);
                 }
@@ -93,6 +93,11 @@ unordered_map<string, pair<string, string>> readCFG(string fileName)
     {
         cout<<"Failed to read cfg file. Using program defaults."<<endl;
        //Initialize default cfgContents 
+    }
+
+    if(file.is_open())
+    {
+        file.close();
     }
 
     return cfgContents;
