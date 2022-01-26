@@ -18,9 +18,9 @@ description:
     The # symbol will be used to denote a single line comment
     The % symbol will be used to denote a multi line comment that will continue until it is terminated with another %
 */
-unordered_map<string, pair<string, string>> readCFG(string fileName)
+unordered_map<string, pair<string, pair<string, string>>> readCFG(string fileName)
 {
-    unordered_map<string, pair<string, string>> cfgContents;
+    unordered_map<string, pair<string, pair<string, string>>> cfgContents;
     fstream file = fstream(fileName);
 
     string thisLine="";
@@ -81,7 +81,7 @@ unordered_map<string, pair<string, string>> readCFG(string fileName)
                     }
 
                     cout<<"Writing "<<type<<", "<<data<<" to "<<name<<" in cfgContents\n";
-                    cfgContents[name] = pair<string, string>(type, data);
+                    cfgContents[name] = pair<string, pair<string, string>>(name, pair<string, string>(type, data));
                 }
 
                 thisLine = "";

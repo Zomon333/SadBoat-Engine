@@ -24,21 +24,21 @@ int main()
     cout<<"Initializing engine.\n";
 
     // Changing configPtr to your own function will override the default config loading utility. Use with caution!
-    unordered_map<string, pair<string, string>> (*configPtr)(string fileName);
+    unordered_map<string, pair<string, pair<string, string>>> (*configPtr)(string fileName);
     cout<<"configPtr created.\n";
 
     configPtr = &readCFG;
     cout<<"configPtr assigned: 0x"<<configPtr<<"\n";
 
     cout<<"Loading config.cfg using 0x"<<configPtr<<"\n";
-    unordered_map<string, pair<string, string>> config = configPtr("config.cfg");
+    unordered_map<string, pair<string, pair<string, string>>> config = configPtr("config.cfg");
     cout<<"Config loaded.\n";
 
     cout<<"Calculating X_RES. \n";
-    int X_RES = stoi(config["X_RES"].second);
+    int X_RES = stoi(config["X_RES"].second.second);
 
     cout<<"Calculating Y_RES. \n";
-    int Y_RES = stoi(config["Y_RES"].second);
+    int Y_RES = stoi(config["Y_RES"].second.second);
 
     cout<<"Calculating RESCOUNT\n";
     int RESCOUNT = X_RES * Y_RES;
