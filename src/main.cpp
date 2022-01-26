@@ -7,6 +7,7 @@
 #include <deque>
 #include <string>
 
+//For textures registry
 #include "globals.h"
 
 #include "cfgutility.h"
@@ -20,19 +21,29 @@ using namespace std;
 
 int main()
 {
-    cout<<"Hello world!";
+    cout<<"Initializing engine.\n";
 
     // Changing configPtr to your own function will override the default config loading utility. Use with caution!
     unordered_map<string, pair<string, string>> (*configPtr)(string fileName);
+    cout<<"configPtr created.\n";
+
     configPtr = &readCFG;
+    cout<<"configPtr assigned: 0x"<<configPtr<<"\n";
 
-
+    cout<<"Loading config.cfg using 0x"<<configPtr<<"\n";
     unordered_map<string, pair<string, string>> config = configPtr("config.cfg");
+    cout<<"Config loaded.\n";
 
-    //Initialize the display size
-    const int X_RES = 1920;
-    const int Y_RES = 1080;
-    const int RESCOUNT = X_RES * Y_RES;
+    cout<<"Calculating X_RES. \n";
+    int X_RES = stoi(config["X_RES"].second);
+
+    cout<<"Calculating Y_RES. \n";
+    int Y_RES = stoi(config["Y_RES"].second);
+
+    cout<<"Calculating RESCOUNT\n";
+    int RESCOUNT = X_RES * Y_RES;
+
+    cout<<"\n X_RES: "<<X_RES<<"\n Y_RES: "<<Y_RES<<"\n";
 
     //Initialize the framebuffer
     framebuffer* screen;

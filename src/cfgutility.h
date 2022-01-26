@@ -5,12 +5,27 @@ using namespace std;
 
 pair<string, string> delimSplice(string delim, string text);
 
+/*
+name: readCFG
+purpose: allows easy reading of a *.cfg file to import game data
+description:
+    Opens fileName parameter as a file stream and reads contents.
+    Contents must follow the following format: TYPE:NAME=DATA,
+    readCFG will then break the data into TYPE, NAME, and DATA based on delimiters.
+    These variables will be stored in an unordered map as (TYPE, DATA) at the key NAME.
+
+    This readCFG function follows standard SadBoat CFG formatting.
+    The # symbol will be used to denote a single line comment
+    The % symbol will be used to denote a multi line comment that will continue until it is terminated with another %
+*/
 unordered_map<string, pair<string, string>> readCFG(string fileName)
 {
     unordered_map<string, pair<string, string>> cfgContents;
     fstream file = fstream(fileName);
 
     string thisLine="";
+    bool lineComment = false;
+    bool blockComment = false;
     char current;
 
     if(file.is_open())
@@ -19,7 +34,32 @@ unordered_map<string, pair<string, string>> readCFG(string fileName)
         {
             current = file.get();
             
-            if(current!=',' && current!='\n' && current!=NULL)
+
+
+            /*
+            Config Commenting code
+            */
+            if(lineComment && current=='\n')
+            {
+                current = file.get();
+                lineComment = !lineComment;
+            }
+
+            if(current=='#' && blockComment == false)
+            {
+                lineComment = !lineComment;
+            }
+
+            if(current=='%' && lineComment == false)
+            {
+                current = file.get();
+                blockComment = !blockComment;
+            }
+
+
+
+
+            if(current!=',' && current!='\n' && current!=NULL && !lineComment && !blockComment)
             {
                 thisLine+=current;
             }
@@ -33,7 +73,18 @@ unordered_map<string, pair<string, string>> readCFG(string fileName)
                 name = delimSplice(":",delimSplice("=", thisLine).first).second;
                 data = delimSplice("=", thisLine).second;
 
-                cfgContents[name] = pair<string, string>(type, data);
+                if(type.length()>0 && name.length()>0)
+                {
+                    if(data.length()==0)
+                    {
+                        data="NULL";
+                    }
+                    
+                    cout<<"Writing "<<type<<", "<<data<<" to "<<name<<" in cfgContents\n";
+                    cfgContents[name] = pair<string, string>(type, data);
+                }
+
+                thisLine = "";
 
             }
         }
@@ -47,6 +98,9 @@ unordered_map<string, pair<string, string>> readCFG(string fileName)
     return cfgContents;
 }
 
+/*
+Bug: returned pair still contains delim
+*/
 pair<string, string> delimSplice(string delim, string text)
 {
     string left = "";
@@ -108,6 +162,26 @@ pair<string, string> delimSplice(string delim, string text)
         }
 
     }
+
+    if(left[0]==delim[0])
+    {
+        string tmp = "";
+        for(int i = 1; i<left.length(); i++)
+        {
+            tmp+=left[i];
+        }
+        left = tmp;
+    }
+    if(right[0]==delim[0])
+    {
+        string tmp = "";
+        for( int i = 1; i<right.length(); i++)
+        {
+            tmp+=right[i];
+        }
+        right = tmp;
+    }
+
 
     return pair<string, string>(left, right);
 }
