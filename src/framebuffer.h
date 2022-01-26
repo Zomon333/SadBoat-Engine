@@ -44,13 +44,15 @@ class framebuffer
                 }
             }
 
-            frameLayers.push_back(pair<int, frame>(-INFINITY, blackground));
+            frameLayers.push_back(pair<int, frame>(-15000, blackground));
         }
 
         void sortFrames()
         {
             insertionSort(frameLayers, 0, frameLayers.size());
         }
+
+        void addSprite(sprite toAdd, pair<int, int> coords);
 
         void pushFrame(frame toAdd);
         void addFrameAt(frame toAdd, int index);
