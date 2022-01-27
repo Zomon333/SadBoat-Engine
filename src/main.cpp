@@ -14,7 +14,7 @@
 
 #include "cfgutility.h"
 
-//#include "shader.h"
+
 
 #include "pixel.h"
 #include "sprite.h"
@@ -32,13 +32,12 @@ int main()
     cout<<"configPtr created.\n";
 
     configPtr = &readCFG;
-    cout<<"configPtr assigned: 0x"<<configPtr<<"\n";
+    cout<<"configPtr assigned: 0x"<<configPtr<<"\n\n";
 
     cout<<"Loading config.cfg using 0x"<<configPtr<<"\n";
     unordered_map<string, pair<string, pair<string, string>>> config = configPtr("config.cfg");
-    cout<<"Config loaded.\n";
 
-    cout<<"Calculating X_RES. \n";
+    cout<<"\nCalculating X_RES. \n";
     int X_RES = stoi(config["X_RES"].second.second);
 
     cout<<"Calculating Y_RES. \n";
@@ -48,18 +47,28 @@ int main()
     int RESCOUNT = X_RES * Y_RES;
 
     //This loads the registry config into the registriesConfig Registry. Changing this value in config.cfg will change what registry file to load!
-    cout<<"Loading registries.cfg using 0x"<<configPtr<<"\n";
+    cout<<"\n\nLoading registries.cfg using 0x"<<configPtr<<"\n";
     unordered_map<string, pair<string, pair<string, string>>> registriesRegistry = configPtr(config["REGISTRY_FILE"].second.second);
+    cout<<"\n";
+
+
+    unordered_map<string, unordered_map<string, pair<string, pair<string, string>>>> allRegistries;
 
     //This loads the phyiscs config into the physicsRegistry Registry. Changing this value in registries.cfg will change what physics properties to load!
-    cout<<"Loading physics.cfg using 0x"<<configPtr<<"\n";
-    unordered_map<string, pair<string, pair<string, string>>> physicsRegistry = configPtr(registriesRegistry["PHYSICS"].second.second);
+    for(unordered_map<string, pair<string, pair<string, string>>>::iterator i = registriesRegistry.begin(); i!=registriesRegistry.end(); i++)
+    {
+        string registryFileName = (*i).second.second.second;
+        string registryName = (*i).first;
+        
+        cout<<"Loading "<<registryFileName<<" as "<<registryName<<" into registriesRegistry using 0x"<<configPtr<<"\n";
+        allRegistries[registryName] = configPtr(registryFileName);
+    }
 
     
 
 
 
 
-    cout<<"Goodbye world!";
+    cout<<"Terminating engine";
     return 0;
 }

@@ -91,7 +91,8 @@ unordered_map<string, pair<string, pair<string, string>>> readCFG(string fileNam
     }
     else
     {
-        cout<<"Failed to read cfg file. Using program defaults."<<endl;
+        cout<<"Failed to load "<<fileName<<" into engine. Using engine defaults.\n"<<endl;
+        return cfgContents;
        //Initialize default cfgContents 
     }
 
@@ -100,6 +101,7 @@ unordered_map<string, pair<string, pair<string, string>>> readCFG(string fileNam
         file.close();
     }
 
+    cout<<"Successfully loaded "<<fileName<<" into engine.\n";
     return cfgContents;
 }
 

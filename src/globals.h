@@ -6,7 +6,7 @@
 using namespace std;
 
 unordered_map<string, vector<vector<pixel>>> textures;
-unordered_map<string, unsigned_int> cachedColors;
+unordered_map<string, unsigned int> cachedColors;
 unordered_map<string, bool> colorExists;
 
 #endif
