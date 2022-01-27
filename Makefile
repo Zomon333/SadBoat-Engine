@@ -2,7 +2,7 @@ CC = cl
 FLAGS = /std:C++17 /WX /EHsc
 OBJECTS = main.obj
 HEADERS =
-VERSION = 0.01.7D
+VERSION = 0.01.9D
 
 SadBoatEngine: $(OBJECTS)
 	$(CC) /Fe"SadBoatEngine-V$(VERSION).exe" $(OBJECTS)
