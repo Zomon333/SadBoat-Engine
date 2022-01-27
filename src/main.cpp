@@ -8,6 +8,13 @@
 #include <string>
 //
 
+#include "../includes/glad/glad.h"
+#include "../includes/GLFW/glfw3.h"
+
+#include <cmath>
+
+#include <iostream>
+#include <cmath>
 
 //For textures registry
 #include "globals.h"
@@ -64,7 +71,7 @@ int main()
         allRegistries[registryName] = configPtr(registryFileName);
     }
 
-    
+    glfwInit();
 
 
 

@@ -40,7 +40,7 @@ public:
     }
 
 
-    pixel(char hexcode[])
+    pixel(const char hexcode[9])
     {
         r=hexToInt(hexcode[0]);
         r*=16;
