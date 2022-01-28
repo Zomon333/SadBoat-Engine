@@ -21,30 +21,30 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <unordered_map>
 #include <deque>
 #include <string>
-//
+#include <cmath>
 
 #include "../includes/glad/glad.h"
 #include "../includes/GLFW/glfw3.h"
 
-#include <cmath>
-
-#include <iostream>
-#include <cmath>
+#include "openglhandlers.h"
 
 #include "globals.h"
-
 #include "cfgutility.h"
 
 #include "color.h"
-
 #include "pixel.h"
-
 #include "sprite.h"
 #include "frame.h"
 #include "framebuffer.h"
 
 using namespace std;
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    //Do nothing;
+    cout<<"A";
+}
+void processInput(GLFWwindow* window);
 
 int main()
 {
@@ -92,6 +92,7 @@ int main()
     /*
 --------------------------------------------------------------------------------
         GRAPHICS ENVIRONMENT SETUP
+        OPENGL / VULKAN
 
 --------------------------------------------------------------------------------
     */
@@ -131,29 +132,58 @@ int main()
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        //pixel testPixel = pixel(pair<float, float>(0.0f, 0.0f), pair<float, float>((float)(X_RES), (float)(Y_RES)), colorClass());
+        #ifdef __APPLE__
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        #endif
 
-        framebuffer screen = framebuffer(X_RES,  Y_RES);
-        //frame renderable = screen.getFrame(0);
-        frame testFrame = frame(1920, 1080);
-
-        for(int x = 0; x<X_RES; x++)
+        GLFWwindow* window = glfwCreateWindow(X_RES, Y_RES, "SadBoat", NULL, NULL);
+        if(window==NULL)
         {
-            for(int y = 0; y<Y_RES; y++)
-            {
-                pixel testPixel = testFrame.getPixel(x, y);
-
-                float testArray[] =
-                {
-                    testPixel.getBounds(0).first, testPixel.getBounds(0).second,
-                    testPixel.getBounds(1).first, testPixel.getBounds(1).second,
-                    testPixel.getBounds(2).first, testPixel.getBounds(2).second,
-                    testPixel.getBounds(3).first, testPixel.getBounds(3).second,
-                };
-            }
+            cout<<"Window creation failed!\n";
+            glfwTerminate();
+            return -1;
         }
-        
+    
+        glfwMakeContextCurrent(window);
+        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+        if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            cout<<"GLAD init failed!\n";
+            return -1;
+        }
+
+
+
+    /*
+--------------------------------------------------------------------------------
+        DEFAULT RASTER SYSTEM TEST RIG
+
+--------------------------------------------------------------------------------
+    */
+        bool defaultRasterSystem = true;
+        if(defaultRasterSystem)
+        {
+            framebuffer screen = framebuffer(X_RES,  Y_RES);
+            frame renderable = screen.getFinal();
+            frame testFrame = frame(1920, 1080);
+
+            for(int x = 0; x<X_RES; x++)
+            {
+                for(int y = 0; y<Y_RES; y++)
+                {
+                    pixel testPixel = testFrame.getPixel(x, y);
+
+                    float testArray[] =
+                    {
+                        testPixel.getBounds(0).first, testPixel.getBounds(0).second,
+                        testPixel.getBounds(1).first, testPixel.getBounds(1).second,
+                        testPixel.getBounds(2).first, testPixel.getBounds(2).second,
+                        testPixel.getBounds(3).first, testPixel.getBounds(3).second,
+                    };
+                }
+            }   
+        }
     }
 
 

@@ -53,7 +53,7 @@ class framebuffer
         {
             framebuffer(1920, 1080);
         }
-        
+
         framebuffer(int X_RES, int Y_RES)
         {
             frame blackground(X_RES, Y_RES);
@@ -84,7 +84,10 @@ class framebuffer
         frame getFrame(int index) { sortFrames(); return frameLayers.at(index).second;}
         void setFrame(frame toSet, int index) { sortFrames(); frameLayers[index] = pair<int, frame>(index, toSet); }
 
-        frame renderFinal(); //Todo
+        frame getFinal()
+        {
+            return frame();
+        }
 
 
 
