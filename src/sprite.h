@@ -40,7 +40,7 @@ class sprite
             {
                 for(int y = 0; y<height; y++)
                 {
-                    image[x][y] = pixel("00000000");
+                    image[x][y] = pixel(pair<float, float>( ((float)(x)), ((float)(y))  ), pair<float, float>( ((float)(stoi(config["X_RES"].second.second))), ((float)(stoi(config["Y_RES"].second.second))) ), colorClass("00000000")); //pixel("00000000");
                 }
             }
 
@@ -54,8 +54,14 @@ class sprite
 
         sprite(string spriteName)
         {
+            /*
+            TODO:
+                Implement this once graphics are working.
+
+            */
+
             //Get the sprite from the globals
-            if(textures.find(spriteName) != textures.end())
+            /*if(textures.find(spriteName) != textures.end())
             {
                 image = textures[spriteName];
                 width = image.size();
@@ -64,7 +70,8 @@ class sprite
             else
             {
                 sprite();
-            }
+            }*/
+            sprite();
         }
 
 

@@ -20,8 +20,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
-unordered_map<string, vector<vector<pixel>>> textures;
-unordered_map<string, unsigned int> cachedColors;
-unordered_map<string, bool> colorExists;
+unordered_map<string, unordered_map<string, pair<string, pair<string, string>>>> allRegistries;
+unordered_map<string, pair<string, pair<string, string>>> config;
+unordered_map<string, pair<string, pair<string, string>>> registriesRegistry;
 
 #endif

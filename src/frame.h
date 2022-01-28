@@ -25,7 +25,8 @@ class frame
         int Y_RES;
         int RESCOUNT;
 
-        pixel* frameBuffer;
+        //pixel* frameBuffer;
+        vector<vector<pixel>> frameBuffer;
 
     public:
         frame()
@@ -33,7 +34,17 @@ class frame
             X_RES = 1920;
             Y_RES = 1080;
             RESCOUNT = X_RES * Y_RES;
-            frameBuffer = new pixel[RESCOUNT];
+            
+            frameBuffer.resize(X_RES);
+            for(int x = 0; x<X_RES; x++)
+            {
+                frameBuffer[x].resize(Y_RES);
+                for( int y = 0; y<Y_RES; y++)
+                {
+                    frameBuffer[x][y] = pixel(pair<float, float>( ((float)(x)), ((float)(y)) ), pair<float, float>( ((float)(X_RES)), ((float)(Y_RES))), colorClass());
+                }
+            }
+
         }
 
         frame(int X_RES, int Y_RES)
@@ -41,14 +52,26 @@ class frame
             this->X_RES = X_RES;
             this->Y_RES = Y_RES;
             RESCOUNT = X_RES * Y_RES;
-            frameBuffer = new pixel[RESCOUNT];
+            
+            frameBuffer.resize(X_RES);
+            for(int x = 0; x<X_RES; x++)
+            {
+                frameBuffer[x].resize(Y_RES);
+                for( int y = 0; y<Y_RES; y++)
+                {
+                    frameBuffer[x][y] = pixel(pair<float, float>( ((float)(x)), ((float)(y)) ), pair<float, float>( ((float)(X_RES)), ((float)(Y_RES))), colorClass());
+                }
+            }
+
         }
 
         
         pixel getPixel(int x, int y)
         {
-            int offset = X_RES * (y-1);
-            return frameBuffer[(x+offset)];
+            x = x % X_RES;
+            y = y % Y_RES;
+            
+            return frameBuffer[x][y];
         }
 
         pixel getPixel(pair<int, int> coord)
@@ -56,15 +79,14 @@ class frame
             return getPixel(coord.first, coord.second);
         }
 
-        void setPixel(int x, int y, pixel data)
+        void setcolorClass(int x, int y, colorClass data)
         {
-            int offset = X_RES * (y-1);
-            frameBuffer[(x+offset)] = data;
+            frameBuffer[x][y] = pixel(pair<float, float>((float)(x), (float)(y)), pair<float, float>( (((float)(X_RES))), (((float)(Y_RES))) ), data);
         }
 
-        void setPixel(pair<int, int> coord, pixel data)
+        void setcolorClass(pair<int, int> coord, colorClass data)
         {
-            setPixel(coord.first, coord.second, data);
+            setcolorClass(coord.first, coord.second, data);
         }
 
         

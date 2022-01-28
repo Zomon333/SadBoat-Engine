@@ -31,63 +31,130 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <iostream>
 #include <cmath>
 
-//For textures registry
 #include "globals.h"
 
 #include "cfgutility.h"
 
-
+#include "color.h"
 
 #include "pixel.h"
+
 #include "sprite.h"
 #include "frame.h"
 #include "framebuffer.h"
 
 using namespace std;
 
+
 int main()
 {
     cout<<"Initializing engine.\n";
 
-    // Changing configPtr to your own function will override the default config loading utility. Use with caution!
-    unordered_map<string, pair<string, pair<string, string>>> (*configPtr)(string fileName);
-    cout<<"configPtr created.\n";
+    /*
+--------------------------------------------------------------------------------
+        CONFIGURATION FILE LOADING
 
-    configPtr = &readCFG;
-    cout<<"configPtr assigned: 0x"<<configPtr<<"\n\n";
-
-    cout<<"Loading config.cfg using 0x"<<configPtr<<"\n";
-    unordered_map<string, pair<string, pair<string, string>>> config = configPtr("config.cfg");
-
-    cout<<"\nCalculating X_RES. \n";
-    int X_RES = stoi(config["X_RES"].second.second);
-
-    cout<<"Calculating Y_RES. \n";
-    int Y_RES = stoi(config["Y_RES"].second.second);
-
-    cout<<"Calculating RESCOUNT\n";
-    int RESCOUNT = X_RES * Y_RES;
-
-    //This loads the registry config into the registriesConfig Registry. Changing this value in config.cfg will change what registry file to load!
-    cout<<"\n\nLoading registries.cfg using 0x"<<configPtr<<"\n";
-    unordered_map<string, pair<string, pair<string, string>>> registriesRegistry = configPtr(config["REGISTRY_FILE"].second.second);
-    cout<<"\n";
-
-
-    unordered_map<string, unordered_map<string, pair<string, pair<string, string>>>> allRegistries;
-
-    //This loads the phyiscs config into the physicsRegistry Registry. Changing this value in registries.cfg will change what physics properties to load!
-    for(unordered_map<string, pair<string, pair<string, string>>>::iterator i = registriesRegistry.begin(); i!=registriesRegistry.end(); i++)
+--------------------------------------------------------------------------------
+    */
+    bool defaultConfigLoading = true;
+    if(defaultConfigLoading)
     {
-        string registryFileName = (*i).second.second.second;
-        string registryName = (*i).first;
-        
-        cout<<"Loading "<<registryFileName<<" as "<<registryName<<" into registriesRegistry using 0x"<<configPtr<<"\n";
-        allRegistries[registryName] = configPtr(registryFileName);
+        // Changing configPtr to your own function will override the default config loading utility. Use with caution!
+        unordered_map<string, pair<string, pair<string, string>>> (*configPtr)(string fileName);
+        cout<<"configPtr created.\n";
+        configPtr = &readCFG;
+        cout<<"configPtr assigned: 0x"<<configPtr<<"\n\n";
+
+        //LOADING FOR CONFIG.CFG
+        cout<<"Loading config.cfg using 0x"<<configPtr<<"\n";
+        config = configPtr("config.cfg");
+
+        //LOADING FOR REGISTRY LISTING FILE
+        cout<<"\n\nLoading registries.cfg using 0x"<<configPtr<<"\n";
+        registriesRegistry = configPtr(config["REGISTRY_FILE"].second.second);
+        cout<<"\n";
+
+
+        //INITIALIZING FOR OTHER REGISTRIES
+        for(unordered_map<string, pair<string, pair<string, string>>>::iterator i = registriesRegistry.begin(); i!=registriesRegistry.end(); i++)
+        {
+            string registryFileName = (*i).second.second.second;
+            string registryName = (*i).first;
+            
+            cout<<"Loading "<<registryFileName<<" as "<<registryName<<" into registriesRegistry using 0x"<<configPtr<<"\n";
+            allRegistries[registryName] = configPtr(registryFileName);
+        }
     }
 
-    glfwInit();
+    
+    
+    
+    /*
+--------------------------------------------------------------------------------
+        GRAPHICS ENVIRONMENT SETUP
 
+--------------------------------------------------------------------------------
+    */
+    bool openGLGraphicsEnvironment = true;
+    if(openGLGraphicsEnvironment)
+    {
+
+        cout<<"\nCalculating X_RES. \n";
+        int X_RES = stoi(config["X_RES"].second.second);
+
+        cout<<"Calculating Y_RES. \n";
+        int Y_RES = stoi(config["Y_RES"].second.second);
+
+        cout<<"Calculating RESCOUNT\n";
+        int RESCOUNT = X_RES * Y_RES;
+
+
+        const char* defaultVertexShaderSource=
+            "#version 330 core\n"
+            "layout (location = 0) in vec3 aPos;\n"
+            "void main()\n"
+            "{\n"
+            "   gl_Position = vec4(aPos, 1.0);\n"
+            "}\0";
+
+        const char* defaultFragmentShaderSource=
+            "#version 330 core\n"
+            "out vec4 FragColor;\n"
+            "uniform vec4 ourColor;\n"
+            "void main()\n"
+            "{\n"
+            "   FragColor = ourColor;\n"
+            "}\n\0";
+
+        glfwInit();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+        //pixel testPixel = pixel(pair<float, float>(0.0f, 0.0f), pair<float, float>((float)(X_RES), (float)(Y_RES)), colorClass());
+
+        framebuffer screen = framebuffer(X_RES,  Y_RES);
+        //frame renderable = screen.getFrame(0);
+        frame testFrame = frame(1920, 1080);
+
+        for(int x = 0; x<X_RES; x++)
+        {
+            for(int y = 0; y<Y_RES; y++)
+            {
+                pixel testPixel = testFrame.getPixel(x, y);
+
+                float testArray[] =
+                {
+                    testPixel.getBounds(0).first, testPixel.getBounds(0).second,
+                    testPixel.getBounds(1).first, testPixel.getBounds(1).second,
+                    testPixel.getBounds(2).first, testPixel.getBounds(2).second,
+                    testPixel.getBounds(3).first, testPixel.getBounds(3).second,
+                };
+            }
+        }
+        
+
+    }
 
 
 

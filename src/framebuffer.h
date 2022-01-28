@@ -23,6 +23,7 @@ class framebuffer
     private:
         vector<pair<int, frame>> frameLayers;
 
+        //I know this insertion sort code works, I just don't know if it works in this context.
         void insertionSort(vector<pair<int, frame>> array, const int start, const int end) {
 
             if(start>end)
@@ -48,6 +49,11 @@ class framebuffer
         }
 
     public:
+        framebuffer()
+        {
+            framebuffer(1920, 1080);
+        }
+        
         framebuffer(int X_RES, int Y_RES)
         {
             frame blackground(X_RES, Y_RES);
@@ -55,7 +61,7 @@ class framebuffer
             {
                 for(int x = 0; x<X_RES; x++)
                 {
-                    blackground.setPixel(pair<int, int>(x, y), pixel("00000000"));
+                    blackground.setcolorClass(pair<int, int>(x, y), colorClass("00000000"));
                 }
             }
 
@@ -69,16 +75,16 @@ class framebuffer
 
         void addSprite(sprite toAdd, pair<int, int> coords);
 
-        void pushFrame(frame toAdd);
-        void addFrameAt(frame toAdd, int index);
+        void pushFrame(frame toAdd) { sortFrames(); frameLayers.push_back(pair<int, frame>(frameLayers[0].first-1, toAdd)); }
+        void addFrameAt(frame toAdd, int index) { frameLayers.push_back(pair<int, frame>(index, toAdd)); sortFrames(); }
         
-        frame popFrame();
-        frame removeFrameAt(frame toAdd, int index);
+        frame popFrame() { sortFrames(); auto toReturn = frameLayers.back(); frameLayers.pop_back(); return toReturn.second; }
+        void removeFrameAt(int index) { sortFrames(); frameLayers.erase(frameLayers.begin()+index); }
 
-        frame getFrame(int index);
-        void setFrame(frame toSet, int index);
+        frame getFrame(int index) { sortFrames(); return frameLayers.at(index).second;}
+        void setFrame(frame toSet, int index) { sortFrames(); frameLayers[index] = pair<int, frame>(index, toSet); }
 
-        frame renderFinal();
+        frame renderFinal(); //Todo
 
 
 
