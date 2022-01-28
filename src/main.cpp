@@ -204,7 +204,7 @@ int main()
         glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
         if(!success)
         {
-            glGetProgramInfoLog(shaderPgoram, 512, NULL, infoLog);
+            glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
             cout<<"Shader program linking failed: "<<infoLog<<endl;
             return -1;
         }
@@ -212,7 +212,12 @@ int main()
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
 
-        
+        //----------------------
+        //  Set up vertex data and buffers
+        //----------------------
+
+
+
 
 
 
