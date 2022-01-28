@@ -96,18 +96,22 @@ int main()
 
 --------------------------------------------------------------------------------
     */
-    bool openGLGraphicsEnvironment = true;
+   int X_RES=1920;
+   int Y_RES=1080;
+   int RESCOUNT = X_RES * Y_RES;
+
+    bool openGLGraphicsEnvironment = config["RENDERER"].second.second == "OPENGL";
     if(openGLGraphicsEnvironment)
     {
 
         cout<<"\nCalculating X_RES. \n";
-        int X_RES = stoi(config["X_RES"].second.second);
+        X_RES = stoi(config["X_RES"].second.second);
 
         cout<<"Calculating Y_RES. \n";
-        int Y_RES = stoi(config["Y_RES"].second.second);
+        Y_RES = stoi(config["Y_RES"].second.second);
 
         cout<<"Calculating RESCOUNT\n";
-        int RESCOUNT = X_RES * Y_RES;
+        RESCOUNT = X_RES * Y_RES;
 
 
         const char* defaultVertexShaderSource=
@@ -153,8 +157,68 @@ int main()
             return -1;
         }
 
+        //----------------------
+        //  Vertex Shader Compilation
+        //----------------------
+
+        unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertexShader, 1, &defaultVertexShaderSource, NULL);
+        glCompileShader(vertexShader);
+
+        int success;
+        char infoLog[512];
+        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+        if(!success)
+        {
+            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+            cout<<"Vertex shader compilation failed: "<<infoLog<<endl;
+            return -1;
+        }
+        cout<<"Default vertex shader compilation was successful.\n";
+
+        //----------------------
+        //  Fragment Shader Compilation
+        //----------------------
+
+        unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragmentShader, 1, &defaultFragmentShaderSource, NULL);
+        glCompileShader(fragmentShader);
+        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+        if(!success)
+        {
+            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+            cout<<"Fragment shader compilation failed: "<<infoLog<<endl;
+            return -1;
+        }
+        cout<<"Default fragment shader compilation was successful.\n";
+
+        //----------------------
+        //  Shader Program Creation & Shader Linking
+        //----------------------
+
+        unsigned int shaderProgram = glCreateProgram();
+        glAttachShader(shaderProgram, vertexShader);
+        glAttachShader(shaderProgram, fragmentShader);
+        glLinkProgram(shaderProgram);
+
+        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+        if(!success)
+        {
+            glGetProgramInfoLog(shaderPgoram, 512, NULL, infoLog);
+            cout<<"Shader program linking failed: "<<infoLog<<endl;
+            return -1;
+        }
+
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+
+        
 
 
+
+
+
+    }
     /*
 --------------------------------------------------------------------------------
         DEFAULT RASTER SYSTEM TEST RIG
@@ -184,7 +248,7 @@ int main()
                 }
             }   
         }
-    }
+    
 
 
 
