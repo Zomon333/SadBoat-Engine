@@ -79,6 +79,7 @@ class pixel
 
             return pair<float, float>(x, y);
         }
+
 };
 
 #endif

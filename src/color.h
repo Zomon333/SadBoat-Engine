@@ -46,6 +46,7 @@ private:
     }
 public:
 
+
     colorClass()
     {
         r=0;
@@ -104,6 +105,22 @@ public:
         return false;
     }
 
+    float getR()
+    {
+        return (r - abs( 255.0f - r )) / 255.0f;  
+    }
+    float getG()
+    {
+        return (g - abs( 255.0f - g )) / 255.0f;   
+    }
+    float getB()
+    {
+        return (b - abs( 255.0f - b )) / 255.0f;     
+    }
+    float getA()
+    {
+        return (a - abs( 255.0f - a )) / 255.0f;         
+    }
 
 };
 #endif

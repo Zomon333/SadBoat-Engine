@@ -39,11 +39,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    //Do nothing;
-    cout<<"A";
-}
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
 int main()
@@ -99,7 +95,7 @@ int main()
    int X_RES=1920;
    int Y_RES=1080;
    int RESCOUNT = X_RES * Y_RES;
-
+   
     bool openGLGraphicsEnvironment = config["RENDERER"].second.second == "OPENGL";
     if(openGLGraphicsEnvironment)
     {
@@ -125,10 +121,10 @@ int main()
         const char* defaultFragmentShaderSource=
             "#version 330 core\n"
             "out vec4 FragColor;\n"
-            "uniform vec4 ourColor;\n"
+            "uniform vec4 pixelColor;\n"
             "void main()\n"
             "{\n"
-            "   FragColor = ourColor;\n"
+            "   FragColor = pixelColor;\n"
             "}\n\0";
 
         glfwInit();
@@ -212,21 +208,10 @@ int main()
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
 
-        //----------------------
-        //  Set up vertex data and buffers
-        //----------------------
 
-
-
-
-
-
-
-
-    }
-    /*
+        /*
 --------------------------------------------------------------------------------
-        DEFAULT RASTER SYSTEM TEST RIG
+        DEFAULT RASTER SYSTEM
 
 --------------------------------------------------------------------------------
     */
@@ -235,28 +220,82 @@ int main()
         {
             framebuffer screen = framebuffer(X_RES,  Y_RES);
             frame renderable = screen.getFinal();
-            frame testFrame = frame(1920, 1080);
+            frame testFrame = frame(X_RES, Y_RES);
 
-            for(int x = 0; x<X_RES; x++)
+            //----------------------
+            //  Set up vertex data and buffers
+            //----------------------
+            unsigned int VBO, VAO;
+            glGenVertexArrays(1, &VAO);
+            glGenBuffers(1, &VBO);
+            glBindVertexArray(VAO);
+
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+            while(!glfwWindowShouldClose(window))
             {
-                for(int y = 0; y<Y_RES; y++)
+                for(int x = 0; x<X_RES; x++)
                 {
-                    pixel testPixel = testFrame.getPixel(x, y);
-
-                    float testArray[] =
+                    for(int y = 0; y<Y_RES; y++)
                     {
-                        testPixel.getBounds(0).first, testPixel.getBounds(0).second,
-                        testPixel.getBounds(1).first, testPixel.getBounds(1).second,
-                        testPixel.getBounds(2).first, testPixel.getBounds(2).second,
-                        testPixel.getBounds(3).first, testPixel.getBounds(3).second,
-                    };
+                        //---
+                        //Process input
+                        //---
+                        processInput(window);
+
+                        //---
+                        //Setup rendering info
+                        //---
+                        pixel testPixel = testFrame.getPixel(x, y);
+
+                        float vertices[] =
+                        {
+                            testPixel.getBounds(0).first, testPixel.getBounds(0).second, 1.0f,
+                            testPixel.getBounds(1).first, testPixel.getBounds(1).second, 1.0f,
+                            testPixel.getBounds(2).first, testPixel.getBounds(2).second, 1.0f,
+                            testPixel.getBounds(0).first, testPixel.getBounds(0).second, 1.0f,
+                            testPixel.getBounds(2).first, testPixel.getBounds(2).second, 1.0f,
+                            testPixel.getBounds(3).first, testPixel.getBounds(3).second, 1.0f
+                        };
+
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+                        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+                        glEnableVertexAttribArray(0);
+
+                        glBindVertexArray(VAO);
+
+
+                        //---
+                        //Render the info
+                        //---
+                        glClearColor(0.156862745f, 0.682352941f, 0.623529412f, 1.0f);
+                        glClear(GL_COLOR_BUFFER_BIT);
+
+                        glUseProgram(shaderProgram);
+
+                        double timeValue = glfwGetTime();
+                        int vertexColorLocation = glGetUniformLocation(shaderProgram, "pixelColor");
+                        glUniform4f(vertexColorLocation, testPixel.getPixel().getR(), testPixel.getPixel().getG(), testPixel.getPixel().getB(), testPixel.getPixel().getA());
+
+                        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+                        //---
+                        //Buffer swapping & window polling
+                        //---
+                        glfwSwapBuffers(window);
+                        glfwPollEvents();
+
+                    }
                 }
-            }   
+
+            
+
+
+            }
         }
+    }
     
-
-
-
     cout<<"Terminating engine";
     return 0;
 }
