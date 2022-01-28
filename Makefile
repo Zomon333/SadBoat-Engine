@@ -6,10 +6,10 @@ LIBS = lib/glfw3.lib opengl32.lib glu32.lib lib/assimp.lib lib/freetype.lib lib/
 VERSION = 0.01.9D
 
 SadBoatEngine: $(OBJECTS)
-	$(CC) /Fe"SadBoatEngine-V$(VERSION).exe" $(OBJECTS)
+	$(CC) /Fe"SadBoatEngine-V$(VERSION).exe" $(OBJECTS) $(LIBS)
 
 main.obj: src\main.cpp $(HEADERS)
-	$(CC) $(FLAGS) /I lib\ /I includes\ src\main.cpp /link $(LIBS)
+	$(CC) $(FLAGS) src\main.cpp $(LIBS) /I includes\ /I lib\
 
 clean:
 	del *.exe *.obj *.ilk *.pdb

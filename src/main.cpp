@@ -13,7 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 #include <iostream>
 #include <queue>
 #include <vector>
