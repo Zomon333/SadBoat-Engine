@@ -222,6 +222,14 @@ int main()
             frame renderable = screen.getFinal();
             frame testFrame = frame(X_RES, Y_RES);
 
+            for(int x = 0; x< (X_RES / 2); x++)
+            {
+                for(int y = 0; y< (Y_RES/2); y++)
+                {
+                    testFrame.setcolorClass(x, y, colorClass("FF0000FF"));
+                }
+            }
+
             //----------------------
             //  Set up vertex data and buffers
             //----------------------
@@ -232,16 +240,24 @@ int main()
 
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-            while(!glfwWindowShouldClose(window))
+
+            
+
+            /*while(!glfwWindowShouldClose(window))
             {
+                //---
+                //Process input
+                //---
+                processInput(window);
+
+                glClearColor(0.156862745f, 0.682352941f, 0.623529412f, 0.0f);
+                glClear(GL_COLOR_BUFFER_BIT);
+
                 for(int x = 0; x<X_RES; x++)
                 {
                     for(int y = 0; y<Y_RES; y++)
                     {
-                        //---
-                        //Process input
-                        //---
-                        processInput(window);
+                        
 
                         //---
                         //Setup rendering info
@@ -269,30 +285,32 @@ int main()
                         //---
                         //Render the info
                         //---
-                        glClearColor(0.156862745f, 0.682352941f, 0.623529412f, 1.0f);
-                        glClear(GL_COLOR_BUFFER_BIT);
+                        
 
                         glUseProgram(shaderProgram);
 
                         double timeValue = glfwGetTime();
                         int vertexColorLocation = glGetUniformLocation(shaderProgram, "pixelColor");
+                        //cout<<"X: "<<testPixel.getPosition().first<<" Y: "<<testPixel.getPosition().second<<" RGBA: "<<testPixel.getPixel().getR()<<" "<<testPixel.getPixel().getG()<<" "<<testPixel.getPixel().getB()<<" "<<testPixel.getPixel().getA()<<endl;
                         glUniform4f(vertexColorLocation, testPixel.getPixel().getR(), testPixel.getPixel().getG(), testPixel.getPixel().getB(), testPixel.getPixel().getA());
 
-                        glDrawArrays(GL_TRIANGLES, 0, 6);
+                        glDrawArrays(GL_TRIANGLES, 0, 3);
 
-                        //---
-                        //Buffer swapping & window polling
-                        //---
-                        glfwSwapBuffers(window);
-                        glfwPollEvents();
+                        
+
 
                     }
                 }
 
+                //---
+                //Buffer swapping & window polling
+                //---
+                glfwSwapBuffers(window);
+                glfwPollEvents();
             
+                cout<<"Frame rendered\n";
 
-
-            }
+            }*/
         }
     }
     
