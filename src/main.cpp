@@ -23,13 +23,17 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <string>
 #include <cmath>
 
+
 #include "../includes/glad/glad.h"
 #include "../includes/GLFW/glfw3.h"
+
 
 #include "openglhandlers.h"
 
 #include "globals.h"
 #include "cfgutility.h"
+
+#include "event.h"
 
 #include "color.h"
 #include "pixel.h"
@@ -113,18 +117,21 @@ int main()
         const char* defaultVertexShaderSource=
             "#version 330 core\n"
             "layout (location = 0) in vec3 aPos;\n"
+            "layout (location = 1) in vec3 aColor;\n"
+            "out vec3 pixelColor;\n"
             "void main()\n"
             "{\n"
             "   gl_Position = vec4(aPos, 1.0);\n"
+            "   pixelColor = aColor;\n"
             "}\0";
 
         const char* defaultFragmentShaderSource=
             "#version 330 core\n"
             "out vec4 FragColor;\n"
-            "uniform vec4 pixelColor;\n"
+            "in vec3 pixelColor;\n"
             "void main()\n"
             "{\n"
-            "   FragColor = pixelColor;\n"
+            "   FragColor = vec4(pixelColor, 1.0f);\n"
             "}\n\0";
 
         glfwInit();
@@ -233,84 +240,102 @@ int main()
             //----------------------
             //  Set up vertex data and buffers
             //----------------------
-            unsigned int VBO, VAO;
+
+            // set up vertex data (and buffer(s)) and configure vertex attributes
+            // ------------------------------------------------------------------
+            /*float vertices[] = {
+                // positions         // colors
+                0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
+                -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
+                0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
+
+            };*/
+
+
+            
+
+            unsigned int* VBOs;
+            unsigned int* VAOs;
+            int ARRAY_QUANTITY = (X_RES*Y_RES*2);
+
+            float* vertices = new float[ARRAY_QUANTITY*6];
+
+            VBOs = new unsigned int[ARRAY_QUANTITY];
+            VAOs = new unsigned int[ARRAY_QUANTITY];
+
+            glGenVertexArrays(ARRAY_QUANTITY, VAOs);
+            glGenBuffers(ARRAY_QUANTITY, VBOs);
+
+            int i = 0;
+            int offset = 0;
+            
+            for(int i = 0; i<ARRAY_QUANTITY; i++)
+            {
+                offset = X_RES*(i%Y_RES) + i%X_RES;
+                glBindVertexArray(VAOs[i]);
+                glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(float)*6, vertices+offset, GL_STATIC_DRAW);
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+                glEnableVertexAttribArray(0);
+                cout<<"Binding VAO #"<<i<<"/"<<ARRAY_QUANTITY<<". ("<<((float)(i)*100.0f/(float)(ARRAY_QUANTITY))<<"%)\n";
+            }
+
+
+
+
+
+
+            /*unsigned int VBO, VAO;
             glGenVertexArrays(1, &VAO);
             glGenBuffers(1, &VBO);
             glBindVertexArray(VAO);
 
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+            //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-            
+            // position attribute
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
+            // color attribute
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);*/
 
-            /*while(!glfwWindowShouldClose(window))
+            glUseProgram(shaderProgram);
+
+            while(!glfwWindowShouldClose(window))
             {
-                //---
-                //Process input
-                //---
+
+
                 processInput(window);
 
-                glClearColor(0.156862745f, 0.682352941f, 0.623529412f, 0.0f);
+                glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                for(int x = 0; x<X_RES; x++)
+                double  timeValue = glfwGetTime();
+                //float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
+                //int vertexColorLocation = glGetUniformLocation(shaderProgram, "pixelColor");
+                //glUniform4f(vertexColorLocation, 0, greenValue, 0, 1.0f); //rgba
+
+                for(int i = 0; i<ARRAY_QUANTITY; i++)
                 {
-                    for(int y = 0; y<Y_RES; y++)
-                    {
-                        
-
-                        //---
-                        //Setup rendering info
-                        //---
-                        pixel testPixel = testFrame.getPixel(x, y);
-
-                        float vertices[] =
-                        {
-                            testPixel.getBounds(0).first, testPixel.getBounds(0).second, 1.0f,
-                            testPixel.getBounds(1).first, testPixel.getBounds(1).second, 1.0f,
-                            testPixel.getBounds(2).first, testPixel.getBounds(2).second, 1.0f,
-                            testPixel.getBounds(0).first, testPixel.getBounds(0).second, 1.0f,
-                            testPixel.getBounds(2).first, testPixel.getBounds(2).second, 1.0f,
-                            testPixel.getBounds(3).first, testPixel.getBounds(3).second, 1.0f
-                        };
-
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-                        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-                        glEnableVertexAttribArray(0);
-
-                        glBindVertexArray(VAO);
-
-
-                        //---
-                        //Render the info
-                        //---
-                        
-
-                        glUseProgram(shaderProgram);
-
-                        double timeValue = glfwGetTime();
-                        int vertexColorLocation = glGetUniformLocation(shaderProgram, "pixelColor");
-                        //cout<<"X: "<<testPixel.getPosition().first<<" Y: "<<testPixel.getPosition().second<<" RGBA: "<<testPixel.getPixel().getR()<<" "<<testPixel.getPixel().getG()<<" "<<testPixel.getPixel().getB()<<" "<<testPixel.getPixel().getA()<<endl;
-                        glUniform4f(vertexColorLocation, testPixel.getPixel().getR(), testPixel.getPixel().getG(), testPixel.getPixel().getB(), testPixel.getPixel().getA());
-
-                        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-                        
-
-
-                    }
+                    glBindVertexArray(VAOs[i]);
+                    glDrawArrays(GL_TRIANGLES, 0, 3);
                 }
+                
 
-                //---
-                //Buffer swapping & window polling
-                //---
+                // render the triangle
+                //glBindVertexArray(VAO);
+                //glDrawArrays(GL_TRIANGLES, 0, 3);
+
+                // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+                // -------------------------------------------------------------------------------
                 glfwSwapBuffers(window);
                 glfwPollEvents();
+            }
             
-                cout<<"Frame rendered\n";
-
-            }*/
+           
+            
         }
     }
     

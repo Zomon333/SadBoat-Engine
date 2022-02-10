@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "vector": "cpp",
+        "utility": "cpp",
+        "xiosbase": "cpp",
+        "unordered_map": "cpp",
+        "string": "cpp",
+        "xstring": "cpp",
+        "chrono": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
