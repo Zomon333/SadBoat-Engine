@@ -17,3 +17,8 @@ clean:
 remake:
 	nmake clean
 	nmake
+
+	
+compileTest:
+	nmake remake
+	nmake clean

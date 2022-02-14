@@ -254,7 +254,7 @@ int main()
 
             
 
-            unsigned int* VBOs;
+            /*unsigned int* VBOs;
             unsigned int* VAOs;
             int ARRAY_QUANTITY = (X_RES*Y_RES*2);
 
@@ -268,8 +268,8 @@ int main()
 
             int i = 0;
             int offset = 0;
-            
-            for(int i = 0; i<ARRAY_QUANTITY; i++)
+            */
+            /*for(int i = 0; i<ARRAY_QUANTITY; i++)
             {
                 offset = X_RES*(i%Y_RES) + i%X_RES;
                 glBindVertexArray(VAOs[i]);
@@ -278,12 +278,57 @@ int main()
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
                 glEnableVertexAttribArray(0);
                 cout<<"Binding VAO #"<<i<<"/"<<ARRAY_QUANTITY<<". ("<<((float)(i)*100.0f/(float)(ARRAY_QUANTITY))<<"%)\n";
-            }
+            }*/
 
+            struct bufferContainer{
+                int ARRAY_QUANTITY;
+                float* vertices;
 
+                unsigned int VBO;
+                unsigned int VAO;
 
+                void setColor(const int X_RES, const int Y_RES, int x, int y, tuple<float, float, float> rgb) {
+                    int offset = 0;
+                    offset = y * X_RES;
+                    offset += x;
+                    offset *= 6;
 
+                    vertices[offset+3]=get<0>(rgb);
+                    vertices[offset+4]=get<1>(rgb);
+                    vertices[offset+5]=get<2>(rgb);
+                }
 
+                void init(const int X_RES, const int Y_RES)
+                {
+                    ARRAY_QUANTITY = (X_RES*Y_RES*2);
+                    vertices = new float[ARRAY_QUANTITY*6];
+
+                    glGenVertexArrays(1, &VAO);
+                    glGenBuffers(1, &VBO);
+
+                    glBindVertexArray(VAO);
+                    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+                    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*6, vertices, GL_STATIC_DRAW);
+
+                    //Positioning attributes
+                    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+                    glEnableVertexAttribArray(0);
+                }
+
+            };
+
+            bufferContainer currentFrame;
+            currentFrame.init(X_RES, Y_RES);
+
+            //static Hashmap of key tuple< x, y, z> containing hitboxes with parent info for Objects
+            //check if occupied
+
+            // | Tj - Tf | = dT
+            // dT = kE
+            // kE = D
+
+            //"Walking is complicated because technically every step you take is coefficient of static friction"
 
             /*unsigned int VBO, VAO;
             glGenVertexArrays(1, &VAO);
@@ -297,6 +342,7 @@ int main()
             // position attribute
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
             glEnableVertexAttribArray(0);
+
             // color attribute
             glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
             glEnableVertexAttribArray(1);*/
@@ -305,7 +351,7 @@ int main()
 
             while(!glfwWindowShouldClose(window))
             {
-
+                cout<<"Frame!";
 
                 processInput(window);
 
@@ -317,12 +363,13 @@ int main()
                 //int vertexColorLocation = glGetUniformLocation(shaderProgram, "pixelColor");
                 //glUniform4f(vertexColorLocation, 0, greenValue, 0, 1.0f); //rgba
 
-                for(int i = 0; i<ARRAY_QUANTITY; i++)
+                /*for(int i = 0; i<ARRAY_QUANTITY; i++)
                 {
                     glBindVertexArray(VAOs[i]);
                     glDrawArrays(GL_TRIANGLES, 0, 3);
-                }
+                }*/
                 
+                glDrawArrays(GL_TRIANGLES, 0, 3);
 
                 // render the triangle
                 //glBindVertexArray(VAO);
