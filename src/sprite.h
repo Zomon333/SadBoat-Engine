@@ -24,9 +24,17 @@ class sprite
         int height;
         vector<vector<pixel>> image;
 
+        int id;
+
     public:
+        static IDMan spriteIDs;
+        static std::unordered_map<int, sprite*> spriteRegistry;
+
         sprite()
         {
+            id = spriteIDs.generateID();
+            spriteRegistry[id] = this;
+
             width = 1;
             height = 1;
             
@@ -74,6 +82,11 @@ class sprite
             sprite();
         }
 
+        ~sprite()
+        {
+            spriteIDs.setIDState(id, false);
+            spriteRegistry[id] = nullptr;
+        }
 
 };
 
