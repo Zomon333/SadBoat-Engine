@@ -24,6 +24,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include <thread>
 
+#include "idman.h"
+
 #include "../includes/glad/glad.h"
 #include "../includes/GLFW/glfw3.h"
 
@@ -32,7 +34,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "globals.h"
 #include "cfgutility.h"
 
-#include "idman.h"
+#include "hitbox.h"
 #include "object.h"
 
 #include "event.h"
@@ -287,35 +289,7 @@ int main()
             bufferContainer currentFrame;
             currentFrame.init(X_RES, Y_RES);
 
-            //static Hashmap of key tuple< x, y, z> containing hitboxes with parent info for Objects
-            //check if occupied
-
-            // | Tj - Tf | = dT
-            // dT = kE
-            // kE = D
-
-            // Dynamic coefficient of friction -- (a * uS) + (b * uK) = uC;
-
-            //"Walking is complicated because technically every step you take is coefficient of static friction"
-
-            // v = sqrt ( 2.0f * (P1 - Px) ) / m;
-
-            /*unsigned int VBO, VAO;
-            glGenVertexArrays(1, &VAO);
-            glGenBuffers(1, &VBO);
-            glBindVertexArray(VAO);
-
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-            //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-            // position attribute
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);
-
-            // color attribute
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-            glEnableVertexAttribArray(1);*/
+            //see notes
 
             glUseProgram(shaderProgram);
 

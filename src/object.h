@@ -18,6 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 //#include <idman.h>
 #include <unordered_map>
+#include "hitbox.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ class Object {
         float dX;
         float dY;
 
+        sprite objectSprite;
         //Needs hitbox array
         //
 
