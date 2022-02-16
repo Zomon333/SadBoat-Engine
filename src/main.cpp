@@ -30,9 +30,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 //Utility Includes
 //----------------------------------
 #include "idman.h"
-#include "registry.h"
 #include "globals.h"
 #include "cfgutility.h"
+#include "registry.h"
 #include "event.h"
 
 //OpenGL Includes
@@ -90,13 +90,17 @@ int main()
         cout<<"\n\nLoading registries.cfg using 0x"<<configPtr<<"\n";
         registriesRegistry = new Registry<string, pair<string, pair<string, string>>>("REGISTRIES","Registry for Registry Loading Information");
         
-        //registriesRegistry->setThisRegistry(configPtr(configRegistry->(*(getThisRegistry()))["REGISTRY_FILE"].second.second));
+        registriesRegistry->setThisRegistry(
+            configPtr(
+                configRegistry->getItem("REGISTRY_FILE").second.second
+            )
+        );
 
         cout<<"\n";
 
 
         //INITIALIZING FOR OTHER REGISTRIES
-        for(auto i = registriesRegistry->(*(getThisRegistry())).begin(); i!=registriesRegistry->(*(getThisRegistry())).end(); i++)
+        for( auto i = registriesRegistry->getThisRegistry()->begin(); i!=registriesRegistry->getThisRegistry()->end(); i++)
         {
             string registryFileName = (*i).second.second.second;
             string registryName = (*i).first;

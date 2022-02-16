@@ -44,6 +44,9 @@ template<class Key, class Content> class Registry{
             thisRegistry = copy.getThisRegistry();
         }
 
+        Registry(const Registry&) = default;
+        Registry& operator=(const Registry&) = default;
+
         ~Registry()
         {
             registrar[id] = nullptr;

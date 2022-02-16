@@ -82,6 +82,12 @@ public:
         this->relativePos = relativePos;
     }
 
+    Hitbox(const Hitbox&) = default;
+    Hitbox& Hitbox::operator=( Hitbox&& )
+    {
+        
+    }
+
     ~Hitbox()
     {
         collisionRegistry->setItem(relativePos, nullptr);
