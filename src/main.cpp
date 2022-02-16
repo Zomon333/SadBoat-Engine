@@ -22,16 +22,18 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <deque>
 #include <string>
 #include <cmath>
-
+#include <thread>
 
 #include "../includes/glad/glad.h"
 #include "../includes/GLFW/glfw3.h"
-
 
 #include "openglhandlers.h"
 
 #include "globals.h"
 #include "cfgutility.h"
+
+#include "idman.h"
+#include "object.h"
 
 #include "event.h"
 
@@ -243,42 +245,6 @@ int main()
 
             // set up vertex data (and buffer(s)) and configure vertex attributes
             // ------------------------------------------------------------------
-            /*float vertices[] = {
-                // positions         // colors
-                0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-                -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-                0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
-
-            };*/
-
-
-            
-
-            /*unsigned int* VBOs;
-            unsigned int* VAOs;
-            int ARRAY_QUANTITY = (X_RES*Y_RES*2);
-
-            float* vertices = new float[ARRAY_QUANTITY*6];
-
-            VBOs = new unsigned int[ARRAY_QUANTITY];
-            VAOs = new unsigned int[ARRAY_QUANTITY];
-
-            glGenVertexArrays(ARRAY_QUANTITY, VAOs);
-            glGenBuffers(ARRAY_QUANTITY, VBOs);
-
-            int i = 0;
-            int offset = 0;
-            */
-            /*for(int i = 0; i<ARRAY_QUANTITY; i++)
-            {
-                offset = X_RES*(i%Y_RES) + i%X_RES;
-                glBindVertexArray(VAOs[i]);
-                glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-                glBufferData(GL_ARRAY_BUFFER, sizeof(float)*6, vertices+offset, GL_STATIC_DRAW);
-                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
-                glEnableVertexAttribArray(0);
-                cout<<"Binding VAO #"<<i<<"/"<<ARRAY_QUANTITY<<". ("<<((float)(i)*100.0f/(float)(ARRAY_QUANTITY))<<"%)\n";
-            }*/
 
             struct bufferContainer{
                 int ARRAY_QUANTITY;
@@ -328,7 +294,11 @@ int main()
             // dT = kE
             // kE = D
 
+            // Dynamic coefficient of friction -- (a * uS) + (b * uK) = uC;
+
             //"Walking is complicated because technically every step you take is coefficient of static friction"
+
+            // v = sqrt ( 2.0f * (P1 - Px) ) / m;
 
             /*unsigned int VBO, VAO;
             glGenVertexArrays(1, &VAO);
@@ -351,7 +321,6 @@ int main()
 
             while(!glfwWindowShouldClose(window))
             {
-                cout<<"Frame!";
 
                 processInput(window);
 
