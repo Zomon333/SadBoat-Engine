@@ -27,8 +27,7 @@ class IDMan {
         //----------------------------------
         IDMan()
         {
-            seed = std::time(nullptr);
-            srand(seed);
+            IDMan(std::time(nullptr), 5, DEFAULT);
         }
 
         IDMan(int seed=std::time(nullptr), int length=5, IDMAN_RESIZE_STATE resize=DEFAULT)
@@ -36,6 +35,19 @@ class IDMan {
             reseed(seed);
             setLength(length);
             this.resize = resize;
+        }
+
+        //Callback manager
+        //----------------------------------
+
+        void setCallback( int (*resizeCallback) )
+        {
+            this->resizeCallback = resizeCallback;
+        }
+
+        (*int) getCallback()
+        {
+            return resizeCallback;
         }
 
         //Usage checking
