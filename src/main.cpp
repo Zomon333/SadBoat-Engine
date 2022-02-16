@@ -13,6 +13,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
+//STD Includes
+//----------------------------------
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -24,21 +27,27 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include <thread>
 
+//Utility Includes
+//----------------------------------
 #include "idman.h"
-
-#include "../includes/glad/glad.h"
-#include "../includes/GLFW/glfw3.h"
-
-#include "openglhandlers.h"
-
 #include "globals.h"
 #include "cfgutility.h"
+#include "event.h"
 
+//OpenGL Includes
+//----------------------------------
+#include "../includes/glad/glad.h"
+#include "../includes/GLFW/glfw3.h"
+#include "openglhandlers.h"
+
+//Physics related includes
+//----------------------------------
+#include "range.h"
 #include "hitbox.h"
 #include "object.h"
 
-#include "event.h"
-
+//Graphics framework includes
+//----------------------------------
 #include "color.h"
 #include "pixel.h"
 #include "sprite.h"
