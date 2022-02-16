@@ -10,7 +10,7 @@ enum IDMAN_RESIZE_STATE
     DEFAULT,
     CUSTOM,
     NONE
-}
+};
 
 class IDMan {
     private:
@@ -32,20 +32,20 @@ class IDMan {
 
         IDMan(int seed=std::time(nullptr), int length=5, IDMAN_RESIZE_STATE resize=DEFAULT)
         {
-            reseed(seed);
+            setSeed(seed);
             setLength(length);
-            this.resize = resize;
+            this->resize = resize;
         }
 
         //Callback manager
         //----------------------------------
 
-        void setCallback( int (*resizeCallback) )
+        void setCallback( int (__cdecl *)(void) )
         {
             this->resizeCallback = resizeCallback;
         }
 
-        (*int) getCallback()
+        auto getCallback()
         {
             return resizeCallback;
         }
@@ -123,7 +123,7 @@ class IDMan {
         //----------------------------------
         void setLength(int length)
         {
-            this.length = length;
+            this->length = length;
         }
 
         int getLength()
@@ -141,10 +141,10 @@ class IDMan {
 
         void setSeed(int seed)
         {
-            this.seed = seed;
+            this->seed = seed;
             srand(seed);
         }
 
-}
+};
 
 #endif
