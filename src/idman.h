@@ -57,6 +57,7 @@ class IDMan {
 
         void setCallback( int (__cdecl *)(void) )
         {
+            resize=CUSTOM;
             this->resizeCallback = resizeCallback;
         }
 
