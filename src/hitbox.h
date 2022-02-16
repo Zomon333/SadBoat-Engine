@@ -35,13 +35,24 @@ private:
 
     int id;
 
-    auto (*collisionCallback)()
+    void (*collisionCallback)();
 
 public:
 
     static IDMan hitboxIDManager;
-    static std::unordered_map<int, Hitbox*> hitboxRegistry;
-    static std::unordered_map<pair<int, int>, Hitbox*> collisionRegistry;
+    static inline Registry<int, Hitbox*> *hitboxRegistry = new Registry<int, Hitbox*>("HITBOX","A registry of all available hitboxes");
+    static inline Registry<pair<int, int>, Hitbox*> *collisionRegistry = new Registry<pair<int, int>,Hitbox*>("COLLISION","A registry of hitboxes organized by location for collision detection");
+    //static std::unordered_map<int, Hitbox*> hitboxRegistry;
+    //static std::unordered_map<pair<int, int>, Hitbox*> collisionRegistry;
+
+
+    //Accessors
+    //----------------------------------
+    range getWidth() { return this->width; }
+    range getHeight() { return this->height; }
+    pair<int, int> getPos() { return this->relativePos; }
+    int getID() { return this->id; }
+    auto getCollisionCallback() { return this->collisionCallback; }
 
     //Constructors
     //----------------------------------
@@ -50,10 +61,21 @@ public:
         Hitbox(range(0,1), range(0,1), make_pair<int, int>(0, 0));
     }
 
+    Hitbox(Hitbox &copy)
+    {
+        this->width = copy.getWidth();
+        this->height = copy.getHeight();
+        this->relativePos = copy.getPos();
+
+        this->id = copy.getID();
+        this->collisionCallback = copy.getCollisionCallback();
+
+    }
+
     Hitbox(range xRange, range yRange, pair<int, int> relativePos)
     {
         id = hitboxIDManager.generateID();
-        hitboxRegistry[id] = this;
+        hitboxRegistry->setItem(id, this);
 
         width = xRange;
         height = yRange;
@@ -62,9 +84,9 @@ public:
 
     ~Hitbox()
     {
-        collisionRegistry[relativePos] = nullptr;
-        hitboxRegistry[id] = nullptr;
-        hitboxIDManager.setState(id, false);
+        collisionRegistry->setItem(relativePos, nullptr);
+        hitboxRegistry->setItem(id, nullptr);
+        hitboxIDManager.setIDState(id, false);
     }
 
     //Viable movement confirmation functions
@@ -79,7 +101,7 @@ public:
         change.first += relativePos.first;
         change.second += relativePos.second;
 
-        if(collisionRegistry[change]==nullptr)
+        if(collisionRegistry->getItem(change)==nullptr)
         {
             return true;
         }
@@ -94,14 +116,14 @@ public:
     //----------------------------------
     void goTo(const pair<int, int> location, bool collisionOverride=false)
     {
-        if(!validityOverride && collisionRegistry[location]!=nullptr)
+        if(!collisionOverride && collisionRegistry->getItem(location)!=nullptr)
         {
             //Throw a new event with high priority as collision callback
         }
-        if(validityOverride || collisionRegistry[location]==nullptr)
+        if(collisionOverride || collisionRegistry->getItem(location)==nullptr)
         {
-            collisionRegistry[location] = this;
-            collisionRegistry[relativePos] = nullptr;
+            collisionRegistry->setItem(location, this);
+            collisionRegistry->setItem(relativePos, nullptr);
             relativePos = location;
         }
     }

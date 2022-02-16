@@ -8,7 +8,10 @@
         "string": "cpp",
         "xstring": "cpp",
         "chrono": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "type_traits": "cpp",
+        "functional": "cpp",
+        "xhash": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

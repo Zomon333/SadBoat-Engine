@@ -17,11 +17,13 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define GLOBALS_H
 
 #include "pixel.h"
+#include "registry.h"
 
 using namespace std;
 
-unordered_map<string, unordered_map<string, pair<string, pair<string, string>>>> allRegistries;
-unordered_map<string, pair<string, pair<string, string>>> config;
-unordered_map<string, pair<string, pair<string, string>>> registriesRegistry;
+//unordered_map<string, unordered_map<string, pair<string, pair<string, string>>>> allRegistries;
+
+Registry<string, pair<string, pair<string, string>>> *configRegistry;
+Registry<string, pair<string, pair<string, string>>> *registriesRegistry;
 
 #endif

@@ -30,6 +30,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 //Utility Includes
 //----------------------------------
 #include "idman.h"
+#include "registry.h"
 #include "globals.h"
 #include "cfgutility.h"
 #include "event.h"
@@ -72,6 +73,8 @@ int main()
     bool defaultConfigLoading = true;
     if(defaultConfigLoading)
     {
+
+
         // Changing configPtr to your own function will override the default config loading utility. Use with caution!
         unordered_map<string, pair<string, pair<string, string>>> (*configPtr)(string fileName);
         cout<<"configPtr created.\n";
@@ -80,22 +83,27 @@ int main()
 
         //LOADING FOR CONFIG.CFG
         cout<<"Loading config.cfg using 0x"<<configPtr<<"\n";
-        config = configPtr("config.cfg");
+        configRegistry = new Registry<string, pair<string, pair<string, string>>>("CONFIG","Registry for Engine Configuration Information");
+        configRegistry->setThisRegistry(configPtr("config.cfg"));
 
         //LOADING FOR REGISTRY LISTING FILE
         cout<<"\n\nLoading registries.cfg using 0x"<<configPtr<<"\n";
-        registriesRegistry = configPtr(config["REGISTRY_FILE"].second.second);
+        registriesRegistry = new Registry<string, pair<string, pair<string, string>>>("REGISTRIES","Registry for Registry Loading Information");
+        
+        //registriesRegistry->setThisRegistry(configPtr(configRegistry->(*(getThisRegistry()))["REGISTRY_FILE"].second.second));
+
         cout<<"\n";
 
 
         //INITIALIZING FOR OTHER REGISTRIES
-        for(unordered_map<string, pair<string, pair<string, string>>>::iterator i = registriesRegistry.begin(); i!=registriesRegistry.end(); i++)
+        for(auto i = registriesRegistry->(*(getThisRegistry())).begin(); i!=registriesRegistry->(*(getThisRegistry())).end(); i++)
         {
             string registryFileName = (*i).second.second.second;
             string registryName = (*i).first;
             
             cout<<"Loading "<<registryFileName<<" as "<<registryName<<" into registriesRegistry using 0x"<<configPtr<<"\n";
-            allRegistries[registryName] = configPtr(registryFileName);
+            Registry<string, pair<string, pair<string, string>>>* tempRegistry = new Registry<string, pair<string, pair<string, string>>>(registryName, registryFileName);
+            tempRegistry->setThisRegistry(configPtr(registryFileName));
         }
     }
 
@@ -113,15 +121,17 @@ int main()
    int Y_RES=1080;
    int RESCOUNT = X_RES * Y_RES;
    
-    bool openGLGraphicsEnvironment = config["RENDERER"].second.second == "OPENGL";
+    //bool openGLGraphicsEnvironment = config["RENDERER"].second.second == "OPENGL";
+    bool openGLGraphicsEnvironment = configRegistry->getItem("RENDERER").second.second == "OPENGL";
+
     if(openGLGraphicsEnvironment)
     {
 
         cout<<"\nCalculating X_RES. \n";
-        X_RES = stoi(config["X_RES"].second.second);
+        X_RES = stoi(configRegistry->getItem("X_RES").second.second); 
 
         cout<<"Calculating Y_RES. \n";
-        Y_RES = stoi(config["Y_RES"].second.second);
+        Y_RES = stoi(configRegistry->getItem("Y_RES").second.second);
 
         cout<<"Calculating RESCOUNT\n";
         RESCOUNT = X_RES * Y_RES;

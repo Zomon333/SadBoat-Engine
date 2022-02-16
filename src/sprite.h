@@ -17,6 +17,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef S_H
 #define S_H
 
+using namespace std;
+
 class sprite
 {
     private:
@@ -28,12 +30,12 @@ class sprite
 
     public:
         static IDMan spriteIDs;
-        static std::unordered_map<int, sprite*> spriteRegistry;
+        static Registry<int, sprite*> spriteRegistry;
 
         sprite()
         {
             id = spriteIDs.generateID();
-            spriteRegistry[id] = this;
+            spriteRegistry.setItem(id, this);
 
             width = 1;
             height = 1;
@@ -48,7 +50,14 @@ class sprite
             {
                 for(int y = 0; y<height; y++)
                 {
-                    image[x][y] = pixel(pair<float, float>( ((float)(x)), ((float)(y))  ), pair<float, float>( ((float)(stoi(config["X_RES"].second.second))), ((float)(stoi(config["Y_RES"].second.second))) ), colorClass("00000000")); //pixel("00000000");
+                    image[x][y] = 
+                    pixel(
+                        pair<float, float>( ((float)(x)), ((float)(y))  ),
+                         pair<float, float>( 
+                             ((float)(stoi(configRegistry->getItem("X_RES").second.second))), 
+                             ((float)(stoi(configRegistry->getItem("Y_RES").second.second))) ), 
+                             colorClass("00000000")); 
+                    //pixel("00000000");
                 }
             }
 
@@ -85,7 +94,7 @@ class sprite
         ~sprite()
         {
             spriteIDs.setIDState(id, false);
-            spriteRegistry[id] = nullptr;
+            spriteRegistry.setItem(id, nullptr);
         }
 
 };

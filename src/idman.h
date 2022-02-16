@@ -19,12 +19,15 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <random>
 #include <unordered_map>
 #include <ctime>
+#include <iostream>
+
+using namespace std;
 
 enum IDMAN_RESIZE_STATE
 {
-    DEFAULT,
-    CUSTOM,
-    NONE
+    DEFAULT=0,
+    CUSTOM=1,
+    NONE=2
 };
 
 class IDMan {
