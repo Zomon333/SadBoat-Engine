@@ -17,7 +17,7 @@ template<class Key, class Content> class Registry{
 
     public:
         inline static IDMan* registryIDManager = new IDMan(std::time(nullptr), 5, DEFAULT);
-        inline static unordered_map<int, Registry*, std::hash<int>> registrar;
+        inline static unordered_map<int, Registry*, std::hash<int>> registrar; //Ideally, I'd want registrar to be a registry of registries but it makes the compilation recursive. Don't do that.
 
         //Constructors
         //----------------------------------
