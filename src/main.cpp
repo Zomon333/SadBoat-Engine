@@ -121,8 +121,8 @@ int main()
 
 --------------------------------------------------------------------------------
     */
-   int X_RES=1920;
-   int Y_RES=1080;
+   X_RES=1920;
+   Y_RES=1080;
    int RESCOUNT = X_RES * Y_RES;
    
     //bool openGLGraphicsEnvironment = config["RENDERER"].second.second == "OPENGL";

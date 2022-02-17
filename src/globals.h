@@ -26,4 +26,7 @@ using namespace std;
 Registry<string, pair<string, pair<string, string>>> *configRegistry;
 Registry<string, pair<string, pair<string, string>>> *registriesRegistry;
 
+int X_RES;
+int Y_RES;
+
 #endif
