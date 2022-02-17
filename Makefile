@@ -9,7 +9,8 @@ SadBoatEngine: $(OBJECTS)
 	$(CC) /Fe"SadBoatEngine-V$(VERSION).exe" $(LIBS) $(OBJECTS) 
 
 main.obj: src\main.cpp includes\glad.c $(HEADERS)
-	$(CC) $(FLAGS) src\main.cpp includes\glad.c $(LIBS) /I includes\ /I lib\
+	$(CC) $(FLAGS) src\main.cpp includes\glad.c $(LIBS) /I includes\ /I lib\;
+	del main.exe
 
 clean:
 	del *.exe *.obj *.ilk *.pdb
