@@ -36,7 +36,8 @@ class IDMan {
         int length;
         IDMAN_RESIZE_STATE resize;
 
-        int (*resizeCallback)();
+       typedef int (*callback_function)(void);
+       callback_function resizeCallback;
 
         std::unordered_map<int, bool> isUsed;
 
@@ -58,10 +59,10 @@ class IDMan {
         //Callback manager
         //----------------------------------
 
-        void setCallback( int (__cdecl *)(void) )
+        void setCallback( callback_function rParam)
         {
             resize=CUSTOM;
-            this->resizeCallback = resizeCallback;
+            this->resizeCallback = rParam;
         }
 
         auto getCallback()

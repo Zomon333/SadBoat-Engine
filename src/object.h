@@ -18,7 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 //#include <idman.h>
 #include <unordered_map>
-//#include "sprite.h"
+#include "sprite.h"
 #include "hitbox.h"
 
 using namespace std;
@@ -40,12 +40,13 @@ class Object {
         int id;
 
         static IDMan objectIDManager;
-        static std::unordered_map<int, Object*> objectsRegistry;
+        static Registry<int, Object*> objectsRegistry;
+        //static std::unordered_map<int, Object*> objectsRegistry;
 
         Object()
         {
             id = objectIDManager.generateID();
-            objectsRegistry[id]=this;
+            objectsRegistry.setItem(id, this);
 
             x=0;
             y=0;
@@ -65,7 +66,7 @@ class Object {
         ~Object()
         {
             objectIDManager.setIDState(id, false);
-            objectsRegistry[id] = nullptr;
+            objectsRegistry.setItem(id, nullptr);
         }
 
 

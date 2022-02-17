@@ -35,7 +35,8 @@ private:
 
     int id;
 
-    void (*collisionCallback)();
+    typedef int (*callback_function)(void);
+    callback_function collisionCallback;
 
 public:
 
@@ -53,6 +54,7 @@ public:
     pair<int, int> getPos() { return this->relativePos; }
     int getID() { return this->id; }
     auto getCollisionCallback() { return this->collisionCallback; }
+    void setCollisionCallback(callback_function newCallback) { collisionCallback = newCallback; }
 
     //Constructors
     //----------------------------------
