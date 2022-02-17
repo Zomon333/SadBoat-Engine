@@ -41,7 +41,7 @@ public:
 
     static IDMan hitboxIDManager;
     static inline Registry<int, Hitbox*> *hitboxRegistry = new Registry<int, Hitbox*>("HITBOX","A registry of all available hitboxes");
-    static inline Registry<pair<int, int>, Hitbox*> *collisionRegistry = new Registry<pair<int, int>,Hitbox*>("COLLISION","A registry of hitboxes organized by location for collision detection");
+    static inline Registry<int, Hitbox*> *collisionRegistry = new Registry<int,Hitbox*>("COLLISION","A registry of hitboxes organized by location for collision detection");
     //static std::unordered_map<int, Hitbox*> hitboxRegistry;
     //static std::unordered_map<pair<int, int>, Hitbox*> collisionRegistry;
 
@@ -83,14 +83,10 @@ public:
     }
 
     Hitbox(const Hitbox&) = default;
-    Hitbox& Hitbox::operator=( Hitbox&& )
-    {
-        
-    }
 
     ~Hitbox()
     {
-        collisionRegistry->setItem(relativePos, nullptr);
+        collisionRegistry->setItem(pairToInt(relativePos), nullptr);
         hitboxRegistry->setItem(id, nullptr);
         hitboxIDManager.setIDState(id, false);
     }
@@ -107,7 +103,7 @@ public:
         change.first += relativePos.first;
         change.second += relativePos.second;
 
-        if(collisionRegistry->getItem(change)==nullptr)
+        if(collisionRegistry->getItem(pairToInt(change))==nullptr)
         {
             return true;
         }
@@ -118,18 +114,23 @@ public:
 
     }
 
+    int pairToInt(pair<int, int> p)
+    {
+        return (p.second * X_RES) + p.first;
+    }
+
     //Movement functions
     //----------------------------------
     void goTo(const pair<int, int> location, bool collisionOverride=false)
     {
-        if(!collisionOverride && collisionRegistry->getItem(location)!=nullptr)
+        if(!collisionOverride && collisionRegistry->getItem(pairToInt(location))!=nullptr)
         {
             //Throw a new event with high priority as collision callback
         }
-        if(collisionOverride || collisionRegistry->getItem(location)==nullptr)
+        if(collisionOverride || collisionRegistry->getItem(pairToInt(location))==nullptr)
         {
-            collisionRegistry->setItem(location, this);
-            collisionRegistry->setItem(relativePos, nullptr);
+            collisionRegistry->setItem(pairToInt(location), this);
+            collisionRegistry->setItem(pairToInt(relativePos), nullptr);
             relativePos = location;
         }
     }
