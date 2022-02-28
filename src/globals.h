@@ -18,6 +18,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include "pixel.h"
 #include "registry.h"
+#include <stack>
+#include <thread>
 
 using namespace std;
 
@@ -25,6 +27,7 @@ using namespace std;
 
 Registry<string, pair<string, pair<string, string>>> *configRegistry;
 Registry<string, pair<string, pair<string, string>>> *registriesRegistry;
+stack<thread*> callStack;
 
 int X_RES;
 int Y_RES;

@@ -11,7 +11,9 @@
         "thread": "cpp",
         "type_traits": "cpp",
         "functional": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

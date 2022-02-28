@@ -60,6 +60,17 @@ using namespace std;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
+void joinAvailable()
+{
+    if(callStack.size()>0)
+    {
+        while(callStack.top()->joinable())
+        {
+            callStack.top()->join();
+        }
+    }
+}
+
 int main()
 {
     cout<<"Initializing engine.\n";
@@ -324,10 +335,6 @@ int main()
                 glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
 
-                double  timeValue = glfwGetTime();
-                //float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
-                //int vertexColorLocation = glGetUniformLocation(shaderProgram, "pixelColor");
-                //glUniform4f(vertexColorLocation, 0, greenValue, 0, 1.0f); //rgba
 
                 /*for(int i = 0; i<ARRAY_QUANTITY; i++)
                 {

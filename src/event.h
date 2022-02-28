@@ -16,13 +16,108 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef EVENT_H
 #define EVENT_H
 
+#include "globals.h"
 #include <chrono>
 #include <queue>
+#include <stack>
 #include <thread>
+
 using namespace std;
 
 
-template<class R, class P> class Event
+enum timeType
+{
+    STATIC,
+    DYNAMIC,
+    INSTANT
+};
+
+template<class Return, class Parameter> class Event
+{
+    private:
+
+    typedef pair<chrono::milliseconds, Event*> eventPairing;
+    typedef Return (*function)(Parameter);
+
+        static priority_queue<
+            eventPairing,
+            vector<eventPairing>,
+            greater<eventPairing>
+        >   eventScheduler;
+
+    function eventFunction;
+
+    Parameter parameters;
+    Return returnable;
+
+    bool multiThreaded;
+
+    public:
+
+    Event()
+    {
+        //Do nothing with default constructor
+    }
+
+    Event(Return toReturn, Parameter toParameters, function eventFunction, bool multiThreaded)
+    {
+        this->eventFunction = eventFunction;
+        parameters = toParameters;
+        returnable = toReturn;
+        this->multiThreaded = multiThreaded;
+    }
+
+    Event(Return toReturn, Parameter toParameters, function eventFunction, bool multiThreaded, chrono::milliseconds time, timeType type)
+    {
+        Event(toReturn, toParameters, eventFunction, multiThreaded);
+        queueEvent(time, type);
+    }
+
+    void queueEvent(chrono::milliseconds time, timeType type)
+    {
+        if(type==INSTANT)
+        {
+            eventScheduler.push(make_pair(
+                chrono::system_clock::now(),
+                this
+                ));
+        }
+        if(type==DYNAMIC)
+        {
+            eventScheduler.push(make_pair(
+                (
+                    chrono::system_clock::now()+time
+                ),
+                this
+                ));
+        }
+        if(type==STATIC)
+        {
+            eventScheduler.push(make_pair(
+                time,
+                this
+            ));
+        }
+    }
+
+    void runEvent()
+    {
+        if(multiThreaded)
+        {
+            callStack.emplace(
+                thread(eventFunction, parameters)
+            );
+        }
+        else
+        {
+            returnable = eventFunction(parameters);
+        }
+    }
+
+
+};
+
+/*template<class R, class P> class Event
 {
     private:
         static priority_queue<pair<chrono::milliseconds, Event*>,vector<pair<chrono::milliseconds, Event*>>,greater<pair<chrono::milliseconds, Event*>>> eventScheduler;
@@ -36,6 +131,8 @@ template<class R, class P> class Event
 
 
     public:
+        static stack<thread*> openThreads;
+
         Event() //Creates event with return of R and parameters of P at NOW
         {
             Event<R, P>* toPass;
@@ -43,13 +140,7 @@ template<class R, class P> class Event
 
 
 
-};
-
-
-
-
-
-
+};*/
 
 
 
