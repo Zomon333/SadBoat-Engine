@@ -20,7 +20,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "registry.h"
 #include <stack>
 #include <thread>
-#include <irrKlang/irrKlang.h>
 
 using namespace std;
 
@@ -29,8 +28,6 @@ using namespace std;
 Registry<string, pair<string, pair<string, string>>> *configRegistry;
 Registry<string, pair<string, pair<string, string>>> *registriesRegistry;
 stack<thread*> callStack;
-
-irrklang::ISoundEngine* engine;
 
 int X_RES;
 int Y_RES;
