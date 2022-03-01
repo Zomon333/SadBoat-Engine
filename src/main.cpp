@@ -41,6 +41,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../includes/GLFW/glfw3.h"
 #include "openglhandlers.h"
 
+//irrKlang Includes
+//----------------------------------
+#include <irrKlang/irrKlang.h>
+
 //Physics related includes
 //----------------------------------
 #include "range.h"
@@ -123,6 +127,22 @@ int main()
     }
 
     
+    /*
+--------------------------------------------------------------------------------
+        AUDIO ENVIRONMENT SETUP
+        IRRKLANG
+
+--------------------------------------------------------------------------------
+    */
+
+    engine = irrklang::createIrrKlangDevice();
+
+    if(!engine)
+    {
+        cout<<"Sound engine initialization failed!\n";   
+        return -1;
+    }
+
     
     
     /*
