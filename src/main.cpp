@@ -43,6 +43,13 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 //OpenAL Includes
 //----------------------------------
+#include "../includes/OpenAL/al.h"
+#include "../includes/OpenAL/alc.h"
+#include "../includes/OpenAL/efx-creative.h"
+#include "../includes/OpenAL/EFX-Util.h"
+#include "../includes/OpenAL/efx.h"
+#include "../includes/OpenAL/xram.h"
+#include "../includes/OpenAL/alut.h"
 
 //Physics related includes
 //----------------------------------
@@ -133,8 +140,56 @@ int main()
 
 --------------------------------------------------------------------------------
     */
-
+   bool openALAudioEnvironment = configRegistry->getItem("PLAYBACK").second.second == "OPENAL";
   
+   if(openALAudioEnvironment)
+   {
+        cout<<"Initializing OpenAL Audio Environment.\n";
+
+        //Get Default Device    
+        Device = alcOpenDevice(NULL);
+
+        //If Default Device is Open
+        if(Device)
+        {
+            //Make Context Current
+            Context = alcCreateContext(Device, NULL);
+            alcMakeContextCurrent(Context);
+        }
+
+        //Test if EAX2.0 extension is loaded
+        auto g_bEAK = alIsExtensionPresent("EAX2.0");
+        if(!g_bEAK)
+        {
+            cout<<"EAX2.0 Extension is not present!\n";
+            return -1;
+        }
+        else
+        {
+            cout<<"EAX2.0 Extension is present.\n";
+        }
+
+        //Clear error state
+        auto error = alGetError();
+
+        //Generate buffers
+        g_buffers = new ALuint;
+        alGenBuffers(1, g_buffers);
+
+        //Test if there's an error with the buffer generation
+        if(
+            (
+                error = alGetError()
+            ) != AL_NO_ERROR)
+        {
+            cout<<"Error loading buffer.\n";
+            return -1;
+        }
+
+
+
+        cout<<"OpenAL Initialization complete.\n";
+   }
 
     
     
@@ -372,6 +427,12 @@ int main()
         }
     }
     
+    Context = alcGetCurrentContext();
+    Device = alcGetContextsDevice(Context);
+    alcMakeContextCurrent(NULL);
+    alcDestroyContext(Context);
+    alcCloseDevice(Device);
+
     cout<<"Terminating engine";
     return 0;
 }

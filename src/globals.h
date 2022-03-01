@@ -20,6 +20,12 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "registry.h"
 #include <stack>
 #include <thread>
+#include "../includes/OpenAL/al.h"
+#include "../includes/OpenAL/alc.h"
+#include "../includes/OpenAL/efx-creative.h"
+#include "../includes/OpenAL/EFX-Util.h"
+#include "../includes/OpenAL/efx.h"
+#include "../includes/OpenAL/xram.h"
 
 using namespace std;
 
@@ -28,6 +34,10 @@ using namespace std;
 Registry<string, pair<string, pair<string, string>>> *configRegistry;
 Registry<string, pair<string, pair<string, string>>> *registriesRegistry;
 stack<thread*> callStack;
+
+ALCdevice* Device;
+ALCcontext* Context;
+ALuint* g_buffers;
 
 int X_RES;
 int Y_RES;
