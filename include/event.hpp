@@ -30,19 +30,19 @@ private:
     Return returnable;
 
 public:
-    static IdManager EventManager;
+    static IdManager eventIDManager;
 
     //Constructors
     //----------------------------------
     Event()
     {
-        id = EventManager.allocate();
+        id = eventIDManager.allocate();
         this->storedFunction = 0;
     }
 
     Event(Function<Return, ParamPack> toUse)
     {
-        id = EventManager.allocate();
+        id = eventIDManager.allocate();
         this->storedFunction = toUse;
     }
 

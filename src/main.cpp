@@ -30,6 +30,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "range.hpp"
 #include "idman.hpp"
 #include "function.hpp"
+#include "event.hpp"
 
 // OpenGL Includes
 //----------------------------------
@@ -41,6 +42,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 //----------------------------------
 #include "boundingbox.hpp"
 #include "hitbox.hpp"
+#include "hitmesh.hpp"
 
 // Graphics Framework Includes
 //----------------------------------

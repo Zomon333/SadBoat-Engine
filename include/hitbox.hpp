@@ -33,8 +33,6 @@ private:
     Function<void, Hitbox *> collisionCallback;
     Hitmesh *parentHitmesh;
 
-    virtual void nullable() = 0;
-
 public:
     static IdManager hitboxIDManager;
 
@@ -62,7 +60,7 @@ public:
         id = hitboxIDManager.allocate();
         this->depth = depth;
 
-        Function<void, void> someFunction = Function<void, void>(&nullable);
+        Function<void, void> someFunction = Function<void, void>();
 
     }
 
