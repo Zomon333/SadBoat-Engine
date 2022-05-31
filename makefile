@@ -9,7 +9,7 @@ OUT_DIR = ./output
 LIBS = 
 
 NAME = "SadBoatEngine-V"
-VERSION = "0.03.3R"
+VERSION = "0.03.4R"
 
 all:
 	g++ $(FLAGS) $(SOURCE_DIR)/*.cpp -I$(INCLUDE_DIR) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)
