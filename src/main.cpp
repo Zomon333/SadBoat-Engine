@@ -67,6 +67,8 @@ int main()
     Hitbox testHitbox = Hitbox(Range(0, 100), Range(0, 100), testLocation, 0);
     Pixel testPixel = Pixel(testLocation, testBox, testColor);
     IdManager testManager = IdManager();
+   
+   //try using https://en.cppreference.com/w/cpp/utility/variant for events & objects
 
     return 0;
 }
