@@ -14,21 +14,62 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define COMP_OBJ_H
 
 #include "OBJECTS_controlledentity.hpp"
+#include "OBJECTS_decal.hpp"
+#include "OBJECTS_entity.hpp"
+#include "OBJECTS_interactable.hpp"
+#include "OBJECTS_item.hpp"
+#include "OBJECTS_object.hpp"
+#include "OBJECTS_projectile.hpp"
+#include "OBJECTS_tile.hpp"
+#include "EVENTS_function.hpp"
+#include <variant>
 
 using namespace std;
 
 class CompositeObject : public ControlledEntity
 {
 private:
-    
+    vector<std::variant<ControlledEntity, Interactable, Item, Entity, Decal, Tile, Projectile, Object>> composite;
 
 public:
+    // Constructors
+    //----------------------------------
+    CompositeObject();
+    CompositeObject(vector<std::variant<ControlledEntity, Interactable, Item, Entity, Decal, Tile, Projectile, Object>> composite);
+    CompositeObject(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> existingObjects);
 
-int suppress();
-int release();
+    // Object Event Suppression
+    //----------------------------------
+    int suppressAll();
+    int suppressAllByID(int id);
+    int suppress(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toSuppress)
+    int suppress(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toSuppress, Function* functionToSuppress)
+    int suppress(int id, Function* functionToSuppress);
 
-int compose();
-int decompose();
+    // Object Event Replacement
+    //----------------------------------
+    int replace(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toSuppress, Function* functionToReplace, Function* functionToReplaceWith)
+    int replace(int id, Function* functionToSuppress, Function* functionToReplaceWith);
+
+    // Object Event Release
+    //----------------------------------
+    int releaseAll();
+    int releaseAllByID(int id);
+    int release(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toRelease);
+    int release(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toRelease, Function* functionToRelease)
+    int release(int id, Function* functionToRelease);
+
+    // CompositeObject Composition
+    //----------------------------------
+    int compose();
+    int compose(int id);
+    int compose(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toAdd);
+
+    // CompositeObject Decomposition
+    //----------------------------------
+    int decompose();
+    int decompose(int id);
+    int decompose(std::variant<ControlledEntity*, Interactable*, Item*, Entity*, Decal*, Tile*, Projectile*, Object*> toRemove);
     
 };
 

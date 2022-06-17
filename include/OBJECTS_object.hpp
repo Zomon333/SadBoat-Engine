@@ -13,17 +13,58 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef OBJ_H
 #define OBJ_H
 
+#include <unordered_map>
+#include <vector>
+#include <string>
+
+#include "EVENTS_ALLEVENTS.hpp"
+
 #include "GAMEPLAY_hitmesh.hpp"
+
+#include "GRAPHICS_sprite.hpp"
+#include "GRAPHICS_animation.hpp"
+
+#include "SYSTEMS_iddeclares.hpp"
+#include "SYSTEMS_idman.hpp"
 
 using namespace std;
 
 class Object : public Hitmesh
 {
 private:
+    int id;
     
+    vector<string> spriteNames;
+    unordered_map<string, Sprite> sprites;
+
+    vector<string> animationNames;
+    unordered_map<string, Animation> animations;
+
+    vector<string> functionNames;
+    unordered_map<string, Function*> functions;
 
 public:
+    static IdManager objectIDManager;
     
+    // Constructors
+    //----------------------------------
+    Object();
+    Object(Hitmesh initializerHitmesh);
+    Object(Hitmesh initializerHitmesh, Sprite defaultSprite);
+    Object(Hitmesh initializerHitmesh, Sprite defaultSprite, pair<int, int> location);
+
+    
+    // Event handlers
+    //----------------------------------
+    void throwEvent(Function* toThrow);
+    void throwEvent(int idToThrow);
+    void throwEvent(string eventNameToThrow);
+
+    // Mutators
+    //----------------------------------
+    void newFunction(Function* toAdd, string addedName);
+    void removeFunction(Function* toRemove);
+    void removeFunction(int idToRemove);
 };
 
 #endif

@@ -70,7 +70,7 @@ public:
     
     // Function execution schemes
     //----------------------------------
-    Return call(any* parameters)
+    auto call(any* parameters)
     {
         joinable = false;
         auto temp = this->Function::operator(any* parameters);

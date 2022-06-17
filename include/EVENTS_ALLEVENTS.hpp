@@ -10,30 +10,15 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef A_EVENT_H
-#define A_EVENT_H
+#ifndef ALL_EVENTS_H
+#define ALL_EVENTS_H
 
+#include "EVENTS_asyncevent.hpp"
 #include "EVENTS_event.hpp"
+#include "EVENTS_function.hpp"
+#include "EVENTS_priorityevent.hpp"
+#include "EVENTS_recurringevent.hpp"
+#include "EVENTS_timedevent.hpp"
 
-using namespace std;
-
-class AsyncEvent : public Event
-{
-public:
-    
-    // Constructors
-    //----------------------------------
-    AsyncEvent();
-    AsyncEvent(Function toCall);
-    AsyncEvent(Function toCall, bool multiThreaded=true);
-
-    // Function execution schemes
-    //----------------------------------
-    auto call(any* parameters);
-    auto operator()(any *params);
-    void store(any* parameters);
-
-    
-};
 
 #endif

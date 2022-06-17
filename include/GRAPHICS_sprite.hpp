@@ -14,15 +14,36 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define SPRITE_H
 
 #include "GRAPHICS_pixel.hpp"
+#include <vector>
+#include <string>
+#include <utility>
 
 using namespace std;
 
 class Sprite
 {
 private:
-    
+    vector<vector<Pixel>> spriteContents;
 
 public:
+    // Constructors
+    //----------------------------------
+    Sprite();
+    Sprite(vector<vector<Pixel>> spriteContents);
+    Sprite(string fileLocation);
+    Sprite(string resourceName);
+
+    // Accessors
+    //----------------------------------
+    Pixel getPixel(pair<int, int> coordinates);
+    Pixel getPixel(int x, int y);
+
+    void display();
+
+    // Mutators
+    //----------------------------------
+    void setPixel(Pixel newPixel, pair<int, int> coordinates);
+    void setPixel(Pixel newPixel, int x, int y);
     
 };
 

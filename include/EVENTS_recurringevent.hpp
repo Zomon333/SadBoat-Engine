@@ -14,16 +14,28 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define R_EVENT_H
 
 #include "EVENTS_event.hpp"
+#include <chrono>
 
 using namespace std;
 
 class RecurringEvent : public Event
 {
-private:
-    
+    private:
+    chrono::milliseconds frequency;
 
-public:
-    
+    void reset();
+
+    public:
+    // Constructors
+    //----------------------------------
+    RecurringEvent();
+    RecurringEvent(Function toCall, bool multiThreaded = false, chrono::milliseconds frequency);
+
+    // Function execution schemes
+    //----------------------------------
+    auto call(any* parameters);
+    auto operator()(any *params);
+    void store(any* parameters);
 };
 
 #endif

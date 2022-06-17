@@ -19,11 +19,18 @@ using namespace std;
 
 class PriorityEvent : public Event
 {
-private:
-    
-
 public:
-    
+    // Constructors
+    //----------------------------------
+    PriorityEvent();
+    PriorityEvent(Function toCall);
+    PriorityEvent(Function toCall, bool multiThreaded=true);
+
+    // Function execution schemes
+    //----------------------------------
+    auto call(any* parameters);
+    auto operator()(any *params);
+    void store(any* parameters);
 };
 
 #endif

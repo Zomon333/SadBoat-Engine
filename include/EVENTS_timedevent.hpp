@@ -14,16 +14,28 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define T_EVENT_H
 
 #include "EVENTS_event.hpp"
+#include <chrono>
 
 using namespace std;
 
 class TimedEvent : public Event
 {
-private:
-    
+    private:
+    chrono::steady_clock::time_point time;
 
-public:
-    
+    void insert();
+
+    public:
+    // Constructors
+    //----------------------------------
+    RecurringEvent();
+    RecurringEvent(Function toCall, bool multiThreaded = false, chrono::steady_clock::time_point time = chrono::steady_clock::now() );
+
+    // Function execution schemes
+    //----------------------------------
+    auto call(any* parameters);
+    auto operator()(any *params);
+    void store(any* parameters);
 };
 
 #endif
