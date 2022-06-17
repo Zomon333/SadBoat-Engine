@@ -27,6 +27,13 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "SYSTEMS_iddeclares.hpp"
 #include "SYSTEMS_idman.hpp"
 
+#include "PHYSICS_energy.hpp"
+#include "PHYSICS_material.hpp"
+#include "PHYSICS_interactions.hpp"
+#include "PHYSICS_explosioninteraction.hpp"
+#include "PHYSICS_impactinteraction.hpp"
+#include "PHYSICS_penetrationinteraction.hpp"
+
 using namespace std;
 
 class Object : public Hitmesh
@@ -42,6 +49,8 @@ private:
 
     vector<string> functionNames;
     unordered_map<string, Function*> functions;
+
+    Material composition;
 
 public:
     static IdManager objectIDManager;
@@ -65,6 +74,12 @@ public:
     void newFunction(Function* toAdd, string addedName);
     void removeFunction(Function* toRemove);
     void removeFunction(int idToRemove);
+
+    // Physics
+    //----------------------------------
+    void react(Energy toReactTo);
+    void react(std::variant<Interaction, ExplosionInteraction, ImpactInteraction, PenetrationInteraction> toReactTo);
+    void react(Object collider);
 };
 
 #endif
