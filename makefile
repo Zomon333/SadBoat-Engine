@@ -1,5 +1,5 @@
 CC = g++
-FLAGS = 
+FLAGS = -std=c++20
 
 SOURCE_DIR = ./src
 INCLUDE_DIR = ./include

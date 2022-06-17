@@ -13,7 +13,8 @@
         "functional": "cpp",
         "xhash": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "optional": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

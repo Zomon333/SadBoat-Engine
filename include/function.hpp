@@ -13,31 +13,49 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef FUNC_H
 #define FUNC_H
 
-#include <vector>
+#include <any>
 
 using namespace std;
 
-template<class Return, class... ParamPack> class Function
+class Function
 {
 private:
-
-    Return (*storedFunction)(ParamPack);
+    any f = [](any *params) {
+        // Do literally anything
+    };
 
 public:
-    //Constructors
+    // Constructors
     //----------------------------------
-    Function();
-    Function(auto toStore)
+    Function()
     {
-        storedFunction = dynamic_cast<decltype(storedFunction)>(toStore);
+        f = []() {
+            return;
+        };
+    }
+    Function(auto newF)
+    {
+        f = newF;
     }
 
-    //Call
+    // Accessors & Mutators
     //----------------------------------
-    Return operator()(ParamPack... params)
+    void setF(decltype(f) newF)
     {
-        return storedFunction(params...);    
-    }  
+        f = newF;
+    }
+
+    auto getF()
+    {
+        return f;
+    }
+
+    // Call
+    //----------------------------------
+    auto operator()(any *params)
+    {
+        return f(params);
+    }
 };
 
 #endif

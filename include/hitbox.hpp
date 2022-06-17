@@ -30,7 +30,7 @@ private:
 
     int id;
 
-    Function<void, Hitbox *> collisionCallback;
+    Function collisionCallback;
     Hitmesh *parentHitmesh;
 
 public:
@@ -59,9 +59,6 @@ public:
         this->relativePos = relativePos;
         id = hitboxIDManager.allocate();
         this->depth = depth;
-
-        Function<void, void> someFunction = Function<void, void>();
-
     }
 
     ~Hitbox()
@@ -100,7 +97,7 @@ public:
 
     // Mutators
     //----------------------------------
-    void setCollisionCallback(Function<void, Hitbox *> newCallback)
+    void setCollisionCallback(Function newCallback)
     {
         collisionCallback = newCallback;
     }

@@ -19,15 +19,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
-template <class Return, class... ParamPack>
-class Event : private Function<Return, ParamPack>
+class Event : private Function
 {
 private:
     int id;
     bool multiThreaded = false;
     bool joinable = false;
 
-    Return returnable;
+    auto returnable;
 
 public:
     static IdManager eventIDManager;
@@ -37,13 +36,12 @@ public:
     Event()
     {
         id = eventIDManager.allocate();
-        this->storedFunction = 0;
     }
 
-    Event(Function<Return, ParamPack> toUse)
+    Event(Function toUse)
     {
         id = eventIDManager.allocate();
-        this->storedFunction = toUse;
+        this->setF(toUse.getF());
     }
 
     //Accessors
@@ -59,7 +57,7 @@ public:
 
     //Mutators
     //----------------------------------
-    void setFunction(Function<Return, ParamPack> toSet)
+    void setFunction(Function toSet)
     {
         this->storedFunction = toSet.storedFunction;
     }
@@ -72,15 +70,20 @@ public:
     
     // Function execution schemes
     //----------------------------------
-    Return call(ParamPack parameters)
+    Return call(any* parameters)
     {
         joinable = false;
-        Return temp = this->storedFunction(parameters);
+        auto temp = this->Function::operator(any* parameters);
         joinable = true;
         return temp;
     }
 
-    void store(ParamPack parameters)
+    auto operator()(any *params)
+    {
+        return call(any* parameters)
+    }
+
+    void store(any* parameters)
     {
         joinable = false;
         returnable = call(parameters);
