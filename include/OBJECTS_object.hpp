@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef T_EVENT_H
-#define T_EVENT_H
+#ifndef OBJ_H
+#define OBJ_H
 
-#include "event.hpp"
+#include "GAMEPLAY_hitmesh.hpp"
 
 using namespace std;
 
-class TimedEvent : public Event
+class Object : public Hitmesh
 {
 private:
     

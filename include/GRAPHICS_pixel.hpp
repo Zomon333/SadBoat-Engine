@@ -13,8 +13,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef PIX_H
 #define PIX_H
 
-#include "boundingbox.hpp"
-#include "color.hpp"
+#include "GAMEPLAY_boundingbox.hpp"
+#include "GRAPHICS_color.hpp"
 
 class Pixel : public BoundingBox, public ColorClass
 {

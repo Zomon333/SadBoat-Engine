@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef OBJ_H
-#define OBJ_H
+#ifndef EXP_INTER_H
+#define EXP_INTER_H
 
-#include "hitmesh.hpp"
+#include "PHYSICS_interactions.hpp"
 
 using namespace std;
 
-class Object : public Hitmesh
+class ExplosionInteraction : public Interaction
 {
 private:
     

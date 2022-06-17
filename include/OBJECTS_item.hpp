@@ -13,7 +13,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "entity.hpp"
+#include "OBJECTS_entity.hpp"
 
 using namespace std;
 

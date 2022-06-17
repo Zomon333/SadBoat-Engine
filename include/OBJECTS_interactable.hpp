@@ -10,25 +10,19 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef COMP_OBJ_H
-#define COMP_OBJ_H
+#ifndef INTERACTABLE_H
+#define INTERACTABLE_H
 
-#include "controlledentity.hpp"
+#include "OBJECTS_entity.hpp"
 
 using namespace std;
 
-class CompositeObject : public ControlledEntity
+class Interactable : public Entity
 {
 private:
     
 
 public:
-
-int suppress();
-int release();
-
-int compose();
-int decompose();
     
 };
 

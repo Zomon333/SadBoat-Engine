@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef IMP_INTER_H
-#define IMP_INTER_H
+#ifndef P_EVENT_H
+#define P_EVENT_H
 
-#include "interactions.hpp"
+#include "EVENTS_event.hpp"
 
 using namespace std;
 
-class ImpactInteraction : public Interaction
+class PriorityEvent : public Event
 {
 private:
     

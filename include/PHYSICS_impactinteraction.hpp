@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef DEC_H
-#define DEC_H
+#ifndef IMP_INTER_H
+#define IMP_INTER_H
 
-#include "object.hpp"
+#include "PHYSICS_interactions.hpp"
 
 using namespace std;
 
-class Decal : public Object
+class ImpactInteraction : public Interaction
 {
 private:
     

@@ -14,8 +14,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "function.hpp"
-#include "idman.hpp"
+#include "EVENTS_function.hpp"
+#include "SYSTEMS_idman.hpp"
 
 using namespace std;
 

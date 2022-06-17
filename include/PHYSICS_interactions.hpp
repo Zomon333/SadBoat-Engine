@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef TILE_H
-#define TILE_H
+#ifndef INTER_H
+#define INTER_H
 
-#include "object.hpp"
+#include "PHYSICS_energy.hpp"
 
 using namespace std;
 
-class Tile : public Object
+class Interaction : public Energy
 {
 private:
     

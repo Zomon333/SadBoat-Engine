@@ -10,41 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef INTER_H
-#define INTER_H
+#ifndef DEC_H
+#define DEC_H
 
-#include "energy.hpp"
+#include "OBJECTS_object.hpp"
 
 using namespace std;
 
-class Interaction : public Energy
-{
-private:
-    
-
-public:
-    
-};
-
-class ImpactInteraction : public Interaction
-{
-private:
-    
-
-public:
-    
-};
-
-class ExplosionInteraction : public Interaction
-{
-private:
-    
-
-public:
-    
-};
-
-class PenetrationInteraction : public Interaction
+class Decal : public Object
 {
 private:
     

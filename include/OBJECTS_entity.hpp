@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef P_EVENT_H
-#define P_EVENT_H
+#ifndef ENT_H
+#define ENT_H
 
-#include "event.hpp"
+#include "OBJECTS_object.hpp"
 
 using namespace std;
 
-class PriorityEvent : public Event
+class Entity : public Object
 {
 private:
     

@@ -13,9 +13,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef HB_H
 #define HB_H
 
-#include "boundingbox.hpp"
-#include "idman.hpp"
-#include "function.hpp"
+#include "GAMEPLAY_boundingbox.hpp"
+#include "SYSTEMS_idman.hpp"
+#include "EVENTS_function.hpp"
 
 using namespace std;
 

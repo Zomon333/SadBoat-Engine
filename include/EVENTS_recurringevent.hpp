@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef PEN_INTER_H
-#define PEN_INTER_H
+#ifndef R_EVENT_H
+#define R_EVENT_H
 
-#include "interactions.hpp"
+#include "EVENTS_event.hpp"
 
 using namespace std;
 
-class PenetrationInteraction : public Interaction
+class RecurringEvent : public Event
 {
 private:
     

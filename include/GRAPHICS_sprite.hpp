@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef EXP_INTER_H
-#define EXP_INTER_H
+#ifndef SPRITE_H
+#define SPRITE_H
 
-#include "interactions.hpp"
+#include "GRAPHICS_pixel.hpp"
 
 using namespace std;
 
-class ExplosionInteraction : public Interaction
+class Sprite
 {
 private:
     

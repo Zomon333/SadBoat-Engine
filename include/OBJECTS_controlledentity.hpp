@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef R_EVENT_H
-#define R_EVENT_H
+#ifndef CONT_ENT_H
+#define CONT_ENT_H
 
-#include "event.hpp"
+#include "OBJECTS_entity.hpp"
 
 using namespace std;
 
-class RecurringEvent : public Event
+class ControlledEntity : public Entity
 {
 private:
     

@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef SPRITE_H
-#define SPRITE_H
+#ifndef A_EVENT_H
+#define A_EVENT_H
 
-#include "pixel.hpp"
+#include "EVENTS_event.hpp"
 
 using namespace std;
 
-class Sprite
+class AsyncEvent : public Event
 {
 private:
     

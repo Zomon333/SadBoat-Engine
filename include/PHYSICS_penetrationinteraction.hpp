@@ -10,20 +10,20 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef IDDEC_H
-#define IDDEC_H
+#ifndef PEN_INTER_H
+#define PEN_INTER_H
 
-#include "idman.hpp"
-#include "hitbox.hpp"
-#include "hitmesh.hpp"
-#include "event.hpp"
+#include "PHYSICS_interactions.hpp"
 
 using namespace std;
 
-IdManager Hitbox::hitboxIDManager = IdManager();
-IdManager Hitmesh::hitmeshIDManager = IdManager();
+class PenetrationInteraction : public Interaction
+{
+private:
+    
 
-template<class Return, class... ParamPack>
-IdManager Event<Return, ParamPack...>::eventIDManager = IdManager();
+public:
+    
+};
 
 #endif

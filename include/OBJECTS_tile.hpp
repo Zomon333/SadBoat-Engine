@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef PROJ_H
-#define PROJ_H
+#ifndef TILE_H
+#define TILE_H
 
-#include "object.hpp"
+#include "OBJECTS_object.hpp"
 
 using namespace std;
 
-class Projectile : public Object
+class Tile : public Object
 {
 private:
     

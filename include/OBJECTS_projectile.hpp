@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef A_EVENT_H
-#define A_EVENT_H
+#ifndef PROJ_H
+#define PROJ_H
 
-#include "event.hpp"
+#include "OBJECTS_object.hpp"
 
 using namespace std;
 
-class AsyncEvent : public Event
+class Projectile : public Object
 {
 private:
     

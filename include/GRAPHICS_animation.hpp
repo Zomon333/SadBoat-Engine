@@ -10,14 +10,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef CONT_ENT_H
-#define CONT_ENT_H
+#ifndef ANIM_H
+#define ANIM_H
 
-#include "entity.hpp"
+#include "GRAPHICS_sprite.hpp"
 
 using namespace std;
 
-class ControlledEntity : public Entity
+class Animation
 {
 private:
     

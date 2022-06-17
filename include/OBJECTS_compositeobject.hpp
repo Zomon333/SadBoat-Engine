@@ -10,19 +10,25 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef ANIM_H
-#define ANIM_H
+#ifndef COMP_OBJ_H
+#define COMP_OBJ_H
 
-#include "sprite.hpp"
+#include "OBJECTS_controlledentity.hpp"
 
 using namespace std;
 
-class Animation
+class CompositeObject : public ControlledEntity
 {
 private:
     
 
 public:
+
+int suppress();
+int release();
+
+int compose();
+int decompose();
     
 };
 

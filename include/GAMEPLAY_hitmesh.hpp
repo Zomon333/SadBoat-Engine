@@ -14,8 +14,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define HITMESH_H
 
 #include <vector>
-#include "hitbox.hpp"
-#include "idman.hpp"
+#include "GAMEPLAY_hitbox.hpp"
+#include "SYSTEMS_idman.hpp"
 
 using namespace std;
 
