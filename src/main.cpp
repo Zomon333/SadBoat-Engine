@@ -27,10 +27,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 // Utility Includes
 //----------------------------------
-#include "range.hpp"
-#include "idman.hpp"
-#include "function.hpp"
-#include "event.hpp"
+#include "SYSTEMS_range.hpp"
+#include "SYSTEMS_idman.hpp"
+#include "EVENTS_function.hpp"
+#include "EVENTS_event.hpp"
 
 // OpenGL Includes
 //----------------------------------
@@ -40,18 +40,18 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 // Physics Related Includes
 //----------------------------------
-#include "boundingbox.hpp"
-#include "hitbox.hpp"
-#include "hitmesh.hpp"
+#include "GAMEPLAY_boundingbox.hpp"
+#include "GAMEPLAY_hitbox.hpp"
+#include "GAMEPLAY_hitmesh.hpp"
 
 // Graphics Framework Includes
 //----------------------------------
-#include "color.hpp"
-#include "pixel.hpp"
+#include "GRAPHICS_color.hpp"
+#include "GRAPHICS_pixel.hpp"
 
 // ID Declaration Includes
 //----------------------------------
-#include "iddeclares.hpp"
+#include "SYSTEMS_iddeclares.hpp"
 
 using namespace std;
 
