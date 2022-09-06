@@ -10,18 +10,19 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef MATERIAL_H
-#define MATERIAL_H
+#ifndef LOG_H
+#define LOG_H
 
-using namespace std;
+#include <utility>
+#include <cmath>
 
-class Material //You might want this to inherit energy? Or some impact? I'm not sure. Up to you.
+
+// a = b ^ c
+// log b a = c
+// basedLog(a, b) = c;
+double basedLog(double a, double b)
 {
-private:
-    
-
-public:
-    
-};
+    return log2(a)/log2(b);
+}
 
 #endif
