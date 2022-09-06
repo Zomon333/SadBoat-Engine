@@ -18,7 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 class Range
 {
 private:
-    int min, max;
+    double min, max;
 
 public:
     //Constructors
@@ -27,19 +27,19 @@ public:
     {
         Range(0, 0);
     }
-    Range(int min, int max)
+    Range(double min, double max)
     {
         setRange(min, max);
     }
 
     //Mutators
     //----------------------------------    
-    void setRange(std::pair<int, int> toSet)
+    void setRange(std::pair<double, double> toSet)
     {
         this->min = toSet.first;
         this->max = toSet.second;
     }
-    void setRange(int min, int max)
+    void setRange(double min, double max)
     {
         this->min = min;
         this->max = max;
@@ -54,11 +54,11 @@ public:
 
     //Collision Logic
     //----------------------------------
-    bool inRange(int toCheck)
+    bool inRange(double toCheck)
     {
         return (toCheck>min && toCheck<max);
     }
-    bool onBounds(int toCheck)
+    bool onBounds(double toCheck)
     {
         return (toCheck==min || toCheck==max);
     }

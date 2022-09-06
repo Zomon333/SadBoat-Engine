@@ -29,7 +29,7 @@ class Point
             this->x=0;
             this->y=0;
         }
-        Point(std::pair<int, int> p)
+        Point(std::pair<double, double> p)
         {
             this->x=p.first;
             this->y=p.second;
@@ -71,6 +71,49 @@ class Point
         bool operator!=(Point rhs)
         {
             return !(*this == rhs);
+        }
+
+        Point operator+(Point rhs)
+        {
+            return Point(std::pair<double, double>(getX()+rhs.getX(), getY()+rhs.getY()));
+        }
+        void operator+=(Point rhs)
+        {
+            Point p2 = ((*this)+rhs);
+            setX(p2.getX());
+            setY(p2.getY());
+        }
+        Point operator-(Point rhs)
+        {
+            return Point(std::pair<double, double>(getX()-rhs.getX(), getY()-rhs.getY()));
+        }
+        void operator-=(Point rhs)
+        {
+            Point p2 = ((*this)-rhs);
+            setX(p2.getX());
+            setY(p2.getY());
+        }
+        Point operator*(double rhs)
+        {
+            Point ex=(*this);
+            ex*=rhs;
+            return ex;
+        }
+        Point operator/(double rhs)
+        {
+            Point ex=(*this);
+            ex/=rhs;
+            return ex;
+        }
+        void operator*=(double rhs)
+        {
+            setX(getX()*rhs);
+            setY(getY()*rhs);
+        }
+        void operator/=(double rhs)
+        {
+            setX(getX()/rhs);
+            setY(getY()/rhs);
         }
 };
 

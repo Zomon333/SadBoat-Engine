@@ -14,85 +14,99 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define UVECTOR_H
 
 #include <utility>
+#include <variant>
 #include "../primitives/angles.hpp"
 #include "../primitives/point.hpp"
 
-template <class Unit>
+
 class UVector
 {
     private:
         Point origin = Point();
-        Unit angle = Unit();
-
+        //Radians angle = Radians();
+        AngleUnion angle;
+    
     public:
         //Constructors
         //----------------------------------
         UVector();
         UVector(Degrees deg, Point origin=Point())
         {
-            angle = Unit(deg);
+            angle = Radians(deg);
             this->origin=origin;
         }
         UVector(Radians rad, Point origin=Point())
         {
-            angle = Unit(rad);
+            angle = Radians(rad);
             this->origin=origin;
         }
 
 
         //Accessors
         //----------------------------------
-        Unit getAngle()
+        AngleUnion getAngleUnion()
         {
             return angle;
         }
+
         
         const Point getOrigin()
         {
             return origin;
         }
 
-        const int getMagnitude()
+        const double getMagnitude()
         {
             return 1;
         }
 
         //Mutators
         //----------------------------------
-        void setAngle(Unit angle2)
+        void setAngle(std::variant<Radians, Degrees> angle2)
         {
-            angle=angle2;
+            try
+            {
+                angle.set(std::get<Radians>(angle2));
+            }
+            catch(const std::exception& e)
+            {
+                angle.set(std::get<Degrees>(angle2));
+            }
+        }
+        void setOrigin(Point origin2)
+        {
+            origin=origin2;
         }
         
-        //Vector sum
+        /*//Vector sum
         UVector operator+(UVector rhs)
         {
-            return UVector((this->angle)+rhs.getAngle());
+
         }
 
         //Difference of vector
         UVector operator-(UVector rhs)
         {
-            return UVector((this->angle)-rhs.getAngle());
+
         }
 
         //Multiply by scalar
         UVector operator*(double rhs)
-        {
-            return UVector((this->getMagnitude())*rhs);
+        {   
+
         }
 
         //Divide by scalar
         UVector operator/(double rhs)
         {
-            return UVector((this->getMagnitude())*rhs);
+
         }
 
         //Negative of vector
         UVector operator!()
         {
-            return UVector((this->getAngle())*-1)
-        }
+
+        }*/
 
 };
 

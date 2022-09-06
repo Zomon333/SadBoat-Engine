@@ -241,9 +241,9 @@ class Radians
             c=0;
             piTerms=1;
         }
-        Radians(double rads, double piTerms=1)
+        Radians(double coefficient, double piTerms=1)
         {
-            c=rads;
+            c=coefficient;
             this->piTerms=piTerms;
         }
         Radians(Degrees deg2)
@@ -434,6 +434,56 @@ class Radians
         void operator/=(double rhs)
         {
             this->setRadians( ((*this)/rhs).getRadians() );
+        }
+};
+
+class AngleUnion
+{
+    private:
+        Degrees a;
+        Radians b;
+    public:
+        AngleUnion()
+        {
+            a=Degrees(0);
+            b=a;
+        }
+        AngleUnion(Degrees a2)
+        {
+            a=a2;
+            b=a;
+        }
+        AngleUnion(Radians b2)
+        {
+            b=b2;
+            a=b;
+        }
+
+        Degrees getDeg()
+        {
+            sync();
+            return a;
+        }
+        Radians getRad()
+        {
+            sync();
+            return b;
+        }
+
+        void set(Radians n)
+        {
+            b=n;
+            sync();
+        }
+        void set(Degrees n)
+        {
+            a=n;
+            sync();
+        }
+
+        void sync()
+        {
+            a=b;
         }
 };
 
