@@ -16,7 +16,24 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include <cmath>
 
-class Degrees
+struct Angle
+{
+    public:
+        enum ATYPE
+        {
+            RADIANS,
+            DEGREES
+        };
+        
+        ATYPE getUnit() { return unit; }
+        void setUnit(ATYPE unit2) { unit=unit2; }
+        virtual double get() = 0;
+
+    private:
+        ATYPE unit;
+};
+
+class Degrees : public Angle
 {
     private:
         double theta;
@@ -25,22 +42,25 @@ class Degrees
         //----------------------------------
         Degrees()
         {
-            theta=0;
+            setUnit(DEGREES);
+            setDegrees(0);
         }
         Degrees(double theta2)
         {
-            theta=theta2;
+            setUnit(DEGREES);
+            setDegrees(theta2);
         }
         Degrees(Radians deg2)
         {
-            Degrees(deg2.getRadians() * (180.0/M_PI));
+            setUnit(DEGREES);
+            setDegrees(deg2.get() * (180.0/M_PI));
         }
 
         //Accessors
         //----------------------------------
 
         //Gets degrees as a double;
-        double getDegrees()
+        double get()
         {
             return theta;
         }
@@ -69,7 +89,7 @@ class Degrees
         //Sets degrees from the Radians class;
         void setDegrees(Radians deg2)
         {
-            this->setDegrees(deg2.getAsDegrees().getDegrees());
+            this->setDegrees(deg2.getAsDegrees().get());
         }
         
         //Operators
@@ -78,71 +98,71 @@ class Degrees
         //Adding
         Degrees operator+(Radians rhs)
         {
-            return Degrees(this->getAsRadians().getRadians()+rhs.getRadians());
+            return Degrees(this->getAsRadians().get()+rhs.get());
         }
         Degrees operator+(Degrees rhs)
         {
-            return Degrees(this->getDegrees()+rhs.getDegrees());
+            return Degrees(this->get()+rhs.get());
         }
         Degrees operator+(double rhs)
         {
-            return Degrees(this->getDegrees()+rhs);
+            return Degrees(this->get()+rhs);
         }
 
         //Subtracting
         Degrees operator-(Radians rhs)
         {
-            return Degrees(this->getAsRadians().getRadians()-rhs.getRadians());
+            return Degrees(this->getAsRadians().get()-rhs.get());
         }
         Degrees operator-(Degrees rhs)
         {
-            return Degrees(this->getDegrees()-rhs.getDegrees());
+            return Degrees(this->get()-rhs.get());
         }
         Degrees operator-(double rhs)
         {
-            return Degrees(this->getDegrees()-rhs);
+            return Degrees(this->get()-rhs);
         }
 
         //Multiplying
         Degrees operator*(Radians rhs)
         {
-            return Degrees(this->getAsRadians().getRadians()*rhs.getRadians());
+            return Degrees(this->getAsRadians().get()*rhs.get());
         }
         Degrees operator*(Degrees rhs)
         {
-            return Degrees(this->getDegrees()*rhs.getDegrees());
+            return Degrees(this->get()*rhs.get());
         }
         Degrees operator*(double rhs)
         {
-            return Degrees(this->getDegrees()*rhs);
+            return Degrees(this->get()*rhs);
         }
 
         //Dividing
         Degrees operator/(Radians rhs)
         {
-            return Degrees(this->getAsRadians().getRadians()/rhs.getRadians());
+            return Degrees(this->getAsRadians().get()/rhs.get());
         }
         Degrees operator/(Degrees rhs)
         {
-            return Degrees(this->getDegrees()/rhs.getDegrees());
+            return Degrees(this->get()/rhs.get());
         }
         Degrees operator/(double rhs)
         {
-            return Degrees(this->getDegrees()/rhs);
+            return Degrees(this->get()/rhs);
         }
 
         //Equal
         bool operator==(Radians rhs)
         {
-            return (this->getAsRadians().getRadians()==rhs.getRadians());
+            return (this->getAsRadians().get()==rhs.get());
         }
         bool operator==(Degrees rhs)
         {
-            return (this->getDegrees()==rhs.getDegrees());
+            return (this->get()==rhs.get());
         }
         bool operator==(double rhs)
         {
-            return (this->getDegrees()==rhs);
+            return (this->get()==rhs);
         }
 
         //Not Equal
@@ -162,7 +182,7 @@ class Degrees
         //Assignment
         void operator=(Radians rhs)
         {
-            this->setDegrees(rhs.getAsDegrees().getDegrees());
+            this->setDegrees(rhs.getAsDegrees().get());
         }
         void operator=(double rhs)
         {
@@ -174,61 +194,61 @@ class Degrees
         //+= operators
         void operator+=(Radians rhs)
         {
-            this->setDegrees( ((*this)+rhs).getDegrees() );
+            this->setDegrees( ((*this)+rhs).get() );
         }
         void operator+=(Degrees rhs)
         {
-            this->setDegrees( ((*this)+rhs).getDegrees() );
+            this->setDegrees( ((*this)+rhs).get() );
         }
         void operator+=(double rhs)
         {
-            this->setDegrees( ((*this)+rhs).getDegrees() );
+            this->setDegrees( ((*this)+rhs).get() );
         }
 
         //-= operators
         void operator-=(Radians rhs)
         {
-            this->setDegrees( ((*this)-rhs).getDegrees() );
+            this->setDegrees( ((*this)-rhs).get() );
         }
         void operator-=(Degrees rhs)
         {
-            this->setDegrees( ((*this)-rhs).getDegrees() );
+            this->setDegrees( ((*this)-rhs).get() );
         }
         void operator-=(double rhs)
         {
-            this->setDegrees( ((*this)-rhs).getDegrees() );
+            this->setDegrees( ((*this)-rhs).get() );
         }
 
         //*= operators
         void operator*=(Radians rhs)
         {
-            this->setDegrees( ((*this)*rhs).getDegrees() );
+            this->setDegrees( ((*this)*rhs).get() );
         }
         void operator*=(Degrees rhs)
         {
-            this->setDegrees( ((*this)*rhs).getDegrees() );
+            this->setDegrees( ((*this)*rhs).get() );
         }
         void operator*=(double rhs)
         {
-            this->setDegrees( ((*this)*rhs).getDegrees() );
+            this->setDegrees( ((*this)*rhs).get() );
         }
 
         // /= operators
         void operator/=(Radians rhs)
         {
-            this->setDegrees( ((*this)/rhs).getDegrees() );
+            this->setDegrees( ((*this)/rhs).get() );
         }
         void operator/=(Degrees rhs)
         {
-            this->setDegrees( ((*this)/rhs).getDegrees() );
+            this->setDegrees( ((*this)/rhs).get() );
         }
         void operator/=(double rhs)
         {
-            this->setDegrees( ((*this)/rhs).getDegrees() );
+            this->setDegrees( ((*this)/rhs).get() );
         }
 };
 
-class Radians
+class Radians : public Angle
 {
     private:
         double c;
@@ -238,17 +258,20 @@ class Radians
         //----------------------------------
         Radians()
         {
+            setUnit(RADIANS);
             c=0;
             piTerms=1;
         }
         Radians(double coefficient, double piTerms=1)
         {
+            setUnit(RADIANS);
             c=coefficient;
             this->piTerms=piTerms;
         }
         Radians(Degrees deg2)
         {
-            c = deg2.getDegrees() * ((M_PI)/180.0);
+            setUnit(RADIANS);
+            c = deg2.get() * ((M_PI)/180.0);
         }
 
 
@@ -256,7 +279,7 @@ class Radians
         //----------------------------------
 
         //Get radians as double in piTerms;
-        double getRadians()
+        double get()
         {
             return c*piTerms;
         }
@@ -276,7 +299,7 @@ class Radians
         }
         void setRadians(Degrees deg2)
         {
-            c = deg2.getAsRadians().getRadians();
+            c = deg2.getAsRadians().get();
         }
 
         //Operators
@@ -285,71 +308,71 @@ class Radians
         //Adding
         Radians operator+(Radians rhs)
         {
-            return Radians(this->getRadians()+rhs.getRadians());
+            return Radians(this->get()+rhs.get());
         }
         Radians operator+(Degrees rhs)
         {
-            return Radians(this->getAsDegrees().getDegrees()+rhs.getDegrees());
+            return Radians(this->getAsDegrees().get()+rhs.get());
         }
         Radians operator+(double rhs)
         {
-            return Radians(this->getAsDegrees().getDegrees()+rhs);
+            return Radians(this->getAsDegrees().get()+rhs);
         }
 
         //Subtracting
         Radians operator-(Radians rhs)
         {
-            return Radians(this->getRadians()-rhs.getRadians());
+            return Radians(this->get()-rhs.get());
         }
         Radians operator-(Degrees rhs)
         {
-            return Radians(this->getRadians()-rhs.getAsRadians().getRadians());
+            return Radians(this->get()-rhs.getAsRadians().get());
         }
         Radians operator-(double rhs)
         {
-            return Radians(this->getRadians()-rhs);
+            return Radians(this->get()-rhs);
         }
 
         //Multiplying
         Radians operator*(Radians rhs)
         {
-            return Radians(this->getRadians()*rhs.getRadians());
+            return Radians(this->get()*rhs.get());
         }
         Radians operator*(Degrees rhs)
         {
-            return Radians(this->getAsDegrees().getDegrees()*rhs.getDegrees());
+            return Radians(this->getAsDegrees().get()*rhs.get());
         }
         Radians operator*(double rhs)
         {
-            return Radians(this->getRadians()*rhs);
+            return Radians(this->get()*rhs);
         }
 
         //Dividing
         Radians operator/(Radians rhs)
         {
-            return Radians(this->getRadians()/rhs.getRadians());
+            return Radians(this->get()/rhs.get());
         }
         Radians operator/(Degrees rhs)
         {
-            return Radians(this->getRadians()/rhs.getAsRadians().getRadians());
+            return Radians(this->get()/rhs.getAsRadians().get());
         }
         Radians operator/(double rhs)
         {
-            return Radians(this->getRadians()/rhs);
+            return Radians(this->get()/rhs);
         }
 
         //Equal
         bool operator==(Radians rhs)
         {
-            return (this->getRadians()==rhs.getRadians());
+            return (this->get()==rhs.get());
         }
         bool operator==(Degrees rhs)
         {
-            return (this->getRadians()==rhs.getAsRadians().getRadians());
+            return (this->get()==rhs.getAsRadians().get());
         }
         bool operator==(double rhs)
         {
-            return (this->getRadians()==rhs);
+            return (this->get()==rhs);
         }
 
         //Not Equal
@@ -370,7 +393,7 @@ class Radians
         void operator=(Degrees rhs)
         {
             piTerms=1;
-            c=rhs.getAsRadians().getRadians();
+            c=rhs.getAsRadians().get();
         }
         void operator=(double rhs)
         {
@@ -383,108 +406,59 @@ class Radians
         //+= operators
         void operator+=(Radians rhs)
         {
-            this->setRadians( ((*this)+rhs).getRadians() );
+            this->setRadians( ((*this)+rhs).get() );
         }
         void operator+=(Degrees rhs)
         {
-            this->setRadians( ((*this)+rhs).getRadians() );
+            this->setRadians( ((*this)+rhs).get() );
         }
         void operator+=(double rhs)
         {
-            this->setRadians( ((*this)+rhs).getRadians() );
+            this->setRadians( ((*this)+rhs).get() );
         }
 
         //-= operators
         void operator-=(Radians rhs)
         {
-            this->setRadians( ((*this)-rhs).getRadians() );
+            this->setRadians( ((*this)-rhs).get() );
         }
         void operator-=(Degrees rhs)
         {
-            this->setRadians( ((*this)-rhs).getRadians() );
+            this->setRadians( ((*this)-rhs).get() );
         }
         void operator-=(double rhs)
         {
-            this->setRadians( ((*this)-rhs).getRadians() );
+            this->setRadians( ((*this)-rhs).get() );
         }
 
         //*= operators
         void operator*=(Radians rhs)
         {
-            this->setRadians( ((*this)*rhs).getRadians() );
+            this->setRadians( ((*this)*rhs).get() );
         }
         void operator*=(Degrees rhs)
         {
-            this->setRadians( ((*this)*rhs).getRadians() );
+            this->setRadians( ((*this)*rhs).get() );
         }
         void operator*=(double rhs)
         {
-            this->setRadians( ((*this)*rhs).getRadians() );
+            this->setRadians( ((*this)*rhs).get() );
         }
 
         // /= operators
         void operator/=(Radians rhs)
         {
-            this->setRadians( ((*this)/rhs).getRadians() );
+            this->setRadians( ((*this)/rhs).get() );
         }
         void operator/=(Degrees rhs)
         {
-            this->setRadians( ((*this)/rhs).getRadians() );
+            this->setRadians( ((*this)/rhs).get() );
         }
         void operator/=(double rhs)
         {
-            this->setRadians( ((*this)/rhs).getRadians() );
+            this->setRadians( ((*this)/rhs).get() );
         }
 };
 
-class AngleUnion
-{
-    private:
-        Degrees a;
-        Radians b;
-    public:
-        AngleUnion()
-        {
-            a=Degrees(0);
-            b=a;
-        }
-        AngleUnion(Degrees a2)
-        {
-            a=a2;
-            b=a;
-        }
-        AngleUnion(Radians b2)
-        {
-            b=b2;
-            a=b;
-        }
-
-        Degrees getDeg()
-        {
-            sync();
-            return a;
-        }
-        Radians getRad()
-        {
-            sync();
-            return b;
-        }
-
-        void set(Radians n)
-        {
-            b=n;
-            sync();
-        }
-        void set(Degrees n)
-        {
-            a=n;
-            sync();
-        }
-
-        void sync()
-        {
-            a=b;
-        }
-};
 
 #endif
