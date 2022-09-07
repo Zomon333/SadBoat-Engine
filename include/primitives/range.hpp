@@ -62,6 +62,10 @@ public:
     {
         return (toCheck==min || toCheck==max);
     }
+    bool outBounds(double toCheck)
+    {
+        return (!inRange(toCheck) && !onBounds(toCheck));
+    }
 
     //Equivalence Operators
     //----------------------------------    
