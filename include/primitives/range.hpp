@@ -84,6 +84,11 @@ public:
 
     }
 
+    bool operator[](double rhs)
+    {
+        return (inRange(rhs) || onBounds(rhs));
+    }
+
 };
 
 #endif
