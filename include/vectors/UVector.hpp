@@ -23,30 +23,46 @@ class UVector
 {
     private:
         Point origin = Point();
-        //Radians angle = Radians();
-        AngleUnion angle;
-    
+
+        std::variant<Radians, Degrees> angle;
+        Angle::ATYPE angleType;
+
     public:
         //Constructors
         //----------------------------------
         UVector();
         UVector(Degrees deg, Point origin=Point())
         {
-            angle = Radians(deg);
+            angle = Degrees(deg);
+            angleType = Angle::DEGREES;
             this->origin=origin;
         }
         UVector(Radians rad, Point origin=Point())
         {
             angle = Radians(rad);
+            angleType = Angle::RADIANS;
             this->origin=origin;
         }
 
 
         //Accessors
         //----------------------------------
-        AngleUnion getAngleUnion()
+        std::pair<std::variant<Radians, Degrees>, Angle::ATYPE> getAngle()
         {
-            return angle;
+            return 
+                std::pair
+                <
+                    std::variant
+                    <
+                        Radians,
+                        Degrees
+                    >,
+                    Angle::ATYPE
+                >
+                (
+                    angle,
+                    angleType
+                );
         }
 
         
@@ -64,14 +80,7 @@ class UVector
         //----------------------------------
         void setAngle(std::variant<Radians, Degrees> angle2)
         {
-            try
-            {
-                angle.set(std::get<Radians>(angle2));
-            }
-            catch(const std::exception& e)
-            {
-                angle.set(std::get<Degrees>(angle2));
-            }
+            angle=angle2;
         }
         void setOrigin(Point origin2)
         {
