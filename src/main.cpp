@@ -25,9 +25,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include <thread>
 
+#include "primitives/range.hpp"
+
 using namespace std;
 
 int main()
 {
+    Range t(0, 10);
+
+    cout<<"returning;";
     return 0;
 }
