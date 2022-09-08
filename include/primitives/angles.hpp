@@ -41,15 +41,18 @@ class Radians : public Angle
     public:
         //Constructors
         //----------------------------------
+
+        // coefficient * piTerms < 2pi, 2pi = 6.28318
         Radians()
         {
             setUnit(RADIANS);
-            setRadians(0, 1);
+            setRadians(0, 1, true);
         }
+        // coefficient * piTerms < 2pi, 2pi = 6.28318
         Radians(double coefficient, double piTerms=1)
         {
             setUnit(RADIANS);
-            setRadians(coefficient, piTerms);
+            setRadians(coefficient, piTerms, true);
         }
 
         //Accessors
@@ -72,7 +75,8 @@ class Radians : public Angle
 
         //Set the amount of radians in terms of pi.
         //Will factor pi out of c2 to update piTerms dynamically if factor is true.
-        void setRadians(double c2, double piTerms2, bool factor)
+        // coefficient * piTerms < 2pi, 2pi = 6.28318
+        void setRadians(double c2, double piTerms2, bool factor=true)
         {
             c=c2;
             piTerms=piTerms2;
@@ -82,7 +86,8 @@ class Radians : public Angle
 
         //Set the amount of radians in terms of pi.
         //Will factor pi out of c2 to update piTerms dynamically if factor is true.
-        void setRadians(double c2, bool factor)
+        // coefficient * piTerms < 2pi, 2pi = 6.28318
+        void setRadians(double c2, bool factor=true)
         {
             c=c2;
             piTerms=1;
@@ -93,16 +98,22 @@ class Radians : public Angle
         //Factors
         void factorPi()
         {
-            if(c>M_PI)
+            //Get what the raw radians should be
+            double old = get();
+
+            //Set it so we're not in terms of pi anymore
+            piTerms=1;
+            //Break it down so we're within our unit circle
+            c=fmod(old,(2*M_PI));
+
+            //And while you can still factor out a pi 
+            while(c>=M_PI)
             {
+                //Remove it from C
                 c/=M_PI;
+
+                //and put it in piTerms
                 piTerms*=M_PI;
-                if(get()>(2*M_PI))
-                {
-                    c=fmod(get(),(2*M_PI));
-                    piTerms=1;
-                    factorPi();
-                }
             }
         }
 
@@ -112,12 +123,17 @@ class Radians : public Angle
         //Adding
         Radians operator+(Radians rhs)
         {
-            return Radians(this->get()+rhs.get());
+            double sum = this->get() + rhs.get();
+            double pi=1;
+
+            return Radians(sum, pi);
         }
         Radians operator+(double rhs)
         {
-            //return Radians(this->getAsDegrees().get()+rhs);
-            return Radians(this->get()+rhs);
+            double sum = get()+rhs;
+            double pi=1;
+
+            return Radians(sum, pi);
         }
 
         //Subtracting
