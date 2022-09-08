@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-
+./output/SadBoatEngine*
 */PlatformerGame/.vs/*
 *.ipch
 *.db
