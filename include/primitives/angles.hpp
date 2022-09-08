@@ -16,7 +16,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include <cmath>
 
-struct Angle
+class Angle
 {
     public:
         enum ATYPE
@@ -33,7 +33,191 @@ struct Angle
         ATYPE unit;
 };
 
-class Degrees : public Angle
+class Radians : public Angle
+{
+    private:
+        double c;
+        double piTerms;
+    public:
+        //Constructors
+        //----------------------------------
+        Radians()
+        {
+            setUnit(RADIANS);
+            setRadians(0, 1);
+        }
+        Radians(double coefficient, double piTerms=1)
+        {
+            setUnit(RADIANS);
+            setRadians(coefficient, piTerms);
+        }
+
+        //Accessors
+        //----------------------------------
+
+        //Get radians as double in piTerms;
+        double get()
+        {
+            return c*piTerms;
+        }
+        //Get c and piTerms so you can do math in terms of pi
+        std::pair<double, double> getPair()
+        {
+            return std::pair<double, double>(c, piTerms);
+        }
+
+
+        //Mutators
+        //----------------------------------
+
+        //Set the amount of radians in terms of pi.
+        //Will factor pi out of c2 to update piTerms dynamically.
+        void setRadians(double c2, double piTerms2)
+        {
+            c=c2;
+            piTerms=piTerms2;
+        }
+
+        //Set the amount of radians in terms of pi.
+        //Will factor pi out of c2 to update piTerms dynamically.
+        void setRadians(double c2)
+        {
+            c=c2;
+            piTerms=1;
+        }
+
+        //Factors
+        void factorPi()
+        {
+            if(c>M_PI)
+            {
+                c/=M_PI;
+                piTerms*=M_PI;
+                if(get()>(2*M_PI))
+                {
+                    c=fmod(get(),(2*M_PI));
+                    piTerms=1;
+                    factorPi();
+                }
+            }
+        }
+
+        //Operators
+        //----------------------------------
+
+        //Adding
+        Radians operator+(Radians rhs)
+        {
+            return Radians(this->get()+rhs.get());
+        }
+        Radians operator+(double rhs)
+        {
+            //return Radians(this->getAsDegrees().get()+rhs);
+            return Radians(this->get()+rhs);
+        }
+
+        //Subtracting
+        Radians operator-(Radians rhs)
+        {
+            return Radians(this->get()-rhs.get());
+        }
+        Radians operator-(double rhs)
+        {
+            return Radians(this->get()-rhs);
+        }
+
+        //Multiplying
+        Radians operator*(Radians rhs)
+        {
+            return Radians(this->get()*rhs.get());
+        }
+        Radians operator*(double rhs)
+        {
+            return Radians(this->get()*rhs);
+        }
+
+        //Dividing
+        Radians operator/(Radians rhs)
+        {
+            return Radians(this->get()/rhs.get());
+        }
+        Radians operator/(double rhs)
+        {
+            return Radians(this->get()/rhs);
+        }
+
+        //Equal
+        bool operator==(Radians rhs)
+        {
+            return (this->get()==rhs.get());
+        }
+        bool operator==(double rhs)
+        {
+            return (this->get()==rhs);
+        }
+
+        //Not Equal
+        bool operator!=(Radians rhs)
+        {
+            return !((*this)==rhs);
+        }
+        bool operator!=(double rhs)
+        {
+            return !((*this)==rhs);
+        }
+
+        //Assignment
+        void operator=(double rhs)
+        {
+            piTerms=1;
+            c=rhs;
+        }
+
+        //Direct modification
+
+        //+= operators
+        void operator+=(Radians rhs)
+        {
+            this->setRadians( ((*this)+rhs).get() );
+        }
+        void operator+=(double rhs)
+        {
+            this->setRadians( ((*this)+rhs).get() );
+        }
+
+        //-= operators
+        void operator-=(Radians rhs)
+        {
+            this->setRadians( ((*this)-rhs).get() );
+        }
+
+        void operator-=(double rhs)
+        {
+            this->setRadians( ((*this)-rhs).get() );
+        }
+
+        //*= operators
+        void operator*=(Radians rhs)
+        {
+            this->setRadians( ((*this)*rhs).get() );
+        }
+        void operator*=(double rhs)
+        {
+            this->setRadians( ((*this)*rhs).get() );
+        }
+
+        // /= operators
+        void operator/=(Radians rhs)
+        {
+            this->setRadians( ((*this)/rhs).get() );
+        }
+        void operator/=(double rhs)
+        {
+            this->setRadians( ((*this)/rhs).get() );
+        }
+};
+
+/*class Degrees : public Angle
 {
     private:
         double theta;
@@ -458,7 +642,7 @@ class Radians : public Angle
         {
             this->setRadians( ((*this)/rhs).get() );
         }
-};
+};*/
 
 
 #endif
