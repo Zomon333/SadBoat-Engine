@@ -22,12 +22,16 @@ TEST_CASE("inRange test for Range","[range]")
 {
     Range testRange = Range(0, 10);
 
-    REQUIRE( testRange.inRange(5) );
-    REQUIRE( testRange.inRange(6) );
+    for(int i = 1; i<10; i++)
+    {
+        REQUIRE(testRange.inRange(i));
+    }
 
-    REQUIRE( !testRange.inRange(10) );
-    REQUIRE( !testRange.inRange(11) );
-    REQUIRE( !testRange.inRange(-1) );
+    for(int i = -1; i>-10; i--)
+    {
+        REQUIRE(!testRange.inRange(i));
+        REQUIRE(!testRange.inRange((20+i)));
+    }
 }
 
 TEST_CASE("onBouds test for Range","[range]")

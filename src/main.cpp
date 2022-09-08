@@ -36,12 +36,18 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    int result = Catch::Session().run( argc, argv );
-    if(result!=0)
-    {  
-        return -1;
+    int results = 0;
+    results = Catch::Session().run(argc, argv);
+
+    //If we ran the catch session, the results variable may change
+    //So if it is anything other than it's default value, it indicates a failed test.
+    //So, if a test fails, then don't launch the rest of the game.
+    if(results!=0)
+    {
+        return results;
     }
     
+
 
 
     return 0;
