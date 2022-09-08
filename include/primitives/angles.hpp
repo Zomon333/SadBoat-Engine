@@ -71,19 +71,23 @@ class Radians : public Angle
         //----------------------------------
 
         //Set the amount of radians in terms of pi.
-        //Will factor pi out of c2 to update piTerms dynamically.
-        void setRadians(double c2, double piTerms2)
+        //Will factor pi out of c2 to update piTerms dynamically if factor is true.
+        void setRadians(double c2, double piTerms2, bool factor)
         {
             c=c2;
             piTerms=piTerms2;
+            if(factor)
+                factorPi();
         }
 
         //Set the amount of radians in terms of pi.
-        //Will factor pi out of c2 to update piTerms dynamically.
-        void setRadians(double c2)
+        //Will factor pi out of c2 to update piTerms dynamically if factor is true.
+        void setRadians(double c2, bool factor)
         {
             c=c2;
             piTerms=1;
+            if(factor)
+                factorPi();
         }
 
         //Factors
