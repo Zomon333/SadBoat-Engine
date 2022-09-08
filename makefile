@@ -21,3 +21,8 @@ remake:
 clean:
 	rm $(OUT_DIR)/*
 
+test:
+	make remake
+	clear
+	./output/*
+
