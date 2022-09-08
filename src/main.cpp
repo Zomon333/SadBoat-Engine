@@ -31,6 +31,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "utilities/catch.hpp"
 
 #include "tests/test_range.hpp"
+#include "tests/test_radians.hpp"
 
 using namespace std;
 
