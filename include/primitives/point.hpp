@@ -57,6 +57,16 @@ class Point
             return this->y;
         }
 
+        double distance(Point other)
+        {
+            double dX = other.getX() - this->getX();
+            double dY = other.getY() - this->getY();
+            dX*=dX;
+            dY*=dY;
+
+            return sqrt(dX+dY);
+        }
+
         //Equivalence Operators
         //----------------------------------    
         bool operator==(Point rhs)
