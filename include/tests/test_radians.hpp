@@ -23,8 +23,8 @@ TEST_CASE("Radians constructor & get test","[radians]")
     REQUIRE(Radians(0, 1).get()==0);
     REQUIRE(Radians(1, 1).get()==1);
     REQUIRE(Radians(3, 1).get()==3);
-    REQUIRE(Radians(6, 2).get()==12);
-    REQUIRE(Radians(14, 8).get()==112);
+    REQUIRE(Radians(6, 1).get()==6);
+    REQUIRE(Radians(2, M_PI).get()==0);
 
     REQUIRE(Radians(1, M_PI).get()==M_PI);
     REQUIRE(Radians(0.5, M_PI).get()==M_PI_2);
@@ -37,91 +37,91 @@ TEST_CASE("Radian pi parse test","[radians]")
 
 TEST_CASE("Radians operator+ test","[radians]")
 {
-    Radians A = Radians(5, 1);
-    Radians B = Radians(7, 1);
+    Radians A = Radians(2, 1);
+    Radians B = Radians(3, 1);
 
     Radians AB = A + B;
 
-    REQUIRE(AB.get()==12);
+    REQUIRE(AB.get()==5);
 
     A = Radians(1, M_PI);
     A = A + M_PI;
 
-    REQUIRE(A.get()==(2*M_PI));
+    REQUIRE(A.get()==(0));
 }
 
 TEST_CASE("Radians operator- test","[radians]")
 {
-    Radians A = Radians(15, 1);
+    Radians A = Radians(6, 1);
     Radians B = Radians(5, 1);
 
     Radians AB = A - B;
 
-    REQUIRE(AB.get()==10);
+    REQUIRE(AB.get()==1);
 
-    A=Radians(2,M_PI);
+    A=Radians(1,M_PI);
     A = A - M_PI;
 
-    REQUIRE(A.get()==M_PI);
+    REQUIRE(A.get()==0);
 }
 
 
 TEST_CASE("Radians operator+= test","[radians]")
 {
     Radians A = Radians(5, 1);
-    A+=Radians(5, 1);
+    A+=Radians(1, 1);
 
-    REQUIRE(A.get()==10);
+    REQUIRE(A.get()==6);
 
     A=Radians(1,M_PI);
     A+=M_PI;
 
-    REQUIRE(A.get()==(2*M_PI));
+    REQUIRE(A.get()==0);
 }
 
 TEST_CASE("Radians operator-= test","[radians]")
 {
-    Radians A = Radians(15, 1);
+    Radians A = Radians(6, 1);
     A-=Radians(5, 1);
 
-    REQUIRE(A.get()==10);
+    REQUIRE(A.get()==1);
 
-    A=Radians(2,M_PI);
+    A=Radians(1,M_PI);
     A-=M_PI;
 
-    REQUIRE(A.get()==M_PI);
+    REQUIRE(A.get()==0);
 }
 
 TEST_CASE("Radians operator* test","[radians]")
 {
-    Radians A = Radians(5, 1);
+    Radians A = Radians(3, 1);
     A = A * 2;
 
-    REQUIRE(A.get()==10);
+    REQUIRE(A.get()==6);
 }
 
 TEST_CASE("Radians operator*= test","[radians]")
 {
-    Radians A = Radians(5, 1);
+    Radians A = Radians(3, 1);
     A*=2;
 
-    REQUIRE(A.get()==10);
+    REQUIRE(A.get()==6);
 }
 
 TEST_CASE("Radians operator/ test","[radians]")
 {
-    Radians A = Radians(10,1);
+    Radians A = Radians(6,1);
     A = A / 2;
 
-    REQUIRE(A.get()==5);
+    REQUIRE(A.get()==3);
 }
 
 TEST_CASE("Radians operator/= test","[radians]")
 {
-    Radians A = Radians(10,1);
+    Radians A = Radians(5,1);
     A/=2;
 
-    REQUIRE(A.get()==5);
+    REQUIRE(A.get()==2.5);
 }
 
 #endif
