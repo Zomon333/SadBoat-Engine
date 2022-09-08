@@ -27,12 +27,22 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include "primitives/range.hpp"
 
+#define CATCH_CONFIG_RUNNER
+#include "utilities/catch.hpp"
+
+#include "tests/test_range.hpp"
+
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    Range t(0, 10);
+    int result = Catch::Session().run( argc, argv );
+    if(result!=0)
+    {  
+        return -1;
+    }
+    
 
-    cout<<"returning;";
+
     return 0;
 }
