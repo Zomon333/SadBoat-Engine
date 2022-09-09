@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define TEST_RADIANS
 
 #include "../utilities/catch.hpp"
-#include "../primitives/angles.hpp"
+#include "../primitives/angles/radians.hpp"
 
 using namespace std;
 
