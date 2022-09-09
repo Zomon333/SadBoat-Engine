@@ -21,6 +21,11 @@ class Point
         double x;
         double y;
 
+        bool equal(Point other)
+        {
+            return (distance(other)==0);
+        } 
+
     public:
         //Constructors
         //----------------------------------
@@ -67,20 +72,14 @@ class Point
             return sqrt(dX+dY);
         }
 
-        //Equivalence Operators
-        //----------------------------------    
         bool operator==(Point rhs)
         {
-            return (
-                    rhs.getX() == this->x
-                )&&(
-                    rhs.getY() == this->y
-                );
+            return (*this).equal(rhs);
         }
 
         bool operator!=(Point rhs)
         {
-            return !(*this == rhs);
+            return !((*this)==rhs);
         }
 
         Point operator+(Point rhs)
