@@ -25,13 +25,16 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include <thread>
 
-#include "primitives/range.hpp"
+#include "../include/primitives/range.hpp"
+#include "../include/primitives/angles.hpp"
+#include "../include/primitives/point.hpp"
 
 #define CATCH_CONFIG_RUNNER
-#include "utilities/catch.hpp"
+#include "../include/utilities/catch.hpp"
 
-#include "tests/test_range.hpp"
-#include "tests/test_radians.hpp"
+#include "../include/tests/test_range.hpp"
+#include "../include/tests/test_radians.hpp"
+#include "../include/tests/test_point.hpp"
 
 using namespace std;
 
