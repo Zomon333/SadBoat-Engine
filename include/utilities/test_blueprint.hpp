@@ -31,23 +31,23 @@ using namespace std;
 
 TEST_CASE("",test_suite)
 {
-    CHECK();
+    //CHECK();
 }
 TEST_CASE("",test_suite)
 {
-    CHECK();
+    //CHECK();
 }
 TEST_CASE("",test_suite)
 {
-    CHECK();
+    //CHECK();
 }
 TEST_CASE("",test_suite)
 {
-    CHECK();
+    //CHECK();
 }
 TEST_CASE("",test_suite)
 {
-    CHECK();
+    //CHECK();
 }
 
 #endif
