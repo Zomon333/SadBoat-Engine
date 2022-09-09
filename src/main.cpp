@@ -26,6 +26,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <thread>
 
 #include "../include/primitives/range.hpp"
+#include "../include/primitives/tolerance.hpp"
 #include "../include/primitives/angles.hpp"
 #include "../include/primitives/point.hpp"
 
@@ -33,6 +34,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../include/utilities/catch.hpp"
 
 #include "../include/tests/test_range.hpp"
+#include "../include/tests/test_tolerance.hpp"
 #include "../include/tests/test_radians.hpp"
 #include "../include/tests/test_point.hpp"
 
