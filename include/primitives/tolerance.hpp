@@ -55,6 +55,10 @@ public:
     void setOrigin(double origin2)
     {
         origin=origin2;
+        double min, max;
+        min=origin-error;
+        max=origin+error;
+        buffer= Range(min, max);
     }
     double getOrigin()
     {
@@ -63,7 +67,12 @@ public:
 
     bool inTolerance(double test)
     {
-        return buffer.inRange(test);
+        return (buffer[test] || buffer.onBounds(test));
+    }
+
+    bool operator[](double test)
+    {
+        return inTolerance(test);
     }
 };
 
