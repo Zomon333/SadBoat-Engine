@@ -39,6 +39,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../include/tests/test_tolerance.hpp"
 #include "../include/tests/test_radians.hpp"
 #include "../include/tests/test_point.hpp"
+#include "../include/tests/test_degrees.hpp"
 
 using namespace std;
 

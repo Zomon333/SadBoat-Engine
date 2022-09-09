@@ -26,12 +26,10 @@ class Degrees : public Angle
         //----------------------------------
         Degrees()
         {
-            setUnit(DEGREES);
             setDegrees(0);
         }
         Degrees(double theta2)
         {
-            setUnit(DEGREES);
             setDegrees(theta2);
         }
 
@@ -52,8 +50,8 @@ class Degrees : public Angle
         {
             theta=fmod(theta2, 360);
             if(theta<0)
-            {    
-                theta=360+theta;
+            {   
+                theta+=360;
             }
         }
         
