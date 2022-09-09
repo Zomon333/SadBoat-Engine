@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     int results = 0;
     results = Catch::Session().run(argc, argv);
 
-    //If we ran the catch session, the results variable may change Test
+    //If we ran the catch session, the results variable may change
     //So if it is anything other than it's default value, it indicates a failed test.
     //So, if a test fails, then don't launch the rest of the game.
     if(results!=0)
