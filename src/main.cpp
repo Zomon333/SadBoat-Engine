@@ -27,7 +27,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include "../include/primitives/range.hpp"
 #include "../include/primitives/tolerance.hpp"
-#include "../include/primitives/angles.hpp"
+#include "../include/primitives/angles/angle.hpp"
+#include "../include/primitives/angles/degrees.hpp"
+#include "../include/primitives/angles/radians.hpp"
 #include "../include/primitives/point.hpp"
 
 #define CATCH_CONFIG_RUNNER
