@@ -33,20 +33,28 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../include/primitives/point.hpp"
 
 /*
+---------------------------------------------------------------------------------------------------------------------
 This definition is used to determine whether or not we want to include our test profiles in our compile.
 Set to #define CONFIG_TEST to include and run test profiles, set to CONFIG_PROD for a production release
+If CONFIG_TEST is not defined, this will default to CONFIG_PROD
+---------------------------------------------------------------------------------------------------------------------
 */
 #define CONFIG_TEST
+
+#ifndef CONFIG_TEST
+    #define CONFIG_PROD
+#endif
+
 #ifdef CONFIG_TEST
 
-#define CATCH_CONFIG_RUNNER
-#include "../include/utilities/catch.hpp"
+    #define CATCH_CONFIG_RUNNER
+    #include "../include/utilities/catch.hpp"
 
-#include "../include/tests/test_range.hpp"
-#include "../include/tests/test_tolerance.hpp"
-#include "../include/tests/test_radians.hpp"
-#include "../include/tests/test_point.hpp"
-#include "../include/tests/test_degrees.hpp"
+    #include "../include/tests/test_range.hpp"
+    #include "../include/tests/test_tolerance.hpp"
+    #include "../include/tests/test_radians.hpp"
+    #include "../include/tests/test_point.hpp"
+    #include "../include/tests/test_degrees.hpp"
 
 #endif
 
@@ -60,9 +68,8 @@ int main(int argc, char* argv[])
         results = Catch::Session().run(argc, argv);
     #endif
 
-    //If we ran the catch session, the results variable may change
-    //So if it is anything other than it's default value, it indicates a failed test.
-    //So, if a test fails, then don't launch the rest of the game.
+    //If we ran the catch session, the results variable may change, indicating a failed test.
+    //Do not launch the game if the tests fail.
     if(results!=0)
     {
         return results;
