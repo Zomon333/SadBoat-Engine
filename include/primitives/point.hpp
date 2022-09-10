@@ -14,6 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define POINT_H
 
 #include <utility>
+#include <cmath>
 
 class Point
 {
