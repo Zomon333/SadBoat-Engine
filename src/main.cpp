@@ -32,6 +32,13 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../include/primitives/angles/radians.hpp"
 #include "../include/primitives/point.hpp"
 
+/*
+This definition is used to determine whether or not we want to include our test profiles in our compile.
+Set to #define CONFIG_TEST to include and run test profiles, set to CONFIG_PROD for a production release
+*/
+#define CONFIG_TEST
+#ifdef CONFIG_TEST
+
 #define CATCH_CONFIG_RUNNER
 #include "../include/utilities/catch.hpp"
 
@@ -41,12 +48,17 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../include/tests/test_point.hpp"
 #include "../include/tests/test_degrees.hpp"
 
+#endif
+
 using namespace std;
 
 int main(int argc, char* argv[])
 {
     int results = 0;
-    results = Catch::Session().run(argc, argv);
+
+    #ifdef CONFIG_TEST
+        results = Catch::Session().run(argc, argv);
+    #endif
 
     //If we ran the catch session, the results variable may change
     //So if it is anything other than it's default value, it indicates a failed test.

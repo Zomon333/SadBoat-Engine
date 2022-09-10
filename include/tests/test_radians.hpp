@@ -10,6 +10,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#ifdef CONFIG_TEST
 #ifndef TEST_RADIANS
 #define TEST_RADIANS
 
@@ -124,4 +125,5 @@ TEST_CASE("Radians operator/= test","[radians]")
     CHECK(A.get()==2.5);
 }
 
+#endif
 #endif

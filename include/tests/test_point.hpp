@@ -10,6 +10,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#ifdef CONFIG_TEST
 #ifndef TEST_POINT
 #define TEST_POINT
 
@@ -121,4 +122,5 @@ TEST_CASE("/, /= test","[point]")
         threes==thirds
     ));
 }
+#endif
 #endif

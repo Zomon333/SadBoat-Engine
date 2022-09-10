@@ -10,6 +10,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#ifdef CONFIG_TEST
 #ifndef TEST_RANGE
 #define TEST_RANGE
 
@@ -67,4 +68,5 @@ TEST_CASE("operator[] test for Range", "[range]")
     }
 }
 
+#endif
 #endif

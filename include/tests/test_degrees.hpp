@@ -10,7 +10,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
+#ifdef CONFIG_TEST
 #ifndef TEST_DEGREES
 #define TEST_DEGREES
 
@@ -79,9 +79,10 @@ TEST_CASE("Degrees operator*= and operator /=",degrees_suite)
 
     deg*=3;
     REQUIRE((deg==90));
-    
+
     deg/=10;
     REQUIRE((deg==9));
 }
 
+#endif
 #endif
