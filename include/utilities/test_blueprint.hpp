@@ -18,7 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define TEST_BLUEPRINT
 //----------------------------------------------------------------
 
-
+#ifdef CONFIG_TEST
 #ifndef TEST_BLUEPRINT
 #define TEST_BLUEPRINT
 
@@ -50,4 +50,5 @@ TEST_CASE("",test_suite)
     //CHECK();
 }
 
+#endif
 #endif
