@@ -9,7 +9,7 @@ OUT_DIR = ./output
 LIBS = 
 
 NAME = "SadBoatEngine-V"
-VERSION = "0.01.4V"
+VERSION = "0.02.0V"
 
 
 all:
