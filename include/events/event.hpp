@@ -21,35 +21,27 @@ template <class Return, class ...Parameters>
 class Event
 {
     private:
-        // This line of code was previously used. It's become defunct as it can't easily be passed to a std::jthread.
-        // std::function<Return(Parameters...)> function;
-
+        //Holds the function to be executed
         std::packaged_task<Return(Parameters...)> function;
+        
+        //Predicts the future, somewhat
         std::future<Return> future;
 
     public:
+        //  Constructors
+        //----------------------------------
         Event()
         {
             function = [](){return Return();};
         }
         Event(auto func)
         {
-            // This line of code was for when function was an std::function.
-            // function = func;
-
             function = std::packaged_task<Return(Parameters...)>(func); 
         }
 
-        //Launch as it's own thread
-        void launch(Parameters... params)
-        {
-            // This line of code also works and is somewhat thread-optimized. JThread is probably faster though, and auto joins anyways.
-            //  future = std::async(std::launch::async, function, params...);
 
-            future = function.get_future();
-            std::jthread thread(std::move(function), params...);
-            thread.detach();
-        }
+        //  Accessors
+        //----------------------------------
 
         //Wait for the result, then get it when it exists.
         Return getResult()
@@ -57,6 +49,17 @@ class Event
             future.wait();
             Return returnable = future.get();
             return returnable;
+        }
+
+        //  Execution modes
+        //----------------------------------
+
+        //Launch as it's own thread
+        void launch(Parameters... params)
+        {
+            future = function.get_future();
+            std::jthread thread(std::move(function), params...);
+            thread.detach();
         }
 
         //Creates new thread, does not detach.
