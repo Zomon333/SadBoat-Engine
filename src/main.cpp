@@ -47,7 +47,8 @@ Disclaimer:
 #include "../include/primitives/angles/degrees.hpp"
 #include "../include/primitives/angles/radians.hpp"
 
-// Events
+// Event Includes
+//----------------------------------
 #include "../include/events/event.hpp"
 
 /*
