@@ -31,7 +31,7 @@ using namespace std;
 TEST_CASE("Event constructor test",event_suite)
 {
     Event<int> e(
-        [](){
+        F(){
             return 1;
         }
     );
@@ -42,7 +42,7 @@ TEST_CASE("Event constructor test",event_suite)
 TEST_CASE("Event linear run test",event_suite)
 {
     Event<int, int, int> sum(
-        [](int a, int b)
+        F(int a, int b)
         {
             return a + b;
         }
@@ -54,7 +54,7 @@ TEST_CASE("Event linear run test",event_suite)
 TEST_CASE("Event concurrent run test.",event_suite)
 {
     Event<int, int, int> sum(
-        [](int a, int b)
+        F(int a, int b)
         {
             return a + b;
         }
@@ -71,7 +71,7 @@ TEST_CASE("Event search test",event_suite)
     int g = 7;
     
     Event<int, int, vector<int>> search(
-        [](int g, vector<int> s){
+        F(int g, vector<int> s){
             for(int i = 0; i<s.size(); i++)
             {
                 if(s[i]==g)
