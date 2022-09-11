@@ -21,6 +21,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <future>
 #include <thread>
 #include <vector>
+#include <stack>
 
 #include "../events/event.hpp"
 
@@ -85,6 +86,28 @@ TEST_CASE("Event search test",event_suite)
     int answer = search.getResult();
     
     CHECK(answer==4);
+}
+
+TEST_CASE("Threaded call stack test",event_suite)
+{
+    Event<int, int, int> sum(
+        F(int a, int b)
+        {
+            return a + b;
+        }
+    );
+
+    std::stack<int> results;
+    for(int i = 0; i<10; i++)
+    {
+        results.emplace(i+i);
+        sum.launch(i, i);
+    }
+    for(int i = 0; i<10; i++)
+    {
+        CHECK( sum.getResult()==results.top() );
+        results.pop();
+    }
 }
 
 #endif
