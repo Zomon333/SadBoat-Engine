@@ -17,15 +17,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <thread>
 #include <future>
 
-#include <any>
-#include <deque>
-
-
 template <class Return, class ...Parameters>
 class Event
 {
     private:
-        std::function<Return(Parameters...)> function;
+        // This line of code was previously used. It's become defunct as it can't easily be passed to a std::jthread.
+        // std::function<Return(Parameters...)> function;
+
+        std::packaged_task<Return(Parameters...)> function;
         std::future<Return> future;
 
     public:
@@ -35,13 +34,21 @@ class Event
         }
         Event(auto func)
         {
-            function = func;
+            // This line of code was for when function was an std::function.
+            // function = func;
+
+            function = std::packaged_task<Return(Parameters...)>(func); 
         }
 
         //Launch as it's own thread
         void launch(Parameters... params)
         {
-            future = std::async(std::launch::async, function, params...);
+            // This line of code also works and is somewhat thread-optimized. JThread is probably faster though, and auto joins anyways.
+            //  future = std::async(std::launch::async, function, params...);
+
+            future = function.get_future();
+            std::jthread thread(std::move(function), params...);
+            thread.detach();
         }
 
         //Wait for the result, then get it when it exists.
