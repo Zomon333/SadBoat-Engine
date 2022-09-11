@@ -38,6 +38,7 @@ TEST_CASE("Event constructor test",event_suite)
 
     CHECK(e()==1);
 }
+
 TEST_CASE("Event linear run test",event_suite)
 {
     Event<int, int, int> sum(
@@ -49,6 +50,7 @@ TEST_CASE("Event linear run test",event_suite)
 
     CHECK(sum(3, 3)==6);
 }
+
 TEST_CASE("Event concurrent run test.",event_suite)
 {
     Event<int, int, int> sum(
@@ -62,6 +64,7 @@ TEST_CASE("Event concurrent run test.",event_suite)
 
     CHECK(answer==6);
 }
+
 TEST_CASE("Event search test",event_suite)
 {
     vector<int> s = { 0, 3, 2, 4, 7, 6, 5, 1};
@@ -79,6 +82,7 @@ TEST_CASE("Event search test",event_suite)
 
     search.launch(g, s);
     int answer = search.getResult();
+    
     CHECK(answer==4);
 }
 
