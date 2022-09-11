@@ -24,6 +24,9 @@ private:
     Range buffer;
 
 public:
+    //  Constructors
+    //----------------------------------
+
     Tolerance()
     {
         origin=0;
@@ -43,13 +46,12 @@ public:
         buffer= Range(min, max);
     }
 
+    //  Mutators
+    //----------------------------------
+    
     void setError(double error2)
     {
         error=error2;
-    }
-    double getError()
-    {
-        return error;
     }
 
     void setOrigin(double origin2)
@@ -60,11 +62,23 @@ public:
         max=origin+error;
         buffer= Range(min, max);
     }
+
+    //  Accessors
+    //----------------------------------
+    
+    double getError()
+    {
+        return error;
+    }
+
     double getOrigin()
     {
         return origin;
     }
 
+    //  inTolerance and op[]
+    //----------------------------------    
+    
     bool inTolerance(double test)
     {
         return (buffer[test] || buffer.onBounds(test));
