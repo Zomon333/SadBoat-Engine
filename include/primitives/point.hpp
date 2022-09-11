@@ -15,6 +15,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include <utility>
 #include <cmath>
+#include "tolerance.hpp"
 
 class Point
 {
@@ -24,7 +25,13 @@ class Point
 
         bool equal(Point other)
         {
-            return (distance(other)==0);
+            //We now account for some tolerance in the distance between points.
+            //The tolerance is currently the smallest value a double could reasonably represent.
+            //Change this to whatever seems like a reasonable error rate to you.
+            const double tol = pow(2,-47);
+            Tolerance error = Tolerance(0,tol);
+            
+            return error[distance(other)];
         } 
 
     public:
@@ -65,7 +72,6 @@ class Point
 
         double distance(Point other)
         {
-            //Account for +-0.001 error
             double dX = other.getX() - this->getX();
             double dY = other.getY() - this->getY();
             dX*=dX;
