@@ -17,6 +17,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define F(a...) [](a...)
 
 #include <functional>
+#include <stack>
 #include <thread>
 #include <future>
 
@@ -25,21 +26,21 @@ class Event
 {
     private:
         //Holds the function to be executed
-        std::packaged_task<Return(Parameters...)> function;
+        std::function<Return(Parameters...)> function;// = std::function<int(int)>([](int a){return a;});
         
         //Predicts the future, somewhat
-        std::future<Return> future;
+        std::stack<std::future<Return>> callStack;
 
     public:
         //  Constructors
         //----------------------------------
         Event()
         {
-            function = [](){return Return();};
+            function = [](Parameters...){return Return();};
         }
         Event(auto func)
         {
-            function = std::packaged_task<Return(Parameters...)>(func); 
+            function = std::function<Return(Parameters...)>(func);
         }
 
 
@@ -49,28 +50,75 @@ class Event
         //Wait for the result, then get it when it exists.
         Return getResult()
         {
-            future.wait();
-            Return returnable = future.get();
-            return returnable;
+            //If there are no results to get, give a default answer.
+            if(callStack.size()==0)
+            {
+                return Return();
+            }
+            callStack.top().wait();
+            Return result = callStack.top().get();
+            callStack.pop();
+            return result;
         }
 
         //  Execution modes
+        // Todo: Find a way to put a std::function into a std::packaged_task
+        //          - Function is non-volatile
+        //          - Packaged task is volatile
         //----------------------------------
 
         //Launch as it's own thread
         void launch(Parameters... params)
         {
-            future = function.get_future();
-            std::jthread thread(std::move(function), params...);
+            //Create a new function that is a copy of the stored function
+            //  - Doing so requires casting the other function to be a constant,
+            //    as that's the only copy constructor for the function class
+            std::function<Return(Parameters...)> tempFunc(static_cast<const std::function<Return(Parameters...)>>(function));
+
+            //Create a packaged task using the temp function
+            //  - This moves the referenced lambda function into the task, because tasks are move only.
+            std::packaged_task<Return(Parameters...)> task = std::packaged_task<Return(Parameters...)>(tempFunc);
+
+            //Get the future of the task
+            //  - This makes a pointer to the return statement and lets us reference it later.
+            //  - I've added an implementation that makes a call stack, allowing us to call an event numerous times and get the results repeatedly.
+            callStack.emplace(task.get_future());
+
+            //Create a new thread and move the lambda function to it
+            //  - This unassigns the function from the packaged task, but the packaged task
+            //    was a copy of a function constant anyways
+            std::jthread thread(std::move(task), params...);
+
+            //Be free, my child!
             thread.detach();
         }
 
         //Creates new thread, does not detach.
         Return operator()(Parameters... params)
         {
-            future = function.get_future();
-            std::jthread thread(std::move(function), params...);
-            return getResult();
+           //Create a new function that is a copy of the stored function
+            //  - Doing so requires casting the other function to be a constant,
+            //    as that's the only copy constructor for the function class
+            std::function<Return(Parameters...)> tempFunc(static_cast<const std::function<Return(Parameters...)>>(function));
+
+            //Create a packaged task using the temp function
+            //  - This moves the referenced lambda function into the task, because tasks are move only.
+            std::packaged_task<Return(Parameters...)> task = std::packaged_task<Return(Parameters...)>(tempFunc);
+
+            //Get the future of the task
+            //  - This makes a pointer to the return statement and lets us reference it later.
+            std::future<Return> lFuture = task.get_future();
+
+            //Create a new thread and move the lambda function to it
+            //  - This unassigns the function from the packaged task, but the packaged task
+            //    was a copy of a function constant anyways
+            std::jthread thread(std::move(task), params...);
+
+            //Wait for the future to arrive
+            lFuture.wait();
+
+            //And get it when it does
+            return lFuture.get();
         }
 };
 
