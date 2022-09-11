@@ -29,6 +29,11 @@ Disclaimer:
 // STD Includes
 //----------------------------------
 #include <iostream>
+#include <variant>
+#include <deque>
+#include <future>
+#include <thread>
+#include <any>
 
 // Primitive Includes
 //----------------------------------
@@ -40,6 +45,9 @@ Disclaimer:
 #include "../include/primitives/angles/angle.hpp"
 #include "../include/primitives/angles/degrees.hpp"
 #include "../include/primitives/angles/radians.hpp"
+
+// Events
+#include "../include/events/event.hpp"
 
 /*
 ---------------------------------------------------------------------------------------------------------------------
@@ -69,6 +77,9 @@ If CONFIG_TEST is not defined, this will default to CONFIG_PROD
     #include "../include/tests/test_degrees.hpp"
     #include "../include/tests/test_radians.hpp"
 
+    // Event tests
+    #include "../include/tests/test_events.hpp"
+
 
 
 #endif
@@ -96,9 +107,52 @@ int main(int argc, char* argv[])
     {
         return results;
     }
+
+    deque<any> eventQueue;
+
+    Event<int> testEvent; // Does the generic constructor at least work?
+    results = testEvent();
+    cout<<results;
+
+    Event<int, int> testEvent2(
+        [](int a){return a;}
+    );
+
+    results = testEvent2(4);
+    cout<<results;
+
+    Event<int, int, int> testEvent3(
+        [](int a, int b)
+        {
+            return a+b;
+        }
+    );
+    results=testEvent3(5,5);
+    cout<<results;
+
+    Event<int, int, vector<int>> searchTest(
+        [](int target, vector<int> area){
+            int i = 0;
+            while(i<area.size())
+            {
+                if(area[i]==target)
+                {
+                    return i;
+                }
+                i++;
+            }
+            return -1;
+        }
+    );
     
+    vector<int> search = {0, 1, 3, 5, 2, 4, 7, 6, 9, 8};
 
+    results = searchTest(5, search);
+    cout<<endl<<results<<endl;
 
+    searchTest.launch(5, search);
+    results = searchTest.getResult();
+    cout<<endl<<results<<endl;
 
     return 0;
 }
