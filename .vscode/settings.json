@@ -63,6 +63,7 @@
         "iterator": "cpp",
         "memory_resource": "cpp",
         "random": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "any": "cpp"
     }
 }
