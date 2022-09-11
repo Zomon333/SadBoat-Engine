@@ -62,9 +62,6 @@ class Event
         }
 
         //  Execution modes
-        // Todo: Find a way to put a std::function into a std::packaged_task
-        //          - Function is non-volatile
-        //          - Packaged task is volatile
         //----------------------------------
 
         //Launch as it's own thread
