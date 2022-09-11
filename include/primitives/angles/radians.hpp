@@ -80,6 +80,7 @@ class Radians : public Angle
         }
 
         //Factors
+        //Add in negative handling
         void factorPi()
         {
             //Get what the raw radians should be

@@ -56,6 +56,7 @@ public:
 
     void setOrigin(double origin2)
     {
+        //May need changing, tbd
         origin=origin2;
         double min, max;
         min=origin-error;

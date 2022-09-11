@@ -69,6 +69,7 @@ TEST_CASE("Event search test",event_suite)
 {
     vector<int> s = { 0, 3, 2, 4, 7, 6, 5, 1};
     int g = 7;
+    
     Event<int, int, vector<int>> search(
         [](int g, vector<int> s){
             for(int i = 0; i<s.size(); i++)

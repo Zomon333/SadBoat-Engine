@@ -47,7 +47,7 @@ public:
 
     //Accessor
     //----------------------------------
-    int getSpan()
+    double getSpan()
     {
         return (max - min);
     }    
@@ -71,6 +71,7 @@ public:
     //----------------------------------    
     bool operator==(Range rhs)
     {
+        //Add tolerance
         if(this->min == rhs.min && this-> max == rhs.max)
         return true;
         return false;

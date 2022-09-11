@@ -65,6 +65,7 @@ class Point
 
         double distance(Point other)
         {
+            //Account for +-0.001 error
             double dX = other.getX() - this->getX();
             double dY = other.getY() - this->getY();
             dX*=dX;
