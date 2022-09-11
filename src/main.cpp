@@ -110,17 +110,6 @@ int main(int argc, char* argv[])
         return results;
     }
 
-    /*Event<bool, int, int> evt(
-        Fn(int a, int b)
-        {
-            cout<<"a: "<<a<<" b: "<<b;
-            return true;
-        }
-    );*/
-
-    //evt(1, 2);
-    //Game code
-    //test
 
     return 0;
 }
