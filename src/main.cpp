@@ -108,8 +108,6 @@ int main(int argc, char* argv[])
         return results;
     }
 
-    deque<any> eventQueue;
-
     Event<int> testEvent; // Does the generic constructor at least work?
     results = testEvent();
     cout<<results;
