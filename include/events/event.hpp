@@ -59,10 +59,12 @@ class Event
             return returnable;
         }
 
-        //Run linearly, do not multithread
+        //Creates new thread, does not detach.
         Return operator()(Parameters... params)
         {
-            return function(params...);
+            future = function.get_future();
+            std::jthread thread(std::move(function), params...);
+            return getResult();
         }
 };
 

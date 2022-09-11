@@ -20,6 +20,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <iostream>
 #include <future>
 #include <thread>
+#include <vector>
 
 #include "../events/event.hpp"
 
@@ -27,25 +28,58 @@ using namespace std;
 
 #define event_suite "[events]"
 
-TEST_CASE("Event test",event_suite)
+TEST_CASE("Event constructor test",event_suite)
 {
+    Event<int> e(
+        [](){
+            return 1;
+        }
+    );
 
+    CHECK(e()==1);
 }
-TEST_CASE("",event_suite)
+TEST_CASE("Event linear run test",event_suite)
 {
-    //CHECK();
+    Event<int, int, int> sum(
+        [](int a, int b)
+        {
+            return a + b;
+        }
+    );
+
+    CHECK(sum(3, 3)==6);
 }
-TEST_CASE("",event_suite)
+TEST_CASE("Event concurrent run test.",event_suite)
 {
-    //CHECK();
+    Event<int, int, int> sum(
+        [](int a, int b)
+        {
+            return a + b;
+        }
+    );
+    sum.launch(3, 3);
+    int answer = sum.getResult();
+
+    CHECK(answer==6);
 }
-TEST_CASE("",event_suite)
+TEST_CASE("Event search test",event_suite)
 {
-    //CHECK();
-}
-TEST_CASE("",event_suite)
-{
-    //CHECK();
+    vector<int> s = { 0, 3, 2, 4, 7, 6, 5, 1};
+    int g = 7;
+    Event<int, int, vector<int>> search(
+        [](int g, vector<int> s){
+            for(int i = 0; i<s.size(); i++)
+            {
+                if(s[i]==g)
+                return i;
+            }
+            return -1;
+        }
+    );
+
+    search.launch(g, s);
+    int answer = search.getResult();
+    CHECK(answer==4);
 }
 
 #endif
