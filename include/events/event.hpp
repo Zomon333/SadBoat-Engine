@@ -90,32 +90,10 @@ class Event
             thread.detach();
         }
 
-        //Creates new thread, does not detach.
+        //Do not create a new thread; run synchronously.
         Return operator()(Parameters... params)
         {
-           //Create a new function that is a copy of the stored function
-            //  - Doing so requires casting the other function to be a constant,
-            //    as that's the only copy constructor for the function class
-            std::function<Return(Parameters...)> tempFunc(static_cast<const std::function<Return(Parameters...)>>(function));
-
-            //Create a packaged task using the temp function
-            //  - This moves the referenced lambda function into the task, because tasks are move only.
-            std::packaged_task<Return(Parameters...)> task = std::packaged_task<Return(Parameters...)>(tempFunc);
-
-            //Get the future of the task
-            //  - This makes a pointer to the return statement and lets us reference it later.
-            std::future<Return> lFuture = task.get_future();
-
-            //Create a new thread and move the lambda function to it
-            //  - This unassigns the function from the packaged task, but the packaged task
-            //    was a copy of a function constant anyways
-            std::jthread thread(std::move(task), params...);
-
-            //Wait for the future to arrive
-            lFuture.wait();
-
-            //And get it when it does
-            return lFuture.get();
+            return function(params...);
         }
 };
 

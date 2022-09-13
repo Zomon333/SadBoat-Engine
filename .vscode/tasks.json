@@ -1,0 +1,37 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compile",
+            "type": "shell",
+            "command": "clear; sleep 1s; make remake",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "clear; sleep 1s; ./output/*",
+            "problemMatcher": [],
+            "group": {
+                "kind":"test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "fullRun",
+            "type": "shell",
+            "command": "make remake; sleep 1s; clear; ./output/*",
+            "problemMatcher": [],
+            "group": {
+                "kind":"njork",//I know this is not a valid type of task. Deal with it.
+                "isDefault": true
+            }
+        }
+    ]
+}
