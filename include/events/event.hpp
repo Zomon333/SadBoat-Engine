@@ -31,6 +31,14 @@ class Event
         //Predicts the future, somewhat
         std::stack<std::future<Return>> callStack;
 
+       std::packaged_task<Return(Parameters...)> package()
+       {
+            return  std::packaged_task<Return(Parameters...)>(                      //Packaged tasks can only *move* data
+                        std::function<Return(Parameters...)>(                       //So give it a function
+                            static_cast<const                                       //Which was copy constructed
+                                std::function<Return(Parameters...)>>(function)));  //From another function
+       }                                                                            //So the task is a free floating copy constucted task
+
     public:
         //  Constructors
         //----------------------------------
@@ -67,23 +75,13 @@ class Event
         //Launch as it's own thread
         void launch(Parameters... params)
         {
-            //Create a new function that is a copy of the stored function
-            //  - Doing so requires casting the other function to be a constant,
-            //    as that's the only copy constructor for the function class
-            std::function<Return(Parameters...)> tempFunc(static_cast<const std::function<Return(Parameters...)>>(function));
-
-            //Create a packaged task using the temp function
-            //  - This moves the referenced lambda function into the task, because tasks are move only.
-            std::packaged_task<Return(Parameters...)> task = std::packaged_task<Return(Parameters...)>(tempFunc);
+            //Get the function as a task
+            auto task = package();
 
             //Get the future of the task
-            //  - This makes a pointer to the return statement and lets us reference it later.
-            //  - I've added an implementation that makes a call stack, allowing us to call an event numerous times and get the results repeatedly.
             callStack.emplace(task.get_future());
 
             //Create a new thread and move the lambda function to it
-            //  - This unassigns the function from the packaged task, but the packaged task
-            //    was a copy of a function constant anyways
             std::jthread thread(std::move(task), params...);
 
             //Be free, my child!
