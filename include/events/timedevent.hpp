@@ -13,9 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef T_EVENT_H
 #define T_EVENT_H
 
-//Where you want to define some function in an event, you can now just use F(params){}; like normal instead of [](params){};
-#define F(a...) [](a...)
-
 #include <functional>
 #include <stack>
 #include <thread>
