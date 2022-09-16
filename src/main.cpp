@@ -51,6 +51,19 @@ Disclaimer:
 //----------------------------------
 #include "../include/events/event.hpp"
 
+
+/*
+---------------------------------------------------------------------------------------------------------------------
+This definition is used to determine whether or not we want to include our OpenGL classes for compilation.
+This exists in case you're trying to compile but don't have the libraries set up to link.
+This allows you to still write code; it just won't be included in compilation.
+---------------------------------------------------------------------------------------------------------------------
+*/
+//#define OPENGL_LINKED
+#ifdef OPENGL_LINKED
+    #include "../include/utilities/opengl/shader.hpp"
+#endif
+
 /*
 ---------------------------------------------------------------------------------------------------------------------
 This definition is used to determine whether or not we want to include our test profiles in our compile.
