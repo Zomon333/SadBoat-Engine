@@ -61,7 +61,11 @@ This allows you to still write code; it just won't be included in compilation.
 */
 //#define OPENGL_LINKED
 #ifdef OPENGL_LINKED
+    #include "../include/utilities/opengl/vao.hpp"
+    #include "../include/utilities/opengl/uniform.hpp"
     #include "../include/utilities/opengl/shader.hpp"
+    #include "../include/utilities/opengl/shaderprogram.hpp"
+    #include "../include/utilities/opengl/interfaceblock.hpp"
 #endif
 
 /*
