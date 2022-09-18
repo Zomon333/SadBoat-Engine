@@ -50,6 +50,7 @@ Disclaimer:
 // Event Includes
 //----------------------------------
 #include "../include/events/event.hpp"
+#include "../include/events/timedevent.hpp"
 
 
 /*

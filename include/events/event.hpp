@@ -31,13 +31,13 @@ class Event
         //Predicts the future, somewhat
         std::stack<std::future<Return>> callStack;
 
-       std::packaged_task<Return(Parameters...)> package()
-       {
-            return  std::packaged_task<Return(Parameters...)>(                      //Packaged tasks can only *move* data
-                        std::function<Return(Parameters...)>(                       //So give it a function
-                            static_cast<const                                       //Which was copy constructed
-                                std::function<Return(Parameters...)>>(function)));  //From another function
-       }                                                                            //So the task is a free floating copy constucted task
+        std::packaged_task<Return(Parameters...)> package()
+        {
+                return  std::packaged_task<Return(Parameters...)>(                      //Packaged tasks can only *move* data
+                            std::function<Return(Parameters...)>(                       //So give it a function
+                                static_cast<const                                       //Which was copy constructed
+                                    std::function<Return(Parameters...)>>(function)));  //From another function
+        }                                                                            //So the task is a free floating copy constucted task
 
     public:
         //  Constructors
@@ -67,6 +67,11 @@ class Event
             Return result = callStack.top().get();
             callStack.pop();
             return result;
+        }
+
+        std::future<Return> getTopFuture()
+        {
+            return callStack.top();
         }
 
         //  Execution modes
