@@ -71,24 +71,36 @@ public:
     //Don't use this for long running conditions! It opens a watchdog thread!
     void defer(Instant execution, Parameters... params)
     {
+        std::cout<<"A\n";
         auto f = lF(Instant execution, std::promise<Return>* toReturn, Parameters... params)
         {
+            std::cout<<"HA\n";
+           toReturn = new std::promise<Return>();
+           std::cout<<"HB\n";
+           toReturn->set_value_at_thread_exit(this->call(params...));
+           std::cout<<"HC\n";
            std::this_thread::sleep_until(execution);
-           toReturn->set_value(this->call(params...));
+           std::cout<<"HD\n";
         };
 
-        std::promise<Return> deferredResult;
-        
+        std::cout<<"B\n";
+        std::promise<Return>* deferredResult = nullptr;
+        std::cout<<"C\n";
 
+        std::cout<<"D\n";
         std::jthread thread(
             std::move(f),
             execution,
-            &deferredResult,
+            deferredResult,
             params...
         );
 
+        std::cout<<"E\n";
         thread.detach();
-        this->callStack.emplace(deferredResult.get_future());
+        std::this_thread::sleep_for(std::chrono::milliseconds(15));
+        std::cout<<"F\n";
+        this->callStack.emplace(deferredResult->get_future());
+        std::cout<<"G\n";
     }
 
     Return call(Parameters... params)
