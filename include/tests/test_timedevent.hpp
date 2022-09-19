@@ -213,31 +213,92 @@ TEST_CASE("Deferred future test",test_timed_event)
         }
     );
 
-    Instant executionTime = EngineClock::now() + std::chrono::seconds(1);
+    Instant executionTime = EngineClock::now() + std::chrono::milliseconds(25);
     deferredSum.defer(executionTime, 3, 3);
 
     CHECK(
         (deferredSum(4, 7)==11)
     );
 
-    /*deferredSum.launch(2,1);
+    deferredSum.launch(2,1);
     CHECK(
         (deferredSum.getResult()==3)
-    );*/
+    );
 
-    /*this_thread::sleep_until(executionTime+std::chrono::seconds(2));
     CHECK(
         (deferredSum.getResult()==6)
-    );*/
+    );
+
 }
-TEST_CASE("",test_timed_event)
+TEST_CASE("Deferred timing test",test_timed_event)
 {
-    //CHECK();
+    TimedEvent<double, int> waitress(
+        F(int a)
+        {
+            return EngineClock::now().time_since_epoch().count();
+        }
+    );
+
+    Instant executionTime = EngineClock::now() + std::chrono::microseconds(75);
+    
+    waitress.defer(executionTime, 0);
+    double start = waitress(0);
+    double end = waitress.getResult();
+
+    CHECK(
+        ((end-start)>0)
+    );
 }
-TEST_CASE("",test_timed_event)
+TEST_CASE("Deferred contents test",test_timed_event)
 {
-    //CHECK();
+    TimedEvent<int, int*, int*> deferredSum(
+        F(int* a, int* b)
+        {
+            return (*a)+(*b);
+        }
+    );
+
+    int a = 3;
+    int b = 3;
+
+    CHECK(
+        (deferredSum(&a, &b)==6)
+    );
+
+    Instant exTime = EngineClock::now() + std::chrono::milliseconds(15);
+    
+    deferredSum.defer(exTime, &a, &b);
+    a=10;
+
+    CHECK(
+        (deferredSum.getResult()==13)
+    );
+}
+TEST_CASE("Suppression test",test_timed_event)
+{
+    TimedEvent<int, int> returner(
+        F(int a)
+        {
+            return a;
+        }
+    );
+    returner.suppress();
+    CHECK
+    (
+        (returner.call(24768)==int())
+    );
+    returner.release();
+    CHECK
+    (
+        (returner.call(24768)==24768)
+    );
 }
 
+/*
+TEST_CASE("",test_timed_event)
+{
+    
+}
+*/
 #endif
 #endif

@@ -71,36 +71,48 @@ public:
     //Don't use this for long running conditions! It opens a watchdog thread!
     void defer(Instant execution, Parameters... params)
     {
-        std::cout<<"A\n";
-        auto f = lF(Instant execution, std::promise<Return>* toReturn, Parameters... params)
+        //Copy TimedEvent's intended function
+        const std::function<Return(Parameters...)> func = 
+                std::function<Return(Parameters...)>(                       
+                    static_cast<const                                       
+                        std::function<Return(Parameters...)>>
+                            (this->function));
+        
+        //Create some new function that takes the exact same parameters
+        //But have it's scope include the old function and intended execution time
+        auto nFunc = [func, execution](Parameters...params)
         {
-            std::cout<<"HA\n";
-           toReturn = new std::promise<Return>();
-           std::cout<<"HB\n";
-           toReturn->set_value_at_thread_exit(this->call(params...));
-           std::cout<<"HC\n";
-           std::this_thread::sleep_until(execution);
-           std::cout<<"HD\n";
+            //But don't actually use the captured execution time!
+            //If you use the actual captured execution time you may end up with deleted functions and expressions
+            //It may throw errors due to that
+
+            //So, instead;
+
+            //Copy it into a constant.
+            const Instant lExe = execution;
+
+            //Copy the captured old function aswell
+            const std::function<Return(Parameters...)> oldFunc =
+                std::function<Return(Parameters...)>(                       
+                    static_cast<const                                       
+                        std::function<Return(Parameters...)>>
+                            (func));
+
+            //Wait until the *copied* execution time
+            std::this_thread::sleep_until(lExe);
+
+            //And return the value of the *copied* function with the *normal* parameters.
+            return oldFunc(params...);
         };
 
-        std::cout<<"B\n";
-        std::promise<Return>* deferredResult = nullptr;
-        std::cout<<"C\n";
+        //Set the event's function to the new deferred function
+        this->function = std::function<Return(Parameters...)>(nFunc);
 
-        std::cout<<"D\n";
-        std::jthread thread(
-            std::move(f),
-            execution,
-            deferredResult,
-            params...
-        );
+        //Launch a thread with the deferred function
+        this->launch(params...);
 
-        std::cout<<"E\n";
-        thread.detach();
-        std::this_thread::sleep_for(std::chrono::milliseconds(15));
-        std::cout<<"F\n";
-        this->callStack.emplace(deferredResult->get_future()); //ISSUE HERE
-        std::cout<<"G\n";
+        //Set the event's function back to the non-deferred version
+        this->function = std::function<Return(Parameters...)>(func);
     }
 
     Return call(Parameters... params)
