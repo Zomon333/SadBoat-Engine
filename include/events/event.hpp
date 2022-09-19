@@ -13,9 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef EVENT_H
 #define EVENT_H
 
-//Where you want to define some function in an event, you can now just use F(params){}; like normal instead of [](params){};
-#define F(a...) [](a...)
-
 #include <functional>
 #include <stack>
 #include <thread>
@@ -24,14 +21,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 template <class Return, class ...Parameters>
 class Event
 {
-    private:
+    protected:
         //Holds the function to be executed
         std::function<Return(Parameters...)> function;// = std::function<int(int)>([](int a){return a;});
         
         //Predicts the future, somewhat
         std::stack<std::future<Return>> callStack;
 
-        std::packaged_task<Return(Parameters...)> package()
+        std::packaged_task<Return(Parameters...)> copyPackage()
         {
                 return  std::packaged_task<Return(Parameters...)>(                      //Packaged tasks can only *move* data
                             std::function<Return(Parameters...)>(                       //So give it a function
@@ -45,6 +42,10 @@ class Event
         Event()
         {
             function = [](Parameters...){return Return();};
+        }
+        Event(std::function<Return(Parameters...)> func)
+        {
+            function = func;
         }
         Event(auto func)
         {
@@ -69,11 +70,6 @@ class Event
             return result;
         }
 
-        std::future<Return> getTopFuture()
-        {
-            return callStack.top();
-        }
-
         //  Execution modes
         //----------------------------------
 
@@ -81,7 +77,7 @@ class Event
         void launch(Parameters... params)
         {
             //Get the function as a task
-            auto task = package();
+            auto task = copyPackage();
 
             //Get the future of the task
             callStack.emplace(task.get_future());

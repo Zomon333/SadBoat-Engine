@@ -20,33 +20,38 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <chrono>
 #include "event.hpp"
 
+
+
 template <class Return, class... Parameters>
 class TimedEvent : public Event<Return, Parameters...>
 {
 private:
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> exeTime;
+    Instant exeTime;
     bool suppressed = false;
 
-    void insertDeferred(std::future<Return> entry)
-    {
-        static_cast<Event<Return, Parameters...>*>(this).callStack.push(entry);
-    }
-
 public:
-    TimedEvent()
+    TimedEvent() 
+    : Event<Return, Parameters...>()
     {
-        this->Event();
+        exeTime = Instant(uTime(0));
     }
 
-    TimedEvent(std::function<Return(Parameters...)> lFunc)
+    TimedEvent(auto lFunc)
+    : Event<Return, Parameters...>(lFunc)
     {
-        exeTime = std::chrono::steady_clock().now();
-        this->Event(lFunc);
+        exeTime = Instant(uTime(0));
     }
-    TimedEvent(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> newExe, std::function<Return(Parameters...)> lFunc)
+
+    TimedEvent(auto lFunc, Instant newExe)
+    : Event<Return, Parameters...>(lFunc)
     {
         exeTime = newExe;
-        this->Event(lFunc);
+    }
+
+    TimedEvent(TimedEvent<Return, Parameters...> &cp)
+    : Event<Return, Parameters...>(cp.function)
+    {
+        exeTime = cp.getTime();
     }
 
     //Do not launch event on time
@@ -61,79 +66,35 @@ public:
         suppressed = false;
     }
 
-    //Awaits condition is true, then launches.
+
+    //Launches thread, but awaits time==now before running event.
     //Don't use this for long running conditions! It opens a watchdog thread!
-    void defer(std::future<bool> condition, Parameters... params)
+    void defer(Instant execution, Parameters... params)
     {
-        //Create a new event
-        //Event takes 3 parameters: The old event, a condition, and the old event's parameters
-        Event<Return, std::future<bool>, TimedEvent<Return, Parameters...>*, Parameters...> watchdog(        
+        auto f = lF(Instant execution, std::promise<Return>* toReturn, Parameters... params)
+        {
+           std::this_thread::sleep_until(execution);
+           toReturn->set_value(this->call(params...));
+        };
 
-            //This event will operate like a watchdog.
-            F(std::future<bool> condition, TimedEvent<Return, Parameters...>* context, Parameters... params)
-            {
+        std::promise<Return> deferredResult;
+        
 
-                //When the new event is called:
-                //Wait for the condition to resolve
-                condition.wait();
-
-                //If the condition is true,
-                if(condition.get()==true)
-                {
-                    //Run the stored event with the parameters given
-                    //Return it's value
-                    return context(params...);                                                                 
-                }
-
-                //If the condition wasn't true, just make a new value.
-                return Return();
-            }
+        std::jthread thread(
+            std::move(f),
+            execution,
+            &deferredResult,
+            params...
         );
 
-        //Launch our watchdog thread
-        //Have it watch a given condition, and when that condition is true, run *this* event.
-        watchdog.launch(condition, this, params...);
-
-        //While the watchdog is running, get the future on top of it's callStack
-        //This future should either be the return of the watchdog event, which will either be Return() or the return of *this* event.
-        insertDeferred(watchdog.getTopFuture());
-    }
-
-
-    //Awaits condition is true, then launches.
-    //Don't use this for long running conditions! It opens a watchdog thread!
-    void defer(bool* condition, Parameters... params)
-    {
-        //Create a new event
-        //Event takes 3 parameters: The old event, a condition, and the old event's parameters
-        Event<Return, bool*, TimedEvent<Return, Parameters...>*, Parameters...> watchdog(        
-
-            //This event will operate like a watchdog.
-            F(bool* condition, TimedEvent<Return, Parameters...>* context, Parameters... params)
-            {
-
-                //When the new event is called:
-                //Wait for the condition to become true
-                while((*condition)==false);
-
-                //Then run context's thread here
-                return context(params...);                                                                 
-            }
-        );
-
-        //Launch our watchdog thread
-        //Have it watch a given condition, and when that condition is true, run *this* event.
-        watchdog.launch(condition, this, params...);
-
-        //While the watchdog is running, get the future on top of it's callStack
-        //This future should either be the return of the watchdog event, which will either be Return() or the return of *this* event.
-        insertDeferred(watchdog.getTopFuture());
+        thread.detach();
+        this->callStack.emplace(deferredResult.get_future());
     }
 
     Return call(Parameters... params)
     {
         if(!suppressed)
-            return (*this)(params...);
+            return this->function(params...);
         else return Return();
     }
 
@@ -141,99 +102,76 @@ public:
     {
         if(!suppressed)
         {    
-            static_cast<Event<Return, Parameters...>*>(this).launch(params...);
+            Event<Return, Parameters...>::launch(params...);
         }
     }
 
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> getTime()
+    Instant getTime()
     {
         return exeTime;
     }
-    void setTime(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> nTime)
+    void setTime(Instant nTime)
     {
         exeTime=nTime;
     }
-
-
-    void operator=(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
+    
+    Return operator()(Parameters... rhs)
     {
-        exeTime = rhs;
-    }
-    TimedEvent<Return, Parameters...> operator+(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        TimedEvent<Return, Parameters...> tempEvent(*this);
-        tempEvent.setTime(getTime()+rhs);
-        return tempEvent;
-    }
-    TimedEvent<Return, Parameters...> operator-(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        TimedEvent<Return, Parameters...> tempEvent(*this);
-        tempEvent.setTime(getTime()-rhs);
-        return tempEvent;
-    }
-    TimedEvent<Return, Parameters...> operator*(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        TimedEvent<Return, Parameters...> tempEvent(*this);
-        tempEvent.setTime(getTime()*rhs);
-        return tempEvent;
-    }
-    TimedEvent<Return, Parameters...> operator/(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        TimedEvent<Return, Parameters...> tempEvent(*this);
-        tempEvent.setTime(getTime()/rhs);
-        return tempEvent;
+       return this->function(rhs...);
     }
 
-
-    bool operator>(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
+    bool operator==(Instant rhs)
     {
-        return (exeTime.time_since_epoch()>rhs.time_since_epoch());
-    }
-    bool operator<(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        return (exeTime.time_since_epoch()<rhs.time_since_epoch());
-    }
-    bool operator==(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        return (exeTime.time_since_epoch()==rhs.time_since_epoch());
-    }
-    bool operator!=(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        return !((*this)==rhs);
-    }
-    bool operator>=(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        return (((*this)>rhs)||((*this)==rhs));
-    }
-    bool operator<=(std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> rhs)
-    {
-        return (((*this)<rhs)||((*this)==rhs));
-    }
-
-
-    bool operator>(TimedEvent<Return, Parameters...> rhs)
-    {
-        return (*this)>rhs.getTime();
-    }
-    bool operator<(TimedEvent<Return, Parameters...> rhs)
-    {
-        return (*this)<rhs.getTime();
+        return this->getTime()==rhs;
     }
     bool operator==(TimedEvent<Return, Parameters...> rhs)
     {
         return (*this)==rhs.getTime();
     }
+
+    bool operator!=(Instant rhs)
+    {
+        return this->getTime()!=rhs;
+    }
     bool operator!=(TimedEvent<Return, Parameters...> rhs)
     {
         return (*this)!=rhs.getTime();
     }
-    bool operator>=(TimedEvent<Return, Parameters...> rhs)
+
+    bool operator>(Instant rhs)
     {
-        return (*this)>=rhs.getTime();
+        return this->getTime()>rhs;
+    }
+    bool operator>(TimedEvent<Return, Parameters...> rhs)
+    {
+        return (*this)>rhs.getTime();
+    }
+
+    bool operator<(Instant rhs)
+    {
+        return this->getTime()<rhs;
+    }
+    bool operator<(TimedEvent<Return, Parameters...> rhs)
+    {
+        return (*this)<rhs.getTime();
+    }
+
+    bool operator<=(Instant rhs)
+    {
+        return !((*this)>rhs);
     }
     bool operator<=(TimedEvent<Return, Parameters...> rhs)
     {
-        return (*this)<=rhs.getTime();
+        return !((*this)>rhs);
+    }
+
+    bool operator>=(Instant rhs)
+    {
+        return !((*this)<rhs);
+    }
+    bool operator>=(TimedEvent<Return, Parameters...> rhs)
+    {
+        return !((*this)<rhs);
     }
 };
 

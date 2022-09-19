@@ -26,6 +26,22 @@ Disclaimer:
 ---------------------------------------------------------------------------------------------------------------------
 */
 
+//  Engine specific defines
+//----------------------------------
+
+//Shorthand lambda function body
+#define F(a...) [](a...)
+//Shorthand lambda function for internal captures
+#define lF(a...) [this](a...)
+
+//Steady clock for timekeeping.
+#define EngineClock std::chrono::steady_clock
+//Microseconds-- engine unit time.
+#define uTime std::chrono::microseconds
+//An instant in time-- a microsecond by the engine's clock.
+#define Instant EngineClock::time_point
+
+
 // STD Includes
 //----------------------------------
 #include <iostream>
@@ -35,6 +51,8 @@ Disclaimer:
 #include <future>
 #include <thread>
 #include <any>
+
+
 
 // Primitive Includes
 //----------------------------------
@@ -99,7 +117,7 @@ If CONFIG_TEST is not defined, this will default to CONFIG_PROD
 
     // Event tests
     #include "../include/tests/test_events.hpp"
-
+    #include "../include/tests/test_timedevent.hpp"
 
 
 #endif
