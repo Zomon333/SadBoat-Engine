@@ -99,7 +99,7 @@ public:
         thread.detach();
         std::this_thread::sleep_for(std::chrono::milliseconds(15));
         std::cout<<"F\n";
-        this->callStack.emplace(deferredResult->get_future());
+        this->callStack.emplace(deferredResult->get_future()); //ISSUE HERE
         std::cout<<"G\n";
     }
 
