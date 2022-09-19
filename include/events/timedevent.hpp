@@ -20,8 +20,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <chrono>
 #include "event.hpp"
 
-
-
 template <class Return, class... Parameters>
 class TimedEvent : public Event<Return, Parameters...>
 {

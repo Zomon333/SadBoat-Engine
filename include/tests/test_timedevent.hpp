@@ -18,6 +18,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../utilities/catch.hpp"
 #include "../events/timedevent.hpp"
 
+#include <queue>
+
 using namespace std;
 
 #define test_timed_event "[TimedEvent]"
@@ -293,12 +295,48 @@ TEST_CASE("Suppression test",test_timed_event)
         (returner.call(24768)==24768)
     );
 }
-
-/*
-TEST_CASE("",test_timed_event)
+TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
 {
+    std::priority_queue<TimedEvent<int, int>*> eventQueue;
+    eventQueue.emplace(new TimedEvent<int, int>(
+        F(int a)
+        {
+            return a;
+        },
+        EngineClock::now()+std::chrono::milliseconds(25)
+    ));
+
+    eventQueue.emplace(new TimedEvent<int, int>(
+        F(int a)
+        {
+            return a+10;
+        },
+        EngineClock::now()+std::chrono::milliseconds(50)
+    ));
+
+    std::stack<TimedEvent<int,int>*> results;
+
+    while(eventQueue.size()>0)
+    {
+        if(eventQueue.top()->operator<=(Instant::clock::now()))
+        {
+            eventQueue.top()->launch(5);
+            results.emplace(eventQueue.top());
+            eventQueue.pop();
+        }
+    }
+
+    CHECK(
+        (results.top()->getResult()==5)
+    );
+
+    results.pop();
+
+    CHECK(
+        (results.top()->getResult()==15)
+    );
     
 }
-*/
+
 #endif
 #endif
