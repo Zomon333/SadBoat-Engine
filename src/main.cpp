@@ -43,6 +43,12 @@ Disclaimer:
 //100 HZ -- engine unit frequency.
 #define uFreq uTime(10)
 
+//2 kHZ -- maximum engine frequency
+#define uFreqMax std::chrono::microseconds(500)
+
+//pow(2, -47)-- engine unit tolerance. Arbitrarily small.
+#define uTol pow(2,-32)
+
 //An instant in time-- a microsecond by the engine's clock.
 #define Instant EngineClock::time_point
 
@@ -77,6 +83,10 @@ Disclaimer:
 #include "../include/events/timedevent.hpp"
 #include "../include/events/recurringevent.hpp"
 
+
+//  Utility Includes
+//----------------------------------
+#include "../include/utilities/vargroup.hpp"
 
 /*
 ---------------------------------------------------------------------------------------------------------------------
@@ -152,6 +162,8 @@ int main(int argc, char* argv[])
     {
         return results;
     }
+
+    Event<void, int> test(F(int a){});
 
     return 0;
 }
