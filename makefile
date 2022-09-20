@@ -1,5 +1,5 @@
 CC = g++
-FLAGS = -std=c++20
+FLAGS = -std=c++20 -fpermissive
 
 SOURCE_DIR = ./src
 INCLUDE_DIR = ./include
