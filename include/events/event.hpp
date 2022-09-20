@@ -18,6 +18,13 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <thread>
 #include <future>
 
+//Event: Events
+//Base class for the event system. 
+//Allows passage of both lambda functions and std::function for both single and multi threaded use.
+//
+//Template takes any return and any parameters, allowing flexibility in your events.
+//
+//Returns asynchronously and stores results in an internal call stack.
 template <class Return, class ...Parameters>
 class Event
 {
@@ -94,6 +101,144 @@ class Event
         {
             return function(params...);
         }
+};
+
+//Alternate implementation for if we want to return void with parameters
+template <class... Parameters>
+class Event<void, Parameters...> : public Event<int, Parameters...>
+{
+    public:
+        Event()
+        {
+            this->function = [](Parameters... params){return 0;};
+        }
+        Event(std::function<void(Parameters...)> func)
+        {
+            this->function = [func](Parameters... params){ func(params...); return 0;};
+        }
+        Event(auto func)
+        {
+            this->function = std::function<int(Parameters...)>([func](Parameters... params)
+            {
+                func(params...);
+                return 0;
+            });
+        }
+
+        //This is the same as a normal event's launch except that it doesn't add to the call stack.
+        void launch(Parameters... params)
+        {
+            //Get the function as a task
+            auto task = this->copyPackage();
+
+            //Create a new thread and move the lambda function to it
+            std::jthread thread(std::move(task), params...);
+
+            //Be free, my child!
+            thread.detach();
+        }
+
+        void getResult()
+        {
+            return;
+        }
+
+        void operator()(Parameters... params)
+        {
+            this->function(params...);
+        }
+
+};
+
+//Alternate implementation for if we want to return void without parameters
+template <>
+class Event<void, void> : public Event<int, int>
+{
+    public:
+        Event()
+        {
+            this->function = [](int a=0){return 0;};
+        }
+        Event(std::function<void(void)> func)
+        {
+            this->function = [func](int a=0){ func(); return 0;};
+        }
+        Event(auto func)
+        {
+            this->function = std::function<int(int)>([func](int a = 0)
+            {
+                func();
+                return 0;
+            });
+        }
+
+        //This is the same as a normal event's launch except that it doesn't add to the call stack and takes no parameters.
+        void launch()
+        {
+            //Get the function as a task
+            auto task = this->copyPackage();
+
+            //Create a new thread and move the lambda function to it
+            std::jthread thread(std::move(task),0);
+
+            //Be free, my child!
+            thread.detach();
+        }
+
+        void getResult()
+        {
+            return;
+        }
+
+        void operator()()
+        {
+            this->function(0);
+        }
+
+};
+
+//Alternate implementation for if we want to return some value without parameters.
+//Doesn't sound super useful, unless you capture something external.
+template <class Return>
+class Event<Return, void> : public Event<Return, int>
+{
+    public:
+        Event()
+        {
+            this->function = [](int a=0){return Return();};
+        }
+        Event(std::function<void(void)> func)
+        {
+            this->function = [func](int a=0){ return func();};
+        }
+        Event(auto func)
+        {
+            this->function = std::function<int(int)>([func](int a = 0)
+            {
+                return func();
+            });
+        }
+
+        //This is the same as a normal event's launch except that it takes no parameters
+        void launch()
+        {
+            //Get the function as a task
+            auto task = this->copyPackage();
+
+            this->callStack.emplace(task.get_future());
+
+            //Create a new thread and move the lambda function to it
+            std::jthread thread(std::move(task),0);
+
+            //Be free, my child!
+            thread.detach();
+        }
+
+        Return operator()()
+        {
+            return this->function(0);
+        }
+
 };
 
 #endif
