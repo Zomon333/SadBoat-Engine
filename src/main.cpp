@@ -36,10 +36,16 @@ Disclaimer:
 
 //Steady clock for timekeeping.
 #define EngineClock std::chrono::steady_clock
+
 //Microseconds-- engine unit time.
-#define uTime std::chrono::microseconds
+#define uTime std::chrono::milliseconds
+
+//100 HZ -- engine unit frequency.
+#define uFreq uTime(10)
+
 //An instant in time-- a microsecond by the engine's clock.
 #define Instant EngineClock::time_point
+
 
 
 // STD Includes
@@ -69,6 +75,7 @@ Disclaimer:
 //----------------------------------
 #include "../include/events/event.hpp"
 #include "../include/events/timedevent.hpp"
+#include "../include/events/recurringevent.hpp"
 
 
 /*
