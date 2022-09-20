@@ -17,12 +17,21 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
+//RecurringEvent: Event, Derived
+//A derivation of TimedEvent which keeps it's function running in a loop.
+//Creates a new thread, and runs stored function with n-second sleeps between runs. Stops execution when returnable!=null.
+//Returns single int for return status.
 template <class... Parameters>
 class RecurringEvent : public TimedEvent<int, Parameters...>, public Event<int, Parameters...>
 {
 private:
+    //  Recursion Control Variables
+    //----------------------------------
 
     std::promise<bool> returnable;
+
+    //  Recursion Helper Functions
+    //----------------------------------
 
     int localDefer(Parameters... params)
     {
@@ -65,6 +74,9 @@ private:
     }
 
 public:
+    //  Constructors
+    //----------------------------------
+
     RecurringEvent() : TimedEvent<int, Parameters...>( 
         F(Parameters... params)
         {
@@ -91,36 +103,70 @@ public:
         period
     ){};
 
+    //  Recursion Flow Control Functions
+    //----------------------------------
+
     void recur(Parameters... params)
     {
+        //Create an event that runs an infinite loop
         Event<int, Parameters...> loop(
             lF(Parameters... params)
             {
+                //Get the eventual return of the recurringEvent
                 std::future<bool> stopSignal = this->returnable.get_future();
+                
+                //Loop continuously
                 while(true)
                 {
+                    //Run a same-threaded defer of the stored function, and save it's result
                     int result = this->localDefer(params...);
-                    std::future_status status = stopSignal.wait_until(EngineClock::now()+std::chrono::microseconds(25));
 
+                    //Query if the stopSignal has been set.
+                    //The offset of 500 microseconds here forces a hard cap that threads cannot recur more than 2,000 times a second.
+                    std::future_status status = stopSignal.wait_until(EngineClock::now()+uFreqMax);
+
+                    //If we got a result that the stopSignal has been set:
                     if(status==std::future_status::ready)
                     {
+                        //Get it!
                         if(stopSignal.get()==true)
                         {
+                            //If we're supposed to stop, return what we got.
                             return result;
                         }
                         else
                         {
+                            //Otherwise...
+
                             //This section accounts for an error where stopSignal may be ready but assigned false.
                             //This will return -1 because we should never set stopSignal to false, only true.
                             return -1;
                         }
                     }
                 }
+
+                //If we get here then there's some issue, because this *should* be unreachable code.
                 return -1;
             }
         );
 
+        //Launch our infinite loop
         loop.launch(params...);
+
+        //An aside to explain this function a bit more clearly:
+            //defer() is a function that launches a thread, but waits a given amount of time before doing it's calculations.
+            //localDefer() is similar to defer; it still waits, but it does not launch a new thread before doing so.
+            //So, what does recur() do?
+            //  1) Creates a new thread.
+            //  2) Runs an almost-infinite loop in that thread, with a single stop condition that's only accessible from outside the thread.
+            //  3) Runs the function provided to RecurringEvent with a local defer. This way:
+            //      3-1) The function still runs on a schedule
+            //      3-2) But the function runs synchronously on recur's thread.
+            //  4) Checks at the end of every recur cycle if the future was set
+            //      4-1) If it was set, return result on true.
+            //      4-2) Else, return -1 to indicate error.
+            //
+            //So, TLDR; Recur is single threaded, but it manages itself on it's own thread that is not main().
 
     }
 
@@ -130,6 +176,9 @@ public:
         return this->getResult();
     }
 
+    //  Mutators
+    //----------------------------------
+    
     void setTime(Instant period)
     {
         this->exeTime = period;

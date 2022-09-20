@@ -16,6 +16,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include "range.hpp"
 
+//Tolerance: Primitive
+//Class for adding an error rate to a value
+//Holds origin and error, uses Range to verify:
+// (Origin-Error) <= input <= (Origin+Error)
 class Tolerance
 {
 private:

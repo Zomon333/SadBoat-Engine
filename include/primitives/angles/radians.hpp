@@ -17,6 +17,12 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include "angle.hpp"
 
+//Radians: Angle, Primitive
+//Helper class to contain Radians. Designed to allow orientability.
+//--Stores values intenerally as c * piTerms. Allows for fractions like pi/2 to be 0.5 * pi.
+//--Pi gets factored out by default.
+//
+//Bounded by [0, 2pi).
 class Radians : public Angle
 {
     private:

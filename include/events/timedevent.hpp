@@ -20,6 +20,11 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <chrono>
 #include "event.hpp"
 
+//TimedEvent: Events, Derived
+//Child class of Base Class Event.
+//Includes chrono time point for time-specific usage.
+//Has suppress and release functionality to cancel events before their time.
+//Has defer to run with respect to time.
 template <class Return, class... Parameters>
 class TimedEvent : public Event<Return, Parameters...>
 {
@@ -28,6 +33,9 @@ private:
     bool suppressed = false;
 
 public:
+    //  Constructors
+    //----------------------------------
+
     TimedEvent() 
     : Event<Return, Parameters...>()
     {
@@ -52,6 +60,9 @@ public:
         exeTime = cp.getTime();
     }
 
+    //  Flow Control Functions
+    //----------------------------------
+
     //Do not launch event on time
     void suppress()
     {
@@ -64,6 +75,8 @@ public:
         suppressed = false;
     }
 
+    //  Launch Style Functions
+    //----------------------------------
 
     //Launches thread, but awaits time==now before running event.
     //Don't use this for long running conditions! It opens a watchdog thread!
@@ -176,15 +189,25 @@ public:
         }
     }
 
+    //  Accessors
+    //----------------------------------
+
     Instant getTime()
     {
         return exeTime;
     }
+
+    //  Mutators
+    //----------------------------------
+
     void setTime(Instant nTime)
     {
         exeTime=nTime;
     }
     
+    //  Operators
+    //----------------------------------
+
     Return operator()(Parameters... rhs)
     {
        return this->function(rhs...);

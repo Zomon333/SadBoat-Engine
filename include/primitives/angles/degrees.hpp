@@ -17,6 +17,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include "angle.hpp"
 
+//Degrees: Angles, Primitive
+//Helper class to contain degrees. Designed to allow orientability.
+//Bounded between [0,360)
 class Degrees : public Angle
 {
     private:

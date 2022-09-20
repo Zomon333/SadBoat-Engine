@@ -16,6 +16,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include <cmath>
 
+//  Abstract class for inheritance reasons
+//  Does nothing.
+//----------------------------------
 class Angle
 {
     public:

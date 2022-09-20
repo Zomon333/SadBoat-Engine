@@ -17,6 +17,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <cmath>
 #include "tolerance.hpp"
 
+//Point: Primitive
+//A point in 2D space. 
 class Point
 {
     private:
@@ -25,11 +27,7 @@ class Point
 
         bool equal(Point other)
         {
-            //We now account for some tolerance in the distance between points.
-            //The tolerance is currently the smallest value a double could reasonably represent.
-            //Change this to whatever seems like a reasonable error rate to you.
-            const double tol = pow(2,-47);
-            Tolerance error = Tolerance(0,tol);
+            Tolerance error = Tolerance(0,uTol);
             
             return error[distance(other)];
         } 
@@ -79,6 +77,9 @@ class Point
 
             return sqrt(dX+dY);
         }
+        
+        //  Operators
+        //----------------------------------
 
         bool operator==(Point rhs)
         {

@@ -15,6 +15,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include <utility>
 
+//Range:    Primitive
+//Class for storing min/max as double
+//Overloaded for boolean operations using [ ]
 class Range
 {
 private:
