@@ -197,6 +197,11 @@ public:
         return exeTime;
     }
 
+    bool getSuppressed()
+    {
+        return suppressed;
+    }
+
     //  Mutators
     //----------------------------------
 

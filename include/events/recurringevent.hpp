@@ -22,13 +22,14 @@ using namespace std;
 //Creates a new thread, and runs stored function with n-second sleeps between runs. Stops execution when returnable!=null.
 //Returns single int for return status.
 template <class... Parameters>
-class RecurringEvent : public TimedEvent<int, Parameters...>, public Event<int, Parameters...>
+class RecurringEvent : public TimedEvent<int, Parameters...>
 {
 private:
     //  Recursion Control Variables
     //----------------------------------
 
     std::promise<bool> returnable;
+    uTime tOff;
 
     //  Recursion Helper Functions
     //----------------------------------
@@ -46,24 +47,18 @@ private:
         //But have it's scope include the old function and intended execution time
         auto nFunc = [this, func](Parameters...params)
         {
-            //But don't actually use the captured execution time!
-            //If you use the actual captured execution time you may end up with deleted functions and expressions
-            //It may throw errors due to that
-
-            //So, instead;
-
-            //Copy it into a constant.
-            const Instant lExe = this->exeTime;
-
-            //Copy the captured old function aswell
+            //Copy the captured old function
             const std::function<int(Parameters...)> oldFunc =
                 std::function<int(Parameters...)>(                       
                     static_cast<const                                       
                         std::function<int(Parameters...)>>
                             (func));
 
-            //Wait until the *copied* execution time
-            std::this_thread::sleep_until(lExe);
+            //Get what time it is now
+            auto deferredTime = EngineClock::now() + this->tOff;
+
+            //Sleep until our offset is over
+            std::this_thread::sleep_until(deferredTime);
 
             //And return the value of the *copied* function with the *normal* parameters.
             return oldFunc(params...);
@@ -77,35 +72,54 @@ public:
     //  Constructors
     //----------------------------------
 
-    RecurringEvent() : TimedEvent<int, Parameters...>( 
-        F(Parameters... params)
-        {
-            return 1;
-        }, 
-        uFreq
-        ){};
+    RecurringEvent(auto f, auto period)
+    {
+        this->function = std::function<int(Parameters...)>(f);
 
-    RecurringEvent(auto f, Instant period) : TimedEvent<int, Parameters...>(f, period){};
+        this->tOff = std::chrono::duration_cast<uTime>(period);
+        
+    }
 
-    RecurringEvent(Event<int, Parameters...> f, Instant period) : RecurringEvent<Parameters...>(
-        [f](Parameters... params)
-        {
-            return f(params...);
-        },
-        period
-        ){};
+    RecurringEvent()
+    {
+        this->function = std::function<int(Parameters...)>(
+            [](int a=0)
+            {
+                return 0;
+            }
+        );
 
-    RecurringEvent(TimedEvent<int, Parameters...> f, Instant period) : TimedEvent<int, Parameters...>(
-        [f](Parameters... params)
-        {
-            return f(params...);
-        },
-        period
-    ){};
+        this->tOff = uFreq;
+    }
+
+    RecurringEvent(Event<int, Parameters...> f, auto period)
+    {
+        this->function = std::function<int(Parameters...)>(
+            [f](Parameters... params)
+            {
+                f(params...);
+                return 0;
+            }
+        );
+
+        this->tOff = std::chrono::duration_cast<uTime>(period);
+    }
+
+    RecurringEvent(TimedEvent<int, Parameters...> f, auto period)
+    {
+        this->function = std::function<int(Parameters...)>(
+            [f](Parameters... params)
+            {
+                f(params...);
+                return 0;
+            }
+        );
+
+        this->tOff = std::chrono::duration_cast<uTime>(period);
+    }
 
     //  Recursion Flow Control Functions
     //----------------------------------
-
     void recur(Parameters... params)
     {
         //Create an event that runs an infinite loop
@@ -114,12 +128,15 @@ public:
             {
                 //Get the eventual return of the recurringEvent
                 std::future<bool> stopSignal = this->returnable.get_future();
-                
+                int result = 0;
                 //Loop continuously
                 while(true)
                 {
                     //Run a same-threaded defer of the stored function, and save it's result
-                    int result = this->localDefer(params...);
+                    if(this->getSuppressed()==false)
+                    {
+                        result = this->localDefer(params...);
+                    }
 
                     //Query if the stopSignal has been set.
                     //The offset of 500 microseconds here forces a hard cap that threads cannot recur more than 2,000 times a second.
@@ -170,6 +187,11 @@ public:
 
     }
 
+    void recur()
+    {
+        this->recur(Parameters()...);
+    }
+
     int end()
     {
         returnable.set_value(true);
@@ -179,9 +201,17 @@ public:
     //  Mutators
     //----------------------------------
     
-    void setTime(Instant period)
+    void setFreq(auto period)
     {
-        this->exeTime = period;
+        this->tOff = std::chrono::duration_cast<uTime>(period);
+    }
+
+    //  Accessors
+    //----------------------------------
+
+    std::promise<bool>* getPromise()
+    {
+        return &returnable;
     }
     
 };
