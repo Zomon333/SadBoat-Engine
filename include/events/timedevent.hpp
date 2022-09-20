@@ -113,6 +113,54 @@ public:
         this->function = std::function<Return(Parameters...)>(func);
     }
 
+    //Launches thread, but awaits time==exeTime before running event.
+    //Don't use this for long running conditions! It opens a watchdog thread!
+    void defer(Parameters... params)
+    {
+        //Copy TimedEvent's intended function
+        const std::function<Return(Parameters...)> func = 
+                std::function<Return(Parameters...)>(                       
+                    static_cast<const                                       
+                        std::function<Return(Parameters...)>>
+                            (this->function));
+        
+        //Create some new function that takes the exact same parameters
+        //But have it's scope include the old function and intended execution time
+        auto nFunc = [this, func](Parameters...params)
+        {
+            //But don't actually use the captured execution time!
+            //If you use the actual captured execution time you may end up with deleted functions and expressions
+            //It may throw errors due to that
+
+            //So, instead;
+
+            //Copy it into a constant.
+            const Instant lExe = this->exeTime;
+
+            //Copy the captured old function aswell
+            const std::function<Return(Parameters...)> oldFunc =
+                std::function<Return(Parameters...)>(                       
+                    static_cast<const                                       
+                        std::function<Return(Parameters...)>>
+                            (func));
+
+            //Wait until the *copied* execution time
+            std::this_thread::sleep_until(lExe);
+
+            //And return the value of the *copied* function with the *normal* parameters.
+            return oldFunc(params...);
+        };
+
+        //Set the event's function to the new deferred function
+        this->function = std::function<Return(Parameters...)>(nFunc);
+
+        //Launch a thread with the deferred function
+        this->launch(params...);
+
+        //Set the event's function back to the non-deferred version
+        this->function = std::function<Return(Parameters...)>(func);
+    }
+
     Return call(Parameters... params)
     {
         if(!suppressed)
