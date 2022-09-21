@@ -31,11 +31,9 @@ Disclaimer:
 
 //Shorthand lambda function body
 #define F(a...) [](a...)
+
 //Shorthand lambda function for internal captures
 #define lF(a...) [this](a...)
-
-//Steady clock for timekeeping.
-#define EngineClock std::chrono::steady_clock
 
 //Microseconds-- engine unit time.
 #define uTime std::chrono::milliseconds
@@ -49,6 +47,12 @@ Disclaimer:
 //pow(2, -47)-- engine unit tolerance. Arbitrarily small.
 #define uTol pow(2,-32)
 
+//Steady clock for timekeeping.
+#define EngineClock std::chrono::steady_clock
+
+//Shorthand for the current time on the clock
+#define Now EngineClock::now()
+
 //An instant in time-- a microsecond by the engine's clock.
 #define Instant EngineClock::time_point
 
@@ -58,8 +62,6 @@ Disclaimer:
 //----------------------------------
 #include <iostream>
 #include <string>
-#include <variant>
-#include <deque>
 #include <future>
 #include <thread>
 #include <any>
@@ -135,6 +137,7 @@ If CONFIG_TEST is not defined, this will default to CONFIG_PROD
     // Event tests
     #include "../include/tests/test_events.hpp"
     #include "../include/tests/test_timedevent.hpp"
+    #include "../include/tests/test_recurringevent.hpp"
 
 
 #endif
@@ -163,7 +166,7 @@ int main(int argc, char* argv[])
         return results;
     }
 
-    Event<void, int> test(F(int a){});
+    
 
     return 0;
 }
