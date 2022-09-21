@@ -210,10 +210,10 @@ public:
     //  Accessors
     //----------------------------------
 
-    /*std::promise<bool>* getPromise()
+    std::promise<bool>* getPromise()
     {
         return &returnable;
-    }*/
+    }
     
 };
 
