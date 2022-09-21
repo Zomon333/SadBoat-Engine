@@ -3,13 +3,13 @@ FLAGS = -std=c++20 -fpermissive
 
 SOURCE_DIR = ./src
 INCLUDE_DIR = ./include
-LIBRARY_DIR = ./lib
 OUT_DIR = ./output
+LIBRARY_DIR = "usr/include/GL"
 
 PRODUCTION_RELEASE = -DCONFIG_PROD
 TEST_RELEASE = -DCONFIG_TEST
 
-LIBS = 
+LIBS = "-lglut" "-lGL" "-lGLU" "-lGLEW"
 
 NAME = "SadBoatEngine-V"
 VERSION = "0.02.5V"
