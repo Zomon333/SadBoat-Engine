@@ -34,3 +34,10 @@ sudo apt-get install freeglut3;
 #
 sudo apt-get install freeglut3-dev;
 
+#
+#	libglew-dev
+#------------------------------------------------------------------------------
+#    This package contains:
+#       -glew.h
+#
+sudo apt-get install libglew-dev;
