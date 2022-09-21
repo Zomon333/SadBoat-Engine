@@ -13,7 +13,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef SOMEHEADER_H
 #define SOMEHEADER_H
 
-#include "SOMESYSTEM_dependency.hpp"
+#include "sb-engine.hpp"
 
 using namespace std;
 
