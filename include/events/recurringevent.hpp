@@ -13,6 +13,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef RECUR_H
 #define RECUR_H
 
+#include "event.hpp"
 #include "timedevent.hpp"
 
 using namespace std;
@@ -55,7 +56,7 @@ private:
                             (func));
 
             //Get what time it is now
-            auto deferredTime = EngineClock::now() + this->tOff;
+            auto deferredTime = Now + this->tOff;
 
             //Sleep until our offset is over
             std::this_thread::sleep_until(deferredTime);
@@ -140,7 +141,7 @@ public:
 
                     //Query if the stopSignal has been set.
                     //The offset of 500 microseconds here forces a hard cap that threads cannot recur more than 2,000 times a second.
-                    std::future_status status = stopSignal.wait_until(EngineClock::now()+uFreqMax);
+                    std::future_status status = stopSignal.wait_until(Now+uFreqMax);
 
                     //If we got a result that the stopSignal has been set:
                     if(status==std::future_status::ready)
@@ -209,10 +210,10 @@ public:
     //  Accessors
     //----------------------------------
 
-    std::promise<bool>* getPromise()
+    /*std::promise<bool>* getPromise()
     {
         return &returnable;
-    }
+    }*/
     
 };
 
