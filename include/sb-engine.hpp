@@ -92,15 +92,13 @@ This allows you to still write code; it just won't be included in compilation.
 /*
 ---------------------------------------------------------------------------------------------------------------------
 This definition is used to determine whether or not we want to include our test profiles in our compile.
-Set to #define CONFIG_TEST to include and run test profiles, set to CONFIG_PROD for a production release
-If CONFIG_TEST is not defined, this will default to CONFIG_PROD
+This is controlled through the makefile; 
+-run "make test" to enable CATCH tests
+-run "make prod" to disable CATCH tests
 ---------------------------------------------------------------------------------------------------------------------
 */
-#define CONFIG_TEST
-
-#ifndef CONFIG_TEST
-    #define CONFIG_PROD
-#endif
+//#define CONFIG_TEST
+//#define CONFIG_PROD
 
 #ifdef CONFIG_TEST
 
