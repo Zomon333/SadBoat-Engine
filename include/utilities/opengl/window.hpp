@@ -51,7 +51,7 @@ class Window
             isFinished = closer.get_future();
 
             Event<int, int> openWindow(
-                [this](int a)
+                lF(int a)
                 {
                     glutInit(&argc, &windowName);
                     glutInitDisplayMode(GLUT_RGBA);
