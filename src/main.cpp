@@ -38,6 +38,7 @@ Disclaimer:
 
 using namespace std;
 
+
 //----------------------------------
 //  main(int argc, char* argv[]) function:
 //
@@ -60,7 +61,17 @@ int main(int argc, char* argv[])
         return results;
     }
 
-    
+    char* name = "SadBoat Engine";
+    #ifdef CONFIG_TEST
+        name = "SadBoat Engine Test Stage";
+    #endif
 
+    Window testWindow(500, 500, &argc, name);
+    auto waitress = testWindow.open();
+
+
+
+
+    waitress->get();
     return 0;
 }
