@@ -80,8 +80,15 @@ This exists in case you're trying to compile but don't have the libraries set up
 This allows you to still write code; it just won't be included in compilation.
 ---------------------------------------------------------------------------------------------------------------------
 */
-//#define OPENGL_LINKED
+#define OPENGL_LINKED
 #ifdef OPENGL_LINKED
+    #include "/usr/include/GL/glew.h"
+    #include "/usr/include/GL/gl.h"
+    #include "/usr/include/GL/glu.h"
+    #include "/usr/include/GL/freeglut.h"
+    
+    #include "../include/utilities/opengl/window.hpp"
+
     #include "../include/utilities/opengl/vao.hpp"
     #include "../include/utilities/opengl/uniform.hpp"
     #include "../include/utilities/opengl/shader.hpp"
