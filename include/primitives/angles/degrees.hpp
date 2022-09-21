@@ -13,10 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef DEGREES_H
 #define DEGREES_H
 
-#include <utility>
-#include <cmath>
-#include "angle.hpp"
-
 //Degrees: Angles, Primitive
 //Helper class to contain degrees. Designed to allow orientability.
 //Bounded between [0,360)

@@ -13,9 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef RECUR_H
 #define RECUR_H
 
-#include "event.hpp"
-#include "timedevent.hpp"
-
 using namespace std;
 
 //RecurringEvent: Event, Derived
@@ -137,6 +134,8 @@ public:
                     if(this->getSuppressed()==false)
                     {
                         result = this->localDefer(params...);
+                        //I may want to add an implementation that stores results in a priority_queue of time
+                        //It could sort by oldest and cull the oldest results for garbage collected multithreading events
                     }
 
                     //Query if the stopSignal has been set.
@@ -176,7 +175,7 @@ public:
             //localDefer() is similar to defer; it still waits, but it does not launch a new thread before doing so.
             //So, what does recur() do?
             //  1) Creates a new thread.
-            //  2) Runs an almost-infinite loop in that thread, with a single stop condition that's only accessible from outside the thread.
+            //  2) Runs an almost-infinite loop in that thread, with a single stop condition that's only accessible from outside the thread. <<<< NOTE: You could pass the promise in through a pointer, I guess? 
             //  3) Runs the function provided to RecurringEvent with a local defer. This way:
             //      3-1) The function still runs on a schedule
             //      3-2) But the function runs synchronously on recur's thread.
@@ -196,7 +195,8 @@ public:
     int end()
     {
         returnable.set_value(true);
-        return this->getResult();
+        //return this->getResult(); //Result is stored in loop. Why would I want to get the result of the RecurringEvent? It doesn't have a result!
+        return 0;
     }
 
     //  Mutators

@@ -13,11 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <functional>
-#include <stack>
-#include <thread>
-#include <future>
-
 //Event: Events
 //Base class for the event system. 
 //Allows passage of both lambda functions and std::function for both single and multi threaded use.

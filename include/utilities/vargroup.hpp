@@ -13,10 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef VARGROUP_H
 #define VARGROUP_H
 
-#include <unordered_map>
-#include <algorithm>
-#include <any>
-
 using namespace std;
 
 class VarGroup

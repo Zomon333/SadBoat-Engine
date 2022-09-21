@@ -13,12 +13,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef T_EVENT_H
 #define T_EVENT_H
 
-#include <functional>
-#include <stack>
-#include <thread>
-#include <future>
-#include <chrono>
-#include "event.hpp"
+
+
 
 //TimedEvent: Events, Derived
 //Child class of Base Class Event.

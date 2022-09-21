@@ -13,8 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef RANGE_H
 #define RANGE_H
 
-#include <utility>
-
 //Range:    Primitive
 //Class for storing min/max as double
 //Overloaded for boolean operations using [ ]

@@ -64,6 +64,7 @@
         "memory_resource": "cpp",
         "random": "cpp",
         "queue": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "stack": "cpp"
     }
 }

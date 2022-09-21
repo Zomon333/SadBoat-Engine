@@ -13,10 +13,6 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef POINT_H
 #define POINT_H
 
-#include <utility>
-#include <cmath>
-#include "tolerance.hpp"
-
 //Point: Primitive
 //A point in 2D space. 
 class Point
