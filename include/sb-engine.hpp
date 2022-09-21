@@ -14,8 +14,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 SadBoat Engine:
     The SadBoat Engine is an open-source, free to use game engine being designed in C++.
     Most of it's functionality is defined in it's header files, making it a mostly header only engine.
-    Consequently, you do not need this main.cpp, specifically, to run your game. It is, however, recommended.
-    Opting to not use this main.cpp file means you may need to reimplement the code found herein. This is up to your discretion.
+    Consequently, you do not need our main.cpp, specifically, to run your game. It is, however, recommended.
+    Opting to not use our main.cpp file means you may need to reimplement the code. This is up to your discretion.
 
 Disclaimer:
     We are not responsible for what you do with our code. You can use it as intended, or make your own use of it.
