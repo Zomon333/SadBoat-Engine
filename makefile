@@ -12,7 +12,7 @@ TEST_RELEASE = -DCONFIG_TEST
 LIBS = "-lglut" "-lGL" "-lGLU" "-lGLEW"
 
 NAME = "SadBoatEngine-V"
-VERSION = "0.02.5V"
+VERSION = "0.02.6V"
 
 
 prod:
