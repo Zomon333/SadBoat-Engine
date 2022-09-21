@@ -25,16 +25,18 @@ Disclaimer:
 ---------------------------------------------------------------------------------------------------------------------
 */
 
+
+
+
+
+//
 //  Engine Include
 //
-//This file contains all the includes for the engine. It's all you need to get started.
+//  This file contains all the includes for the engine. 
+//  It's all you need to get started.
+//
 //----------------------------------
 #include "../include/sb-engine.hpp"
-
-
-/*
----------------------------------------------------------------------------------------------------------------------
-*/
 
 
 using namespace std;
