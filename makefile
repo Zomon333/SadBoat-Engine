@@ -1,7 +1,7 @@
 CC = g++
 FLAGS = -std=c++20 -fpermissive
 
-DEFINES = "-DOPENGL_LINKED"
+DEFINES = 
 
 SOURCE_DIR = ./src
 INCLUDE_DIRS = "-I./include" "-I/usr/include/GL" 
