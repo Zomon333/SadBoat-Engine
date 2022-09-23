@@ -103,6 +103,11 @@ class Event
         {
             return function(params...);
         }
+
+        void operator=(Event& rhs)
+        {
+            (*this)=Event(rhs);
+        }
 };
 
 #endif
