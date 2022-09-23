@@ -26,11 +26,11 @@ public:
     //----------------------------------
     Range()
     {
-        Range(0, 0);
+        setRange(0,0);
     }
-    Range(double min, double max)
+    Range(double min, double max) : Range()
     {
-        setRange(min, max);
+        setRange(min,max);
     }
 
     //Mutators
