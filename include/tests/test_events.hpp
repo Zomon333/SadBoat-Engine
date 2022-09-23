@@ -40,6 +40,21 @@ TEST_CASE("Event constructor test",event_suite)
     CHECK(e()==1);
 }
 
+TEST_CASE("Event copy constructor test",event_suite)
+{
+    Event<int> e(
+        F(){
+            return 1;
+        }
+    );
+
+    CHECK(e()==1);
+
+    Event<int> f = Event<int>(e);
+    
+    CHECK(f()==1);
+}
+
 TEST_CASE("Event linear run test",event_suite)
 {
     Event<int, int, int> sum(
