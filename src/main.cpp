@@ -51,25 +51,71 @@ int main(int argc, char* argv[])
     int results = 0;
 
     #ifdef CONFIG_TEST
+        cout<<"Running tests...\n";
         results = Catch::Session().run(argc, argv);
+        if(results!=0)
+        {
+            cout<<"Tests failed, engine aborting.\n";
+            return results;
+        }
     #endif
 
     //If we ran the catch session, the results variable may change, indicating a failed test.
     //Do not launch the game if the tests fail.
-    if(results!=0)
-    {
-        return results;
-    }
 
-    char* name = "SadBoat Engine";
+    char* name;
+    #ifdef CONFIG_PROD
+        cout<<"Launching engine...\n";
+        name = (char*)"SadBoat Engine";
+    #endif
     #ifdef CONFIG_TEST
-        name = "SadBoat Engine Test Stage";
+        cout<<"Tests succeeded, engine launching.\n";
+        name = (char*)"SadBoat Engine Test Stage";
     #endif
 
-    Window testWindow(500, 500, &argc, name);
+    //This map correllates shaderID to Shader
+    unordered_map<GLuint, Shader*> shaderMap;
+    
+    //This event holds the initialization for Shaders
+    //It will be called during the Window startup sequence
+    Event<int, int> DeclareShaders(
+        [&shaderMap](int a)
+        {
+            //  1) Load all of your shaders from .glsl files into strings
+            //--------------------------------------------------------------------
+            
+
+            //  2) Declare all of your shaders
+            //--------------------------------------------------------------------
+
+            Shader vertexShader = Shader(GL_VERTEX_SHADER,      "");
+            Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "");
+
+            //  3) Index them in the shaderMap
+            //--------------------------------------------------------------------
+
+            shaderMap[vertexShader.getID()] = &vertexShader;
+            shaderMap[fragmentShader.getID()] = &fragmentShader;
+
+            //  4) Compile your shaders
+            //--------------------------------------------------------------------
+
+            //vertexShader.make();
+            //fragmentShader.make();
+
+            return a;
+        }
+    );
+
+    //Window: Opens with X/Y with name.
+    //        Parses argc as an argument.
+    //        Runs DeclareShaders as our shader declaration step.
+    //        Stores shaders in shaderMap.
+    Window testWindow(1920, 1080, &argc, name, DeclareShaders, shaderMap);
     auto waitress = testWindow.open();
 
 
+    
 
 
     waitress->get();
