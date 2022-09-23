@@ -51,6 +51,12 @@ Disclaimer:
 //----------------------------------
 #include "../include/utilities/defines.hpp"
 
+// Event Includes
+//----------------------------------
+#include "../include/events/event.hpp"
+#include "../include/events/timedevent.hpp"
+#include "../include/events/recurringevent.hpp"
+
 // Primitive Includes
 //----------------------------------
 #include "../include/primitives/range.hpp"
@@ -61,13 +67,6 @@ Disclaimer:
 #include "../include/primitives/angles/angle.hpp"
 #include "../include/primitives/angles/degrees.hpp"
 #include "../include/primitives/angles/radians.hpp"
-
-// Event Includes
-//----------------------------------
-#include "../include/events/event.hpp"
-#include "../include/events/timedevent.hpp"
-#include "../include/events/recurringevent.hpp"
-
 
 //  Utility Includes
 //----------------------------------
