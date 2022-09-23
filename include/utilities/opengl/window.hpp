@@ -24,21 +24,27 @@ class Window
         GLuint windowID = 0;
 
         int argc = 0;
-        char* windowName = "";
+        char* windowName = (char*)"";
 
         int x = 0;
         int y = 0;
+
+        unordered_map<GLuint, Shader*>* shaderMap;
+        Event<int, int>* declareShaders;
 
         std::promise<bool> closer;
         std::future<bool> isFinished;
 
     public:
-        Window(int x, int y, int* argc, char* name)
+        Window(int x, int y, int* argc, char* name, Event<int, int> &ShaderEvent, unordered_map<GLuint, Shader*> &shaderMap)
         {
             this->x = x;
             this->y = y;
             this->argc = *argc;
             this->windowName = name;
+
+            this->shaderMap = &shaderMap;
+            this->declareShaders = &ShaderEvent;
         }
 
         static void display()
@@ -67,6 +73,9 @@ class Window
                     glutDisplayFunc(display);
 
                     this->closer.set_value_at_thread_exit(true);
+
+                    declareShaders->operator()(0);
+
                     glutMainLoop();
                     return 0;
                 }
