@@ -61,7 +61,7 @@ TEST_CASE("Recurring Event Accumulator Test",test_recur)
     CHECK(c==100);
 
     testEvent.release();
-    std::this_thread::sleep_until((Now + uTime(11)));
+    std::this_thread::sleep_until((Now + uTime(15)));
 
     CHECK(c==0);
 
