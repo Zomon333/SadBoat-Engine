@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
                             1920, 1080,                 //Width: 1920, Height: 1080
                             &argc,                      //Parses argc as an argument
                             name,                       //Window name of name
-                            DeclareShaders, shaderMap   //Shaders from DeclareShaders. Stored in shaderMap
+                            DeclareShaders              //Shaders from DeclareShaders. Stored in shaderMap
                         );
 
     //Open initialized window. open() returns reference to current window status.                    

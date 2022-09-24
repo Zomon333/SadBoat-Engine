@@ -29,22 +29,20 @@ class Window
         int x = 0;
         int y = 0;
 
-        unordered_map<GLuint, Shader*>* shaderMap;
-        Event<int, int>* declareShaders;
+        Event<int, int>* ShaderHandler;
 
         std::promise<bool> closer;
         std::future<bool> isFinished;
 
     public:
-        Window(int x, int y, int* argc, char* name, Event<int, int> &ShaderEvent, unordered_map<GLuint, Shader*> &shaderMap)
+        Window(int x, int y, int* argc, char* name, Event<int, int> &ShaderEvent)
         {
             this->x = x;
             this->y = y;
             this->argc = *argc;
             this->windowName = name;
 
-            this->shaderMap = &shaderMap;
-            this->declareShaders = &ShaderEvent;
+            this->ShaderHandler = &ShaderEvent;
         }
 
         static void display()
@@ -71,7 +69,7 @@ class Window
                     windowID = glutCreateWindow(windowName);
                     GLenum glewInitResults = glewInit();
 
-                    declareShaders->operator()(0);
+                    ShaderHandler->operator()(0);
                     glutDisplayFunc(display);
 
                     this->closer.set_value_at_thread_exit(true);
@@ -93,20 +91,5 @@ class Window
 
         GLuint getWindowID(){return windowID;}
 
-        auto getShaderMap(){return shaderMap;}
-        auto getStoredShaders()
-        {
-            vector<Shader*> shaders;
-            
-            for(auto sPair : (*shaderMap))
-            {
-                shaders.push_back(sPair.second);
-            }
-
-            return shaders;
-        }
 };
-
-
-
 #endif
