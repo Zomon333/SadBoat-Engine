@@ -59,22 +59,22 @@ class Window
             Event<int, int> openWindow(
                 lF(int a)
                 {
+                                        
                     glutInit(&argc, &windowName);
-                    glutInitDisplayMode(GLUT_RGBA);
 
+                    glutInitDisplayMode(GLUT_RGBA);
                     glutInitWindowSize(x,y);
+
                     glutInitContextVersion(4,3);
                     glutInitContextProfile(GLUT_CORE_PROFILE);
-
+                    
                     windowID = glutCreateWindow(windowName);
-
                     GLenum glewInitResults = glewInit();
 
+                    declareShaders->operator()(0);
                     glutDisplayFunc(display);
 
                     this->closer.set_value_at_thread_exit(true);
-
-                    declareShaders->operator()(0);
 
                     glutMainLoop();
                     return 0;
