@@ -65,6 +65,7 @@
         "random": "cpp",
         "queue": "cpp",
         "any": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "cinttypes": "cpp"
     }
 }
