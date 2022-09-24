@@ -83,13 +83,13 @@ int main(int argc, char* argv[])
         {
             //  1) Load all of your shaders from .glsl files into strings
             //--------------------------------------------------------------------
-            
+
 
             //  2) Declare all of your shaders
             //--------------------------------------------------------------------
 
-            Shader vertexShader = Shader(GL_VERTEX_SHADER,      "");
-            Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "");
+            Shader vertexShader = Shader(GL_VERTEX_SHADER,      "../shaders/vertex.glsl");
+            Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "../shaders/fragment.glsl");
 
             //  3) Index them in the shaderMap
             //--------------------------------------------------------------------
@@ -100,8 +100,8 @@ int main(int argc, char* argv[])
             //  4) Compile your shaders
             //--------------------------------------------------------------------
 
-            //vertexShader.make();
-            //fragmentShader.make();
+            vertexShader.make();
+            fragmentShader.make();
 
             return a;
         }
