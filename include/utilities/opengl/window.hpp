@@ -92,6 +92,19 @@ class Window
         int getY(){return y;}
 
         GLuint getWindowID(){return windowID;}
+
+        auto getShaderMap(){return shaderMap;}
+        auto getStoredShaders()
+        {
+            vector<Shader*> shaders;
+            
+            for(auto sPair : (*shaderMap))
+            {
+                shaders.push_back(sPair.second);
+            }
+
+            return shaders;
+        }
 };
 
 
