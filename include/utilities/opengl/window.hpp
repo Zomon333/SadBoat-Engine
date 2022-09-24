@@ -17,24 +17,40 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
-
+//Window: OpenGL Wrapper
+//Class for instancing a game window. 
+//Holds necessary IDs and information, aswell as functions to open the window.
+//Provides no graphics processing; only window ability. Provide your own graphics with the Event pointers.
 class Window
 {
     private:
+        //OpenGL Window name. To understand names better, see shader.hpp
         GLuint windowID = 0;
 
+        //Args to parse
         int argc = 0;
+
+        //Literal window title, not OpenGL name.
         char* windowName = (char*)"";
 
+        //Width
         int x = 0;
+        
+        //Height
         int y = 0;
 
+        //Pointer to event to handle shader compilation
         Event<int, int>* ShaderHandler;
 
+        //Standard promise indicating when the glut loop is done
         std::promise<bool> closer;
+
+        //Standard future holding the value of the closer promise
         std::future<bool> isFinished;
 
     public:
+        //Constructor
+        //----------------------------------
         Window(int x, int y, int* argc, char* name, Event<int, int> &ShaderEvent)
         {
             this->x = x;
@@ -45,10 +61,17 @@ class Window
             this->ShaderHandler = &ShaderEvent;
         }
 
+        //Display functions
+        //----------------------------------
+
+        //Display callback for glut loop.
         static void display()
         {
             //Do something
         }
+
+        //Window management functions
+        //----------------------------------
 
         std::future<bool>* open()
         {
@@ -83,12 +106,25 @@ class Window
             return &isFinished;
         }
 
+        //Mutators
+        //----------------------------------
+
+        //Sets X, doesn't resize window
         void setX(int nX) {x=nX;}
+
+        //Sets Y, doesn't resize window
         void setY(int nY) {y=nY;}
 
+        //Accessors
+        //----------------------------------
+
+        //Gets window width
         int getX(){return x;}
+
+        //Gets window height
         int getY(){return y;}
 
+        //Gets window ID (OpenGL name)
         GLuint getWindowID(){return windowID;}
 
 };

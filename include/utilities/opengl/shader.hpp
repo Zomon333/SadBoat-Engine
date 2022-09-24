@@ -13,6 +13,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef SHADER_H
 #define SHADER_H
 
+//Shader: OpenGL Wrapper
+//Class containing Shader ID, type, and Code. 
+//Has helper functions to compile shaders.
+//Has no linking functionality or interfacing functionality. Other classes exist for that!
 class Shader
 {
     private:

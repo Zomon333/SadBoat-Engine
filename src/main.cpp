@@ -73,31 +73,19 @@ int main(int argc, char* argv[])
         name = (char*)"SadBoat Engine Test Stage";
     #endif
 
-    //This map correllates shaderID to Shader
-    unordered_map<GLuint, Shader*> shaderMap;
     
     //This event holds the initialization for Shaders
     //It will be called during the Window startup sequence
-    Event<int, int> DeclareShaders(
-        [&shaderMap](int a)
+    Event<int, int> ShaderHandler(
+        [](int a)
         {
-            //  1) Load all of your shaders from .glsl files into strings
-            //--------------------------------------------------------------------
-
-
-            //  2) Declare all of your shaders
+            //  1) Declare all of your shaders
             //--------------------------------------------------------------------
 
             Shader vertexShader = Shader(GL_VERTEX_SHADER,      "shaders/vertex.glsl");
             Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "shaders/fragment.glsl");
 
-            //  3) Index them in the shaderMap
-            //--------------------------------------------------------------------
-
-            shaderMap[vertexShader.getID()] = &vertexShader;
-            shaderMap[fragmentShader.getID()] = &fragmentShader;
-
-            //  4) Compile your shaders
+            //  2) Compile your shaders
             //--------------------------------------------------------------------
 
             vertexShader.make();
@@ -109,9 +97,9 @@ int main(int argc, char* argv[])
 
     Window engineWindow(    //Window: Initializes with properties...
                             1920, 1080,                 //Width: 1920, Height: 1080
-                            &argc,                      //Parses argc as an argument
-                            name,                       //Window name of name
-                            DeclareShaders              //Shaders from DeclareShaders. Stored in shaderMap
+                            &argc,                      //Parses argc as an argument.
+                            name,                       //Sets Window name as name.
+                            ShaderHandler               //ShaderHandler. Event to handle shader compilation.
                         );
 
     //Open initialized window. open() returns reference to current window status.                    
