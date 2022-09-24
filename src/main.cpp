@@ -88,8 +88,8 @@ int main(int argc, char* argv[])
             //  2) Declare all of your shaders
             //--------------------------------------------------------------------
 
-            Shader vertexShader = Shader(GL_VERTEX_SHADER,      "../shaders/vertex.glsl");
-            Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "../shaders/fragment.glsl");
+            Shader vertexShader = Shader(GL_VERTEX_SHADER,      "shaders/vertex.glsl");
+            Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "shaders/fragment.glsl");
 
             //  3) Index them in the shaderMap
             //--------------------------------------------------------------------
@@ -107,17 +107,18 @@ int main(int argc, char* argv[])
         }
     );
 
-    //Window: Opens with X/Y with name.
-    //        Parses argc as an argument.
-    //        Runs DeclareShaders as our shader declaration step.
-    //        Stores shaders in shaderMap.
-    Window testWindow(1920, 1080, &argc, name, DeclareShaders, shaderMap);
-    auto waitress = testWindow.open();
+    Window engineWindow(    //Window: Initializes with properties...
+                            1920, 1080,                 //Width: 1920, Height: 1080
+                            &argc,                      //Parses argc as an argument
+                            name,                       //Window name of name
+                            DeclareShaders, shaderMap   //Shaders from DeclareShaders. Stored in shaderMap
+                        );
+
+    //Open initialized window. open() returns reference to current window status.                    
+    auto windowStatus = engineWindow.open();
 
 
-    
-
-
-    waitress->get();
+    //Get the current window status. If the window is still open, this will wait until it is closed.
+    windowStatus->get();
     return 0;
 }
