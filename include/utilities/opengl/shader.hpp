@@ -16,40 +16,50 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 class Shader
 {
     private:
+        //OpenGL uses a Client/Server architecture; we make requests, and the OpenGL server tries to fulfill them.
+        //Due to this, we don't get to manage OpenGL's memory directly. Instead of using pointers, OpenGL builds lookup tables with "names".
+        //"Names" are the client-side identifier we use in our application. They usually get mapped to a pointer server-side on the GPU throug a lookup table.
+        
+        //ShaderID is this shader's "name".
+        //ShaderType is essentially, then, the *class* of the Shader.
+
         GLuint shaderID;
         GLenum shaderType;
         
-        const char* code;
+        //Code is a purely-frontend convention for us to more-easily store the program.
+
+        string code;
 
     public:
-        Shader()
+        //Constructors
+        //----------------------------------
+
+        //Default constructor: Does nothing.
+        Shader();
+
+        //Partial constructor: Sets and allocates type.
+        Shader(GLenum shaderType)
         {
-            shaderID = glCreateShader(GL_VERTEX_SHADER);
-            this->shaderType = GL_VERTEX_SHADER;
-            this->code = 
-                "#version 430 core"
-                "in vec4 vPosition;"
-                "in vec4 vColor;"
-                ""
-                "out vec4 color;"
-                ""
-                "void"
-                "main()"
-                "{"
-                "   color = vColor;"
-                "}"
-            ;
-            
-        }
-        Shader(GLenum shaderType, string code)
-        {
-            //Allocate a name for our shader sufficient to hold our type of shader
             shaderID = glCreateShader(shaderType);
-
             this->shaderType=shaderType;
-            this->code = code.c_str();
         }
 
+        //Indirect file constructor: Sets and allocates type. Opens filename, and sets shader code to contents.
+        Shader(GLenum shaderType, string fileName) : Shader(shaderType)
+        {
+            loadCode(fileName);
+        }
+        
+        //Direct file constructor: Sets and allocates type. Accepts an already open file, and sets shader code to contents.
+        Shader(GLenum shaderType, fstream* file) : Shader(shaderType)
+        {
+            loadCode(file);
+        }
+
+        //Deconstructor
+        //----------------------------------
+
+        //Default deconstructor: Deletes shader if shaderID is taken.
         ~Shader()
         {
             if(isShader())
@@ -58,47 +68,79 @@ class Shader
             }
         }
 
-        int make(bool multiThread=true)
+        //Shader loading
+        //----------------------------------
+
+        //Accepts an open file stream by reference, reads it into this->code, and closes it.
+        void loadCode(fstream* codeFile)
+        {
+            string tempString = "";
+            while(codeFile->peek()!=EOF)
+            {
+                tempString+=codeFile->get();
+            }
+
+            codeFile->close();
+
+            this->code=tempString;
+        }
+
+        //Accepts a filename, opens the file, reads it into this-> code, and closes it.
+        void loadCode(string file)
+        {
+            fstream codeFile;
+            codeFile.open(file, ios::in);
+
+            string tempString = "";
+            while(codeFile.peek()!=EOF)
+            {
+                tempString+=codeFile.get();
+            }
+
+            codeFile.close();
+
+            this->code=tempString;
+        }
+
+        //Shader compilation
+        //----------------------------------
+
+        //Compilation function for shader; returns result.
+        GLint make()
         {
             //Get something to catch the result
             GLint result;
 
-            //Make an event that captures this object and the result by reference
-            Event<GLint,int> makeEvent(
-                [this, &result](int a=0)
-                {
-                    //Cast our data to the format the OpenGL functions want to run with
-                    const GLchar *source = (const GLchar*)code;
-                    //Provide our source code to OpenGL
-                    glShaderSource(shaderID, 1, &source, 0);
+            //Cast our data to the format the OpenGL functions want to run with
+            const GLchar *source = (const GLchar*)code.c_str();
+            //Provide our source code to OpenGL
+            glShaderSource(shaderID, 1, &source, 0);
 
-                    //Try to compile the shader
-                    glCompileShader(shaderID);
+            //Try to compile the shader
+            glCompileShader(shaderID);
 
-                    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
+            glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
 
-                    if(result!=GL_TRUE)
-                    {
-                        //There's an issue in shader compilation!
-                        //glGetShaderInfoLog(...)
-                    }
+            if(result!=GL_TRUE)
+            {
+                //There's an issue in shader compilation!
+                //glGetShaderInfoLog(...)
+            }
 
-                    //We don't actually need to return the result; we're just *going to*.
-                    return result;
-                }
-            );
-            
-            if(multiThread) {           //If multithreaded
-                makeEvent.launch(0);    //Launch
-                makeEvent.getResult();  //And wait
-            } 
-            else makeEvent(0);          //Else: Just calc
-
-            return result;              //Because result was captured by reference, we don't even care about the returns. It was updated in real time.
+            //We don't actually need to return the result; we're just *going to*.
+            return result;
         }
 
+        //Accessors
+        //----------------------------------
+
+        //Get ShaderID (AKA Shader "name")
         GLuint getID(){ return this->shaderID; }
+        
+        //Get Shader Type (Vertex, Fragment, etc.)
         GLenum getType(){ return this->shaderType; }
+        
+        //Gets Shader Status (Is the ShaderID an allocated shader name?)
         bool isShader() { return glIsShader(shaderID); }
 };
 
