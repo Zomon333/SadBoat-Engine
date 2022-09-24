@@ -89,7 +89,7 @@ class Shader
         void loadCode(string file)
         {
             fstream codeFile;
-            codeFile.open(file, ios::in);
+            codeFile.open(file);
 
             string tempString = "";
             while(codeFile.peek()!=EOF)
@@ -142,6 +142,9 @@ class Shader
         
         //Gets Shader Status (Is the ShaderID an allocated shader name?)
         bool isShader() { return glIsShader(shaderID); }
+
+        //Gets Shader's code
+        string* getCode() { return &(this->code); }
 };
 
 #endif
