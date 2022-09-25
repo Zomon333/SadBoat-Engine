@@ -22,7 +22,7 @@ class Shader
     private:
         //OpenGL uses a Client/Server architecture; we make requests, and the OpenGL server tries to fulfill them.
         //Due to this, we don't get to manage OpenGL's memory directly. Instead of using pointers, OpenGL builds lookup tables with "names".
-        //"Names" are the client-side identifier we use in our application. They usually get mapped to a pointer server-side on the GPU throug a lookup table.
+        //"Names" are the client-side identifier we use in our application. They usually get mapped to a pointer server-side on the GPU through a lookup table.
         
         //ShaderID is this shader's "name".
         //ShaderType is essentially, then, the *class* of the Shader.
