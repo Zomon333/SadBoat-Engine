@@ -91,6 +91,9 @@ int main(int argc, char* argv[])
             vertexShader.make();
             fragmentShader.make();
 
+            //  3) Link shaders into shader program
+            //--------------------------------------------------------------------
+
             return a;
         }
     );

@@ -20,7 +20,7 @@ using namespace std;
 //Window: OpenGL Wrapper
 //Class for instancing a game window. 
 //Holds necessary IDs and information, aswell as functions to open the window.
-//Provides no graphics processing; only window ability. Provide your own graphics with the Event pointers.
+//Provides no graphics processing; only windowing ability. Provide your own graphics with the provided Event pointers.
 class Window
 {
     private:

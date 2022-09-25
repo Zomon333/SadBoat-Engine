@@ -20,6 +20,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 //Allows passage of both lambda functions and std::function for both single and multi threaded use.
 //
 //Template takes any return and any parameters, allowing flexibility in your events.
+//Cannot be initialized with void for return or parameters. Use int and return error results instead.
 //
 //Returns asynchronously and stores results in an internal call stack.
 template <class Return, class ...Parameters>
