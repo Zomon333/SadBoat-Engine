@@ -20,6 +20,7 @@ class Point
     private:
         double x;
         double y;
+        double z;
 
         bool equal(Point other)
         {
@@ -35,11 +36,18 @@ class Point
         {
             this->x=0;
             this->y=0;
+            this->z=0;
         }
-        Point(std::pair<double, double> p)
+        
+        Point(std::tuple<double, double, double> p)
         {
-            this->x=p.first;
-            this->y=p.second;
+            this->x=std::get<0>(p);
+            this->y=std::get<1>(p);
+            this->z=std::get<2>(p);
+        }
+        Point(double x, double y, double z) : Point(std::tuple<double, double, double>(x, y, z))
+        {
+            return;
         }
 
         //Mutators
@@ -52,6 +60,10 @@ class Point
         {
             this->y=y2;
         }
+        void setZ(double z2)
+        {
+            this->z=z2;
+        }
 
         //Accessors
         //----------------------------------
@@ -63,6 +75,10 @@ class Point
         {
             return this->y;
         }
+        double getZ()
+        {
+            return this->z;
+        }
 
         double distance(Point other)
         {
@@ -71,7 +87,12 @@ class Point
             dX*=dX;
             dY*=dY;
 
-            return sqrt(dX+dY);
+            double diag = dX+dY;
+            double dZ = other.getZ() - this->getZ();
+            
+            dZ*=dZ;
+
+            return sqrt(diag+dZ);
         }
         
         //  Operators
@@ -89,23 +110,39 @@ class Point
 
         Point operator+(Point rhs)
         {
-            return Point(std::pair<double, double>(getX()+rhs.getX(), getY()+rhs.getY()));
+            return Point(std::tuple<double, double, double>(
+                getX()+rhs.getX(),
+                getY()+rhs.getY(),
+                getZ()+rhs.getZ()));
         }
         void operator+=(Point rhs)
         {
             Point p2 = ((*this)+rhs);
             setX(p2.getX());
             setY(p2.getY());
+            setZ(p2.getZ());
         }
         Point operator-(Point rhs)
         {
-            return Point(std::pair<double, double>(getX()-rhs.getX(), getY()-rhs.getY()));
+            return Point(std::tuple<double, double, double>(
+                getX()-rhs.getX(),
+                getY()-rhs.getY(),
+                getZ()-rhs.getZ()));
         }
         void operator-=(Point rhs)
         {
             Point p2 = ((*this)-rhs);
             setX(p2.getX());
             setY(p2.getY());
+            setZ(p2.getZ());
+        }
+        Point operator*(Point rhs)
+        {
+            return Point(
+                this->getX() * rhs.getX(),
+                this->getY() * rhs.getY(),
+                this->getZ() * rhs.getZ()
+            );
         }
         Point operator*(double rhs)
         {
@@ -113,21 +150,39 @@ class Point
             ex*=rhs;
             return ex;
         }
+        Point operator/(Point rhs)
+        {
+            return Point(
+                this->getX() / rhs.getX(),
+                this->getY() / rhs.getY(),
+                this->getZ() / rhs.getZ()
+            );
+        }
         Point operator/(double rhs)
         {
             Point ex=(*this);
             ex/=rhs;
             return ex;
         }
+        void operator*=(Point rhs)
+        {
+            (*this)=(*this)*rhs;
+        }
         void operator*=(double rhs)
         {
             setX(getX()*rhs);
             setY(getY()*rhs);
+            setZ(getZ()*rhs);
+        }
+        void operator/=(Point rhs)
+        {
+            (*this)=(*this)/rhs;
         }
         void operator/=(double rhs)
         {
             setX(getX()/rhs);
             setY(getY()/rhs);
+            setZ(getZ()/rhs);
         }
 };
 

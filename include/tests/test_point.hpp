@@ -24,19 +24,23 @@ TEST_CASE("Constructor test","[point]")
     for(int i = -10; i++; i<11)
     {
         CHECK(
-            Point(std::pair<double, double>(i, i)).getX()==i
+            Point(std::tuple<double, double, double>(i, i, i)).getX()==i
         );
         CHECK(
-            Point(std::pair<double, double>(i, i)).getY()==i
+            Point(std::tuple<double, double, double>(i, i, i)).getY()==i
+        );
+        CHECK(
+            Point(std::tuple<double, double, double>(i, i, i)).getZ()==i
         );
     }
 }
 TEST_CASE("Getter & Setter test.","[point]")
 {
-    CHECK(Point(std::pair<double, double>(5, 10)).getX()==5);
-    CHECK(Point(std::pair<double, double>(5, 10)).getY()==10);
+    CHECK(Point(std::tuple<double, double, double>(5, 10, 0)).getX()==5);
+    CHECK(Point(std::tuple<double, double, double>(5, 10, 0)).getY()==10);
+    CHECK(Point(std::tuple<double, double, double>(5, 10, 0)).getZ()==0);
 
-    Point testPoint = Point(std::pair<double, double>(5, 10));
+    Point testPoint = Point(std::tuple<double, double, double>(5, 10, 0));
     for(int i = -5; i<6; i++)
     {
         testPoint.setX(i);
@@ -44,23 +48,26 @@ TEST_CASE("Getter & Setter test.","[point]")
 
         testPoint.setY(i);
         CHECK(testPoint.getY()==i);
+
+        testPoint.setZ(i);
+        CHECK(testPoint.getZ()==i);
     }
 
 }
 TEST_CASE("Distance test.","[point]")
 {
-    Point origin = Point(std::pair<double, double>(0,0));
-    Point ones = Point(std::pair<double, double>(1,1));
+    Point origin = Point(std::tuple<double, double, double>(0,0,0));
+    Point ones = Point(std::tuple<double, double, double>(1,1,1));
 
-    CHECK(origin.distance(ones)==sqrt(2));
+    CHECK(origin.distance(ones)==sqrt(3));
 
 }
 TEST_CASE("Equivalence, non-equivalence test","[point]")
 {
     for(int i = 0; i<4; i++)
     {
-        Point a = Point(std::pair<double, double>(i, i));
-        Point b = Point(std::pair<double, double>(i, i));
+        Point a = Point(std::tuple<double, double, double>(i, i, i));
+        Point b = Point(std::tuple<double, double, double>(i, i, i));
 
         bool equal = a==b;
         CHECK(equal);
@@ -69,8 +76,8 @@ TEST_CASE("Equivalence, non-equivalence test","[point]")
 }
 TEST_CASE("+, += test","[point]")
 {
-    Point origin = Point(std::pair<double, double>(0,0));
-    Point ones = Point(std::pair<double, double>(1,1));
+    Point origin = Point(std::tuple<double, double, double>(0,0,0));
+    Point ones = Point(std::tuple<double, double, double>(1,1,0));
 
     Point sum = origin + ones;
     bool equal = sum==ones;
@@ -81,8 +88,8 @@ TEST_CASE("+, += test","[point]")
 }
 TEST_CASE("-, -= test","[point]")
 {
-    Point origin = Point(std::pair<double, double>(0,0));
-    Point ones = Point(std::pair<double, double>(1,1));
+    Point origin = Point(std::tuple<double, double, double>(0,0,0));
+    Point ones = Point(std::tuple<double, double, double>(1,1,1));
 
     Point nones = ones - ones;
     bool diff = nones==origin;
@@ -94,7 +101,7 @@ TEST_CASE("-, -= test","[point]")
 }
 TEST_CASE("*, *= test","[point]")
 {
-    Point ones = Point(std::pair<double, double>(1, 1));
+    Point ones = Point(std::tuple<double, double, double>(1, 1, 1));
 
     Point threes = ones * 3;
     bool success = threes.getX()==3;
@@ -110,7 +117,7 @@ TEST_CASE("*, *= test","[point]")
 }
 TEST_CASE("/, /= test","[point]")
 {
-    Point threes = Point(std::pair<double, double>(3, 3));
+    Point threes = Point(std::tuple<double, double, double>(3, 3, 3));
     Point thirds = threes/3;
     
     CHECK((
