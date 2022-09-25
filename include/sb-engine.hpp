@@ -86,10 +86,10 @@ This allows you to still write code; it just won't be included in compilation.
 #include "/usr/include/GL/freeglut.h"
 
 #include "../include/utilities/opengl/window.hpp"
+#include "../include/utilities/opengl/shader.hpp"
 
 #include "../include/utilities/opengl/vao.hpp"
 #include "../include/utilities/opengl/uniform.hpp"
-#include "../include/utilities/opengl/shader.hpp"
 #include "../include/utilities/opengl/shaderprogram.hpp"
 #include "../include/utilities/opengl/interfaceblock.hpp"
 /*

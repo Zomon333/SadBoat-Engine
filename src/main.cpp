@@ -49,8 +49,17 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     int results = 0;
+    char* name;
+
+    #ifdef CONFIG_PROD
+        cout<<"Launching engine...\n";
+        name = (char*)"SadBoat Engine";
+    #endif
 
     #ifdef CONFIG_TEST
+        //If we ran the catch session, the results variable may change, indicating a failed test.
+        //Do not launch the game if the tests fail.
+
         cout<<"Running tests...\n";
         results = Catch::Session().run(argc, argv);
         if(results!=0)
@@ -58,21 +67,10 @@ int main(int argc, char* argv[])
             cout<<"Tests failed, engine aborting.\n";
             return results;
         }
-    #endif
 
-    //If we ran the catch session, the results variable may change, indicating a failed test.
-    //Do not launch the game if the tests fail.
-
-    char* name;
-    #ifdef CONFIG_PROD
-        cout<<"Launching engine...\n";
-        name = (char*)"SadBoat Engine";
-    #endif
-    #ifdef CONFIG_TEST
         cout<<"Tests succeeded, engine launching.\n";
         name = (char*)"SadBoat Engine Test Stage";
     #endif
-
     
     //This event holds the initialization for Shaders
     //It will be called during the Window startup sequence
@@ -108,6 +106,10 @@ int main(int argc, char* argv[])
     //Open initialized window. open() returns reference to current window status.                    
     auto windowStatus = engineWindow.open();
 
+    #define vec2 pair<Point, Point>
+
+    vec2 a;
+    vec2 b;
 
     //Get the current window status. If the window is still open, this will wait until it is closed.
     windowStatus->get();
