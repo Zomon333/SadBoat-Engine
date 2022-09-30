@@ -20,7 +20,8 @@ using namespace std;
 //Window: OpenGL Wrapper
 //Class for instancing a game window. 
 //Holds necessary IDs and information, aswell as functions to open the window.
-//Provides no graphics processing; only windowing ability. Provide your own graphics with the provided Event pointers.
+//Provides no graphics processing; only windowing ability.
+//Provide your own graphics with the provided Event pointers.
 class Window
 {
     private:
@@ -39,8 +40,9 @@ class Window
         //Height
         int y = 0;
 
-        //Pointer to event to handle shader compilation
-        Event<int, int>* ShaderHandler;
+        //Pointer to event to handle user-specific display setup
+        //Generally used for Shader Compilation and Linking.
+        Event<int, int>* SetupHandler;
 
         //Standard promise indicating when the glut loop is done
         std::promise<bool> closer;
@@ -51,14 +53,14 @@ class Window
     public:
         //Constructor
         //----------------------------------
-        Window(int x, int y, int* argc, char* name, Event<int, int> &ShaderEvent)
+        Window(int x, int y, int* argc, char* name, Event<int, int> &SetupHandler)
         {
             this->x = x;
             this->y = y;
             this->argc = *argc;
             this->windowName = name;
 
-            this->ShaderHandler = &ShaderEvent;
+            this->SetupHandler = &SetupHandler;
         }
 
         //Display functions
@@ -92,7 +94,7 @@ class Window
                     windowID = glutCreateWindow(windowName);
                     GLenum glewInitResults = glewInit();
 
-                    ShaderHandler->operator()(0);
+                    SetupHandler->operator()(0);
                     glutDisplayFunc(display);
 
                     this->closer.set_value_at_thread_exit(true);
