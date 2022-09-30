@@ -1,5 +1,5 @@
 CC = g++
-FLAGS = -std=c++20 -fpermissive
+FLAGS = -std=c++20 -ffreestanding -fpermissive
 
 DEFINES = 
 
