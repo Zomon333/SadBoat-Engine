@@ -45,3 +45,4 @@ notes.txt
 output/SadBoatEngine-V0.04.0R
 output/*
 .vscode/settings.json
+.vscode/c_cpp_properties.json
