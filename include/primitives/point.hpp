@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define POINT_H
 
 //Point: Primitive
-//A point in 2D space. 
+//A point in 3D space. 
 class Point
 {
     private:
