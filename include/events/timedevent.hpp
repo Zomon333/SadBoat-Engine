@@ -13,8 +13,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef T_EVENT_H
 #define T_EVENT_H
 
+#include <chrono>
 
-
+using namespace std;
+using namespace std::chrono;
 
 //TimedEvent: Events, Derived
 //Child class of Base Class Event.
@@ -25,7 +27,7 @@ template <class Return, class... Parameters>
 class TimedEvent : public Event<Return, Parameters...>
 {
 private:
-    Instant exeTime;
+    steady_clock::time_point exeTime;
     bool suppressed = false;
 
 public:
@@ -35,16 +37,16 @@ public:
     TimedEvent() 
     : Event<Return, Parameters...>()
     {
-        exeTime = Instant(uTime(0));
+        exeTime = steady_clock::time_point(milliseconds(0));
     }
 
     TimedEvent(auto lFunc)
     : Event<Return, Parameters...>(lFunc)
     {
-        exeTime = Instant(uTime(0));
+        exeTime = steady_clock::time_point(milliseconds(0));
     }
 
-    TimedEvent(auto lFunc, Instant newExe)
+    TimedEvent(auto lFunc, steady_clock::time_point newExe)
     : Event<Return, Parameters...>(lFunc)
     {
         exeTime = newExe;
@@ -76,7 +78,7 @@ public:
 
     //Launches thread, but awaits time==now before running event.
     //Don't use this for long running conditions! It opens a watchdog thread!
-    void defer(Instant execution, Parameters... params)
+    void defer(steady_clock::time_point execution, Parameters... params)
     {
         //Copy TimedEvent's intended function
         const std::function<Return(Parameters...)> func = 
@@ -96,7 +98,7 @@ public:
             //So, instead;
 
             //Copy it into a constant.
-            const Instant lExe = execution;
+            const steady_clock::time_point lExe = execution;
 
             //Copy the captured old function aswell
             const std::function<Return(Parameters...)> oldFunc =
@@ -144,7 +146,7 @@ public:
             //So, instead;
 
             //Copy it into a constant.
-            const Instant lExe = this->exeTime;
+            const steady_clock::time_point lExe = this->exeTime;
 
             //Copy the captured old function aswell
             const std::function<Return(Parameters...)> oldFunc =
@@ -188,7 +190,7 @@ public:
     //  Accessors
     //----------------------------------
 
-    Instant getTime()
+    steady_clock::time_point getTime()
     {
         return exeTime;
     }
@@ -201,7 +203,7 @@ public:
     //  Mutators
     //----------------------------------
 
-    void setTime(Instant nTime)
+    void setTime(steady_clock::time_point nTime)
     {
         exeTime=nTime;
     }
@@ -214,7 +216,7 @@ public:
        return this->function(rhs...);
     }
 
-    bool operator==(Instant rhs)
+    bool operator==(steady_clock::time_point rhs)
     {
         return this->getTime()==rhs;
     }
@@ -223,7 +225,7 @@ public:
         return (*this)==rhs.getTime();
     }
 
-    bool operator!=(Instant rhs)
+    bool operator!=(steady_clock::time_point rhs)
     {
         return this->getTime()!=rhs;
     }
@@ -232,7 +234,7 @@ public:
         return (*this)!=rhs.getTime();
     }
 
-    bool operator>(Instant rhs)
+    bool operator>(steady_clock::time_point rhs)
     {
         return this->getTime()>rhs;
     }
@@ -241,7 +243,7 @@ public:
         return (*this)>rhs.getTime();
     }
 
-    bool operator<(Instant rhs)
+    bool operator<(steady_clock::time_point rhs)
     {
         return this->getTime()<rhs;
     }
@@ -250,7 +252,7 @@ public:
         return (*this)<rhs.getTime();
     }
 
-    bool operator<=(Instant rhs)
+    bool operator<=(steady_clock::time_point rhs)
     {
         return !((*this)>rhs);
     }
@@ -259,7 +261,7 @@ public:
         return !((*this)>rhs);
     }
 
-    bool operator>=(Instant rhs)
+    bool operator>=(steady_clock::time_point rhs)
     {
         return !((*this)<rhs);
     }

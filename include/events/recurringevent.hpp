@@ -13,7 +13,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef RECUR_H
 #define RECUR_H
 
+#include "../sb-engine.hpp"
+
 using namespace std;
+using namespace std::chrono;
 
 //RecurringEvent: Event, Derived
 //A derivation of TimedEvent which keeps it's function running in a loop.
@@ -27,7 +30,11 @@ private:
     //----------------------------------
 
     std::promise<bool> returnable;
-    uTime tOff;
+    
+    milliseconds tOff;
+
+    const milliseconds defaultFrequency = milliseconds(10);
+    const milliseconds maxFrequency =  milliseconds(1);
 
     //  Recursion Helper Functions
     //----------------------------------
@@ -53,7 +60,7 @@ private:
                             (func));
 
             //Get what time it is now
-            auto deferredTime = Now + this->tOff;
+            auto deferredTime = steady_clock::now() + this->tOff;
 
             //Sleep until our offset is over
             std::this_thread::sleep_until(deferredTime);
@@ -74,7 +81,7 @@ public:
     {
         this->function = std::function<int(Parameters...)>(f);
 
-        this->tOff = std::chrono::duration_cast<uTime>(period);
+        this->tOff = std::chrono::duration_cast<milliseconds>(period);
         
     }
 
@@ -87,7 +94,7 @@ public:
             }
         );
 
-        this->tOff = uFreq;
+        this->tOff = defaultFrequency;
     }
 
     RecurringEvent(Event<int, Parameters...> f, auto period)
@@ -100,7 +107,7 @@ public:
             }
         );
 
-        this->tOff = std::chrono::duration_cast<uTime>(period);
+        this->tOff = std::chrono::duration_cast<milliseconds>(period);
     }
 
     RecurringEvent(TimedEvent<int, Parameters...> f, auto period)
@@ -113,7 +120,7 @@ public:
             }
         );
 
-        this->tOff = std::chrono::duration_cast<uTime>(period);
+        this->tOff = std::chrono::duration_cast<milliseconds>(period);
     }
 
     //  Recursion Flow Control Functions
@@ -140,7 +147,7 @@ public:
 
                     //Query if the stopSignal has been set.
                     //The offset of 500 microseconds here forces a hard cap that threads cannot recur more than 2,000 times a second.
-                    std::future_status status = stopSignal.wait_until(Now+uFreqMax);
+                    std::future_status status = stopSignal.wait_until(steady_clock::now()+maxFrequency);
 
                     //If we got a result that the stopSignal has been set:
                     if(status==std::future_status::ready)
@@ -204,7 +211,7 @@ public:
     
     void setFreq(auto period)
     {
-        this->tOff = std::chrono::duration_cast<uTime>(period);
+        this->tOff = std::chrono::duration_cast<milliseconds>(period);
     }
 
     //  Accessors

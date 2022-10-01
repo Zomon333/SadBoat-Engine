@@ -11,14 +11,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    limitations under the License.
 */
 
-#ifdef CONFIG_TEST
 #ifndef TEST_T_EVENT
 #define TEST_T_EVENT
 
 #include "../utilities/catch.hpp"
-#include "../events/timedevent.hpp"
+#include "../sb-engine.hpp"
 
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -34,10 +34,10 @@ TEST_CASE("TimedEvent Constructor",test_timed_event)
         (defTest(0)==int())
     );
     REQUIRE(
-        (defTest==Instant(uTime()))
+        (defTest==steady_clock::time_point(milliseconds()))
     );
 
-    //Call constructor with some uninitialized Instant
+    //Call constructor with some uninitialized steady_clock::time_point
     TimedEvent<int, int, int> sum(
         F(int a, int b)
         {
@@ -51,17 +51,17 @@ TEST_CASE("TimedEvent Constructor",test_timed_event)
     );
     REQUIRE
     (
-        (sum==Instant(uTime()))
+        (sum==steady_clock::time_point(milliseconds()))
     );
 
-    //Call constructor with some initialized Instant
+    //Call constructor with some initialized steady_clock::time_point
     TimedEvent<int, int, int> sum2(
         F(int a, int b)
         {
             return a + b;
         },
-        Instant(
-            uTime(
+        steady_clock::time_point(
+            milliseconds(
                 50
             )
         )
@@ -89,8 +89,8 @@ TEST_CASE("Comparison Tests",test_timed_event)
         {
             return a;
         },
-        Instant(
-            uTime(
+        steady_clock::time_point(
+            milliseconds(
                 0
             )
         )
@@ -101,8 +101,8 @@ TEST_CASE("Comparison Tests",test_timed_event)
         {
             return !b;
         },
-        Instant(
-            uTime(
+        steady_clock::time_point(
+            milliseconds(
                 5
             )
         )
@@ -111,21 +111,21 @@ TEST_CASE("Comparison Tests",test_timed_event)
     //Test equivalence of echoTest to Instances of Unit Time
     CHECK
     (
-        (echoTest==Instant(uTime(0)))
+        (echoTest==steady_clock::time_point(milliseconds(0)))
     );
     CHECK
     (
-        (echoTest!=Instant(uTime(5)))
+        (echoTest!=steady_clock::time_point(milliseconds(5)))
     );
 
     //Test equivalence of reverseTest to Instances of Unit Time
     CHECK
     (
-        (reverseTest==Instant(uTime(5)))
+        (reverseTest==steady_clock::time_point(milliseconds(5)))
     );
     CHECK
     (
-        (reverseTest!=Instant(uTime(0)))
+        (reverseTest!=steady_clock::time_point(milliseconds(0)))
     );
 
     //Test equivalence of echoTest and reverseTest
@@ -215,7 +215,7 @@ TEST_CASE("Deferred future test",test_timed_event)
         }
     );
 
-    Instant executionTime = EngineClock::now() + std::chrono::milliseconds(25);
+    steady_clock::time_point executionTime = steady_clock::now() + std::chrono::milliseconds(25);
     deferredSum.defer(executionTime, 3, 3);
 
     CHECK(
@@ -237,11 +237,11 @@ TEST_CASE("Deferred timing test",test_timed_event)
     TimedEvent<double, int> waitress(
         F(int a)
         {
-            return EngineClock::now().time_since_epoch().count();
+            return steady_clock::now().time_since_epoch().count();
         }
     );
 
-    Instant executionTime = EngineClock::now() + std::chrono::microseconds(75);
+    steady_clock::time_point executionTime = steady_clock::now() + std::chrono::microseconds(75);
     
     waitress.defer(executionTime, 0);
     double start = waitress(0);
@@ -267,7 +267,7 @@ TEST_CASE("Deferred contents test",test_timed_event)
         (deferredSum(&a, &b)==6)
     );
 
-    Instant exTime = EngineClock::now() + std::chrono::milliseconds(15);
+    steady_clock::time_point exTime = steady_clock::now() + std::chrono::milliseconds(15);
     
     deferredSum.defer(exTime, &a, &b);
     a=10;
@@ -303,7 +303,7 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
         {
             return a;
         },
-        EngineClock::now()+std::chrono::milliseconds(25)
+        steady_clock::now()+std::chrono::milliseconds(25)
     ));
 
     eventQueue.emplace(new TimedEvent<int, int>(
@@ -311,14 +311,14 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
         {
             return a+10;
         },
-        EngineClock::now()+std::chrono::milliseconds(50)
+        steady_clock::now()+std::chrono::milliseconds(50)
     ));
 
     std::stack<TimedEvent<int,int>*> results;
 
     while(eventQueue.size()>0)
     {
-        if(eventQueue.top()->operator<=(Instant::clock::now()))
+        if(eventQueue.top()->operator<=(steady_clock::time_point::clock::now()))
         {
             eventQueue.top()->launch(5);
             results.emplace(eventQueue.top());
@@ -338,5 +338,4 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
     
 }
 
-#endif
 #endif

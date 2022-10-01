@@ -11,16 +11,15 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    limitations under the License.
 */
 
-#ifdef CONFIG_TEST
 #ifndef TEST_RECUR_EVENT
 #define TEST_RECUR_EVENT
 
+#include "sb-engine.hpp"
 #include "../utilities/catch.hpp"
-#include "../events/recurringevent.hpp"
-
-using namespace std;
 
 #define test_recur "[Recurring Event Test]"
+
+//Todo: Find out why the compiler doesn't want to resolve this
 
 TEST_CASE("Recurring Event Accumulator Test",test_recur)
 {
@@ -34,12 +33,12 @@ TEST_CASE("Recurring Event Accumulator Test",test_recur)
             (*c) = (*a) + (*b);
             return 0;
         },
-        uFreq
+        milliseconds(10)
     );
 
     testEvent.recur(&a, &b, &c);
 
-    Instant exTime = Now + uTime(11);
+    steady_clock::time_point exTime = steady_clock::now() + milliseconds(11);
     std::this_thread::sleep_until(exTime);
 
     for(int i = 0; i<100; i++)
@@ -47,26 +46,26 @@ TEST_CASE("Recurring Event Accumulator Test",test_recur)
         a = i;
         b = (100 - i);
 
-        exTime = Now + uTime(11);
+        exTime = steady_clock::now() + milliseconds(11);
         std::this_thread::sleep_until(exTime);
 
         CHECK(c==100);
     }
 
     testEvent.suppress();
-    std::this_thread::sleep_until((Now + uTime(11)));
+    std::this_thread::sleep_until((steady_clock::now() + milliseconds(11)));
 
     a = 0;
     b = 0;
     CHECK(c==100);
 
     testEvent.release();
-    std::this_thread::sleep_until((Now + uTime(15)));
+    std::this_thread::sleep_until((steady_clock::now() + milliseconds(15)));
 
     CHECK(c==0);
 
     testEvent.end();
-    std::this_thread::sleep_until((Now + uTime(11)));
+    std::this_thread::sleep_until((steady_clock::now() + milliseconds(11)));
 
     a=20;
     b=20;
@@ -82,24 +81,24 @@ TEST_CASE("Recurring Event Frequency Change Test",test_recur)
             (*a) = (*a) + 1;
             return 0;
         },
-        uFreq
+        milliseconds(10)
     );
 
     freqTest.recur(&a);
-    std::this_thread::sleep_until((Now + std::chrono::seconds(1)));
+    std::this_thread::sleep_until((steady_clock::now() + std::chrono::seconds(1)));
 
 
     int rOneRes = a;
     freqTest.suppress();
-    std::this_thread::sleep_until((Now + uTime(10)));
+    std::this_thread::sleep_until((steady_clock::now() + milliseconds(10)));
 
     a = 0;
-    freqTest.setFreq(uFreqMax);
+    freqTest.setFreq(milliseconds(1));
 
-    std::this_thread::sleep_until((Now + uTime(10)));
+    std::this_thread::sleep_until((steady_clock::now() + milliseconds(10)));
 
     freqTest.release();
-    std::this_thread::sleep_until((Now + std::chrono::seconds(1)));
+    std::this_thread::sleep_until((steady_clock::now() + std::chrono::seconds(1)));
 
     int rTwoRes = a;
 
@@ -110,5 +109,4 @@ TEST_CASE("Recurring Event Frequency Change Test",test_recur)
 }
 
 
-#endif
 #endif
