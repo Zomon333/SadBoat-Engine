@@ -24,25 +24,7 @@ using namespace std;
 //Shorthand lambda function for internal captures
 #define lF(a...) [this](a...)
 
-//Microseconds-- engine unit time.
-#define uTime std::chrono::milliseconds
-
-//100 HZ -- engine unit frequency.
-#define uFreq uTime(10)
-
-//2 kHZ -- maximum engine frequency
-#define uFreqMax std::chrono::microseconds(500)
-
 //pow(2, -47)-- engine unit tolerance. Arbitrarily small.
 #define uTol pow(2,-32)
-
-//Steady clock for timekeeping.
-#define EngineClock std::chrono::steady_clock
-
-//Shorthand for the current time on the clock
-#define Now EngineClock::now()
-
-//An instant in time-- a microsecond by the engine's clock.
-#define Instant EngineClock::time_point
 
 #endif
