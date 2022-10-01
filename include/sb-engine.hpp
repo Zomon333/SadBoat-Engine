@@ -88,10 +88,10 @@ This allows you to still write code; it just won't be included in compilation.
 #include "../include/utilities/opengl/window.hpp"
 #include "../include/utilities/opengl/shader.hpp"
 
-#include "../include/utilities/opengl/vao.hpp"
-#include "../include/utilities/opengl/uniform.hpp"
-#include "../include/utilities/opengl/shaderprogram.hpp"
-#include "../include/utilities/opengl/interfaceblock.hpp"
+//#include "../include/utilities/opengl/vao.hpp"
+//#include "../include/utilities/opengl/uniform.hpp"
+//#include "../include/utilities/opengl/shaderprogram.hpp"
+//#include "../include/utilities/opengl/interfaceblock.hpp"
 /*
 ---------------------------------------------------------------------------------------------------------------------
 This definition is used to determine whether or not we want to include our test profiles in our compile.
@@ -121,7 +121,7 @@ This is controlled through the makefile;
     // Event tests
     #include "../include/tests/test_events.hpp"
     #include "../include/tests/test_timedevent.hpp"
-    #include "../include/tests/test_recurringevent.hpp"
+    //#include "../include/tests/test_recurringevent.hpp"
 
 
 #endif
