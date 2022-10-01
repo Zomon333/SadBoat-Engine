@@ -106,10 +106,13 @@ int main(int argc, char* argv[])
     //Open initialized window. open() returns reference to current window status.                    
     auto windowStatus = engineWindow.open();
 
-    #define vec2 pair<Point, Point>
-
-    vec2 a;
-    vec2 b;
+    RecurringEvent<int> testEvent(
+        F(int a)
+        {
+            return a;
+        },
+        milliseconds(10)
+    );
 
     //Get the current window status. If the window is still open, this will wait until it is closed.
     windowStatus->get();

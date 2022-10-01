@@ -19,7 +19,14 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #define test_recur "[Recurring Event Test]"
 
-//Todo: Find out why the compiler doesn't want to resolve this
+/*
+Bug:
+    For some reason, the compiler doesn't know what RecurringEvent is in this scope.
+    I've tried everything at my immediate disposal and I don't know why this is the case.
+    These tests *did* run in the past, and always passed when they did. I don't see why they wouldn't now.
+
+    RecurringEvent is still valid in other contexts like main(); so it must just be some scoping issue.
+*/
 
 TEST_CASE("Recurring Event Accumulator Test",test_recur)
 {
