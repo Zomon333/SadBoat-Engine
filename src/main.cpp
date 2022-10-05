@@ -72,10 +72,15 @@ int main(int argc, char* argv[])
         name = (char*)"SadBoat Engine Test Stage";
     #endif
     
+
+
+    VAO<double>* testVAO;
+
+
     //This event holds the initialization for Shaders
     //It will be called during the Window startup sequence
-    Event<int, int> ShaderHandler(
-        [](int a)
+    Event<int, int> WindowInit(
+        [&testVAO](int a)
         {
             //  1) Declare all of your shaders
             //--------------------------------------------------------------------
@@ -92,6 +97,8 @@ int main(int argc, char* argv[])
             //  3) Link shaders into shader program
             //--------------------------------------------------------------------
 
+            testVAO = new VAO<double>();
+
             return a;
         }
     );
@@ -100,21 +107,68 @@ int main(int argc, char* argv[])
                             1920, 1080,                 //Width: 1920, Height: 1080
                             &argc,                      //Parses argc as an argument.
                             name,                       //Sets Window name as name.
-                            ShaderHandler               //ShaderHandler. Event to handle shader compilation.
+                            WindowInit               //ShaderHandler. Event to handle shader compilation.
                         );
 
     //Open initialized window. open() returns reference to current window status.                    
     auto windowStatus = engineWindow.open();
 
-    RecurringEvent<int> testEvent(
+    
+    vector<double> test(5);
+    test.resize(15);
+    
+    for(int i = 0; i<15; i++)
+    {
+        test[i]=i;
+    }
+
+    
+    //testVAO->update(test);
+
+    Event<int, int> testA(
+        F(int a)
+        {
+            return (a*10);
+        }
+    );
+
+    Event<int, int> testB(
+        F(int b)
+        {
+            return (b-5);
+        }
+    );
+
+    Event<int, int> none = testA + testB;
+    
+    cout<<testA(5)<<"=50"<<endl;
+    cout<<testB(10)<<"=5"<<endl;
+    cout<<none(3)<<"=25"<<endl;
+
+    //testA += testB;
+
+    Point tP(3, 3, 3);
+    tP/=3;
+
+    cout<<tP.getX()<<"=1";
+
+
+    //cout<<testA(3)<<"=25"<<endl;
+
+    //Event<int, int> testC = testB * 2;
+
+    //cout<<testC(20)<<"=10"<<endl;
+
+
+
+
+    TimedEvent<int, int> ender(
         F(int a)
         {
             return a;
         },
-        milliseconds(10)
+        steady_clock::now() + seconds(2)
     );
-
-    //Get the current window status. If the window is still open, this will wait until it is closed.
-    windowStatus->get();
-    return 0;
+    ender.defer(0);
+    return ender.getResult();
 }

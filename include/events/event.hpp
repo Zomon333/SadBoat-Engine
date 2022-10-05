@@ -107,8 +107,40 @@ class Event
 
         void operator=(Event& rhs)
         {
-            (*this)=Event(rhs);
+            this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(rhs.function));
         }
+
+        void operator+=(Event<Return, Return> rhs)
+        {
+            (*this)=(*this + rhs);
+        }
+
+        Event<Return, Parameters...> operator+(Event<Return, Return> rhs)
+        {
+            return Event<Return, Parameters...>(
+                [this, rhs](Parameters... params)
+                {
+                    Return temp = this->operator()(params...);
+                    return rhs(temp);
+                }
+            );
+        }
+
+        Event<Return, Parameters...> operator*(int i)
+        {
+            Event<Return, Parameters...> tempEvent = *this;
+            for(int j = 0; j<i; j++)
+            {
+                tempEvent+=tempEvent;
+            }
+            return tempEvent;
+        }
+
+        void operator*=(int i)
+        {
+            *this = ((*this)*i);
+        }
+
 };
 
 #endif

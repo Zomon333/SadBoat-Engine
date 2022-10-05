@@ -92,6 +92,9 @@ class Window
                     glutInitContextProfile(GLUT_CORE_PROFILE);
                     
                     windowID = glutCreateWindow(windowName);
+
+                    glewExperimental = GL_TRUE;
+
                     GLenum glewInitResults = glewInit();
 
                     SetupHandler->operator()(0);

@@ -52,6 +52,8 @@ public:
     {
         return (max - min);
     }    
+    double getMin() { return min; }
+    double getMax() { return max; }
 
     //Collision Logic
     //----------------------------------
