@@ -114,47 +114,6 @@ int main(int argc, char* argv[])
     auto windowStatus = engineWindow.open();
 
     
-    vector<double> test(5);
-    test.resize(15);
-    
-    for(int i = 0; i<15; i++)
-    {
-        test[i]=i;
-    }
-
-    
-    //testVAO->update(test);
-
-    Event<int, int> testA(
-        F(int a)
-        {
-            return (a*10);
-        }
-    );
-
-    Event<int, int> testB(
-        F(int b)
-        {
-            return (b-5);
-        }
-    );
-
-    Event<int, int> none = *(testA + testB);
-    
-    cout<<testA(5)<<"=50"<<endl;
-    cout<<testB(10)<<"=5"<<endl;
-    cout<<none(3)<<"=25"<<endl;
-
-    testA += &testB;
-
-    cout<<testA(3)<<"=25"<<endl;
-
-    Event<int, int> testC = *(testB * 2);
-
-    cout<<testC(20)<<"=10"<<endl;
-
-
-
 
     TimedEvent<int, int> ender(
         F(int a)

@@ -129,18 +129,15 @@ class Event
 
         Event<Return, Return>* operator*(int i)
         {
-            return new Event<Return, Return>(
-                [this, &i](Return params)
-                {
-                    const int loop=i;
-                    Return temp;
-                    for(int j = 0; j<loop; j++)
-                    {
-                        temp = this->operator()(temp);
-                    }
-                    return temp;
-                }
-            );
+            Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
+            Event<Return, Parameters...>* returnable = new Event<Return, Parameters...>(F(Parameters... params){return Return();});
+
+            for(int j = i; j>0; j--)
+            {
+                (*returnable)+=temp;
+            }
+            
+            return returnable;
         }
 
         void operator*=(int i)
