@@ -110,11 +110,6 @@ class Event
             this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(rhs.function));
         }
 
-        void operator+=(Event<Return, Return> rhs)
-        {
-            (*this)=(*this + rhs);
-        }
-
         Event<Return, Parameters...> operator+(Event<Return, Return> rhs)
         {
             return Event<Return, Parameters...>(
@@ -125,6 +120,11 @@ class Event
                 }
             );
         }
+
+	void operator+=(Event<Return, Return> rhs)
+	{
+		(*this)=(*this + rhs);
+	}
 
         Event<Return, Parameters...> operator*(int i)
         {
