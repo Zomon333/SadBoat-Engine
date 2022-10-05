@@ -139,25 +139,19 @@ int main(int argc, char* argv[])
         }
     );
 
-    Event<int, int> none = testA + testB;
+    Event<int, int> none = *(testA + testB);
     
     cout<<testA(5)<<"=50"<<endl;
     cout<<testB(10)<<"=5"<<endl;
     cout<<none(3)<<"=25"<<endl;
 
-    //testA += testB;
+    testA += &testB;
 
-    Point tP(3, 3, 3);
-    tP/=3;
+    cout<<testA(3)<<"=25"<<endl;
 
-    cout<<tP.getX()<<"=1";
+    Event<int, int> testC = *(testB * 2);
 
-
-    //cout<<testA(3)<<"=25"<<endl;
-
-    //Event<int, int> testC = testB * 2;
-
-    //cout<<testC(20)<<"=10"<<endl;
+    cout<<testC(20)<<"=10"<<endl;
 
 
 

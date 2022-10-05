@@ -171,7 +171,7 @@ class VAO
         void test()
         {
             Event<int,int>* tempEvent = new Event<int, int>(F(int a){return (a+1);});
-            *(this->current) += *tempEvent;
+            *(this->current) += tempEvent;
         }
 
         //Map all of the data.
