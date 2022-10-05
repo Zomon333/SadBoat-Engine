@@ -121,10 +121,10 @@ class Event
             );
         }
 
-	void operator+=(Event<Return, Return> rhs)
-	{
-		(*this)=(*this + rhs);
-	}
+    	void operator+=(Event<Return, Return> rhs)
+    	{
+    		(*this)=(*this + rhs);
+    	}
 
         Event<Return, Parameters...> operator*(int i)
         {
