@@ -11,8 +11,8 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    limitations under the License.
 */
 
-#ifndef TEST_RECUR_EVENT
-#define TEST_RECUR_EVENT
+#ifndef RECUR_EVENT_TEST
+#define RECUR_EVENT_TEST
 
 #include "sb-engine.hpp"
 #include "../utilities/catch.hpp"
@@ -21,15 +21,6 @@ using namespace std;
 using namespace SBE;
 
 #define test_recur "[Recurring Event Test]"
-
-/*
-Bug:
-    For some reason, the compiler doesn't know what RecurringEvent is in this scope.
-    I've tried everything at my immediate disposal and I don't know why this is the case.
-    These tests *did* run in the past, and always passed when they did. I don't see why they wouldn't now.
-
-    RecurringEvent is still valid in other contexts like main(); so it must just be some scoping issue.
-*/
 
 TEST_CASE("Recurring Event Accumulator Test",test_recur)
 {

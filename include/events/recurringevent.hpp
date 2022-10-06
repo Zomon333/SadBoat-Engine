@@ -13,7 +13,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef RECUR_H
 #define RECUR_H
 
-#include "../sb-engine.hpp"
+#include "sb-engine.hpp"
 
 using namespace std;
 using namespace std::chrono;

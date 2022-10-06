@@ -14,6 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define T_EVENT_H
 
 #include <chrono>
+#include "sb-engine.hpp"
 
 using namespace std;
 using namespace std::chrono;
