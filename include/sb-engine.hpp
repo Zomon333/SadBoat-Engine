@@ -31,6 +31,9 @@ Disclaimer:
     You can include this file and your main should run fine. You can use these features as needed.
 */
 
+#ifndef ENGINE_INCLUDES
+#define ENGINE_INCLUDES
+
 // STD Includes
 //----------------------------------
 
@@ -48,6 +51,7 @@ Disclaimer:
 #include <unordered_map>
 #include <utility>
 
+
 //  Engine Specific Defines
 //----------------------------------
 #include "../include/utilities/defines.hpp"
@@ -57,6 +61,7 @@ Disclaimer:
 #include "../include/events/event.hpp"
 #include "../include/events/timedevent.hpp"
 #include "../include/events/recurringevent.hpp"
+
 
 // Primitive Includes
 //----------------------------------
@@ -93,6 +98,8 @@ This allows you to still write code; it just won't be included in compilation.
 //#include "../include/utilities/opengl/uniform.hpp"
 //#include "../include/utilities/opengl/shaderprogram.hpp"
 //#include "../include/utilities/opengl/interfaceblock.hpp"
+
+
 /*
 ---------------------------------------------------------------------------------------------------------------------
 This definition is used to determine whether or not we want to include our test profiles in our compile.
@@ -101,6 +108,7 @@ This is controlled through the makefile;
 -run "make prod" to disable CATCH tests
 ---------------------------------------------------------------------------------------------------------------------
 */
+
 //#define CONFIG_TEST
 //#define CONFIG_PROD
 
@@ -108,6 +116,8 @@ This is controlled through the makefile;
 
     #define CATCH_CONFIG_RUNNER
     #include "../include/utilities/catch.hpp"
+
+    
 
     // Test primitives
     //----------------------------------
@@ -122,7 +132,8 @@ This is controlled through the makefile;
     // Event tests
     #include "../include/tests/test_events.hpp"
     #include "../include/tests/test_timedevent.hpp"
-    //#include "../include/tests/test_recurringevent.hpp"
+    #include "../include/tests/test_recurringevent.hpp"
 
 
+#endif
 #endif
