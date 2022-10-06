@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     
 
 
-    VAO<double>* testVAO;
+    VAO* testVAO;
 
 
     //This event holds the initialization for Shaders
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
             //  3) Link shaders into shader program
             //--------------------------------------------------------------------
 
-            testVAO = new VAO<double>();
+            testVAO = new VAO();
 
             return a;
         }
@@ -117,6 +117,8 @@ int main(int argc, char* argv[])
 
 
 
+    
+
     TimedEvent<int, int> ender(
         F(int a)
         {
@@ -125,5 +127,6 @@ int main(int argc, char* argv[])
         steady_clock::now() + seconds(2)
     );
     ender.defer(0);
+
     return ender.getResult();
 }
