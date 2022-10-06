@@ -13,139 +13,141 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "../utilities/defines.hpp"
+#include "utilities/defines.hpp"
 
-//Event: Events
-//Base class for the event system. 
-//Allows passage of both lambda functions and std::function for both single and multi threaded use.
-//
-//Template takes any return and any parameters, allowing flexibility in your events.
-//Cannot be initialized with void for return or parameters. Use int and return error results instead.
-//
-//Returns asynchronously and stores results in an internal call stack.
-template <class Return, class ...Parameters>
-class Event
+namespace SBE
 {
-    protected:
-        //Holds the function to be executed
-        std::function<Return(Parameters...)> function;// = std::function<int(int)>([](int a){return a;});
-        
-        //Predicts the future, somewhat
-        std::stack<std::future<Return>> callStack;
-
-        std::packaged_task<Return(Parameters...)> copyPackage()
-        {
-                return  std::packaged_task<Return(Parameters...)>(                      //Packaged tasks can only *move* data
-                            std::function<Return(Parameters...)>(                       //So give it a function
-                                static_cast<const                                       //Which was copy constructed
-                                    std::function<Return(Parameters...)>>(function)));  //From another function
-        }                                                                            //So the task is a free floating copy constucted task
-
-
-    public:
-        //  Constructors
-        //----------------------------------
-        Event()
-        {
-            function = [](Parameters...){return Return();};
-        }
-        Event(std::function<Return(Parameters...)> func)
-        {
-            function = func;
-        }
-        Event(auto func)
-        {
-            function = std::function<Return(Parameters...)>(func);
-        }
-        Event(const Event &copiedEvent)
-        {
-            this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(copiedEvent.function));
-        }
-
-
-        //  Accessors
-        //----------------------------------
-
-        //Wait for the result, then get it when it exists.
-        Return getResult()
-        {
-            //If there are no results to get, give a default answer.
-            if(callStack.size()==0)
-            {
-                return Return();
-            }
-            callStack.top().wait();
-            Return result = callStack.top().get();
-            callStack.pop();
-            return result;
-        }
-
-        //  Execution modes
-        //----------------------------------
-
-        //Launch as it's own thread
-        void launch(Parameters... params)
-        {
-            //Get the function as a task
-            auto task = copyPackage();
-
-            //Get the future of the task
-            callStack.emplace(task.get_future());
-
-            //Create a new thread and move the lambda function to it
-            std::jthread thread(std::move(task), params...);
-
-            //Be free, my child!
-            thread.detach();
-        }
-
-        //Do not create a new thread; run synchronously.
-        Return operator()(Parameters... params)
-        {
-            return function(params...);
-        }
-
-        void operator=(Event& rhs)
-        {
-            this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(rhs.function));
-        }
-
-        Event<Return, Parameters...>* operator+(Event<Return, Return> rhs)
-        {
-            return new Event<Return, Parameters...>(
-                [this, rhs](Parameters... params)
-                {
-                    Return temp = this->operator()(params...);
-                    return rhs.operator()(temp);
-                }
-            );
-        }
-
-    	void operator+=(Event<Return, Return>* rhs)
-    	{
-            Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-    		(*this) = *((*temp)+(*rhs));
-    	}
-
-        Event<Return, Return>* operator*(int i)
-        {
-            Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-            Event<Return, Parameters...>* returnable = new Event<Return, Parameters...>(F(Parameters... params){return Return();});
-
-            for(int j = i; j>0; j--)
-            {
-                (*returnable)+=temp;
-            }
+    //Event: Events
+    //Base class for the event system. 
+    //Allows passage of both lambda functions and std::function for both single and multi threaded use.
+    //
+    //Template takes any return and any parameters, allowing flexibility in your events.
+    //Cannot be initialized with void for return or parameters. Use int and return error results instead.
+    //
+    //Returns asynchronously and stores results in an internal call stack.
+    template <class Return, class ...Parameters>
+    class Event
+    {
+        protected:
+            //Holds the function to be executed
+            std::function<Return(Parameters...)> function;// = std::function<int(int)>([](int a){return a;});
             
-            return returnable;
-        }
+            //Predicts the future, somewhat
+            std::stack<std::future<Return>> callStack;
 
-        void operator*=(int i)
-        {
-            Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-    		(*this) = *((*temp)*(i));
-        }
+            std::packaged_task<Return(Parameters...)> copyPackage()
+            {
+                    return  std::packaged_task<Return(Parameters...)>(                      //Packaged tasks can only *move* data
+                                std::function<Return(Parameters...)>(                       //So give it a function
+                                    static_cast<const                                       //Which was copy constructed
+                                        std::function<Return(Parameters...)>>(function)));  //From another function
+            }                                                                            //So the task is a free floating copy constucted task
 
+
+        public:
+            //  Constructors
+            //----------------------------------
+            Event()
+            {
+                function = [](Parameters...){return Return();};
+            }
+            Event(std::function<Return(Parameters...)> func)
+            {
+                function = func;
+            }
+            Event(auto func)
+            {
+                function = std::function<Return(Parameters...)>(func);
+            }
+            Event(const Event &copiedEvent)
+            {
+                this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(copiedEvent.function));
+            }
+
+
+            //  Accessors
+            //----------------------------------
+
+            //Wait for the result, then get it when it exists.
+            Return getResult()
+            {
+                //If there are no results to get, give a default answer.
+                if(callStack.size()==0)
+                {
+                    return Return();
+                }
+                callStack.top().wait();
+                Return result = callStack.top().get();
+                callStack.pop();
+                return result;
+            }
+
+            //  Execution modes
+            //----------------------------------
+
+            //Launch as it's own thread
+            void launch(Parameters... params)
+            {
+                //Get the function as a task
+                auto task = copyPackage();
+
+                //Get the future of the task
+                callStack.emplace(task.get_future());
+
+                //Create a new thread and move the lambda function to it
+                std::jthread thread(std::move(task), params...);
+
+                //Be free, my child!
+                thread.detach();
+            }
+
+            //Do not create a new thread; run synchronously.
+            Return operator()(Parameters... params)
+            {
+                return function(params...);
+            }
+
+            void operator=(Event& rhs)
+            {
+                this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(rhs.function));
+            }
+
+            Event<Return, Parameters...>* operator+(Event<Return, Return> rhs)
+            {
+                return new Event<Return, Parameters...>(
+                    [this, rhs](Parameters... params)
+                    {
+                        Return temp = this->operator()(params...);
+                        return rhs.operator()(temp);
+                    }
+                );
+            }
+
+            void operator+=(Event<Return, Return>* rhs)
+            {
+                Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
+                (*this) = *((*temp)+(*rhs));
+            }
+
+            Event<Return, Return>* operator*(int i)
+            {
+                Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
+                Event<Return, Parameters...>* returnable = new Event<Return, Parameters...>(F(Parameters... params){return Return();});
+
+                for(int j = i; j>0; j--)
+                {
+                    (*returnable)+=temp;
+                }
+                
+                return returnable;
+            }
+
+            void operator*=(int i)
+            {
+                Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
+                (*this) = *((*temp)*(i));
+            }
+
+    };
 };
-
 #endif

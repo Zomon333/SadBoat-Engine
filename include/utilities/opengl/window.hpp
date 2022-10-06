@@ -13,124 +13,131 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "../../sb-engine.hpp"
+#include "sb-engine.hpp"
 
-using namespace std;
-
-//Window: OpenGL Wrapper
-//Class for instancing a game window. 
-//Holds necessary IDs and information, aswell as functions to open the window.
-//Provides no graphics processing; only windowing ability.
-//Provide your own graphics with the provided Event pointers.
-class Window
+namespace SBE
 {
-    private:
-        //OpenGL Window name. To understand names better, see shader.hpp
-        GLuint windowID = 0;
+    using namespace std;
 
-        //Args to parse
-        int argc = 0;
+    Event<int,int> displayCallback(F(int a){return a;});
+    void display()
+    {
+        int results = displayCallback(0);
+        Event<int,int>* tempEvent = new Event<int,int>(F(int a){return a;});
+        displayCallback = *tempEvent;
 
-        //Literal window title, not OpenGL name.
-        char* windowName = (char*)"";
+    }
 
-        //Width
-        int x = 0;
-        
-        //Height
-        int y = 0;
 
-        //Pointer to event to handle user-specific display setup
-        //Generally used for Shader Compilation and Linking.
-        Event<int, int>* SetupHandler;
+    //Window: OpenGL Wrapper
+    //Class for instancing a game window. 
+    //Holds necessary IDs and information, aswell as functions to open the window.
+    //Provides no graphics processing; only windowing ability.
+    //Provide your own graphics with the provided Event pointers.
+    class Window
+    {
+        private:
+            //OpenGL Window name. To understand names better, see shader.hpp
+            GLuint windowID = 0;
 
-        //Standard promise indicating when the glut loop is done
-        std::promise<bool> closer;
+            //Args to parse
+            int argc = 0;
 
-        //Standard future holding the value of the closer promise
-        std::future<bool> isFinished;
+            //Literal window title, not OpenGL name.
+            char* windowName = (char*)"";
 
-    public:
-        //Constructor
-        //----------------------------------
-        Window(int x, int y, int* argc, char* name, Event<int, int> &SetupHandler)
-        {
-            this->x = x;
-            this->y = y;
-            this->argc = *argc;
-            this->windowName = name;
+            //Width
+            int x = 0;
+            
+            //Height
+            int y = 0;
 
-            this->SetupHandler = &SetupHandler;
-        }
+            //Pointer to event to handle user-specific display setup
+            //Generally used for Shader Compilation and Linking.
+            Event<int, int>* SetupHandler;
 
-        //Display functions
-        //----------------------------------
+            //Standard promise indicating when the glut loop is done
+            std::promise<bool> closer;
 
-        //Display callback for glut loop.
-        static void display()
-        {
-            //Do something
-        }
+            //Standard future holding the value of the closer promise
+            std::future<bool> isFinished;
 
-        //Window management functions
-        //----------------------------------
+        public:
+            //Constructor
+            //----------------------------------
+            Window(int x, int y, int* argc, char* name, Event<int, int> &SetupHandler)
+            {
+                this->x = x;
+                this->y = y;
+                this->argc = *argc;
+                this->windowName = name;
 
-        std::future<bool>* open()
-        {
-            isFinished = closer.get_future();
+                this->SetupHandler = &SetupHandler;
+            }
 
-            Event<int, int> openWindow(
-                lF(int a)
-                {
-                                        
-                    glutInit(&argc, &windowName);
 
-                    glutInitDisplayMode(GLUT_RGBA);
-                    glutInitWindowSize(x,y);
+            //Window management functions
+            //----------------------------------
 
-                    glutInitContextVersion(4,3);
-                    glutInitContextProfile(GLUT_CORE_PROFILE);
-                    
-                    windowID = glutCreateWindow(windowName);
+            std::future<bool>* open()
+            {
+                isFinished = closer.get_future();
 
-                    glewExperimental = GL_TRUE;
+                Event<int, int> openWindow(
+                    lF(int a)
+                    {
+                                            
+                        glutInit(&argc, &windowName);
 
-                    GLenum glewInitResults = glewInit();
+                        glutInitDisplayMode(GLUT_RGBA);
+                        glutInitWindowSize(x,y);
 
-                    SetupHandler->operator()(0);
-                    glutDisplayFunc(display);
+                        glutInitContextVersion(4,3);
+                        glutInitContextProfile(GLUT_CORE_PROFILE);
+                        
+                        windowID = glutCreateWindow(windowName);
 
-                    this->closer.set_value_at_thread_exit(true);
+                        glewExperimental = GL_TRUE;
 
-                    glutMainLoop();
-                    return 0;
-                }
-            );
+                        GLenum glewInitResults = glewInit();
 
-            openWindow.launch(0);
-            return &isFinished;
-        }
+                        SetupHandler->operator()(0);
 
-        //Mutators
-        //----------------------------------
+                        glutDisplayFunc(display);
 
-        //Sets X, doesn't resize window
-        void setX(int nX) {x=nX;}
+                        this->closer.set_value_at_thread_exit(true);
 
-        //Sets Y, doesn't resize window
-        void setY(int nY) {y=nY;}
+                        glutMainLoop();
+                        return 0;
+                    }
+                );
 
-        //Accessors
-        //----------------------------------
+                openWindow.launch(0);
+                return &isFinished;
+            }
 
-        //Gets window width
-        int getX(){return x;}
+            //Mutators
+            //----------------------------------
 
-        //Gets window height
-        int getY(){return y;}
+            //Sets X, doesn't resize window
+            void setX(int nX) {x=nX;}
 
-        //Gets window ID (OpenGL name)
-        GLuint getWindowID(){return windowID;}
+            //Sets Y, doesn't resize window
+            void setY(int nY) {y=nY;}
+
+            //Accessors
+            //----------------------------------
+
+            //Gets window width
+            int getX(){return x;}
+
+            //Gets window height
+            int getY(){return y;}
+
+            //Gets window ID (OpenGL name)
+            GLuint getWindowID(){return windowID;}
+
+    };
 
 };
 #endif

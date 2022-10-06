@@ -13,157 +13,159 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef DEGREES_H
 #define DEGREES_H
 
-//Degrees: Angles, Primitive
-//Helper class to contain degrees. Designed to allow orientability.
-//Bounded between [0,360)
-class Degrees : public Angle
+namespace SBE
 {
-    private:
-        double theta;
-    public:
-        //Constructors
-        //----------------------------------
-        Degrees()
-        {
-            setDegrees(0);
-        }
-        Degrees(double theta2)
-        {
-            setDegrees(theta2);
-        }
-
-        //Accessors
-        //----------------------------------
-        //Gets degrees as a double;
-        double get()
-        {
-            return theta;
-        }
-
-        //Mutators
-        //----------------------------------
-
-        //Sets degrees from a double;
-        //Bounded by 360, resets when above;
-        void setDegrees(double theta2)
-        {
-            theta=fmod(theta2, 360);
-            if(theta<0)
-            {   
-                theta+=360;
+    //Degrees: Angles, Primitive
+    //Helper class to contain degrees. Designed to allow orientability.
+    //Bounded between [0,360)
+    class Degrees : public Angle
+    {
+        private:
+            double theta;
+        public:
+            //Constructors
+            //----------------------------------
+            Degrees()
+            {
+                setDegrees(0);
             }
-        }
-        
-        //Operators
-        //----------------------------------
+            Degrees(double theta2)
+            {
+                setDegrees(theta2);
+            }
 
-        //Adding
-        Degrees operator+(Degrees rhs)
-        {
-            return Degrees(this->get()+rhs.get());
-        }
-        Degrees operator+(double rhs)
-        {
-            return Degrees(this->get()+rhs);
-        }
+            //Accessors
+            //----------------------------------
+            //Gets degrees as a double;
+            double get()
+            {
+                return theta;
+            }
 
-        //Subtracting
-        Degrees operator-(Degrees rhs)
-        {
-            return Degrees(this->get()-rhs.get());
-        }
-        Degrees operator-(double rhs)
-        {
-            return Degrees(this->get()-rhs);
-        }
+            //Mutators
+            //----------------------------------
 
-        //Multiplying
-        Degrees operator*(Degrees rhs)
-        {
-            return Degrees(this->get()*rhs.get());
-        }
-        Degrees operator*(double rhs)
-        {
-            return Degrees(this->get()*rhs);
-        }
+            //Sets degrees from a double;
+            //Bounded by 360, resets when above;
+            void setDegrees(double theta2)
+            {
+                theta=fmod(theta2, 360);
+                if(theta<0)
+                {   
+                    theta+=360;
+                }
+            }
+            
+            //Operators
+            //----------------------------------
 
-        //Dividing
-        Degrees operator/(Degrees rhs)
-        {
-            return Degrees(this->get()/rhs.get());
-        }
-        Degrees operator/(double rhs)
-        {
-            return Degrees(this->get()/rhs);
-        }
+            //Adding
+            Degrees operator+(Degrees rhs)
+            {
+                return Degrees(this->get()+rhs.get());
+            }
+            Degrees operator+(double rhs)
+            {
+                return Degrees(this->get()+rhs);
+            }
 
-        //Equal
-        bool operator==(Degrees rhs)
-        {
-            return (this->get()==rhs.get());
-        }
-        bool operator==(double rhs)
-        {
-            return (this->get()==rhs);
-        }
+            //Subtracting
+            Degrees operator-(Degrees rhs)
+            {
+                return Degrees(this->get()-rhs.get());
+            }
+            Degrees operator-(double rhs)
+            {
+                return Degrees(this->get()-rhs);
+            }
 
-        //Not Equal
-        bool operator!=(Degrees rhs)
-        {
-            return !((*this)==rhs);
-        }
-        bool operator!=(double rhs)
-        {
-            return !((*this)==rhs);
-        }
+            //Multiplying
+            Degrees operator*(Degrees rhs)
+            {
+                return Degrees(this->get()*rhs.get());
+            }
+            Degrees operator*(double rhs)
+            {
+                return Degrees(this->get()*rhs);
+            }
 
-        //Assignment
-        void operator=(double rhs)
-        {
-            this->setDegrees(rhs);
-        }
+            //Dividing
+            Degrees operator/(Degrees rhs)
+            {
+                return Degrees(this->get()/rhs.get());
+            }
+            Degrees operator/(double rhs)
+            {
+                return Degrees(this->get()/rhs);
+            }
 
-        //Direct modification
+            //Equal
+            bool operator==(Degrees rhs)
+            {
+                return (this->get()==rhs.get());
+            }
+            bool operator==(double rhs)
+            {
+                return (this->get()==rhs);
+            }
 
-        //+= operators
-        void operator+=(Degrees rhs)
-        {
-            this->setDegrees( ((*this)+rhs).get() );
-        }
-        void operator+=(double rhs)
-        {
-            this->setDegrees( ((*this)+rhs).get() );
-        }
+            //Not Equal
+            bool operator!=(Degrees rhs)
+            {
+                return !((*this)==rhs);
+            }
+            bool operator!=(double rhs)
+            {
+                return !((*this)==rhs);
+            }
 
-        //-= operators
-        void operator-=(Degrees rhs)
-        {
-            this->setDegrees( ((*this)-rhs).get() );
-        }
-        void operator-=(double rhs)
-        {
-            this->setDegrees( ((*this)-rhs).get() );
-        }
+            //Assignment
+            void operator=(double rhs)
+            {
+                this->setDegrees(rhs);
+            }
 
-        //*= operators
-        void operator*=(Degrees rhs)
-        {
-            this->setDegrees( ((*this)*rhs).get() );
-        }
-        void operator*=(double rhs)
-        {
-            this->setDegrees( ((*this)*rhs).get() );
-        }
+            //Direct modification
 
-        // /= operators
-        void operator/=(Degrees rhs)
-        {
-            this->setDegrees( ((*this)/rhs).get() );
-        }
-        void operator/=(double rhs)
-        {
-            this->setDegrees( ((*this)/rhs).get() );
-        }
+            //+= operators
+            void operator+=(Degrees rhs)
+            {
+                this->setDegrees( ((*this)+rhs).get() );
+            }
+            void operator+=(double rhs)
+            {
+                this->setDegrees( ((*this)+rhs).get() );
+            }
+
+            //-= operators
+            void operator-=(Degrees rhs)
+            {
+                this->setDegrees( ((*this)-rhs).get() );
+            }
+            void operator-=(double rhs)
+            {
+                this->setDegrees( ((*this)-rhs).get() );
+            }
+
+            //*= operators
+            void operator*=(Degrees rhs)
+            {
+                this->setDegrees( ((*this)*rhs).get() );
+            }
+            void operator*=(double rhs)
+            {
+                this->setDegrees( ((*this)*rhs).get() );
+            }
+
+            // /= operators
+            void operator/=(Degrees rhs)
+            {
+                this->setDegrees( ((*this)/rhs).get() );
+            }
+            void operator/=(double rhs)
+            {
+                this->setDegrees( ((*this)/rhs).get() );
+            }
+    };
 };
-
 #endif

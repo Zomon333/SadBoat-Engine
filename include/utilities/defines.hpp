@@ -17,6 +17,7 @@ using namespace std;
 
 //  Engine specific defines
 //----------------------------------
+namespace SBE {};
 
 //Shorthand lambda function body
 #define F(a...) [](a...)

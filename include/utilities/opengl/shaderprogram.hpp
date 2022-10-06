@@ -16,13 +16,15 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include <cmath>
 
-class ShaderProgram
+namespace SBE
 {
-    private:
+    class ShaderProgram
+    {
+        private:
 
 
-    public:
-        
+        public:
+            
+    };
 };
-
 #endif

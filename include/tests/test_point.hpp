@@ -18,6 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../primitives/point.hpp"
 
 using namespace std;
+using namespace SBE;
 
 TEST_CASE("Constructor test","[point]")
 {

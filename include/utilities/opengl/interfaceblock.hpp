@@ -16,13 +16,16 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include <cmath>
 
-class InterfaceBlock
+namespace SBE
 {
-    private:
+    class InterfaceBlock
+    {
+        private:
 
 
-    public:
-        
+        public:
+            
+    };
+    
 };
-
 #endif

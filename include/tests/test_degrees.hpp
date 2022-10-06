@@ -18,6 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../primitives/angles/degrees.hpp"
 
 using namespace std;
+using namespace SBE;
 
 #define degrees_suite "[degrees]"
 

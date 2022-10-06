@@ -21,6 +21,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <stack>
 
 using namespace std;
+using namespace SBE;
 
 #define test_timed_event "[TimedEvent]"
 

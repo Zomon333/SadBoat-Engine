@@ -16,9 +16,11 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include <utility>
 #include <variant>
 
-class UVector
+namespace SBE
 {
+    class UVector
+    {
 
-};
-
+    };
+}
 #endif

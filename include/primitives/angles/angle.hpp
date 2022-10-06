@@ -13,24 +13,27 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef ANGLE_H
 #define ANGLE_H
 
-//  Abstract class for inheritance reasons
-//  Does nothing.
-//----------------------------------
-class Angle
+namespace SBE
 {
-    public:
-        enum ATYPE
-        {
-            RADIANS,
-            DEGREES
-        };
-        
-        ATYPE getUnit() { return unit; }
-        void setUnit(ATYPE unit2) { unit=unit2; }
-        virtual double get() = 0;
+    //  Abstract class for inheritance reasons
+    //  Does nothing.
+    //----------------------------------
+    class Angle
+    {
+        public:
+            enum ATYPE
+            {
+                RADIANS,
+                DEGREES
+            };
+            
+            ATYPE getUnit() { return unit; }
+            void setUnit(ATYPE unit2) { unit=unit2; }
+            virtual double get() = 0;
 
-    private:
-        ATYPE unit;
-};
+        private:
+            ATYPE unit;
+    };
+}
 
 #endif

@@ -15,71 +15,73 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
-class VarGroup
+namespace SBE
 {
-private:
-    unordered_map<int, any> backing; 
-
-public:
-
-    //  Constructors
-    //----------------------------------
-
-    VarGroup();
-    VarGroup(int addr, any val)
+    class VarGroup
     {
-        backing[addr]=val;
-    }
-    VarGroup(pair<int, any> pairing)
-    {
-        backing[pairing.first]=pairing.second;
-    }
+    private:
+        unordered_map<int, any> backing; 
 
-    template <class type>
-    VarGroup(void* addr)
-    {
-        backing[((long long uint)(addr))]=(type)(*addr);
-    }
+    public:
 
-    //  Mutators
-    //----------------------------------
+        //  Constructors
+        //----------------------------------
 
-    void add(int addr, any val)
-    {
-        backing[addr]=val;
-    }
+        VarGroup();
+        VarGroup(int addr, any val)
+        {
+            backing[addr]=val;
+        }
+        VarGroup(pair<int, any> pairing)
+        {
+            backing[pairing.first]=pairing.second;
+        }
 
-    void add(pair<int, any> pairing)
-    {
-        backing[pairing.first]=pairing.second;
-    }
+        template <class type>
+        VarGroup(void* addr)
+        {
+            backing[((long long uint)(addr))]=(type)(*addr);
+        }
 
-    template <class type>
-    void add(void* addr)
-    {
-        backing[((long long uint)(addr))]=(type)(*addr);
-    }
+        //  Mutators
+        //----------------------------------
 
-    void remove(void* addr)
-    {
-        backing[((long long uint)(addr))]=0;
-    }
-    void remove(int addr)
-    {
-        backing[addr]=0;
-    }
+        void add(int addr, any val)
+        {
+            backing[addr]=val;
+        }
 
-    //  Accessors
-    //----------------------------------
+        void add(pair<int, any> pairing)
+        {
+            backing[pairing.first]=pairing.second;
+        }
 
-    any get(void* addr)
-    {
-        return backing[((long long uint)(addr))];
-    }
-    any get(int addr)
-    {
-        return backing[addr];
-    }
+        template <class type>
+        void add(void* addr)
+        {
+            backing[((long long uint)(addr))]=(type)(*addr);
+        }
+
+        void remove(void* addr)
+        {
+            backing[((long long uint)(addr))]=0;
+        }
+        void remove(int addr)
+        {
+            backing[addr]=0;
+        }
+
+        //  Accessors
+        //----------------------------------
+
+        any get(void* addr)
+        {
+            return backing[((long long uint)(addr))];
+        }
+        any get(int addr)
+        {
+            return backing[addr];
+        }
+    };
 };
-
 #endif

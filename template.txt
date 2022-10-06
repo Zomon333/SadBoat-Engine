@@ -17,13 +17,15 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 using namespace std;
 
-class SomeClass : public Inheritance
+namespace SBE
 {
-private:
-    
+    class SomeClass : public Inheritance
+    {
+    private:
+        
 
-public:
-    
+    public:
+        
+    };
 };
-
 #endif

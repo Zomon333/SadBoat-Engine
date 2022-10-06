@@ -18,6 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../primitives/tolerance.hpp"
 
 using namespace std;
+using namespace SBE;
 
 #define tolerance_suite "[tolerance]"
 

@@ -13,83 +13,85 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TOL_H
 #define TOL_H
 
-//Tolerance: Primitive
-//Class for adding an error rate to a value
-//Holds origin and error, uses Range to verify:
-// (Origin-Error) <= input <= (Origin+Error)
-class Tolerance
+namespace SBE
 {
-private:
-    double error;
-    double origin;
-    Range buffer;
-
-public:
-    //  Constructors
-    //----------------------------------
-
-    Tolerance()
+    //Tolerance: Primitive
+    //Class for adding an error rate to a value
+    //Holds origin and error, uses Range to verify:
+    // (Origin-Error) <= input <= (Origin+Error)
+    class Tolerance
     {
-        origin=0;
-        error=0.000001;
-        double min, max;
-        min=origin-error;
-        max=origin+error;
-        buffer= Range(min, max);
-    }
-    Tolerance(double origin, double error)
-    {
-        this->origin=origin;
-        this->error=error;
-        double min, max;
-        min=origin-error;
-        max=origin+error;
-        buffer= Range(min, max);
-    }
+    private:
+        double error;
+        double origin;
+        Range buffer;
 
-    //  Mutators
-    //----------------------------------
-    
-    void setError(double error2)
-    {
-        error=error2;
-    }
+    public:
+        //  Constructors
+        //----------------------------------
 
-    void setOrigin(double origin2)
-    {
-        //May need changing, tbd
-        origin=origin2;
-        double min, max;
-        min=origin-error;
-        max=origin+error;
-        buffer= Range(min, max);
-    }
+        Tolerance()
+        {
+            origin=0;
+            error=0.000001;
+            double min, max;
+            min=origin-error;
+            max=origin+error;
+            buffer= Range(min, max);
+        }
+        Tolerance(double origin, double error)
+        {
+            this->origin=origin;
+            this->error=error;
+            double min, max;
+            min=origin-error;
+            max=origin+error;
+            buffer= Range(min, max);
+        }
 
-    //  Accessors
-    //----------------------------------
-    
-    double getError()
-    {
-        return error;
-    }
+        //  Mutators
+        //----------------------------------
+        
+        void setError(double error2)
+        {
+            error=error2;
+        }
 
-    double getOrigin()
-    {
-        return origin;
-    }
+        void setOrigin(double origin2)
+        {
+            //May need changing, tbd
+            origin=origin2;
+            double min, max;
+            min=origin-error;
+            max=origin+error;
+            buffer= Range(min, max);
+        }
 
-    //  inTolerance and op[]
-    //----------------------------------    
-    
-    bool inTolerance(double test)
-    {
-        return (buffer[test] || buffer.onBounds(test));
-    }
+        //  Accessors
+        //----------------------------------
+        
+        double getError()
+        {
+            return error;
+        }
 
-    bool operator[](double test)
-    {
-        return inTolerance(test);
-    }
+        double getOrigin()
+        {
+            return origin;
+        }
+
+        //  inTolerance and op[]
+        //----------------------------------    
+        
+        bool inTolerance(double test)
+        {
+            return (buffer[test] || buffer.onBounds(test));
+        }
+
+        bool operator[](double test)
+        {
+            return inTolerance(test);
+        }
+    };
 };
-
 #endif

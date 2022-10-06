@@ -15,14 +15,15 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include <utility>
 #include <cmath>
-
-class Uniform
+namespace SBE
 {
-    private:
+    class Uniform
+    {
+        private:
 
 
-    public:
-        
+        public:
+            
+    };
 };
-
 #endif

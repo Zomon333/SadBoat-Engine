@@ -26,6 +26,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../events/event.hpp"
 
 using namespace std;
+using namespace SBE;
 
 #define event_suite "[events]"
 

@@ -33,10 +33,10 @@ Disclaimer:
 //  It's all you need to get started.
 //
 //----------------------------------
-#include "../include/sb-engine.hpp"
-
+#include "sb-engine.hpp"
 
 using namespace std;
+using namespace SBE;
 
 
 //----------------------------------
@@ -113,7 +113,9 @@ int main(int argc, char* argv[])
     //Open initialized window. open() returns reference to current window status.                    
     auto windowStatus = engineWindow.open();
 
-    
+
+
+
 
     TimedEvent<int, int> ender(
         F(int a)

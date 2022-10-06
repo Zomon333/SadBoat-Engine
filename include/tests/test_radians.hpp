@@ -18,6 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../primitives/angles/radians.hpp"
 
 using namespace std;
+using namespace SBE;
 
 TEST_CASE("Radians constructor & get test","[radians]")
 {

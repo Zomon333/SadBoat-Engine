@@ -13,86 +13,88 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef RANGE_H
 #define RANGE_H
 
-//Range:    Primitive
-//Class for storing min/max as double
-//Overloaded for boolean operations using [ ]
-class Range
+namespace SBE
 {
-private:
-    double min, max;
+    //Range:    Primitive
+    //Class for storing min/max as double
+    //Overloaded for boolean operations using [ ]
+    class Range
+    {
+    private:
+        double min, max;
 
-public:
-    //Constructors
-    //----------------------------------
-    Range()
-    {
-        setRange(0,0);
-    }
-    Range(double min, double max) : Range()
-    {
-        setRange(min,max);
-    }
+    public:
+        //Constructors
+        //----------------------------------
+        Range()
+        {
+            setRange(0,0);
+        }
+        Range(double min, double max) : Range()
+        {
+            setRange(min,max);
+        }
 
-    //Mutators
-    //----------------------------------    
-    void setRange(std::pair<double, double> toSet)
-    {
-        this->min = toSet.first;
-        this->max = toSet.second;
-    }
-    void setRange(double min, double max)
-    {
-        this->min = min;
-        this->max = max;
-    }
+        //Mutators
+        //----------------------------------    
+        void setRange(std::pair<double, double> toSet)
+        {
+            this->min = toSet.first;
+            this->max = toSet.second;
+        }
+        void setRange(double min, double max)
+        {
+            this->min = min;
+            this->max = max;
+        }
 
-    //Accessor
-    //----------------------------------
-    double getSpan()
-    {
-        return (max - min);
-    }    
-    double getMin() { return min; }
-    double getMax() { return max; }
+        //Accessor
+        //----------------------------------
+        double getSpan()
+        {
+            return (max - min);
+        }    
+        double getMin() { return min; }
+        double getMax() { return max; }
 
-    //Collision Logic
-    //----------------------------------
-    bool inRange(double toCheck)
-    {
-        return (toCheck>min && toCheck<max);
-    }
-    bool onBounds(double toCheck)
-    {
-        return (toCheck==min || toCheck==max);
-    }
-    bool outBounds(double toCheck)
-    {
-        return (!inRange(toCheck) && !onBounds(toCheck));
-    }
+        //Collision Logic
+        //----------------------------------
+        bool inRange(double toCheck)
+        {
+            return (toCheck>min && toCheck<max);
+        }
+        bool onBounds(double toCheck)
+        {
+            return (toCheck==min || toCheck==max);
+        }
+        bool outBounds(double toCheck)
+        {
+            return (!inRange(toCheck) && !onBounds(toCheck));
+        }
 
-    //Equivalence Operators
-    //----------------------------------    
-    bool operator==(Range rhs)
-    {
-        //Add tolerance
-        if(this->min == rhs.min && this-> max == rhs.max)
-        return true;
-        return false;
-    }
+        //Equivalence Operators
+        //----------------------------------    
+        bool operator==(Range rhs)
+        {
+            //Add tolerance
+            if(this->min == rhs.min && this-> max == rhs.max)
+            return true;
+            return false;
+        }
 
-    bool operator!=(Range rhs)
-    {
-        if(*this == rhs)
-        return false;
-        return true;
+        bool operator!=(Range rhs)
+        {
+            if(*this == rhs)
+            return false;
+            return true;
 
-    }
+        }
 
-    bool operator[](double rhs)
-    {
-        return (inRange(rhs) || onBounds(rhs));
-    }
+        bool operator[](double rhs)
+        {
+            return (inRange(rhs) || onBounds(rhs));
+        }
 
+    };
 };
-
 #endif

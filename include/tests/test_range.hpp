@@ -18,6 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "../primitives/range.hpp"
 
 using namespace std;
+using namespace SBE;
 
 TEST_CASE("inRange test for Range","[range]")
 {
