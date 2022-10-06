@@ -15,10 +15,10 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include "sb-engine.hpp"
 
+using namespace std;
+
 namespace SBE
 {
-    using namespace std;
-
     Event<int,int> displayCallback(F(int a){return a;});
     void display()
     {
@@ -138,6 +138,5 @@ namespace SBE
             GLuint getWindowID(){return windowID;}
 
     };
-
 };
 #endif
