@@ -21,7 +21,6 @@ using namespace std;
 
 namespace SBE
 {
-    template <class Data>
     class VAO
     {
         private:
@@ -67,10 +66,10 @@ namespace SBE
                 GL_DYNAMIC_COPY                         Dynamic: Modified many, used many.  Copy: Modified by OpenGL, used by OpenGL.
             */
 
-            Data* mappedData;
+            double* mappedData;
             bool mapped;
 
-            const Event<int, int> noEvent = Event<int, int>(
+            const Event<int, int>* noEvent = new Event<int, int>(
                 lF(int a)
                 {
                     return a;
@@ -79,7 +78,7 @@ namespace SBE
 
             Event<int, int>* current;
 
-            void copyInto(vector<Data> toCopy)
+            void copyInto(vector<double> toCopy)
             {
                 (*mappedData) = (*(toCopy.data()));
             }
@@ -91,7 +90,7 @@ namespace SBE
             //Create a new VAO of GL_ARRAY_BUFFER, GL_STATIC_DRAW type.
             VAO()
             {
-                this->current = &noEvent;
+                this->current = (SBE::Event<int,int>*)(void*)(noEvent);
 
                 //Get a name that is not in use
                 glGenVertexArrays(1, &index);
@@ -127,8 +126,6 @@ namespace SBE
                 glDeleteVertexArrays(1, &index);
             }
 
-            
-
             //Accessors
             //----------------------------------
 
@@ -139,7 +136,7 @@ namespace SBE
             }
 
             //Return a pointer to the mapped data.
-            Data* getMap() 
+            double* getMap() 
             {
                 return mappedData;
             }
@@ -154,73 +151,114 @@ namespace SBE
 
             //Mutators
             //----------------------------------
+            
+            
+            //  SOME OPENGL CAVEATS
+            //----------------------------------
+            //  OpenGL was originally made in the early 90s; far before CPUs had actual proper multithreading capabilities.
+            //  Because of this, OpenGL *assumes you are performing all of your operations on a single thread.*
+            //  This, obviously, throws MANY errors if you try and multithread it. So I've created a workaround;
+            //      Because all functions that access OpenGL data need to be in the same thread, we need to have ways to transfer function calls between threads.
+            //      There are systems for this in C++, but they can be a little problematic. Namely, because it would overwrite the OpenGL thread and crash us.
+            //      So instead of overwriting, deleting, or whatever-ing the other thread; how about we just store the function call?
+            //      Events allow us to store functions as variables. And, importantly, because they are variables we can modify them.
+            //      I've added operations to events to allow us to *directly add events*, so we can make a queue of processes.
+            //      (In our backend, this is stored as one single event that gets dynamically manipulated during runtime with copies and pointers.)
+            //      
+            //----------------------------------
 
             //Map the data to the given range.
             void map(Range toMap)
             {
-                if(!mapped)
-                {
-                    mappedData = glMapBufferRange(
-                        target,
-                        (toMap.getMin()*sizeof(Data)),    
-                        (toMap.getMax()*sizeof(Data))+1,
-                        GL_MAP_UNSYNCHRONIZED_BIT
-                    );
-                    mapped=!mapped;
-                }
-            }
-
-            void test()
-            {
-                Event<int,int>* tempEvent = new Event<int, int>(F(int a){return (a+1);});
-                *(this->current) += tempEvent;
+                Event<int, int>* toQueue = new Event<int, int>(
+                    [this, &toMap](int a)
+                    {
+                        if(!this->mapped)
+                        {
+                            this->mappedData = (double*)(glMapBufferRange(
+                                this->target,
+                                (toMap.getMin()*sizeof(double)),    
+                                (toMap.getMax()*sizeof(double))+1,
+                                GL_MAP_UNSYNCHRONIZED_BIT
+                            ));
+                            this->mapped=!this->mapped;
+                        }
+                        return a;
+                    }
+                );
+                *current += toQueue;
+                
             }
 
             //Map all of the data.
             void map()
             {
-                if(!mapped)
-                {
-                    mappedData = glMapBuffer(target, GL_READ_WRITE);
-                    mapped=!mapped;
-                }
+                Event<int, int>* toQueue = new Event<int, int>(
+                    lF(int a)
+                    {
+                        if(!this->mapped)
+                        {
+                            this->mappedData = (double*)(glMapBuffer(this->target, GL_READ_WRITE));
+                            this->mapped=!this->mapped;
+                        }
+                        return a;
+                    }
+                );
+                *current += toQueue;
             }   
 
             //Unmap the data from the given range.
             void unmap(Range toUnmap)
             {
-                if(mapped)
-                {
-                    glFlushMappedBufferRange(
-                        target,
-                        (mappedData+(toUnmap.getMin()*sizeof(Data))),
-                        (mappedData+(toUnmap.getMax()*sizeof(Data))+1)
-                    );
-                    mapped=!mapped;
-                }
+                Event<int, int>* toQueue = new Event<int, int>(
+                    [this, &toUnmap](int a)
+                    {
+                        if(this->mapped)
+                        {
+                            glFlushMappedBufferRange(
+                                this->target,
+                                (*this->mappedData+(toUnmap.getMin()*sizeof(double))),
+                                (*this->mappedData+(toUnmap.getMax()*sizeof(double))+1)
+                            );
+                            this->mapped=!this->mapped;
+                        }
+                        return a;
+                    }
+                );
+
+                *current += toQueue;
+
             }
 
             //Unmap all of the data.
             void unmap()
             {
-                if(mapped)
-                {
-                    glUnmapBuffer(target);
-                    mapped=!mapped;
-                }
+                Event<int, int>* toQueue = new Event<int, int>(
+                    lF(int a)
+                    {
+                        if(this->mapped)
+                        {
+                            glUnmapBuffer(this->target);
+                            this->mapped=!this->mapped;
+                        }
+                        return a;
+                    }
+                );
+
+                *current += toQueue;
             }
 
             //Replace all of the data in the VAO with new data.
-            void update(vector<Data> newData)
+            void update(vector<double> newdouble)
             {
-                Event<int, int> toQueue(
-                    [this, &newData](int a)
+                Event<int, int>* toQueue = new Event<int,int>(
+                    [this, &newdouble](int a)
                     {
                         //Ask OpenGL to move all of the VAO into RAM instead of VRAM.
                         this->map();
 
                         //Copy the provided data on top of OpenGL's data.
-                        this->copyInto(newData);
+                        this->copyInto(newdouble);
 
                         //Ask OpenGL to move the data back into VRAM.
                         this->unmap();
@@ -229,23 +267,20 @@ namespace SBE
                     }
                 );
 
-                this->push(
-                    &toQueue
-                );
-                //this->queuedEvents.emplace(&toQueue);
+                *current += toQueue;
             }
 
             //Replace a range of the data in the VAO with new data.
-            void update(Range toUpdate, vector<Data> newData)
+            void update(Range toUpdate, vector<double> newdouble)
             {
-                Event<int, int> toQueue(
-                    [this, &toUpdate, &newData](int a)
+                Event<int, int>* toQueue = new Event<int, int>(
+                    [this, &toUpdate, &newdouble](int a)
                     {
                         //Ask OpenGL to move a range of it's VAO into RAM instead of VRAM.
                         map(toUpdate);
 
                         //Copy the provided data on top of OpenGL's data.
-                        copyInto(newData);
+                        copyInto(newdouble);
 
                         //Ask OpenGL to move the data back into VRAM.
                         unmap(toUpdate);
@@ -254,10 +289,7 @@ namespace SBE
                     }
                 );
 
-                this->push(
-                    &toQueue
-                );
-                //this->queuedEvents.emplace(&toQueue);
+                *current += toQueue;
             }
 
     };
