@@ -14,6 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define EVENT_H
 
 #include "utilities/defines.hpp"
+#include "sb-engine.hpp"
 
 namespace SBE
 {
@@ -107,32 +108,62 @@ namespace SBE
                 return function(params...);
             }
 
+            //  Operators
+            //----------------------------------
+
+            //Equivalence operator
+            //Copies the function of the given event into this event. Does not copy the call stack.
             void operator=(Event& rhs)
             {
                 this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(rhs.function));
             }
 
-            Event<Return, Parameters...>* operator+(Event<Return, Return> rhs)
+            //
+            //  Combines the two added events into a new event, where the 2nd operand is called as an event with the return of the 1st event.
+            //  C = A + B  --->  C(params) = B(  A(params)  );
+            //  
+            //  Because B is called with A's return, B must accept A's return as a parameter.
+            //
+            Event<Return, Parameters...>* operator+(Event<Return, Return>* rhs)
             {
                 return new Event<Return, Parameters...>(
                     [this, rhs](Parameters... params)
                     {
                         Return temp = this->operator()(params...);
-                        return rhs.operator()(temp);
+                        return rhs->operator()(temp);
                     }
                 );
             }
 
+
+            //
+            //  Performs event addition as described above. Sets the current event to the sum of the two events.
+            //
+            //  A += B  --->    A = A + B   --->    A(params) = B( A(params) );
+            //
             void operator+=(Event<Return, Return>* rhs)
             {
                 Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-                (*this) = *((*temp)+(*rhs));
+                (*this) = *((*temp)+(rhs));
             }
 
+            //
+            //  Performs event multiplication with an integer. Multiplication is repeated addition.
+            //  Multiplying by 0 returns an event which returns it's parameters. Multiplying by 1 returns the original event.
+            //  Returns the result of i-many additive cycles, creating a "looping" event.
+            //
+            //  A = B * 1   --->    A(params) = B(params);
+            //  A = B * 2   --->    A(params) = B( B(params) );
+            //  A = B * 3   --->    A(params) = B( B( B(params) ) );
+            //  A = B * n   --->    A(params) = B( B(... params));
+            //
             Event<Return, Return>* operator*(int i)
             {
+                if(i==1) return new Event<Return, Return>(*this);
                 Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-                Event<Return, Parameters...>* returnable = new Event<Return, Parameters...>(F(Parameters... params){return Return();});
+                
+                Event<Return, Return>* returnable = new Event<Return, Return>(F(Return params){return params;});
+                if(i==0) return returnable;
 
                 for(int j = i; j>0; j--)
                 {
@@ -142,6 +173,11 @@ namespace SBE
                 return returnable;
             }
 
+            //  
+            //  Performs a multiplication *and* an equivalence operator.
+            //  -Multiplication is repeated addition of itself to itself.
+            //  -Equivalence updates itself to it's new multiplied value once the operation is done.
+            //
             void operator*=(int i)
             {
                 Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
