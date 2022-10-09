@@ -184,17 +184,32 @@ namespace SBE
             //
             Event<Return, Return>* operator*(int i)
             {
-                if(i==1) return new Event<Return, Return>(*this);
-                Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-                
-                Event<Return, Return>* returnable = new Event<Return, Return>(F(Return params){return params;});
-                if(i==0) return returnable;
+                //Case: * 0, return empty event
+                if(i<=0) return new Event<Return, Return>(F(Return a){ return a;});
 
-                for(int j = i; j>0; j--)
-                {
-                    (*returnable)+=temp;
-                }
+                //Case: * 1, return self
+                if(i==1) return new Event<Return, Return>(*this);
+
+                //Case: * (>=2), must be at least 2.
+                int numLoops=2;
                 
+                Event<Return, Return>* returnable = new Event<Return,Return>(*this);
+                (*returnable) += new Event<Return, Return>(*this);
+
+                double numSquares = floor(log10(i)/log10(2));
+                while(numSquares>1)
+                {
+                    (*returnable) += new Event<Return, Return>(*returnable);
+                    numLoops*=2;
+                    numSquares--;
+                }
+
+                while(numLoops<i)
+                {
+                    (*returnable) += new Event<Return, Return>(*this);
+                    numLoops++;
+                }
+
                 return returnable;
             }
 
