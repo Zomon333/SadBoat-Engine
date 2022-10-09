@@ -101,53 +101,56 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
 
-
-    VkResult test;
-    VkInstanceCreateInfo pCreateInfo;
-
-    VkInstance pInstance;
-
-    pCreateInfo.sType=VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    pCreateInfo.pNext=nullptr;
-    pCreateInfo.flags=0;
-
-    VkApplicationInfo pApplicationInfo;
-    pApplicationInfo.sType=VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    pApplicationInfo.pNext=nullptr;
-    pApplicationInfo.pApplicationName="SadBoat Engine";
-    pApplicationInfo.applicationVersion=VK_API_VERSION_1_0;
-    pApplicationInfo.pEngineName="SadBoat Engine";
-    pApplicationInfo.engineVersion=1;
-
-    pCreateInfo.pApplicationInfo = &pApplicationInfo;
-    pCreateInfo.enabledLayerCount=0;
-    pCreateInfo.ppEnabledLayerNames=nullptr;
-    pCreateInfo.enabledExtensionCount=0;
-    pCreateInfo.ppEnabledExtensionNames=nullptr;
-
-
-    test = vkCreateInstance(&pCreateInfo, nullptr, &pInstance);
-
-
-    //A timed event set to end after 2 seconds.
-    SBE::TimedEvent<int, int> ender(
-        F(int a)
-        {
-            return a;
-        },
-        steady_clock::now() + seconds(2)
-    );
-    ender.defer(0);
-
-    std::cout<<"\nClosing engine.\nYou can safely ignore any segfaults or graphics errors after this point.\n";
     
-    int i = 100;
-    while(i>0)
+    rapidxml::xml_document<> document;
+    rapidxml::xml_node<>* root;
+
+    ifstream testData("./config/test_xml.xml");
+
+    vector<char> buffer((istreambuf_iterator<char>(testData)),istreambuf_iterator<char>());
+    buffer.push_back('\0');
+
+    document.parse<0>(&buffer[0]);
+    root = document.first_node("QuotesList");
+    
+    auto Fishing = root->first_node("Fishing");
+    auto Real = root->first_node("Real");
+
+    cout<<"Fishing Quotes: "<<endl;
+    for(int i = 0; i<50; i++) 
     {
         cout<<"-";
-        i--;
+    }
+    cout<<endl;
+    
+    //For some node "quote" as a child of Fishing
+    //  Where quote exists and is not a nullptr, do some thing
+    //  And move to it's sibling
+    for(rapidxml::xml_node<>* quote = Fishing->first_node("Quote"); quote; quote=quote->next_sibling())
+    {
+        cout<<quote->value()<<endl;
+    }
+
+    cout<<"\n\nReal Quotes: "<<endl;
+    for(int i = 0; i<50; i++) 
+    {
+        cout<<"-";
     }
     cout<<endl;
 
-    return ender.getResult();
+    //For some node "quote" as a child of Real
+    //  Where quote exists and is not a nullptr, do some thing
+    //  And move to it's sibling.
+    for(rapidxml::xml_node<>* quote = Real->first_node("Quote"); quote; quote=quote->next_sibling())
+    {
+        cout<<quote->value()<<endl;
+    }
+
+
+
+
+
+    
+
+    return 0;
 }
