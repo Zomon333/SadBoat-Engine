@@ -77,11 +77,10 @@ Disclaimer:
 
 //  Utility Includes
 //----------------------------------
-#include "../include/utilities/vargroup.hpp"
+#include "utilities/rapidxml-1.13/rapidxml.hpp" //RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
 
 //  Physics Includes
 //----------------------------------
-#include "../include/vectors/vector.hpp"
 
 /*
 ---------------------------------------------------------------------------------------------------------------------
@@ -89,14 +88,6 @@ Disclaimer:
 ---------------------------------------------------------------------------------------------------------------------
 */
 #include "./vulkan/vulkan.hpp"
-
-
-//RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
-#include "utilities/rapidxml-1.13/rapidxml.hpp"
-
-#include "utilities/rapidxml-1.13/rapidxml_print.hpp"
-#include "utilities/rapidxml-1.13/rapidxml_utils.hpp"
-//#include "utilities/rapidxml-1.13/rapidxml_iterators.hpp"
 
 
 /*
