@@ -14,4 +14,4 @@
 
 ### Extra Resources  
 
-[Last](https://www.github.com/Zomon333/SadBoat-Engine/tree/Linux-Refactor/docs/2-utilities/defines.md) --- [Next](https://www.github.com/Zomon333/SadBoat-Engine/tree/Linux-Refactor/docs/3-primitives/range.md)
+[Last](https://github.com/Zomon333/SadBoat-Engine/blob/Linux-Refactor/docs/1-introduction/table-of-contents.md) --- [Next](https://www.github.com/Zomon333/SadBoat-Engine/tree/Linux-Refactor/docs/3-primitives/range.md)
