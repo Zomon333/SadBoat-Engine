@@ -101,11 +101,12 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
 
+
     
     rapidxml::xml_document<> document;
     rapidxml::xml_node<>* root;
 
-    ifstream testData("./config/test_xml.xml");
+    ifstream testData("./config/quotes.xml");
 
     vector<char> buffer((istreambuf_iterator<char>(testData)),istreambuf_iterator<char>());
     buffer.push_back('\0');
@@ -145,7 +146,6 @@ int main(int argc, char* argv[])
     {
         cout<<quote->value()<<endl;
     }
-
 
 
 
