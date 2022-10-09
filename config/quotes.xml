@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <QuotesList>
     <Fishing>
-        <Quote>There once was a man from nantucket.</Quote>
-        <Quote>Who fell asleep in a bucket.</Quote>
-        <Quote>He woke up in a fright in the middle of the night...</Quote>
+        <Quote>There once was a man from nantucket.                         </Quote>
+        <Quote>Who fell asleep in a bucket.                                 </Quote>
+        <Quote>He woke up in a fright in the middle of the night...         </Quote>
     </Fishing>
     <Real>
-        <Quote>The king has stolen your laundry.</Quote>
-        <Quote>There's a snake in my boot!</Quote>
-        <Quote>The rook is the horse one.</Quote>
+        <Quote>The king has stolen your laundry.                            </Quote>
+        <Quote>There's a snake in my boot!                                  </Quote>
+        <Quote>The rook is the horse one.                                   </Quote>
     </Real>
 </QuotesList>
