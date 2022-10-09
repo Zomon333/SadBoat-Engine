@@ -83,7 +83,6 @@ Disclaimer:
 //----------------------------------
 #include "../include/vectors/vector.hpp"
 
-
 /*
 ---------------------------------------------------------------------------------------------------------------------
     Vulkan Includes
@@ -91,6 +90,9 @@ Disclaimer:
 */
 #include "./vulkan/vulkan.hpp"
 
+
+//RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
+#include "utilities/rapidxml-1.13/rapidxml.hpp"
 
 
 /*
