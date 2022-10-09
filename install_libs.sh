@@ -9,35 +9,51 @@
 #------------------------------------------------------------------------------      
 #
 
-
 #
-#       mesa-common-dev
+#       Mesa
 #------------------------------------------------------------------------------
 #   This package contains:
-#      -An Open Source version of OpenGL. 
+#      -Mesa3D open source graphics library.
 #
-sudo apt-get install mesa-common-dev;
+
+sudo apt-get install mesa                               #Get the most recent Mesa
+sudo apt-get build-dep mesa                             #Update and get it's dependencies
+
+mkdir local-mesa                                        #Make a folder called local-mesa
+cd ./local-mesa                                         #Move into local-mesa
+
+wget https://archive.mesa3d.org//mesa-22.2.0.tar.xz     #Download our version of Mesa
+tar -xf ./mesa-22.2.0.tar.xz                            #Unzip it
+cd ./mesa-22.2.0.tar.xz                                 #Move into out version of Mesa
+
+mkdir build                                             #Make a build directory
+
+meson ./ ./build                                        #Generate ninja build files for that directory
+ninja -C ./build                                        #Build that directory
+sudo ninja -C ./build install                           #Install the built files
+
+cd ../..
+
+
 
 #
-#       freeglut3
+#       libvulkan-dev
 #------------------------------------------------------------------------------
 #   This package contains:
-#      -Freeglut: Free Open Source alternative to OpenGL Utility Toolkit.
+#      -Development headers for vulkan. 
 #
-sudo apt-get install freeglut3;
+sudo apt-get install libvulkan-dev
+
 
 #
-#       freeglut3-dev
+#       vulkan-tools, vulkan-validationlayers-dev, spirv-tools
 #------------------------------------------------------------------------------
 #   This package contains:
-#      -Some Freeglut developer packages for better linux support.
+#      -Tools to test your vulkan environment.
+#      -Debugging layers to test your vulkan development.
+#      -Required SPIR-V tools.
 #
-sudo apt-get install freeglut3-dev;
+sudo apt install vulkan-tools vulkan-validationlayers-dev spriv-tools
 
-#
-#	libglew-dev
-#------------------------------------------------------------------------------
-#    This package contains:
-#       -glew.h
-#
-sudo apt-get install libglew-dev;
+
+
