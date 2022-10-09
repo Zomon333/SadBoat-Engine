@@ -101,11 +101,32 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
 
-    
+
+    VkResult test;
+    VkInstanceCreateInfo pCreateInfo;
+
+    VkInstance pInstance;
+
+    pCreateInfo.sType=VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    pCreateInfo.pNext=nullptr;
+    pCreateInfo.flags=0;
+
+    VkApplicationInfo pApplicationInfo;
+    pApplicationInfo.sType=VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    pApplicationInfo.pNext=nullptr;
+    pApplicationInfo.pApplicationName="SadBoat Engine";
+    pApplicationInfo.applicationVersion=VK_API_VERSION_1_0;
+    pApplicationInfo.pEngineName="SadBoat Engine";
+    pApplicationInfo.engineVersion=1;
+
+    pCreateInfo.pApplicationInfo = &pApplicationInfo;
+    pCreateInfo.enabledLayerCount=0;
+    pCreateInfo.ppEnabledLayerNames=nullptr;
+    pCreateInfo.enabledExtensionCount=0;
+    pCreateInfo.ppEnabledExtensionNames=nullptr;
 
 
-
-
+    test = vkCreateInstance(&pCreateInfo, nullptr, &pInstance);
 
 
     //A timed event set to end after 2 seconds.
