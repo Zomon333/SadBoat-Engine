@@ -45,6 +45,7 @@ Disclaimer:
 #include <functional>
 #include <future>
 #include <iostream>
+#include <iomanip>
 #include <stack>
 #include <string>
 #include <thread>
@@ -78,26 +79,11 @@ Disclaimer:
 //----------------------------------
 #include "../include/utilities/vargroup.hpp"
 
-/*
----------------------------------------------------------------------------------------------------------------------
-This definition is used to determine whether or not we want to include our OpenGL classes for compilation.
-This exists in case you're trying to compile but don't have the libraries set up to link.
-This allows you to still write code; it just won't be included in compilation.
----------------------------------------------------------------------------------------------------------------------
-*/
-#include "/usr/include/GL/glew.h"
-#include "/usr/include/GL/gl.h"
-#include "/usr/include/GL/glu.h"
-#include "/usr/include/GL/freeglut.h"
+//  Physics Includes
+//----------------------------------
+#include "../include/vectors/vector.hpp"
 
-#include "../include/utilities/opengl/window.hpp"
-#include "../include/utilities/opengl/shader.hpp"
 
-#include "../include/utilities/opengl/vao.hpp"
-
-//#include "../include/utilities/opengl/uniform.hpp"
-//#include "../include/utilities/opengl/shaderprogram.hpp"
-//#include "../include/utilities/opengl/interfaceblock.hpp"
 
 
 /*
@@ -116,8 +102,6 @@ This is controlled through the makefile;
 
     #define CATCH_CONFIG_RUNNER
     #include "../include/utilities/catch.hpp"
-
-    
 
     // Test primitives
     //----------------------------------

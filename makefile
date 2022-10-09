@@ -1,17 +1,17 @@
 CC = g++
-FLAGS = -std=c++20 -ffreestanding -fpermissive
+FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
 
 DEFINES = 
 
 SOURCE_DIR = ./src
-INCLUDE_DIRS = "-I./include/" "-I/usr/include/GL"
+INCLUDE_DIRS = "-I./include/" "-I/usr/include/"
 OUT_DIR = ./output
 LIBRARY_DIR = "usr/include/GL"
 
 PRODUCTION_RELEASE = -DCONFIG_PROD
 TEST_RELEASE = -DCONFIG_TEST
 
-LIBS = "-lglut" "-lGL" "-lGLU" "-lGLEW"
+LIBS = 
 
 NAME = "SadBoatEngine-V"
 VERSION = "0.02.7V"

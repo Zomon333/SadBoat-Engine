@@ -35,6 +35,9 @@ namespace SBE
             
             //Predicts the future, somewhat
             std::stack<std::future<Return>> callStack;
+            
+            std::stack<std::jthread::id> idStack;
+            std::stack<std::jthread*> threadStack;
 
             std::packaged_task<Return(Parameters...)> copyPackage()
             {
@@ -79,8 +82,22 @@ namespace SBE
                 }
                 callStack.top().wait();
                 Return result = callStack.top().get();
+
                 callStack.pop();
+                idStack.pop();
+                threadStack.pop();
+
                 return result;
+            }
+
+            std::jthread::id getID()
+            {
+                return idStack.top();
+            }
+
+            std::jthread* getThread()
+            {
+                return threadStack.top();
             }
 
             //  Execution modes
@@ -97,6 +114,9 @@ namespace SBE
 
                 //Create a new thread and move the lambda function to it
                 std::jthread thread(std::move(task), params...);
+
+                idStack.emplace(thread.get_id());
+                threadStack.push(&thread);
 
                 //Be free, my child!
                 thread.detach();
@@ -135,7 +155,6 @@ namespace SBE
                 );
             }
 
-
             //
             //  Performs event addition as described above. Sets the current event to the sum of the two events.
             //
@@ -143,6 +162,12 @@ namespace SBE
             //
             void operator+=(Event<Return, Return>* rhs)
             {
+                if(this==nullptr)
+                {
+                    *this=*rhs;
+                    return;
+                }
+
                 Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
                 (*this) = *((*temp)+(rhs));
             }

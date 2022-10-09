@@ -38,6 +38,50 @@ Disclaimer:
 using namespace std;
 using namespace SBE;
 
+//A short test driver to determine window name and whether to boot Catch.
+string testSetup(int argc, char* argv[], string possibleName)
+{
+    //Declare an empty name.
+    string name = "";
+    int results;
+
+    //Write a long line for visual clarity.
+    int i = 100;
+    while(i>0)
+    {
+        cout<<"-";
+        i--;
+    }
+    cout<<endl;
+
+    
+    //This code only gets included into our program if we run "make" or "make prod" during compilation.
+    #ifdef CONFIG_PROD
+        cout<<"Launching engine...\n";
+        name = possibleName;
+    #endif
+
+    //This code only gets included into our program if we run "make test" during compilation.
+    #ifdef CONFIG_TEST
+        //If we ran the catch session, the results variable may change, indicating a failed test.
+        //Do not launch the game if the tests fail.
+
+        cout<<"Running tests...\n";
+        results = Catch::Session().run(argc, argv);
+        if(results!=0)
+        {
+            cout<<"Tests failed, engine aborting.\n";
+            throw new exception();
+        }
+
+        cout<<"Tests succeeded, engine launching.\n";
+        name = "Test Stage - ";
+        name+=possibleName;
+        
+    #endif
+
+    return name;
+}
 
 //----------------------------------
 //  main(int argc, char* argv[]) function:
@@ -48,78 +92,24 @@ using namespace SBE;
 //----------------------------------
 int main(int argc, char* argv[])
 {
-    int results = 0;
-    char* name;
+    //  Unit Test Setup
+    //----------------------------------
 
-    #ifdef CONFIG_PROD
-        cout<<"Launching engine...\n";
-        name = (char*)"SadBoat Engine";
-    #endif
+    //gameName: A constant identifier for what our game should be called.
+    const string gameName = "SadBoat Engine";
 
-    #ifdef CONFIG_TEST
-        //If we ran the catch session, the results variable may change, indicating a failed test.
-        //Do not launch the game if the tests fail.
-
-        cout<<"Running tests...\n";
-        results = Catch::Session().run(argc, argv);
-        if(results!=0)
-        {
-            cout<<"Tests failed, engine aborting.\n";
-            return results;
-        }
-
-        cout<<"Tests succeeded, engine launching.\n";
-        name = (char*)"SadBoat Engine Test Stage";
-    #endif
-    
-
-
-    VAO* testVAO;
-
-
-    //This event holds the initialization for Shaders
-    //It will be called during the Window startup sequence
-    Event<int, int> WindowInit(
-        [&testVAO](int a)
-        {
-            //  1) Declare all of your shaders
-            //--------------------------------------------------------------------
-
-            Shader vertexShader = Shader(GL_VERTEX_SHADER,      "shaders/vertex.glsl");
-            Shader fragmentShader = Shader(GL_FRAGMENT_SHADER,  "shaders/fragment.glsl");
-
-            //  2) Compile your shaders
-            //--------------------------------------------------------------------
-
-            vertexShader.make();
-            fragmentShader.make();
-
-            //  3) Link shaders into shader program
-            //--------------------------------------------------------------------
-
-            testVAO = new VAO();
-
-            return a;
-        }
-    );
-
-    Window engineWindow(    //Window: Initializes with properties...
-                            1920, 1080,                 //Width: 1920, Height: 1080
-                            &argc,                      //Parses argc as an argument.
-                            name,                       //Sets Window name as name.
-                            WindowInit               //ShaderHandler. Event to handle shader compilation.
-                        );
-
-    //Open initialized window. open() returns reference to current window status.                    
-    auto windowStatus = engineWindow.open();
-
-
-
-
+    //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
+    string name = testSetup(argc, argv, gameName);
 
     
 
-    TimedEvent<int, int> ender(
+
+
+
+
+
+    //A timed event set to end after 2 seconds.
+    SBE::TimedEvent<int, int> ender(
         F(int a)
         {
             return a;
@@ -127,6 +117,16 @@ int main(int argc, char* argv[])
         steady_clock::now() + seconds(2)
     );
     ender.defer(0);
+
+    std::cout<<"\nClosing engine.\nYou can safely ignore any segfaults or graphics errors after this point.\n";
+    
+    int i = 100;
+    while(i>0)
+    {
+        cout<<"-";
+        i--;
+    }
+    cout<<endl;
 
     return ender.getResult();
 }
