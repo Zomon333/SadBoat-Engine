@@ -4,14 +4,14 @@ FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
 DEFINES = 
 
 SOURCE_DIR = ./src
-INCLUDE_DIRS = "-I./include/" "-I/usr/include/"
+INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/"
 OUT_DIR = ./output
-LIBRARY_DIR = "usr/include/GL"
+LIBRARY_DIR = "usr/lib/x86_64-linux-gnu"
 
 PRODUCTION_RELEASE = -DCONFIG_PROD
 TEST_RELEASE = -DCONFIG_TEST
 
-LIBS = 
+LIBS = "-lvulkan"
 
 NAME = "SadBoatEngine-V"
 VERSION = "0.02.7V"
