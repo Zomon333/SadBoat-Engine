@@ -9,7 +9,7 @@ We've attempted to make our engine object oriented and not terribly difficult to
 
 ## Organization
 ---
-We've organized our document into a few smaller segments for ease of access;  
+We've organized our documentation into a few smaller segments for ease of access;  
 **Chapters** contain pages regarding a category of features.
 **Pages** contain information regarding a specific feature.
 **Page Sections** contain clarifications on specific engine features.
