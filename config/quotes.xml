@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <QuotesList>
     <Fishing>
-        <Quote>There once was a man from nantucket.                         </Quote>
-        <Quote>Who fell asleep in a bucket.                                 </Quote>
-        <Quote>He woke up in a fright in the middle of the night...         </Quote>
+        <Quote>A pawn is a moment of beauty known only to those who seek it.</Quote>
+        <Quote>Be patient and calm - for no one can catch a knight in anger.</Quote>
+        <Quote>Bragging may not bring happiness, but no man having caught a large queen goes home through an alley.</Quote>
+        <Quote>Calling chess a hobby is like calling brain surgery a job.</Quote>
+        <Quote>"Don't worry", he said, that grandfatherly smile spreading across his face once more. "I've been playing chess for over fourty years!"</Quote>
+        <Quote>Chess is much more than kings. It is the great occasion where we may return to the fine simplicity of our forefathers.</Quote>
+        <Quote>Chess provides time to think, and reason not to.</Quote>
+        <Quote>Pawns are born honest, but they get over it.</Quote>
+        <Quote>Many men play chess all of their lives without knowing that it is not kings they are after.</Quote>
+        <Quote>The chess was good; it was the winning that was bad.</Quote>
+        <Quote>There's a fine line between chess and standing on the shore like an idiot.</Quote>
+        <Quote>Good things come to those who bait.</Quote>
     </Fishing>
     <Real>
-        <Quote>The king has stolen your laundry.                            </Quote>
-        <Quote>There's a snake in my boot!                                  </Quote>
-        <Quote>The rook is the horse one.                                   </Quote>
+        <Quote>The rook is the horse one.</Quote>
     </Real>
 </QuotesList>
