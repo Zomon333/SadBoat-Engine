@@ -25,6 +25,14 @@ Disclaimer:
 ---------------------------------------------------------------------------------------------------------------------
 */
 
+//
+//  Engine Defines
+//
+//  This adds RapidXML and Vulkan to our include path
+//  You can disable these if you'd like, but I'd suggest against it.
+//
+#define INCLUDE_RAPIDXML
+#define INCLUDE_VULKAN
 
 //
 //  Engine Include
@@ -33,7 +41,12 @@ Disclaimer:
 //  It's all you need to get started.
 //
 //----------------------------------
+
+
+
 #include "sb-engine.hpp"
+
+
 
 using namespace std;
 using namespace SBE;
@@ -49,15 +62,15 @@ string testSetup(int argc, char* argv[], string possibleName)
     int i = 100;
     while(i>0)
     {
-        cout<<"-";
+        std::cout<<"-";
         i--;
     }
-    cout<<endl;
+    std::cout<<endl;
 
     
     //This code only gets included into our program if we run "make" or "make prod" during compilation.
     #ifdef CONFIG_PROD
-        cout<<"Launching engine...\n";
+        std::cout<<"Launching engine...\n";
         name = possibleName;
     #endif
 
@@ -66,15 +79,15 @@ string testSetup(int argc, char* argv[], string possibleName)
         //If we ran the catch session, the results variable may change, indicating a failed test.
         //Do not launch the game if the tests fail.
 
-        cout<<"Running tests...\n";
+        std::cout<<"Running tests...\n";
         results = Catch::Session().run(argc, argv);
         if(results!=0)
         {
-            cout<<"Tests failed, engine aborting.\n";
+            std::cout<<"Tests failed, engine aborting.\n";
             throw new exception();
         }
 
-        cout<<"Tests succeeded, engine launching.\n";
+        std::cout<<"Tests succeeded, engine launching.\n";
         name = "Test Stage - ";
         name+=possibleName;
         
@@ -102,6 +115,14 @@ int main(int argc, char* argv[])
     string name = testSetup(argc, argv, gameName);
 
 
+    Event<int, int>* testA = new Event<int, int>(F(int a ){return a+1;});
+    Event<int, int>* testB = new Event<int, int>(F(int b ){return b*2;});
+    
+
+    (*testA) += testB;
+
+    testA->~Event();
+
     
     rapidxml::xml_document<> document;
     rapidxml::xml_node<>* root;
@@ -117,34 +138,34 @@ int main(int argc, char* argv[])
     auto Fishing = root->first_node("Fishing");
     auto Real = root->first_node("Real");
 
-    cout<<"Fishing Quotes: "<<endl;
+    std::cout<<"Fishing Quotes: "<<endl;
     for(int i = 0; i<50; i++) 
     {
-        cout<<"-";
+        std::cout<<"-";
     }
-    cout<<endl;
+    std::cout<<endl;
     
     //For some node "quote" as a child of Fishing
     //  Where quote exists and is not a nullptr, do some thing
     //  And move to it's sibling
     for(rapidxml::xml_node<>* quote = Fishing->first_node("Quote"); quote; quote=quote->next_sibling())
     {
-        cout<<quote->value()<<endl;
+        std::cout<<quote->value()<<endl;
     }
 
-    cout<<"\n\nReal Quotes: "<<endl;
+    std::cout<<"\n\nReal Quotes: "<<endl;
     for(int i = 0; i<50; i++) 
     {
-        cout<<"-";
+        std::cout<<"-";
     }
-    cout<<endl;
+    std::cout<<endl;
 
     //For some node "quote" as a child of Real
     //  Where quote exists and is not a nullptr, do some thing
     //  And move to it's sibling.
     for(rapidxml::xml_node<>* quote = Real->first_node("Quote"); quote; quote=quote->next_sibling())
     {
-        cout<<quote->value()<<endl;
+        std::cout<<quote->value()<<endl;
     }
 
 

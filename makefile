@@ -1,7 +1,7 @@
 CC = g++
 FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
 
-DEFINES = 
+DEFINES = -DINCLUDE_VULKAN -DINCLUDE_RAPIDXML
 
 SOURCE_DIR = ./src
 INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/"
