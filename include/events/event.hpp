@@ -33,6 +33,10 @@ namespace SBE
             //Holds the function to be executed
             std::function<Return(Parameters...)> function;// = std::function<int(int)>([](int a){return a;});
             
+
+            //Holds the concactenated function
+            std::vector<std::function<Return(Parameters...)>*> concFuncs;
+
             //Predicts the future, somewhat
             std::stack<std::future<Return>> callStack;
             
@@ -55,19 +59,27 @@ namespace SBE
             {
                 function = [](Parameters...){return Return();};
             }
-            Event(std::function<Return(Parameters...)> func)
+            Event(std::function<Return(Parameters...)> func) : Event()
             {
                 function = func;
             }
-            Event(auto func)
+            Event(auto func) : Event()
             {
                 function = std::function<Return(Parameters...)>(func);
             }
-            Event(const Event &copiedEvent)
+            Event(const Event &copiedEvent) : Event()
             {
                 this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(copiedEvent.function));
             }
 
+            ~Event()
+            {
+                while(concFuncs.size()>0)
+                {
+                    delete concFuncs.back();
+                    concFuncs.pop_back();
+                }
+            }
 
             //  Accessors
             //----------------------------------
@@ -144,15 +156,17 @@ namespace SBE
             //  
             //  Because B is called with A's return, B must accept A's return as a parameter.
             //
-            Event<Return, Parameters...>* operator+(Event<Return, Return>* rhs)
+            Event<Return, Parameters...> operator+(Event<Return, Return> &rhs)
             {
-                return new Event<Return, Parameters...>(
-                    [this, rhs](Parameters... params)
+                Event<Return, Parameters...> temp = Event<Return, Parameters...>(
+                    [this, &rhs](Parameters... params)
                     {
-                        Return temp = this->operator()(params...);
-                        return rhs->operator()(temp);
+                        this->launch(params...);
+                        return rhs(this->getResult());
                     }
                 );
+
+                return temp;
             }
 
             //
@@ -160,17 +174,27 @@ namespace SBE
             //
             //  A += B  --->    A = A + B   --->    A(params) = B( A(params) );
             //
-            void operator+=(Event<Return, Return>* rhs)
+            void operator+=(Event<Return, Return> &rhs)
             {
-                if(this==nullptr)
-                {
-                    *this=*rhs;
-                    return;
-                }
+                //Make a new blank function
+                std::function<Return(Parameters...)>* old = new std::function<Return(Parameters...)>([](Parameters... params){return Return();});
+                
+                //Take the current function out
+                old->swap(this->function);
 
-                Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-                (*this) = *((*temp)+(rhs));
+                //Make sure we still know where old is
+                this->concFuncs.push_back(old);
+
+                //Set the stored function to the old function + RHS's function by reference
+                this->function = std::function<Return(Parameters...)>(
+                    [old, &rhs](Parameters... params)
+                    {
+                        return rhs(old->operator()(params...));
+                    }
+                );
             }
+
+            
 
             //
             //  Performs event multiplication with an integer. Multiplication is repeated addition.
@@ -182,36 +206,24 @@ namespace SBE
             //  A = B * 3   --->    A(params) = B( B( B(params) ) );
             //  A = B * n   --->    A(params) = B( B(... params));
             //
-            Event<Return, Return>* operator*(int i)
+            Event<Return, Return> operator*(int i)
             {
-                //Case: * 0, return empty event
-                if(i<=0) return new Event<Return, Return>(F(Return a){ return a;});
-
-                //Case: * 1, return self
-                if(i==1) return new Event<Return, Return>(*this);
-
-                //Case: * (>=2), must be at least 2.
-                int numLoops=2;
-                
-                Event<Return, Return>* returnable = new Event<Return,Return>(*this);
-                (*returnable) += new Event<Return, Return>(*this);
-
-                double numSquares = floor(log10(i)/log10(2));
-                while(numSquares>1)
-                {
-                    (*returnable) += new Event<Return, Return>(*returnable);
-                    numLoops*=2;
-                    numSquares--;
-                }
-
-                while(numLoops<i)
-                {
-                    (*returnable) += new Event<Return, Return>(*this);
-                    numLoops++;
-                }
+                Event<Return, Return> returnable(
+                    [this, i](Return start)
+                    {
+                        Return temp = this->operator()(start);
+                        for(int j = i-1; j>0; j--)
+                        {
+                            temp = this->operator()(temp);
+                        }
+                        return temp;
+                    }
+                );
 
                 return returnable;
             }
+
+            
 
             //  
             //  Performs a multiplication *and* an equivalence operator.
@@ -219,9 +231,31 @@ namespace SBE
             //  -Equivalence updates itself to it's new multiplied value once the operation is done.
             //
             void operator*=(int i)
-            {
-                Event<Return, Parameters...>* temp = new Event<Return, Parameters...>(*this);
-                (*this) = *((*temp)*(i));
+            {          
+                //Make a new blank function
+                std::function<Return(Parameters...)>* old = new std::function<Return(Parameters...)>([](Parameters... params){return Return();});
+
+                //Take the current function out
+                old->swap(this->function);
+
+                //Do the manipulation
+                Event<Return, Return> toUse(
+                    [old, i](Return a)
+                    {
+                        Return results = old->operator()(a);
+                        for(int j = i-1; j>0; j--)
+                        {
+                            results = old->operator()(results);
+                        }
+                        return results;
+                    }
+                );
+
+                //Make sure we still know where old is
+                this->concFuncs.push_back(old);
+
+                //Set the stored function to the old function many times
+                this->function = toUse.function;
             }
 
     };

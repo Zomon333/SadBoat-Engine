@@ -41,12 +41,7 @@ Disclaimer:
 //  It's all you need to get started.
 //
 //----------------------------------
-
-
-
 #include "sb-engine.hpp"
-
-
 
 using namespace std;
 using namespace SBE;
@@ -114,15 +109,7 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
 
-
-    Event<int, int>* testA = new Event<int, int>(F(int a ){return a+1;});
-    Event<int, int>* testB = new Event<int, int>(F(int b ){return b*2;});
     
-
-    (*testA) += testB;
-
-    testA->~Event();
-
     
     rapidxml::xml_document<> document;
     rapidxml::xml_node<>* root;
@@ -169,9 +156,8 @@ int main(int argc, char* argv[])
     }
 
 
+    //*/
 
-
-    
-
+    while(true);
     return 0;
 }
