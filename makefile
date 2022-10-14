@@ -1,6 +1,7 @@
 CC = g++
 FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
 
+NOBUILD = -Dandroid-stub=false -Dgles1=disabled -Dgles2=disabled -Dopengl=false -Dglx=disabled -Dgbm=disabled -Degl=disabled -Dglvnd=false -Dzlib=disabled -Dgallium-d3d12-video=disabled
 BR = "\033[1;36m---------------------------------------------------\033[0m"
 
 DEFINES = -DINCLUDE_VULKAN -DINCLUDE_RAPIDXML
@@ -31,6 +32,8 @@ clean:
 	rm -rf ./lib/mesa 		&
 
 vulkan_install:
+	@./confirm.sh
+
 	@rm -rf ./lib/mesa &
 	@echo "\033[1;36mInstalling Vulkan Compilation Tools...\033[0m"
 	@echo $(BR);
@@ -39,6 +42,8 @@ vulkan_install:
 	sudo apt install meson
 	sudo apt install ninja-build
 	sudo apt install glslang-tools
+	sudo apt-get install python3	
+	pip install mako
 	
 	@echo "\n\n"
 	@echo "\033[1;36mDownloading mesa\033[0m"
@@ -62,7 +67,7 @@ vulkan_install:
 	@echo "\033[1;36mCreating ninja config files\033[0m"
 	@echo $(BR)
 
-	meson ./lib/mesa/$(MESA_V) ./lib/mesa/$(MESA_V)/build
+	meson $(NOBUILD) ./lib/mesa/$(MESA_V) ./lib/mesa/$(MESA_V)/build
 
 	@echo "\n\n"
 	@echo "\033[1;36mCompiling mesa with ninja\033[0m"
@@ -73,9 +78,6 @@ vulkan_install:
 	@echo "\n\n"
 	@echo "\033[1;36mInstalling mesa\033[0m"
 	@echo $(BR)
-
-	sudo apt-get install mesa
-	sudo apt-get build-dep mesa
 
 	sudo ninja -C ./lib/mesa/$(MESA_V)/build install
 
