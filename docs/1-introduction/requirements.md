@@ -22,9 +22,11 @@ Our engine utilizes the RapidXML library for loading data from XML files. RapidX
 RapidXML uses a structure that allows users to read data from XML files fairly easily. The documentation for RapidXML is not included in our table of contents, but is available online. We use version 1.13.
 
 ### Vulkan
-Vulkan is a graphics programming interface used by our engine in order to send commands and data to the GPU for rendering. It is the backbone of all on-screen graphics and is required for anything visual to work. Vulkan is **not** a header only library-- it must be compiled separately from the engine, and then linked at compile time. Because this process depends on what compiler you're using, what system you're compiling on, and what version of Vulkan you're using, we **do not provide Vulkan with the engine**.
+Vulkan is a graphics programming interface used by our engine in order to send commands and data to the GPU for rendering. It is the backbone of all on-screen graphics and is required for anything visual to work. Vulkan is **not** a header only library-- it must be compiled separately from the engine, and then linked at compile time. This process depends on what compiler you're using, what system you're compiling on, and what version of Vulkan you're using. 
 
 Our development tools and makefiles are designed to be used on Linux systems. There is an Open Source version of Vulkan that is available for install on Linux called Mesa3D. It is what we use in our engine. The documentation and installation instructions for Mesa3D are available on their site where you can also find the most recent version of their API.
+
+**We provide a Vulkan installer with our engine, which installs the Mesa3D versions you'd use on Linux. This may not work on other systems.**
 
 ### OpenAL
 OpenAL is an audio library built similarly to OpenGL. It is used by our engine in order to process and play audio. It is a required library which is not provided with the engine.
