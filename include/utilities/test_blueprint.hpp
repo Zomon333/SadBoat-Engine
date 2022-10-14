@@ -22,7 +22,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_BLUEPRINT
 #define TEST_BLUEPRINT
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 #include "../primitives/"
 
 using namespace std;
