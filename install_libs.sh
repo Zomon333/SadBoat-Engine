@@ -28,7 +28,6 @@
 #      -Debugging layers for your vulkan envionrment
 #      -Required SPIR-V tools
 #
-make clean
 make vulkan_install
 
 

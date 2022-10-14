@@ -35,6 +35,7 @@ vulkan_install:
 	@echo "\033[1;36mInstalling Vulkan Compilation Tools...\033[0m"
 	@echo $(BR);
 
+	sudo apt-get install cmake
 	sudo apt install meson
 	sudo apt install ninja-build
 	sudo apt install glslang-tools
