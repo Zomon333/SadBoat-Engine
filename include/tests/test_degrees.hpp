@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_DEGREES
 #define TEST_DEGREES
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 #include "../primitives/angles/degrees.hpp"
 
 using namespace std;

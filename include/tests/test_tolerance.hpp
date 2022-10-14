@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_TOLERANCE
 #define TEST_TOLERANCE
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 #include "../primitives/tolerance.hpp"
 
 using namespace std;

@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_POINT
 #define TEST_POINT
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 #include "../primitives/point.hpp"
 
 using namespace std;

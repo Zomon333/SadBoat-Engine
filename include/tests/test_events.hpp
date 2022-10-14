@@ -15,7 +15,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_EVENTS
 #define TEST_EVENTS
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 
 #include <iostream>
 #include <future>

@@ -15,7 +15,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #define RECUR_EVENT_TEST
 
 #include "sb-engine.hpp"
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 
 using namespace std;
 using namespace SBE;

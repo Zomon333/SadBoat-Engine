@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_RANGE
 #define TEST_RANGE
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 #include "../primitives/range.hpp"
 
 using namespace std;

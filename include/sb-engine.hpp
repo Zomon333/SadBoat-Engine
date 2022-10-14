@@ -94,7 +94,7 @@ Disclaimer:
 
 //RapidXML Include
 #ifdef INCLUDE_RAPIDXML
-    #include "utilities/rapidxml-1.13/rapidxml.hpp" //RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
+    #include "../lib/rapidxml-1.13/rapidxml.hpp" //RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
 #endif
 
 /*
@@ -112,7 +112,7 @@ This is controlled through the makefile;
 #ifdef CONFIG_TEST
 
     #define CATCH_CONFIG_RUNNER
-    #include "../include/utilities/catch.hpp"
+    #include "../lib/catch.hpp"
 
     // Test primitives
     //----------------------------------
