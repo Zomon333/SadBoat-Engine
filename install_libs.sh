@@ -19,6 +19,10 @@
 sudo apt-get install mesa                               #Get the most recent Mesa
 sudo apt-get build-dep mesa                             #Update and get it's dependencies
 
+sudo apt install meson					#Meson build configurer
+sudo apt install ninja-build				#Ninja build tool install
+sudo apt install glslang-tools				#glslang dependency
+
 mkdir local-mesa                                        #Make a folder called local-mesa
 cd ./local-mesa                                         #Move into local-mesa
 
@@ -53,7 +57,7 @@ sudo apt-get install libvulkan-dev
 #      -Debugging layers to test your vulkan development.
 #      -Required SPIR-V tools.
 #
-sudo apt install vulkan-tools vulkan-validationlayers-dev spriv-tools
+sudo apt install vulkan-tools vulkan-validationlayers-dev spirv-tools
 
 
 

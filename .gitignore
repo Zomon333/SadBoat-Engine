@@ -1,3 +1,6 @@
+# Local Libraries
+./local-mesa/*
+
 # Prerequisites
 *.d
 
