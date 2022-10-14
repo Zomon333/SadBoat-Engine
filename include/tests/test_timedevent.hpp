@@ -14,7 +14,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef TEST_T_EVENT
 #define TEST_T_EVENT
 
-#include "../utilities/catch.hpp"
+#include "../lib/catch.hpp"
 #include "../sb-engine.hpp"
 
 #include <queue>
@@ -304,7 +304,7 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
         {
             return a;
         },
-        steady_clock::now()+std::chrono::milliseconds(25)
+        steady_clock::now()+milliseconds(50)
     ));
 
     eventQueue.emplace(new TimedEvent<int, int>(
@@ -312,14 +312,20 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
         {
             return a+10;
         },
-        steady_clock::now()+std::chrono::milliseconds(50)
+        steady_clock::now()+milliseconds(500)
     ));
 
-    std::stack<TimedEvent<int,int>*> results;
+    CHECK(eventQueue.top()->call(0)==0);
+    eventQueue.pop();
+
+    CHECK(eventQueue.top()->call(0)==10);
+    eventQueue.pop();
+
+    /*std::stack<TimedEvent<int,int>*> results;
 
     while(eventQueue.size()>0)
     {
-        if(eventQueue.top()->operator<=(steady_clock::time_point::clock::now()))
+        if(eventQueue.top()->operator<=(steady_clock::now()))
         {
             eventQueue.top()->launch(5);
             results.emplace(eventQueue.top());
@@ -327,6 +333,8 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
         }
     }
 
+    int res = results.top()->getResult();
+    cout<<"results.top()="<<res<<endl;
     CHECK(
         (results.top()->getResult()==5)
     );
@@ -336,6 +344,9 @@ TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
     CHECK(
         (results.top()->getResult()==15)
     );
+
+    res = results.top()->getResult();
+    cout<<"results.top()="<<res<<endl;*/
     
 }
 

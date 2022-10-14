@@ -91,7 +91,7 @@ namespace SBE{
             
             //Create some new function that takes the exact same parameters
             //But have it's scope include the old function and intended execution time
-            auto nFunc = [func, execution](Parameters...params)
+            auto nFunc = [this, func, execution](Parameters...params)
             {
                 //But don't actually use the captured execution time!
                 //If you use the actual captured execution time you may end up with deleted functions and expressions
@@ -113,7 +113,8 @@ namespace SBE{
                 std::this_thread::sleep_until(lExe);
 
                 //And return the value of the *copied* function with the *normal* parameters.
-                return oldFunc(params...);
+                //But only if it's not suppressed.
+                return this->getSuppressed() ? Return() : oldFunc(params...);
             };
 
             //Set the event's function to the new deferred function
@@ -161,7 +162,8 @@ namespace SBE{
                 std::this_thread::sleep_until(lExe);
 
                 //And return the value of the *copied* function with the *normal* parameters.
-                return oldFunc(params...);
+                //But only if it's not suppressed.
+                return this->getSuppressed() ? Return() : oldFunc(params...);
             };
 
             //Set the event's function to the new deferred function
