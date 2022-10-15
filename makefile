@@ -1,36 +1,55 @@
-CC = g++
-FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
-
-NOBUILD = -Dandroid-stub=false -Dgles1=disabled -Dgles2=disabled -Dopengl=false -Dglx=disabled -Dgbm=disabled -Degl=disabled -Dglvnd=false -Dzlib=disabled -Dgallium-d3d12-video=disabled
-BR = "\033[1;36m---------------------------------------------------\033[0m"
-
-DEFINES = -DINCLUDE_VULKAN -DINCLUDE_RAPIDXML
-
-SOURCE_DIR = ./src
-INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/"
-OUT_DIR = ./output
-LIBRARY_DIR = "usr/lib/x86_64-linux-gnu" "./lib"
-
-PRODUCTION_RELEASE = -DCONFIG_PROD
-TEST_RELEASE = -DCONFIG_TEST
-
-LIBS = "-lvulkan"
-MESA_V = "mesa-22.2.0"
-
+#
+#	Engine Version & Name
+#---------------------------------------------------
 NAME = "SadBoatEngine-V"
 VERSION = "0.02.7V"
 
 
+#
+#	General Compilation Info
+#---------------------------------------------------
+CC = g++
+FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
+DEFINES = -DINCLUDE_VULKAN -DINCLUDE_RAPIDXML
+
+LIBS = "-lvulkan"
+
+PRODUCTION_RELEASE = -DCONFIG_PROD
+TEST_RELEASE = -DCONFIG_TEST
+
+#
+#	Resource Location Info
+#---------------------------------------------------
+SOURCE_DIR = ./src
+OUT_DIR = ./output
+
+INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/"
+LIBRARY_DIR = "usr/lib/x86_64-linux-gnu" "./lib"
+
+
+#
+#	Mesa Formatting Info
+#---------------------------------------------------
+MESA_V = "mesa-22.2.0"
+BR = "\033[1;36m---------------------------------------------------\033[0m"
+
+
+
+
+#Compiles for production
 prod:
 	g++ $(FLAGS) $(DEFINES) $(PRODUCTION_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)""
 
+#Compiles with tests
 test:
 	g++ $(FLAGS) $(DEFINES) $(TEST_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)"-T"
 
+#Removes all built releases
 clean:
 	rm -rf $(OUT_DIR)/* 	&
-	rm -rf ./lib/mesa 		&
 
+#Creates a fresh Vulkan install
+#May require some alternate dependencies that are not listed
 vulkan_install:
 	@./confirm.sh
 
