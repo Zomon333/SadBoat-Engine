@@ -24,7 +24,7 @@ SOURCE_DIR = ./src
 OUT_DIR = ./output
 
 INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/"
-LIBRARY_DIR = "usr/lib/x86_64-linux-gnu" "./lib"
+LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib"
 
 
 #
@@ -42,7 +42,7 @@ prod:
 
 #Compiles with tests
 test:
-	g++ $(FLAGS) $(DEFINES) $(TEST_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)"-T"
+	g++ $(FLAGS) $(DEFINES) $(TEST_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)"-T"
 
 #Removes all built releases
 clean:
@@ -51,7 +51,7 @@ clean:
 #Creates a fresh Vulkan install
 #May require some alternate dependencies that are not listed
 vulkan_install:
-	@./confirm.sh
+	@./confirm.sh "Mesa3D requires your apt and apt-get settings to allow source code downloads. Are these enabled?"
 
 	@rm -rf ./lib/mesa &
 	@echo "\033[1;36mInstalling Vulkan Compilation Tools...\033[0m"
@@ -106,4 +106,9 @@ vulkan_install:
 
 	sudo apt-get install libvulkan-dev
 	sudo apt install vulkan-tools vulkan-validationlayers-dev spirv-tools
+
+	@echo "\n\n"
+	@echo "\033[1;36mDeleting $(MESA_V).tar.xz.1\033[0m"
+	@echo $(BR)
+	rm -rf ./lib/mesa/$(MESA_V).tar.xz.1 &
 

@@ -1,5 +1,12 @@
 #!/bin/bash
-echo -ne "\033[1;36mMesa3D requires your apt and apt-get settings to allow source code downloads. Are these enabled? (Y/N): \033[0m"
+
+#
+#   Outputs the input from the command line and asks for a Y/N input.
+#   Y or y continues the program
+#   !(Y or y) stops the program
+#   
+
+echo -ne "\033[1;36m$1 (Y/N): \033[0m"
 read -p "" -n 1 -r
 echo " "
 
