@@ -2,6 +2,16 @@
 <QuotesList>
     <Fishing>
         <Quote id="F1">The texas rig is a good rig for casting worms and other soft body baits into weedy, snag prone areas.</Quote>
+        <Quote id="F2">Largemouth Bass are voracious eaters, consuming everything from Blue Gill to bats.</Quote>
+        <Quote id="F3">Largemouth Bass come in two subspecies, the longer lived Northern Largemouth and the larger growing Florida Bass.</Quote>
+        <Quote id="F4">Largemouth bass are native to limited freshwater ranges in the Central and Eastern United States, but do to popularity amongst anglers, have spread across the US and around the world.</Quote>
+        <Quote id="F5">Largemouth bass are ambush predators and like to stay near places they can hide in, like sunken logs or dense weeds.</Quote>
+        <Quote id="F6">If you’re after bass, go for weed-less baits.</Quote>
+        <Quote id="F7">Northern Pike and Bass are cannibals.</Quote>
+        <Quote id="F8">The biggest Largemouth Bass ever caught weighed 22 lbs. [2.2 lbs to the kg]</Quote>
+        <Quote id="F9">Fly fishing uses false casting with a long pole and weighted fishing line to cast super light, top water baits.</Quote>
+        <Quote id="F10">Fly fishers makes use of artificial baits that mimic insects in various stages of development to lure fish that like to eat drowning bugs.</Quote>
+
         <Quote> patient and calm - for no one can catch a knight in anger.</Quote>
         <Quote>Bragging may not bring happiness, but no man having caught a large queen goes home through an alley.</Quote>
         <Quote>Calling chess a hobby is like calling brain surgery a job.</Quote>
@@ -14,7 +24,23 @@
         <Quote>There's a fine line between chess and standing on the shore like an idiot.</Quote>
         <Quote>Good things come to those who bait.</Quote>
     </Fishing>
+    <Sailing>
+        <Quote id="S1">. </Quote>
+    </Sailing>
     <Real>
-        <Quote>The rook is the horse one.</Quote>
+        <Quote id="R1">The rook is the horse one.</Quote>
+        <Quote id="R2">The Spanish Opening is one of the first openings taught to new chess players.</Quote>
+        <Quote id="R3">The Queen’s 9 points, that’s final.</Quote>
+        <Quote id="R4">The farther a piece is from its color’s king, the smarter it is.</Quote>
+        <Quote id="R5">The pawns are peasant levies, so the more of them that you lose, the more your economy will suffer.</Quote>
+        <Quote id="R6">Pawns are situationally very powerful: they can promote, attack en passant, and, in numbers, can deny areas of the board.</Quote>
+        <Quote id="R7">Sometimes it is strategically advantageous to bait you opponent with a piece to set up the development of a different piece.</Quote>
+        <Quote id="R8">The Berlin Defense is the funniest way to inform your opponent that you are a civil engineer.</Quote>
+        <Quote id="R9">If you can’t think of anything else, move a knight or a pawn to open. You came here without a plan, what have you got to lose?</Quote>
+        <Quote id="R10">A chess match trains your enemy how to beat you, thus in order to avoid giving the opposition an advantage the only reasonable course of action is to not play the match.</Quote>
     </Real>
+    <Special>
+        <Quote id="Sp1">Perhaps the conflict is not with your opponent.</Quote>
+        <Quote id="Sp2">You ever cast, and cast, and cast, all day long just to find you never really cared about catching anything in the first place?  It was about the water wasn’t it? Something in the blue…</Quote>
+    </Special> 
 </QuotesList>
