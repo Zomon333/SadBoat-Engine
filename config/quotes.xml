@@ -11,6 +11,16 @@
         <Quote id="F8">The biggest Largemouth Bass ever caught weighed 22 lbs. [2.2 lbs to the kg]</Quote>
         <Quote id="F9">Fly fishing uses false casting with a long pole and weighted fishing line to cast super light, top water baits.</Quote>
         <Quote id="F10">Fly fishers makes use of artificial baits that mimic insects in various stages of development to lure fish that like to eat drowning bugs.</Quote>
+        <Quote id="F11">Good things come to those who bait.</Quote>
+        <Quote id="F12">One of the best ways to catch trout is to fly fish.</Quote>
+        <Quote id="F13">Look for small surface feeding birds to find good spots to fly fish.  More birds means more insects around and better chance of getting a bite!</Quote>
+        <Quote id="F14">When fly fishing, look for bugs on the water, that’s what the fish are looking for.</Quote>
+        <Quote id="F15">The fish aren’t all hiding in deep water, many fish take shelter and hunt in the shallows and weeds.</Quote>
+        <Quote id="F16">If you’re fishing the shore, try not to stand too close to the bank, especially in clear water. The fish might spot you and get spooked.</Quote>
+        <Quote id="F17">Braided line is generally lighter and stronger than monofilament line, however, it doesn’t stretch so it’s up to your rod to absorb shocks.</Quote>
+        <Quote id="F18">It’s not that the fish aren’t biting today, it’s that they aren’t biting for you.</Quote>
+        <Quote id="F19">Catawba worms make great bait, so if you’re ever in the right part of the American South, make sure to get some.</Quote>
+        <Quote id="F20">Bluegill go by a lot of different names: bream, brim, perch, sunfish, sun perch, spiny bream. Only one of those is fake.</Quote>
     </Fishing>
     <Sailing>
         <Quote id="S1">. </Quote>
@@ -26,9 +36,20 @@
         <Quote id="R8">The Berlin Defense is the funniest way to inform your opponent that you are a civil engineer.</Quote>
         <Quote id="R9">If you can’t think of anything else, move a knight or a pawn to open. You came here without a plan, what have you got to lose?</Quote>
         <Quote id="R10">A chess match trains your enemy how to beat you, thus in order to avoid giving the opposition an advantage the only reasonable course of action is to not play the match.</Quote>
+        <Quote id="R11">Chess is a horror game from the king’s perspective.</Quote>
+        <Quote id="R12">Try asking your bishop to convince the opponent’s bishop to excommunicate the opponent’s king./Quote>
+        <Quote id="R13">Have you attempted to negotiate an armistice? That might give you enough time to come up with a plan.</Quote>
+        <Quote id="R14">Castling can get you out of a pinch, it’s a shame you can only do it once.</Quote>
+        <Quote id="R15">The Bishop can be a hard piece to develop and leverage effectively. Moving the king or queen side pawn can be pretty critical to this end./Quote>
+        <Quote id="R16">Having a lone pawn in the center of the board is not necessarily a bad thing.  It’s still denying moves and creating opportunities.</Quote>
+        <Quote id="R17">Knights are better than Bishops in the early game, when more pieces are on the board, but as things open up, Bishops dominate.</Quote>
+        <Quote id="R18">When you play chess, you are not the king, you are a cruel supernatural force that compels the king to engage in bloody and fruitless wars.</Quote>
+        <Quote id="R19">Put your rook on an open file. Just try it, trust me.</Quote>
+        <Quote id="R20">In 1255 it was decided that pawns would only move forward due to desertion concerns. </Quote>
     </Real>
     <Special>
         <Quote id="Sp1">Perhaps the conflict is not with your opponent.</Quote>
         <Quote id="Sp2">You ever cast, and cast, and cast, all day long just to find you never really cared about catching anything in the first place?  It was about the water wasn’t it? Something in the blue…</Quote>
+        <Quote id="Sp3">How long have you been here?</Quote>
     </Special> 
 </QuotesList>
