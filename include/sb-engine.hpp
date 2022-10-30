@@ -89,6 +89,7 @@ Disclaimer:
 */
 #ifdef INCLUDE_VULKAN
     #include "./vulkan/vulkan.hpp"
+    #include "../include/vulkan/instance.hpp"
 #endif
 
 
