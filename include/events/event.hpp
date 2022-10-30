@@ -139,6 +139,10 @@ namespace SBE
             {
                 return function(params...);
             }
+            Return call(Parameters... params)
+            {
+                return function(params...);
+            }
 
             //  Operators
             //----------------------------------
