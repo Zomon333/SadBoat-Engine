@@ -31,7 +31,7 @@ LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib"
 #	Mesa Formatting Info
 #---------------------------------------------------
 MESA_V = "mesa-22.2.0"
-NOBUILD = -Dlibunwind=disabled
+NOBUILD = -Dlibunwind=disabled -Dintel=true
 BR = "\033[1;36m---------------------------------------------------\033[0m"
 
 
@@ -49,31 +49,12 @@ test:
 clean:
 	rm -rf $(OUT_DIR)/* 	&
 
-#Creates a fresh Vulkan install
-#May require some alternate dependencies that are not listed
-vulkan_install:
-	@./confirm.sh "Mesa3D requires your apt and apt-get settings to allow source code downloads. Are these enabled?"
-
-	@echo "\n\n"
-	@echo "\033[1;36mSetting apt mirror to bookworm\033[0m"
-	@echo $(BR)
-
-	sudo cp /etc/apt/sources.list /etc/apt/sources.backup
-	sudo sed -i 's/bullseye/bookworm/' /etc/apt/sources.list
-	sudo apt-get install -y libdrm-dev
-
-	@echo "\n\n"
-	@echo "\033[1;36mReverting to bullseye\033[0m"
-	@echo $(BR)
-
-	sudo cp /etc/apt/sources.backup /etc/apt/sources.list
-
-	@rm -rf ./lib/mesa &
+#Installs the tools needed to build vulkan
+vulkan_build_tools:
 	@echo "\033[1;36mInstalling Vulkan Compilation Tools...\033[0m"
 	@echo $(BR);
 	
 	sudo apt-get install -y g++
-	sudo apt install -y gcc-multilib
 	
 	sudo apt-get install -y cmake
 	sudo apt-get install -y bison
@@ -86,6 +67,29 @@ vulkan_install:
 	sudo apt-get install -y python3	
 	sudo apt-get install -y pip
 	pip install mako
+
+#Attempts to install vulkan's dependencies. No guarantees this will work with your system!
+vulkan_deps:
+	@echo "\033[1;36mInstalling Vulkan Dependencies...\033[0m"
+	@echo $(BR);
+
+	sudo apt-get install -y libudev-dev llvm libelf-dev	
+	sudo apt-get install -y libwayland-dev libwayland-egl-backend-dev
+	sudo apt-get install -y libx11-dev libxext-dev libxfixes-dev
+	sudo apt-get install -y libxcb-glx0-dev libxcb-shm0-dev libx11-xcb-dev
+	sudo apt-get install -y libxcb-dri2-0 libxcb-dri2-0-dev libxcb-dri3-0 libxcb-dri3-dev
+	sudo apt-get install -y libxcb-present-dev 
+	sudo apt-get install -y libxshmfence-dev libxshmfence1
+	sudo apt-get install -y libxxf86vm-dev libxxf86vm1 libxxf86vm1-dbg
+	sudo apt-get install -y x11-xserver-utils libxrandr-dev libxrandr2 lxde
+	
+
+#Creates a fresh Vulkan install
+#May require some alternate dependencies that are not listed
+vulkan_install:
+	@./confirm.sh "Mesa3D requires your apt and apt-get settings to allow source code downloads. Are these enabled?"
+
+	@rm -rf ./lib/mesa
 	
 	@echo "\n\n"
 	@echo "\033[1;36mDownloading mesa\033[0m"
@@ -104,23 +108,6 @@ vulkan_install:
 	mv -f ./$(MESA_V) ./lib/mesa/
 
 	mkdir ./lib/mesa/$(MESA_V)/build
-	
-	@echo "\n\n"
-	@echo "\033[1;36mInstalling Mesa Dependencies\033[0m"
-	@echo $(BR)
-
-	sudo apt-get install -y libudev-dev llvm libelf-dev valgrind
-
-	sudo apt-get install -y libunwind-dev libwayland-dev wayland-protocols libwayland-egl-backend-dev
-
-	sudo apt-get install -y libx11-dev libxext-dev libxfixes-dev
-	sudo apt-get install -y libxcb-glx0-dev libxcb-shm0-dev libx11-xcb-dev
-	sudo apt-get install -y libxcb-dri2-0 libxcb-dri2-0-dev libxcb-dri3-0 libxcb-dri3-dev
-	sudo apt-get install -y libxcb-present-dev 
-	sudo apt-get install -y libxshmfence-dev libxshmfence1
-	sudo apt-get install -y libxxf86vm-dev libxxf86vm1 libxxf86vm1-dbg
-	sudo apt-get install -y x11-xserver-utils libxrandr-dev libxrandr2 lxde
-	
 
 	@echo "\n\n"
 	@echo "\033[1;36mCreating ninja config files\033[0m"
