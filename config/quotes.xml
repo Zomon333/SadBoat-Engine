@@ -58,7 +58,7 @@
         <Quote id="R2">The Spanish Opening is one of the first openings taught to new chess players.</Quote>
         <Quote id="R3">The Queen’s 9 points, that’s final.</Quote>
         <Quote id="R4">The farther a piece is from its color’s king, the smarter it is.</Quote>
-        <Quote id="R5">The pawns are peasant levies, so the more of them that you lose, the more your economy will suffer.</Quote>
+        <Quote id="R5">The pawns are peasant levies, so the more of them you lose, the more your economy will suffer.</Quote>
         <Quote id="R6">Pawns are situationally very powerful: they can promote, attack en passant, and, in numbers, can deny areas of the board.</Quote>
         <Quote id="R7">Sometimes it is strategically advantageous to bait you opponent with a piece to set up the development of a different piece.</Quote>
         <Quote id="R8">The Berlin Defense is the funniest way to inform your opponent that you are a civil engineer.</Quote>
@@ -73,7 +73,17 @@
         <Quote id="R17">Knights are better than Bishops in the early game, when more pieces are on the board, but as things open up, Bishops dominate.</Quote>
         <Quote id="R18">When you play chess, you are not the king, you are a cruel supernatural force that compels the king to engage in bloody and fruitless wars.</Quote>
         <Quote id="R19">Put your rook on an open file. Just try it, trust me.</Quote>
-        <Quote id="R20">In 1255 it was decided that pawns would only move forward due to desertion concerns. </Quote>
+        <Quote id="R20">In 1255 it was decided that pawns would only move forward due to desertion concerns.</Quote>
+        <Quote id="R21">A forking attack, is a move that has the potential to open two of your opponent’s pieces up to capture.  Thus if your opponent moves one piece, the other is lost.</Quote>
+        <Quote id="R22">Pick an opening and stick with it, you’ll figure out how to adapt later.</Quote>
+        <Quote id="R23">To pin a piece is to attack it in such a fashion that moving that piece would expose another piece to attack.</Quote>
+        <Quote id="R24">In the original version of chess, the A2 and A7 pawns were actually vikingers from the far North.  Unfortunately, they never seemed to understand the rules.  They’d steal from the bishops, kill pawns, and leave the board.</Quote>
+        <Quote id="R25">You only need two rooks to checkmate.</Quote>
+        <Quote id="R26">If you don’t like the way the AI plays, it’s entirely your fault.</Quote>
+        <Quote id="R27">You might find it handy to familiarize yourself with common checkmate patterns. It’ll help in the end game.</Quote>
+        <Quote id="R28">You’re probably very familiar with chump checks.</Quote>
+        <Quote id="R29">Rooks have a low chance of surrendering due to spoiled grain stores and plague, thus waiting for poor weather on the opponent’s side of the board can proffer a default points lead.</Quote>
+        <Quote id="R30">Chess is just a scheme to sell you chess instructional materials.</Quote>
     </Real>
     <Special>
         <Quote id="Sp1">Perhaps the conflict is not with your opponent.</Quote>
