@@ -5,17 +5,13 @@
    <Ceramics>
    </Ceramics>
    <Organics>
-        <Archaea>
-        </Archaea>
-        <Bacteria>
-        </Bacteria>
+        <Archaea></Archaea>
+        <Bacteria></Bacteria>
+        
         <Eukarya>
-            <Protista>
-                
-            </Protista>
-            <Fungi>
-                
-            </Fungi>
+            <Protista></Protista>
+            <Fungi></Fungi>
+            
             <Plantae>
                 
             </Plantae>
@@ -23,6 +19,7 @@
                 
             </Animalia>
         </Eukarya>
+   
    </Organics>
    <Composites>
    </Composites>
