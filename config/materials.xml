@@ -15,33 +15,14 @@
             <Plantae>
                 
             </Plantae>
-            <Animalia>
-                <Annelida></Annelida>
-                <Nematoda></Nematoda>
-                <Platyhelminthes></Platyhelminthes>
-                <Porifera></Porifera>
-                <Echinodermata></Echinodermata>
-                <Cnidaria></Cnidaria>
-                
-                <Arthropoda>
-                    
-                </Arthropoda>
-                <Chordata> 
-                    <Vertebrata>
-                        <Amphibians></Amphibians>
-                        <Reptiles></Reptiles>
-                        <Birds></Birds>
-                        <Mammals></Mammals>
-                        <BonyFish></BonyFish>
-                        <CartillegenousFish></CartillegenousFish>
-                        <Lampreys></Lampreys>
-                        <Hagfish></Hagfish>
-                    </Vertebrata>
-                </Chordata>
-                <Mollusca>
-                    
-                </Mollusca>
-                
+            <Animalia> 
+                <Bone></Bone>
+                <Cartilege></Cartilege>
+                <Hair></Hair>
+                <Fat></Fat>
+                <Muscle></Muscle>
+                <Organ></Organ>
+                <Blood></Blood>
             </Animalia>
         </Eukarya>
    
