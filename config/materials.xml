@@ -5,12 +5,13 @@
    <Ceramics>
    </Ceramics>
    <Organics>
-    <Chitinous>
-    </Chitinous>
-    <Cellulose>
-    </Cellulose>
-    <Fatty>
-    </Fatty>
+        <Archaea>
+        </Archaea>
+        <Bacteria>
+        </Bacteria>
+        <Eukarya>
+            
+        </Eukarya>
    </Organics>
    <Composites>
    </Composites>
