@@ -18,17 +18,21 @@
             <Animalia>
                 <Annelida></Annelida>
                 <Nematoda></Nematoda>
-                <Arthropoda></Arthropoda>
                 <Platyhelminthes></Platyhelminthes>
                 <Porifera></Porifera>
                 <Echinodermata></Echinodermata>
-                <Chordata>
+                <Cnidaria></Cnidaria>
+                
+                <Arthropoda>
+                    
+                </Arthropoda>
+                <Chordata> 
                     
                 </Chordata>
-                <Cnidaria></Cnidaria>
                 <Mollusca>
                     
                 </Mollusca>
+                
             </Animalia>
         </Eukarya>
    
