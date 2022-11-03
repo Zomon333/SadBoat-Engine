@@ -13,7 +13,17 @@
             <Fungi></Fungi>
             
             <Plantae>
-                
+                <Root></Root>
+                <Stem></Stem>
+                <Leaf></Leaf>
+                <Phloem></Phloem>
+                <Xylem></Xylem>
+                <Sap></Sap>
+                <Pitch></Pitch>
+                <Flower></Flower>
+                <Pollen></Pollen>
+                <Seed></Seed>
+                <Nut></Nut>
             </Plantae>
             <Animalia> 
                 <Bone></Bone>
