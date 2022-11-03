@@ -16,7 +16,19 @@
                 
             </Plantae>
             <Animalia>
-                
+                <Annelida></Annelida>
+                <Nematoda></Nematoda>
+                <Arthropoda></Arthropoda>
+                <Platyhelminthes></Platyhelminthes>
+                <Porifera></Porifera>
+                <Echinodermata></Echinodermata>
+                <Chordata>
+                    
+                </Chordata>
+                <Cnidaria></Cnidaria>
+                <Mollusca>
+                    
+                </Mollusca>
             </Animalia>
         </Eukarya>
    
