@@ -16,15 +16,11 @@
                 <Root></Root>
                 <Stem></Stem>
                 <Leaf></Leaf>
-                <Phloem></Phloem>
-                <Xylem></Xylem>
                 <Sap></Sap>
-                <Pitch></Pitch>
                 <Flower></Flower>
                 <Pollen></Pollen>
                 <Fruit></Fruit>
                 <Seed></Seed>
-                <Nut></Nut>
             </Plantae>
             <Animalia> 
                 <Bone></Bone>
