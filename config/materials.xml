@@ -28,7 +28,14 @@
                 </Arthropoda>
                 <Chordata> 
                     <Vertebrata>
-                        
+                        <Amphibians></Amphibians>
+                        <Reptiles></Reptiles>
+                        <Birds></Birds>
+                        <Mammals></Mammals>
+                        <BonyFish></BonyFish>
+                        <CartillegenousFish></CartillegenousFish>
+                        <Lampreys></Lampreys>
+                        <Hagfish></Hagfish>
                     </Vertebrata>
                 </Chordata>
                 <Mollusca>
