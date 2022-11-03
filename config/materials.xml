@@ -10,7 +10,18 @@
         <Bacteria>
         </Bacteria>
         <Eukarya>
-            
+            <Protista>
+                
+            </Protista>
+            <Fungi>
+                
+            </Fungi>
+            <Plantae>
+                
+            </Plantae>
+            <Animalia>
+                
+            </Animalia>
         </Eukarya>
    </Organics>
    <Composites>
