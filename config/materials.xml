@@ -11,8 +11,9 @@
    <Ceramics>
    </Ceramics>
    <Eukarya>
-        <Fungi></Fungi>
-        
+        <Fungi>
+            <SHROOM></SHROOM>
+        </Fungi>
         <Plantae>
             <Root></Root>
             <Stem></Stem>
