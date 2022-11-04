@@ -39,10 +39,12 @@ BR = "\033[1;36m---------------------------------------------------\033[0m"
 
 #Compiles for production
 prod:
+	mkdir ./output &
 	g++ $(FLAGS) $(DEFINES) $(PRODUCTION_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)""
 
 #Compiles with tests
 test:
+	mkdir ./output &
 	g++ $(FLAGS) $(DEFINES) $(TEST_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)"-T"
 
 #Removes all built releases
