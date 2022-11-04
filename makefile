@@ -31,7 +31,7 @@ LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib"
 #	Mesa Formatting Info
 #---------------------------------------------------
 MESA_V = "mesa-22.2.0"
-NOBUILD = -Dlibunwind=disabled -Dintel=true
+NOBUILD = -Dlibunwind=disabled
 BR = "\033[1;36m---------------------------------------------------\033[0m"
 
 
@@ -78,10 +78,92 @@ vulkan_deps:
 	sudo apt-get install -y libx11-dev libxext-dev libxfixes-dev
 	sudo apt-get install -y libxcb-glx0-dev libxcb-shm0-dev libx11-xcb-dev
 	sudo apt-get install -y libxcb-dri2-0 libxcb-dri2-0-dev libxcb-dri3-0 libxcb-dri3-dev
-	sudo apt-get install -y libxcb-present-dev 
+	sudo apt-get install -y libxcb-present-dev libx11-dev libpthread-stubs0-dev libudev-dev libpciaccess-dev
 	sudo apt-get install -y libxshmfence-dev libxshmfence1
 	sudo apt-get install -y libxxf86vm-dev libxxf86vm1 libxxf86vm1-dbg
-	sudo apt-get install -y x11-xserver-utils libxrandr-dev libxrandr2 lxde
+	sudo apt-get install -y x11-xserver-utils libxrandr-dev libxrandr2 lxde 
+	
+
+	@echo "\n\n"
+	@echo "\033[1;36mInstalling Vulkan Dependency Dependencies\033[0m"
+	@echo $(BR);
+	sudo apt-get install -y libxml2-dev doxygen xsltproc xmlto
+
+	rm -rf ./lib/drm
+	
+	@echo "\n\n"
+	@echo "\033[1;36mCloning libdrm\033[0m"
+	@echo $(BR);
+	git clone git://anongit.freedesktop.org/git/mesa/drm ./lib/drm
+	mkdir ./lib/drm/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mConfiguring libdrm\033[0m"
+	@echo $(BR);
+	meson ./lib/drm ./lib/drm/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mBuilding libdrm\033[0m"
+	@echo $(BR);
+	ninja -C ./lib/drm/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mInstalling libdrm\033[0m"
+	@echo $(BR);
+	sudo ninja -C ./lib/drm/build install
+
+
+	rm -rf ./lib/wayland
+	
+	@echo "\n\n"
+	@echo "\033[1;36mCloning wayland\033[0m"
+	@echo $(BR);
+	git clone https://gitlab.freedesktop.org/wayland/wayland.git ./lib/wayland
+	mkdir ./lib/wayland/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mConfiguring wayland\033[0m"
+	@echo $(BR);
+	meson ./lib/wayland ./lib/wayland/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mBuilding wayland\033[0m"
+	@echo $(BR);
+	ninja -C ./lib/wayland/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mInstalling wayland\033[0m"
+	@echo $(BR);
+	sudo ninja -C ./lib/wayland/build install
+
+
+
+
+	rm -rf ./lib/wayland-protocols
+	
+	@echo "\n\n"
+	@echo "\033[1;36mCloning wayland-protocols\033[0m"
+	@echo $(BR);
+	git clone https://gitlab.freedesktop.org/wayland/wayland-protocols.git ./lib/wayland-protocols
+	mkdir ./lib/wayland-protocols/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mConfiguring wayland-protocols\033[0m"
+	@echo $(BR);
+	meson ./lib/wayland-protocols ./lib/wayland-protocols/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mBuilding wayland-protocols\033[0m"
+	@echo $(BR);
+	ninja -C ./lib/wayland-protocols/build
+	
+	@echo "\n\n"
+	@echo "\033[1;36mInstalling wayland-protocols\033[0m"
+	@echo $(BR);
+	sudo ninja -C ./lib/wayland-protocols/build install
+	
+	
+
 	
 
 #Creates a fresh Vulkan install
