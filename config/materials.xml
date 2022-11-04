@@ -10,42 +10,33 @@
    </Metals>
    <Ceramics>
    </Ceramics>
-   <Organics>
-        <Archaea></Archaea>
-        <Bacteria></Bacteria>
+   <Eukarya>
+        <Fungi></Fungi>
         
-        <Eukarya>
-            <Protista></Protista>
-            <Fungi></Fungi>
-            
-            <Plantae>
-                <Root></Root>
-                <Stem></Stem>
-                <Leaf></Leaf>
-                <Sap></Sap>
-                <Flower></Flower>
-                <Pollen></Pollen>
-                <Fruit></Fruit>
-                <Seed></Seed>
-            </Plantae>
-            <Animalia> 
-                <Bone></Bone>
-                <Cartilege></Cartilege>
-                <Hair></Hair>
-                <Fat></Fat>
-                <Muscle></Muscle>
-                <Organ></Organ>
-                <Blood></Blood>
-            </Animalia>
-        </Eukarya>
-   
-   </Organics>
+        <Plantae>
+            <Root></Root>
+            <Stem></Stem>
+            <Leaf></Leaf>
+            <Sap></Sap>
+            <Flower></Flower>
+            <Pollen></Pollen>
+            <Fruit></Fruit>
+            <Seed></Seed>
+        </Plantae>
+        <Animalia> 
+            <Bone></Bone>
+            <Cartilege></Cartilege>
+            <Hair></Hair>
+            <Fat></Fat>
+            <Muscle></Muscle>
+            <Organ></Organ>
+            <Blood></Blood>
+        </Animalia>
+   </Eukarya>
    <Composites>
    </Composites>
    <Dev>
-      <BedRock>
-      </BedRock>
-      <Unobtanium>
-      </Unobtanium>
+      <BedRock></BedRock>
+      <Unobtanium></Unobtanium>
    </Dev>
 </MaterialsList>
