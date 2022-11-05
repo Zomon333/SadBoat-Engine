@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MaterialsList>
+<!--
+    Some notes for the future:
+    1) You can use the tags shown here to create comments that won't get parsed by RapidXML
+    2-A) Tags with no children should take up one line; <Tag></Tag>
+    2-B) Tags *with* children can take up numerous lines.
+    3) If a tag will only contain one value, write it on one line. RapidXML *reads line breaks*!
+
+-->
+<SolidMaterials>
+   <!--         
+        Generic metals
+   -->
    <Metals>
-      <Lead>
-      </Lead>
-      <Brass>
-      </Brass>
-      <MildSteel>
-      </MildSteel>
+      <Lead></Lead>
+      <Brass></Brass>
+      <MildSteel></MildSteel>
    </Metals>
-   <Ceramics>
-   </Ceramics>
-   <Eukarya>
-        <Fungi>
-            <SHROOM></SHROOM>
-        </Fungi>
-        <Plantae>
-            <Root></Root>
-            <Stem></Stem>
-            <Leaf></Leaf>
-            <Sap></Sap>
-            <Flower></Flower>
-            <Pollen></Pollen>
-            <Fruit></Fruit>
-            <Seed></Seed>
-        </Plantae>
-        <Animalia> 
-            <Bone></Bone>
-            <Cartilege></Cartilege>
-            <Hair></Hair>
-            <Fat></Fat>
-            <Muscle></Muscle>
-            <Organ></Organ>
-            <Blood></Blood>
-        </Animalia>
-   </Eukarya>
-   <Composites>
-   </Composites>
+
+   <!--        
+        Generic ceramics
+   -->
+   <Ceramics></Ceramics>
+   
+   <!--        
+        Generic organics
+   -->
+   <Organics></Organics>
+   
+   <!--        
+        Generic composites
+   -->
+   <Composites></Composites>
+
+   <!--        
+        Development only materials
+   -->
    <Dev>
       <BedRock></BedRock>
       <Unobtanium></Unobtanium>
    </Dev>
-</MaterialsList>
+</SolidMaterials>

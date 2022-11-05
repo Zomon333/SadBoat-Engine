@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Files>
     <File>assetslisting.xml</File>
-    <File>visual</File>
-    <File>audio</File>
-    <File>config</File>
+    <Folder listing="graphicslisting.xml">visual</Folder>
+    <Folder listing="audiolisting.xml">audio</Folder>
+    <Folder listing="configlisting.xml">config</Folder>
 </Files>
