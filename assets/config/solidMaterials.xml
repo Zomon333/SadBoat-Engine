@@ -8,30 +8,41 @@
 
 -->
 <SolidMaterials>
-   <!--         
-        Generic metals
-   -->
-   <Metals>
-      <Lead></Lead>
-      <Brass></Brass>
-      <MildSteel></MildSteel>
-   </Metals>
-
+   
    <!--        
         Generic ceramics
    -->
    <Ceramics></Ceramics>
    
    <!--        
-        Generic organics
-   -->
-   <Organics></Organics>
-   
-   <!--        
         Generic composites
    -->
    <Composites></Composites>
 
+   <!--         
+        Generic metals
+   -->
+
+   <Metals>
+      <PureMetals>
+          <Lead></Lead>
+      </PureMetals>
+      <Alloys>
+          <Brass></Brass>
+          <MildSteel></MildSteel>
+      </Alloys>
+   </Metals>
+   
+   <!--        
+        Generic organics
+   -->
+   <Organics></Organics>
+
+   <!--        
+        Generic Polymers
+   -->
+   <Polymers></Polymers>
+   
    <!--        
         Development only materials
    -->
