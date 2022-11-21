@@ -7,6 +7,11 @@
     3) If a tag will only contain one value, write it on one line. RapidXML *reads line breaks*!
 
 -->
+<!--
+<ExampleMaterial>
+     <Density>0000.00</Density> Use kg/m^3, <YungsModulous>000000000000.00</YungsModulous> Use Pascals, <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
+</ExampleMaterial>
+-->
 <SolidMaterials>
    
    <!--        
