@@ -65,7 +65,13 @@
       </PureMetals>
       <Alloys>
           <Brass></Brass>
-          <MildSteel></MildSteel>
+          <Steel>
+               <AlloySteel></AlloySteel>
+               <CarbonSteel></CarbonSteel>
+               <CastIron></CastIron>
+               <MildSteel></MildSteel>
+               <StainlessSteel></StainlessSteel>
+          </Steel>
       </Alloys>
    </Metals>
    
