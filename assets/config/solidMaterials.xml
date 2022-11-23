@@ -64,14 +64,22 @@
           </Tungsten>
       </PureMetals>
       <Alloys>
-          <Brass></Brass>
-          <Steel>
+          <Aluminum></Aluminum>
+          <Copper>
+               <Brass></Brass>
+               <Bronze>
+                    <AluminumBronze></AluminumBronze>
+                    <NickelAluminumBronze></NickelAluminumBronze>
+               </Bronze>
+          </Copper>
+          <Iron>
                <AlloySteel></AlloySteel>
                <CarbonSteel></CarbonSteel>
                <CastIron></CastIron>
                <MildSteel></MildSteel>
                <StainlessSteel></StainlessSteel>
-          </Steel>
+          </Iron>
+          <Titanium></Titanium>
       </Alloys>
    </Metals>
    
