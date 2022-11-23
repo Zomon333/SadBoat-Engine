@@ -20,14 +20,21 @@ using namespace std;
 
 namespace SBE
 {
+    //Instance: Graphics
+    //Helper class so it's easier to instantiate a Vulkan Instance
+    //
     class Instance
     {
     private:
+        VkResult creationResult;
+
         VkInstance vulkanInstance;
-        VkInstanceCreateInfo creationInfo;
-        VkAllocationCallbacks allocationInfo;
+        VkInstanceCreateInfo* creationInfo;
+        VkAllocationCallbacks* allocationInfo;
 
     public:
+        //Constructors
+        //----------------------------------
         Instance()
         {
             //creationInfo.sType=;
@@ -39,17 +46,100 @@ namespace SBE
             //creationInfo.enabledExtensionCount=;
             //creationInfo.ppEnabledExtensionNames=;
 
-            vkCreateInstance(&creationInfo, &allocationInfo, &vulkanInstance);
+            //allocationInfo.pfnAllocation=;
+            //allocationInfo.pfnFree=;
+            //allocationInfo.pfnInternalAllocation=;
+            //allocationInfo.pfnInternalFree=;
+            //allocationInfo.pfnReallocation=;
+            //allocationInfo.pUserData=;
+
+            creationResult = vkCreateInstance(creationInfo, allocationInfo, &vulkanInstance);
         }
 
         Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks allocationInfo)
         {
+            *(this->creationInfo)=creationInfo;
+            *(this->allocationInfo)=allocationInfo;
+
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
+        }
+
+        Instance(VkInstanceCreateInfo* creationInfo, VkAllocationCallbacks allocationInfo)
+        {
+            this->creationInfo=creationInfo;
+            *(this->allocationInfo)=allocationInfo;
+
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
+        }
+
+        Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks* allocationInfo)
+        {
+            *(this->creationInfo)=creationInfo;
+            this->allocationInfo=allocationInfo;
+
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
+        }
+
+        Instance(VkInstanceCreateInfo* creationInfo, VkAllocationCallbacks* allocationInfo)
+        {
             this->creationInfo=creationInfo;
             this->allocationInfo=allocationInfo;
 
-            vkCreateInstance(&(this->creationInfo),&(this->allocationInfo),&vulkanInstance);
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
+        }
+
+        //Destructors
+        //----------------------------------
+        ~Instance()
+        {
+            delete creationInfo;
+            delete allocationInfo;
+
+            /*
+                Todo: Learn how to destroy a Vulkan Instance and put it here
+            */
+        }
+
+        //Accessors
+        //----------------------------------
+        VkInstance* getInstance()
+        {
+            return &(this->vulkanInstance);
+        }
+
+        VkInstanceCreateInfo* getCreationInfo()
+        {
+            return this->creationInfo;
+        }
+
+        VkAllocationCallbacks* getAllocationInfo()
+        {
+            return this->allocationInfo;
+        }
+
+        VkResult getResult()
+        {
+            return creationResult;
+        }
+
+        //Mutators
+        //----------------------------------
+        void setInstance(VkInstance newInstance)
+        {
+            this->vulkanInstance=newInstance;
         }
         
+        void setCreationInfo(VkInstanceCreateInfo* newInfo)
+        {
+            this->creationInfo=newInfo;
+        }
+       
+        void setAllocationInfo(VkAllocationCallbacks* newAllocators)
+        {
+            this->allocationInfo=newAllocators;
+        }
+       
+       
     };
 };
 #endif
