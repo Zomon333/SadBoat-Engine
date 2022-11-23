@@ -9,7 +9,9 @@
 -->
 <!--
 <ExampleMaterial>
-     <Density>0000.00</Density> Use kg/m^3, <YungsModulous>000000000000.00</YungsModulous> Use Pascals, <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
+     <Density>0000.00</Density> Use kg/m^3,
+     <YungsModulous>000000000000.00</YungsModulous> Use Pascals,
+     <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
 </ExampleMaterial>
 -->
 <SolidMaterials>
