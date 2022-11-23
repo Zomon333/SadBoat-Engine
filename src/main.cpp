@@ -112,87 +112,9 @@ int main(int argc, char* argv[])
 
 
 
-    //*/
-    /*
+
+
     
-    rapidxml::xml_document<> document;
-    rapidxml::xml_node<>* root;
-
-    ifstream testData("./assets/config/solidMaterials.xml");
-
-    vector<char> buffer((istreambuf_iterator<char>(testData)),istreambuf_iterator<char>());
-    buffer.push_back('\0');
-
-    document.parse<0>(&buffer[0]);
-    root = document.first_node("SolidMaterials");
-
-    unordered_map<string,rapidxml::xml_node<char>*> tree;
-
-    tree["Metals"]=root->first_node("Metals");
-    tree["Ceramics"]=root->first_node("Ceramics");
-    tree["Organics"]=root->first_node("Organics");
-    tree["Composites"]=root->first_node("Composites");
-    tree["Dev"]=root->first_node("Dev");
-    
-    vector<string> tags;
-    tags.push_back("Metals");
-    tags.push_back("Ceramics");
-    tags.push_back("Organics");
-    tags.push_back("Composites");
-    tags.push_back("Dev");
-
-
-    cout<<tree["Metals"]->first_node()->name();
-
-    for(int i = 0; i<tags.size(); i++)
-    {
-        cout<<"<"<<tags[i]<<">"<<endl;
-
-        for(rapidxml::xml_node<>* mat = tree[tags[i]]->first_node(); mat; mat=mat->next_sibling())
-        {
-            std::cout<<mat->name()<<":"<<mat->value()<<endl;
-        }
-
-        cout<<"</"<<tags[i]<<">"<<endl;
-    }
-
-
-
-    //auto Metals = root->first_node("Fishing");
-    //auto Real = root->first_node("Real");
-
-    /*std::cout<<"Fishing Quotes: "<<endl;
-    for(int i = 0; i<50; i++) 
-    {
-        std::cout<<"-";
-    }
-    std::cout<<endl;
-    
-    //For some node "quote" as a child of Fishing
-    //  Where quote exists and is not a nullptr, do some thing
-    //  And move to it's sibling
-    for(rapidxml::xml_node<>* quote = Fishing->first_node("Quote"); quote; quote=quote->next_sibling())
-    {
-        std::cout<<quote->value()<<endl;
-    }
-
-    std::cout<<"\n\nReal Quotes: "<<endl;
-    for(int i = 0; i<50; i++) 
-    {
-        std::cout<<"-";
-    }
-    std::cout<<endl;
-
-    //For some node "quote" as a child of Real
-    //  Where quote exists and is not a nullptr, do some thing
-    //  And move to it's sibling.
-    for(rapidxml::xml_node<>* quote = Real->first_node("Quote"); quote; quote=quote->next_sibling())
-    {
-        std::cout<<quote->value()<<endl;
-    }
-
-
-    //*/
 
 
     return 0;
