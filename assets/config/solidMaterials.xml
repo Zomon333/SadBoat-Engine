@@ -32,7 +32,36 @@
 
    <Metals>
       <PureMetals>
-          <Lead></Lead>
+          <Aluminum>
+               <Density>2700</Density>
+               <YungsModulous>000000000000.00</YungsModulous>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+          </Aluminum>
+          <Copper>
+               <Density>8940</Density>
+               <YungsModulous>000000000000.00</YungsModulous>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+          </Copper>
+          <Iron>
+               <Density>7874</Density>
+               <YungsModulous>000000000000.00</YungsModulous>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+          </Iron>
+          <Lead>
+               <Density>11340</Density>
+               <YungsModulous>000000000000.00</YungsModulous>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+          </Lead>
+          <Titanium>
+               <Density>4507</Density>
+               <YungsModulous>000000000000.00</YungsModulous>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+          </Titanium>
+          <Tungsten>
+               <Density>19250</Density>
+               <YungsModulous>000000000000.00</YungsModulous>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+          </Tungsten>
       </PureMetals>
       <Alloys>
           <Brass></Brass>
