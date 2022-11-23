@@ -58,7 +58,7 @@ namespace SBE
             appInfo->applicationVersion=0;                          //What is the version of the application?
             appInfo->pEngineName="SadBoat Engine";                  //What is the name of the engine?
             appInfo->engineVersion=29;                              //What is the version of the engine?
-            appInfo->apiVersion=VK_API_VERSION_1_0;                 //What version of Vulkan are we using?*/
+            appInfo->apiVersion=VK_MAKE_VERSION(1,0,0);                 //What version of Vulkan are we using?*/
 
             //Pointer to another struct describing our application. Optional, but highly recommended!
             creationInfo->pApplicationInfo=appInfo;
