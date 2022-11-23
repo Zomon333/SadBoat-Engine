@@ -108,10 +108,6 @@ int main(int argc, char* argv[])
 
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
-
-    Instance test;
-
-    //cout<<test.getResult()<<endl;
     
 
 
