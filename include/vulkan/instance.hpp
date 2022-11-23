@@ -91,6 +91,11 @@ namespace SBE
             vulkanInstance = new VkInstance;
 
             creationResult = vkCreateInstance(creationInfo, allocationInfo, vulkanInstance);
+
+            if(creationResult!=VK_SUCCESS)
+            {
+                throw new runtime_error("Vulkan Instance did not initialize.");
+            }
             
         }
 
@@ -101,6 +106,11 @@ namespace SBE
 
             vulkanInstance = new VkInstance;
             creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+
+            if(creationResult!=VK_SUCCESS)
+            {
+                throw new runtime_error("Vulkan Instance did not initialize.");
+            }
             
         }
 
@@ -111,6 +121,11 @@ namespace SBE
 
             vulkanInstance = new VkInstance;
             creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+
+            if(creationResult!=VK_SUCCESS)
+            {
+                throw new runtime_error("Vulkan Instance did not initialize.");
+            }
             
         }
 
@@ -121,6 +136,11 @@ namespace SBE
 
             vulkanInstance = new VkInstance;
             creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+
+            if(creationResult!=VK_SUCCESS)
+            {
+                throw new runtime_error("Vulkan Instance did not initialize.");
+            }
             
         }
 
@@ -131,6 +151,11 @@ namespace SBE
 
             vulkanInstance = new VkInstance;
             creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+
+            if(creationResult!=VK_SUCCESS)
+            {
+                throw new runtime_error("Vulkan Instance did not initialize.");
+            }
             
         }
 
