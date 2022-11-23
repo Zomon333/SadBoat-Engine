@@ -97,7 +97,7 @@
         Development only materials
    -->
    <Dev>
-      <BedRock></BedRock>
-      <Unobtanium></Unobtanium>
+      <BedRock></BedRock><!-- Infinite Density -->
+      <Unobtanium></Unobtanium><!-- Infinite FYFM -->
    </Dev>
 </SolidMaterials>
