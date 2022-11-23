@@ -36,3 +36,5 @@ output/*
 .vscode/settings.json
 .vscode/c_cpp_properties.json
 *.tar.xz.1
+lib/wayland
+lib/wayland-protocols
