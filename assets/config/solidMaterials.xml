@@ -7,31 +7,47 @@
     3) If a tag will only contain one value, write it on one line. RapidXML *reads line breaks*!
 
 -->
+<!--
+<ExampleMaterial>
+     <Density>0000.00</Density> Use kg/m^3, <YungsModulous>000000000000.00</YungsModulous> Use Pascals, <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
+</ExampleMaterial>
+-->
 <SolidMaterials>
-   <!--         
-        Generic metals
-   -->
-   <Metals>
-      <Lead></Lead>
-      <Brass></Brass>
-      <MildSteel></MildSteel>
-   </Metals>
-
+   
    <!--        
         Generic ceramics
    -->
    <Ceramics></Ceramics>
    
    <!--        
-        Generic organics
-   -->
-   <Organics></Organics>
-   
-   <!--        
         Generic composites
    -->
    <Composites></Composites>
 
+   <!--         
+        Generic metals
+   -->
+
+   <Metals>
+      <PureMetals>
+          <Lead></Lead>
+      </PureMetals>
+      <Alloys>
+          <Brass></Brass>
+          <MildSteel></MildSteel>
+      </Alloys>
+   </Metals>
+   
+   <!--        
+        Generic organics
+   -->
+   <Organics></Organics>
+
+   <!--        
+        Generic Polymers
+   -->
+   <Polymers></Polymers>
+   
    <!--        
         Development only materials
    -->
