@@ -19,6 +19,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 
 #include <queue>
 #include <stack>
+#include <cstdlib>
 
 using namespace std;
 using namespace SBE;
@@ -296,58 +297,6 @@ TEST_CASE("Suppression test",test_timed_event)
         (returner.call(24768)==24768)
     );
 }
-TEST_CASE("PriorityQueue Sorting Test",test_timed_event)
-{
-    std::priority_queue<TimedEvent<int, int>*> eventQueue;
-    eventQueue.emplace(new TimedEvent<int, int>(
-        F(int a)
-        {
-            return a;
-        },
-        steady_clock::now()+milliseconds(50)
-    ));
 
-    eventQueue.emplace(new TimedEvent<int, int>(
-        F(int a)
-        {
-            return a+10;
-        },
-        steady_clock::now()+milliseconds(500)
-    ));
-
-    CHECK(eventQueue.top()->call(0)==0);
-    eventQueue.pop();
-
-    CHECK(eventQueue.top()->call(0)==10);
-    eventQueue.pop();
-
-    /*std::stack<TimedEvent<int,int>*> results;
-
-    while(eventQueue.size()>0)
-    {
-        if(eventQueue.top()->operator<=(steady_clock::now()))
-        {
-            eventQueue.top()->launch(5);
-            results.emplace(eventQueue.top());
-            eventQueue.pop();
-        }
-    }
-
-    int res = results.top()->getResult();
-    cout<<"results.top()="<<res<<endl;
-    CHECK(
-        (results.top()->getResult()==5)
-    );
-
-    results.pop();
-
-    CHECK(
-        (results.top()->getResult()==15)
-    );
-
-    res = results.top()->getResult();
-    cout<<"results.top()="<<res<<endl;*/
-    
-}
 
 #endif
