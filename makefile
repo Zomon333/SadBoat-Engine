@@ -35,6 +35,11 @@ NOBUILD = -Dlibunwind=disabled
 BR = "\033[1;36m---------------------------------------------------\033[0m"
 
 
+#Compiles for debug
+debug:
+	mkdir ./output &
+	g++ $(FLAGS) $(DEFINES) $(PRODUCTION_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)"-dbg"
+	valgrind --leak-check=full --track-origins=yes $(OUT_DIR)/$(NAME)$(VERSION)"-dbg"
 
 
 #Compiles for production
