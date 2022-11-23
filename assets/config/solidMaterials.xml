@@ -9,9 +9,9 @@
 -->
 <!--
 <ExampleMaterial>
+     <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
      <Density>0000.00</Density> Use kg/m^3,
      <YungsModulous>000000000000.00</YungsModulous> Use Pascals,
-     <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
 </ExampleMaterial>
 -->
 <SolidMaterials>
@@ -33,34 +33,34 @@
    <Metals>
       <PureMetals>
           <Aluminum>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>2700</Density>
                <YungsModulous>000000000000.00</YungsModulous>
-               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
           </Aluminum>
           <Copper>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>8940</Density>
                <YungsModulous>000000000000.00</YungsModulous>
-               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
           </Copper>
           <Iron>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>7874</Density>
                <YungsModulous>000000000000.00</YungsModulous>
-               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
           </Iron>
           <Lead>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>11340</Density>
                <YungsModulous>000000000000.00</YungsModulous>
-               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
           </Lead>
           <Titanium>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>4507</Density>
                <YungsModulous>000000000000.00</YungsModulous>
-               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
           </Titanium>
           <Tungsten>
+               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>19250</Density>
                <YungsModulous>000000000000.00</YungsModulous>
-               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
           </Tungsten>
       </PureMetals>
       <Alloys>
@@ -74,7 +74,11 @@
           </Copper>
           <Iron>
                <AlloySteel></AlloySteel>
-               <CarbonSteel></CarbonSteel>
+               <HighCarbonSteel>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>7850</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </HighCarbonSteel>
                <CastIron></CastIron>
                <MildSteel></MildSteel>
                <StainlessSteel></StainlessSteel>
