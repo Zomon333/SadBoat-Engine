@@ -90,6 +90,8 @@ Disclaimer:
 #ifdef INCLUDE_VULKAN
     #include "./vulkan/vulkan.hpp"
     #include "../include/vulkan/instance.hpp"
+    #include "../include/vulkan/physicaldevice.hpp"
+    #include "../include/vulkan/physicaldevicecollection.hpp"
 #endif
 
 
