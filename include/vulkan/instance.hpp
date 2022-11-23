@@ -28,7 +28,7 @@ namespace SBE
     private:
         VkResult creationResult;
 
-        VkInstance vulkanInstance;
+        VkInstance* vulkanInstance;
         VkInstanceCreateInfo* creationInfo;
         VkAllocationCallbacks* allocationInfo;
 
@@ -37,6 +37,8 @@ namespace SBE
         //----------------------------------
         Instance()
         {
+            creationInfo = new VkInstanceCreateInfo;
+
             //Tells Vulkan what type of Struct this is
             creationInfo->sType=VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
             
@@ -49,14 +51,14 @@ namespace SBE
 
             
             //Another struct describing our application. Optional.
-            VkApplicationInfo* appInfo = new VkApplicationInfo;
+            VkApplicationInfo* appInfo = new VkApplicationInfo();
             appInfo->sType=VK_STRUCTURE_TYPE_APPLICATION_INFO;      //What type of struct is this?
             appInfo->pNext=nullptr;                                 //Do we need any extra parameters? (No)
             appInfo->pApplicationName="SadBoat Engine";             //What is the name of the application?
             appInfo->applicationVersion=0;                          //What is the version of the application?
             appInfo->pEngineName="SadBoat Engine";                  //What is the name of the engine?
             appInfo->engineVersion=29;                              //What is the version of the engine?
-            appInfo->apiVersion=VK_API_VERSION_1_0;                 //What version of Vulkan are we using?
+            appInfo->apiVersion=VK_API_VERSION_1_0;                 //What version of Vulkan are we using?*/
 
             //Pointer to another struct describing our application. Optional, but highly recommended!
             creationInfo->pApplicationInfo=appInfo;
@@ -86,11 +88,10 @@ namespace SBE
             //allocationInfo->pfnReallocation=;
             //allocationInfo->pUserData=;
 
-            creationResult = vkCreateInstance(creationInfo, allocationInfo, &vulkanInstance);
-            if(creationResult!=VK_SUCCESS)
-            {
-                throw new runtime_error("Vulkan Instance failed creation.");
-            }
+            vulkanInstance = new VkInstance;
+
+            creationResult = vkCreateInstance(creationInfo, allocationInfo, vulkanInstance);
+            
         }
 
         Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks allocationInfo)
@@ -98,11 +99,9 @@ namespace SBE
             *(this->creationInfo)=creationInfo;
             *(this->allocationInfo)=allocationInfo;
 
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
-            if(creationResult!=VK_SUCCESS)
-            {
-                throw new runtime_error("Vulkan Instance failed creation.");
-            }
+            vulkanInstance = new VkInstance;
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+            
         }
 
         Instance(VkInstanceCreateInfo* creationInfo, VkAllocationCallbacks allocationInfo)
@@ -110,11 +109,9 @@ namespace SBE
             this->creationInfo=creationInfo;
             *(this->allocationInfo)=allocationInfo;
 
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
-            if(creationResult!=VK_SUCCESS)
-            {
-                throw new runtime_error("Vulkan Instance failed creation.");
-            }
+            vulkanInstance = new VkInstance;
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+            
         }
 
         Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks* allocationInfo)
@@ -122,11 +119,9 @@ namespace SBE
             *(this->creationInfo)=creationInfo;
             this->allocationInfo=allocationInfo;
 
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
-            if(creationResult!=VK_SUCCESS)
-            {
-                throw new runtime_error("Vulkan Instance failed creation.");
-            }
+            vulkanInstance = new VkInstance;
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+            
         }
 
         Instance(VkInstanceCreateInfo* creationInfo, VkAllocationCallbacks* allocationInfo)
@@ -134,11 +129,9 @@ namespace SBE
             this->creationInfo=creationInfo;
             this->allocationInfo=allocationInfo;
 
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, &vulkanInstance);
-            if(creationResult!=VK_SUCCESS)
-            {
-                throw new runtime_error("Vulkan Instance failed creation.");
-            }
+            vulkanInstance = new VkInstance;
+            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
+            
         }
 
         //Destructors
@@ -157,7 +150,7 @@ namespace SBE
         //----------------------------------
         VkInstance* getInstance()
         {
-            return &(this->vulkanInstance);
+            return this->vulkanInstance;
         }
 
         VkInstanceCreateInfo* getCreationInfo()
@@ -177,7 +170,7 @@ namespace SBE
 
         //Mutators
         //----------------------------------
-        void setInstance(VkInstance newInstance)
+        void setInstance(VkInstance* newInstance)
         {
             this->vulkanInstance=newInstance;
         }
