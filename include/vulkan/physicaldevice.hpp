@@ -23,7 +23,7 @@ namespace SBE
     class PhysicalDevice
     {
     private:
-        VkPhysicalDevice self;
+        VkPhysicalDevice self; 
         VkPhysicalDeviceProperties selfProps;
 
     public:

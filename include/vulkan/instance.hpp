@@ -34,7 +34,7 @@ namespace SBE
 
     public:
         //Constructors
-        //----------------------------------
+        //---------------------------------- 
         Instance()
         {
             creationInfo = new VkInstanceCreateInfo;

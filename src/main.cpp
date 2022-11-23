@@ -113,6 +113,7 @@ int main(int argc, char* argv[])
     PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(&vulkanInstance);
 
     auto devices = vulkanDevices.getDevices();
+    
 
 
     return 0;

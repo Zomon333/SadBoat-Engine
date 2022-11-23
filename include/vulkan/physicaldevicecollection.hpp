@@ -25,7 +25,7 @@ namespace SBE
     class PhysicalDeviceCollection
     {
     private:
-        Instance* host;
+        Instance* host; 
 
         uint32_t numDevices;
         vector<PhysicalDevice*> devices;
