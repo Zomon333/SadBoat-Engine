@@ -73,17 +73,21 @@
                </Bronze>
           </Copper>
           <Iron>
-               <AlloySteel></AlloySteel>
-               <HighCarbonSteel>
-                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
-                    <Density>7850</Density>
-                    <YungsModulous>000000000000.00</YungsModulous>
-               </HighCarbonSteel>
                <DuctileCastIron>
                     <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                     <Density>7300</Density>
                     <YungsModulous>000000000000.00</YungsModulous>
                </DuctileCastIron>
+               <HighCarbonSteel>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>7810</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </HighCarbonSteel>
+               <MediumCarbonSteel>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>7830</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </MediumCarbonSteel>
                <MildSteel>
                     <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                     <Density>7850</Density>
