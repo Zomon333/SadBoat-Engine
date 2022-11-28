@@ -79,9 +79,21 @@
                     <Density>7850</Density>
                     <YungsModulous>000000000000.00</YungsModulous>
                </HighCarbonSteel>
-               <CastIron></CastIron>
-               <MildSteel></MildSteel>
-               <StainlessSteel></StainlessSteel>
+               <DuctileCastIron>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>7300</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </DuctileCastIron>
+               <MildSteel>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>7850</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </MildSteel>
+               <StainlessSteel>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>7900</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </StainlessSteel>
           </Iron>
           <Titanium></Titanium>
       </Alloys>
