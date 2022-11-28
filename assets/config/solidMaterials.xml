@@ -15,21 +15,6 @@
 </ExampleMaterial>
 -->
 <SolidMaterials>
-   
-   <!--        
-        Generic ceramics
-   -->
-   <Ceramics></Ceramics>
-   
-   <!--        
-        Generic composites
-   -->
-   <Composites></Composites>
-
-   <!--         
-        Generic metals
-   -->
-
    <Metals>
       <PureMetals>
           <Aluminum>
@@ -147,20 +132,13 @@
           <Titanium></Titanium>
       </Alloys>
    </Metals>
-   
-   <!--        
-        Generic organics
-   -->
+   <NonMetals>
+   <Ceramics></Ceramics>
+   <Composites></Composites>
    <Organics></Organics>
-
-   <!--        
-        Generic Polymers
-   -->
    <Polymers></Polymers>
+   </NonMetals>
    
-   <!--        
-        Development only materials
-   -->
    <Dev>
       <BedRock></BedRock><!-- Infinite Density -->
       <Unobtanium></Unobtanium><!-- Infinite FYFM -->
