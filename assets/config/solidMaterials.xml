@@ -37,6 +37,7 @@
                <Density>2700</Density>
                <YungsModulous>000000000000.00</YungsModulous>
           </Aluminum>
+          <Americium></Americium>
           <Copper>
                <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>8940</Density>
@@ -52,6 +53,13 @@
                <Density>11340</Density>
                <YungsModulous>000000000000.00</YungsModulous>
           </Lead>
+          <Lithium></Lithium>
+          <Magnesium></Magnesium>
+          <Neodymium></Neodymium>
+          <Osmium></Osmium>
+          <Potassium></Potassium>
+          <Radium></Radium>
+          <Sodium></Sodium>
           <Titanium>
                <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>4507</Density>
@@ -62,6 +70,7 @@
                <Density>19250</Density>
                <YungsModulous>000000000000.00</YungsModulous>
           </Tungsten>
+          <Uranium></Uranium>
       </PureMetals>
       <Alloys>
           <Aluminum></Aluminum>
