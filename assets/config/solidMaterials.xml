@@ -18,7 +18,7 @@
      <HomogenousSolids>
           <Compounds></Compounds>
           <Polymers>
-               <Plastic>
+               <Plastics>
                     <ABS>
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>1070</Density>
@@ -29,7 +29,7 @@
                          <Density>1260</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
                     </PETG>
-               </Plastic>
+               </Plastics>
           </Polymers>
           <PureElements>
                <Metals>
@@ -160,7 +160,18 @@
                <Titanium></Titanium>
           </Alloys>
           <Ceramics></Ceramics>
-          <Composites></Composites>
+          <Composites>
+               <Concrete>
+                         <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                         <Density>2600</Density>
+                         <YungsModulous>000000000000.00</YungsModulous>
+               </Concrete>
+               <Plywood>
+                    <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                    <Density>600</Density>
+                    <YungsModulous>000000000000.00</YungsModulous>
+               </Plywood>
+          </Composites>
           <Organics></Organics>
      </NonHomogenousSolids>
      <Dev>
