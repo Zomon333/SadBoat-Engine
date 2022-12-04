@@ -15,8 +15,9 @@
 </ExampleMaterial>
 -->
 <SolidMaterials>
+
    <Metals>
-      <PureMetals>
+      <ElementalMetals>
           <Aluminum>
                <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                <Density>2700</Density>
@@ -92,7 +93,7 @@
                <Density>19050</Density>
                <YungsModulous>000000000000.00</YungsModulous>
           </Uranium>
-      </PureMetals>
+      </ElementalMetals>
       <Alloys>
           <Aluminum></Aluminum>
           <Copper>
@@ -138,9 +139,13 @@
    <Organics></Organics>
    <Polymers></Polymers>
    </NonMetals>
-   
    <Dev>
-      <BedRock></BedRock><!-- Infinite Density -->
-      <Unobtanium></Unobtanium><!-- Infinite FYFM -->
+     <JeanBaptiste>
+          <CoeficientOfRestitution>0.5</CoeficientOfRestitution>
+          <Density>1</Density>
+          <YungsModulous>1.00</YungsModulous>
+     </JeanBaptiste><!-- A generic substance for testing purposes-->
+     <BedRock></BedRock><!-- Infinite Density -->
+     <Unobtanium></Unobtanium><!-- Infinite FYFM -->
    </Dev>
 </SolidMaterials>
