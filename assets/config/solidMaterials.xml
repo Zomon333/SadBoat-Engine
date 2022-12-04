@@ -172,7 +172,33 @@
                     <YungsModulous>000000000000.00</YungsModulous>
                </Plywood>
           </Composites>
-          <Organics></Organics>
+          <Organics>
+               <CelluloseBased>
+                    <Tree>
+                         <Wood>
+                              <Acacias>
+                                   <IronwoodWattle>
+                                        <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                                        <Density>1150</Density>
+                                        <YungsModulous>000000000000.00</YungsModulous>
+                                   </IronwoodWattle>
+                              </Acacias>
+                              <Oaks>
+                                   <LiveOak>
+                                        <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                                        <Density>1000</Density>
+                                        <YungsModulous>000000000000.00</YungsModulous>
+                                   </LiveOak>
+                                   <WhiteOak>
+                                        <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                                        <Density>755</Density>
+                                        <YungsModulous>000000000000.00</YungsModulous>
+                                   <WhiteOak>
+                              </Oaks>
+                         </Wood>
+                    </Tree>
+               </CelluloseBased>
+          </Organics>
      </NonHomogenousSolids>
      <Dev>
           <JeanBaptiste>
