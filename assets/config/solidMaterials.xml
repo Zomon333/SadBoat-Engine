@@ -103,11 +103,19 @@
           <Alloys>
                <Aluminum></Aluminum>
                <Copper>
-               <Brass></Brass>
-               <Bronze>
-                    <AluminumBronze></AluminumBronze>
-                    <NickelAluminumBronze></NickelAluminumBronze>
-               </Bronze>
+                    <Brass></Brass>
+                    <Bronze>
+                         <AluminumBronze>
+                              <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                              <Density>7640</Density>
+                              <YungsModulous>000000000000.00</YungsModulous>
+                         </AluminumBronze>
+                         <NickelAluminumBronze>
+                              <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
+                              <Density>7580</Density>
+                              <YungsModulous>000000000000.00</YungsModulous>
+                         </NickelAluminumBronze>
+                    </Bronze>
                </Copper>
                <Iron>
                     <DuctileCastIron>
