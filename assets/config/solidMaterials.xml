@@ -31,7 +31,7 @@
                     </PETG>
                </Plastics>
           </Polymers>
-          <PureElements>
+          <Elements>
                <Metals>
                     <Aluminum>
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
@@ -110,7 +110,7 @@
                     </Uranium>
                </Metals>
                <NonMetals></NonMetals>
-          </PureElements>
+          </Elements>
      </HomogenousSolids>
      <NonHomogenousSolids>
           <Alloys>
