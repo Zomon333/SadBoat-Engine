@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<ExampleMaterial>
+     <Density>0000.00</Density> Use kg/m^3,
+     <Viscosity>000000000000.00</Viscosity> Use N*s/m^2,
+</ExampleMaterial>
+-->
+<LiquidMaterials>
+    <HomogenousLiquids>
+        <Compounds>
+        </Compounds>
+        <Elements>
+        </Elements>
+    </HomogenousLiquids>
+    <NonHomogenousLiquids>
+    </NonHomogenousLiquids>
+</LiquidMaterials>
