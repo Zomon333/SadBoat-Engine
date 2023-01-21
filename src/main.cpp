@@ -173,82 +173,10 @@ bool getHardwareAccelerationSettings(HardwareAccelerationSettings* updatable)
     */
     __asm__("mov %%ebx, %0\n\t":"=r" (results[1]));
     
-    // Feature Flags
-    /*
-    ECX BREAKOUT
-    ------------------------------
-    0   sse3
-    1   pclmulqdq
-    2   dtes64
-    3   monitor
-    4   ds-cpi
-    5   vmx
-    6   smx
-    7   est
-    8   tm2
-    9   ssse3
-    10  cnxt-id
-    11  sdbg
-    12  fma
-    13  cx16
-    14  xtpr
-    15  pdcm
-    16  Reserved
-    17  pcid
-    18  dca
-    19  sse4.1
-    20  sse4.2
-    21  x2apic
-    22  movbe
-    23  popcnt
-    24  tsc-deadline
-    25  aes
-    26  xsave
-    27  osxsave
-    28  avx
-    29  f16c
-    30  rdrnd
-    31  hypervisor
-    */
-    __asm__("mov %%ecx, %0\n\t":"=r" (results[2]));
     
-    // Feature Flags
-    /*
-    EDX BREAKOUT
-    ------------------------------
-    0   fpu
-    1   vme
-    2   de
-    3   pse
-    4   tsc
-    5   msr
-    6   pae
-    7   mce
-    8   cx8
-    9   apic
-    10  RESERVED
-    11  sep
-    12  mtrr
-    13  pge
-    14  mca
-    15  cmov
-    16  pat
-    17  pse-36
-    18  psn
-    19  clfsh
-    20  RESERVED
-    21  ds
-    22  acpi   
-    23  mmx
-    24  fxsr
-    25  sse
-    26  sse2
-    27  ss
-    28  htt
-    29  tm
-    30  ia64
-    31  pbe
-    */
+    __asm__("mov %%ecx, %0\n\t":"=r" (results[2]));
+
+    
     __asm__("mov %%edx, %0\n\t":"=r" (results[3]));
 
     bool parsed[2][32];
@@ -295,14 +223,80 @@ bool getHardwareAccelerationSettings(HardwareAccelerationSettings* updatable)
         parsed[1][i]= ((vals[i]&results[3]) > 0);
     }
 
-    for(int i=0; i<2; i++)
-    {
-        for(int j=0; j<32; j++)
-        {
-            cout<<parsed[i][j];
-        }
-        cout<<endl;
-    }
+    int i=0;
+    int j=0;
+    
+    //  Feature Flags ECX & EDX Breakout
+    //
+    //  ECX FEATURE FLAG BREAKOUT
+    //--------------------------------------------------
+    updatable->SSE3 = parsed[i][j]; j++;                //  0   sse3
+    updatable->PCLMULQDQ = parsed[i][j]; j++;           //  1   pclmulqdq
+    updatable->DTES64 = parsed[i][j]; j++;              //  2   dtes64
+    updatable->MONITOR = parsed[i][j]; j++;             //  3   monitor
+    updatable->DS_CPI = parsed[i][j]; j++;              //  4   ds-cpi
+    updatable->VMX = parsed[i][j]; j++;                 //  5   vmx
+    updatable->SMX = parsed[i][j]; j++;                 //  6   smx
+    updatable->EST = parsed[i][j]; j++;                 //  7   est
+    updatable->TM2 = parsed[i][j]; j++;                 //  8   tm2
+    updatable->SSSE3 = parsed[i][j]; j++;               //  9   ssse3
+    updatable->CNXT_ID = parsed[i][j]; j++;             //  10  cnxt-id
+    updatable->SDBG = parsed[i][j]; j++;                //  11  sdbg
+    updatable->FMA = parsed[i][j]; j++;                 //  12  fma
+    updatable->CX16 = parsed[i][j]; j++;                //  13  cx16
+    updatable->XTPR = parsed[i][j]; j++;                //  14  xtpr
+    updatable->PDCM = parsed[i][j]; j++;                //  15  pdcm
+    updatable->RESERVED1 = parsed[i][j]; j++;           //  16  Reserved
+    updatable->PCID = parsed[i][j]; j++;                //  17  pcid
+    updatable->DCA = parsed[i][j]; j++;                 //  18  dca
+    updatable->SSE4_1 = parsed[i][j]; j++;              //  19  sse4.1
+    updatable->SSE4_2 = parsed[i][j]; j++;              //  20  sse4.2
+    updatable->X2APIC = parsed[i][j]; j++;              //  21  x2apic
+    updatable->MOVBE = parsed[i][j]; j++;               //  22  movbe
+    updatable->POPCNT = parsed[i][j]; j++;              //  23  popcnt
+    updatable->TSC_DEADLINE = parsed[i][j]; j++;        //  24  tsc-deadline
+    updatable->AES = parsed[i][j]; j++;                 //  25  aes
+    updatable->XSAVE = parsed[i][j]; j++;               //  26  xsave
+    updatable->OSXSAVE = parsed[i][j]; j++;             //  27  osxsave
+    updatable->AVX = parsed[i][j]; j++;                 //  28  avx
+    updatable->F16C = parsed[i][j]; j++;                //  29  f16c
+    updatable->RDRND = parsed[i][j]; j++;               //  30  rdrnd
+    updatable->HYPERVISOR = parsed[i][j]; j=0; i++;     //  31  hypervisor
+    //
+    //  EDX FEATURE FLAG BREAKOUT
+    //--------------------------------------------------
+    updatable->FPU = parsed[i][j]; j++;                 //  0   fpu
+    updatable->VME = parsed[i][j]; j++;                 //  1   vme
+    updatable->DE = parsed[i][j]; j++;                  //  2   de
+    updatable->PSE = parsed[i][j]; j++;                 //  3   pse
+    updatable->TSC = parsed[i][j]; j++;                 //  4   tsc
+    updatable->MSR = parsed[i][j]; j++;                 //  5   msr
+    updatable->PAE = parsed[i][j]; j++;                 //  6   pae
+    updatable->MCE = parsed[i][j]; j++;                 //  7   mce
+    updatable->CX6 = parsed[i][j]; j++;                 //  8   cx8
+    updatable->APIC = parsed[i][j]; j++;                //  9   apic
+    updatable->RESERVED2 = parsed[i][j]; j++;           //  10  RESERVED
+    updatable->SEP = parsed[i][j]; j++;                 //  11  sep
+    updatable->MTRR = parsed[i][j]; j++;                //  12  mtrr
+    updatable->PGE = parsed[i][j]; j++;                 //  13  pge
+    updatable->MCA = parsed[i][j]; j++;                 //  14  mca
+    updatable->CMOV = parsed[i][j]; j++;                //  15  cmov
+    updatable->PAT = parsed[i][j]; j++;                 //  16  pat
+    updatable->PSE_36 = parsed[i][j]; j++;              //  17  pse-36
+    updatable->PSN = parsed[i][j]; j++;                 //  18  psn
+    updatable->CLFSH = parsed[i][j]; j++;               //  19  clfsh
+    updatable->RESERVED3 = parsed[i][j]; j++;           //  20  RESERVED
+    updatable->DS = parsed[i][j]; j++;                  //  21  ds
+    updatable->ACPI = parsed[i][j]; j++;                //  22  acpi   
+    updatable->MMX = parsed[i][j]; j++;                 //  23  mmx
+    updatable->FXSR = parsed[i][j]; j++;                //  24  fxsr
+    updatable->SSE = parsed[i][j]; j++;                 //  25  sse
+    updatable->SSE2 = parsed[i][j]; j++;                //  26  sse2
+    updatable->SS = parsed[i][j]; j++;                  //  27  ss
+    updatable->HTT = parsed[i][j]; j++;                 //  28  htt
+    updatable->TM = parsed[i][j]; j++;                  //  29  tm
+    updatable->IA64 = parsed[i][j]; j++;                //  30  ia64
+    updatable->PBE = parsed[i][j]; j++;                 //  31  pbe
 
     return true;
 }
