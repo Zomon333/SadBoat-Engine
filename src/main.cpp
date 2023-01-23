@@ -121,7 +121,93 @@ int main(int argc, char* argv[])
     // 3) If no device to choose, blindly choose 0th device 
     //auto chosenDevice = devices[0];
 
+
+    // We need to initialize our LogicalDevice, so we're setting up some boilerplate structs to store the info for the constructor.
+    // 
+    // 
+    VkDeviceCreateInfo initInfo;
+
+    // What type of struct are we initializing our logical device with?
+    initInfo.sType=VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+
+    // Does it have any extensions?
+    initInfo.pNext=nullptr;
+
+    // Or any flags?
+    initInfo.flags=0;
+
+
+    // We need some info on the Queues we're initializing inside of it, too.
+    VkDeviceQueueCreateInfo initDevQueue;
+    // What type of struct is this?
+    initDevQueue.sType=VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    // Any extensions? (no)
+    initDevQueue.pNext=nullptr;
+    // Any flags? (no)
+    initDevQueue.flags=0;
+
+    // Find some queue family in the collection of queue families.
+    // Ideally, we'd do more work here to find the *right* queue family but for this boilerplate
+    // we're just going to assume the first queue fam is fine.
     QueueFamilyCollection deviceQueues = QueueFamilyCollection(vulkanDevices.getDevices()[0]);
+
+    // Specifies the family of the queues we want to create
+    // Set to the index in the array of queue families stored in QueueFamilyCollection
+    initDevQueue.queueFamilyIndex=0;
+
+    // Use as many queues as we can, as long as it's not zero
+    initDevQueue.queueCount=(deviceQueues.describeQueue(0)->queueCount-1 > 0) ? deviceQueues.describeQueue(0)->queueCount-1 : 1;
+
+    // An optional pointer to an array of floats representing priority of work submitted to each of the queues. These values are normalized.
+    // Use this later for prioritizing rendering for high mobility objects and the player model
+    // Setting this to nullptr has the device treat every queue the same
+    float priorities[initDevQueue.queueCount];
+    
+    // This for loop creates a piecewise function to weight queue priorities based on how far they are
+    // It has an intentional bias so 20% of the queues are 0.5 priorities
+    for(int i=0; i<initDevQueue.queueCount;i++)
+    {
+        float progress = ((float)(i)/(float)(initDevQueue.queueCount));
+
+        Range mids = Range(0.4, 0.6);
+
+
+        if(mids[progress])
+        {   
+            priorities[i]= 0.5;
+        }   
+        else
+        {
+            priorities[i] = (1.0-(1.25 * progress));
+        }
+
+        if(priorities[i]<0.1)
+        {
+            priorities[i]=0.1;
+        }
+    }
+    initDevQueue.pQueuePriorities=priorities;
+    
+
+
+
+
+
+    // initInfo.queueCreateInfoCount=
+    // initInfo.pQueueCreateInfos=
+
+
+
+
+    // initInfo.enabledLayerCount=
+    // initInfo.ppEnabledLayerNames=
+    // initInfo.enabledExtensionCount=
+    // initInfo.ppEnabledExtensionNames=
+    // initInfo.pEnabledFeatures=
+
+
+
+    LogicalDevice testDevice = LogicalDevice(vulkanDevices.getDevices()[0], &initInfo);
 
     return 0;
 }
