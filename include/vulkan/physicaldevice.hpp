@@ -23,25 +23,59 @@ namespace SBE
     class PhysicalDevice
     {
     private:
+        // What are we?
         VkPhysicalDevice self; 
+
+        // What can we do?
         VkPhysicalDeviceProperties selfProps;
+        VkPhysicalDeviceFeatures selfFeats;
+
+        // Where do we do it?
+        VkPhysicalDeviceMemoryProperties selfMem;
+
+        // How do we do it?
+        uint32_t queueFamPropCount;
+        vector<VkQueueFamilyProperties*> selfQueueFamilyProperties;
 
     public:
+
+        //Constructors
+        //----------------------------------
+        PhysicalDevice(VkPhysicalDevice nSelf)
+        {
+            self=nSelf;
+            this->update();
+        }
+
         PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps)
         {
             self=nSelf;
             selfProps=nProps;
+            this->update();
         }
 
-        auto getDevice()
+        //Mutators
+        //----------------------------------
+        void update()
         {
-            return self;
+            vkGetPhysicalDeviceProperties(self, &selfProps);
+            vkGetPhysicalDeviceFeatures(self, &selfFeats);
+            vkGetPhysicalDeviceMemoryProperties(self, &selfMem);
+
+            vkGetPhysicalDeviceQueueFamilyProperties(self, &queueFamPropCount, nullptr);
+            selfQueueFamilyProperties.resize(queueFamPropCount);
+            vkGetPhysicalDeviceQueueFamilyProperties(self, &queueFamPropCount, *(selfQueueFamilyProperties.data()));
         }
 
-        auto getProperties()
-        {
-            return selfProps;
-        }
+        //Accessors
+        //----------------------------------
+        auto getDevice() { return self; }
+        auto getProperties() { return selfProps; }
+        auto getFeatures() {  return selfFeats; }
+        auto getMem() {  return selfMem; }
+        auto getQueueFamPropCount() {  return queueFamPropCount; }
+        auto getQueueFamilyProps() {  return selfQueueFamilyProperties; }
+
     };
 };
 #endif
