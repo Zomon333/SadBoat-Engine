@@ -91,6 +91,7 @@ string testSetup(int argc, char* argv[], string possibleName)
     return name;
 }
 
+
 //----------------------------------
 //  main(int argc, char* argv[]) function:
 //
@@ -113,8 +114,12 @@ int main(int argc, char* argv[])
     PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(&vulkanInstance);
 
     auto devices = vulkanDevices.getDevices();
-
-
+    
+    // Todo: Implement device choice workflow
+    // 1) Prefer device listed in config
+    // 2) If no config, Intelligently choose best device as backup, save to config
+    // 3) If no device to choose, blindly choose 0th device 
+    auto chosenDevice = devices[0];
 
     return 0;
 }
