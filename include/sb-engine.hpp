@@ -97,6 +97,9 @@ Disclaimer:
     #include "../include/vulkan/queuefamily.hpp"
     #include "../include/vulkan/queuefamilycollection.hpp"
 
+    #include "../include/vulkan/logicaldevice.hpp"
+
+
 
 #endif
 
