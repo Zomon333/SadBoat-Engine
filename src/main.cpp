@@ -113,13 +113,15 @@ int main(int argc, char* argv[])
     Instance vulkanInstance;
     PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(&vulkanInstance);
 
-    auto devices = vulkanDevices.getDevices();
+    //auto devices = vulkanDevices.getDevices();
     
     // Todo: Implement device choice workflow
     // 1) Prefer device listed in config
     // 2) If no config, Intelligently choose best device as backup, save to config
     // 3) If no device to choose, blindly choose 0th device 
-    auto chosenDevice = devices[0];
+    //auto chosenDevice = devices[0];
+
+    QueueFamilyCollection deviceQueues = QueueFamilyCollection(vulkanDevices.getDevices()[0]);
 
     return 0;
 }
