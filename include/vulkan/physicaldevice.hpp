@@ -20,6 +20,7 @@ using namespace std;
 
 namespace SBE
 {
+
     class PhysicalDevice
     {
     private:
@@ -34,8 +35,8 @@ namespace SBE
         VkPhysicalDeviceMemoryProperties selfMem;
 
         // How do we do it?
-        uint32_t queueFamPropCount;
-        vector<VkQueueFamilyProperties*> selfQueueFamilyProperties;
+        // QueueFamilyCollection* queueFamilies;
+
 
     public:
 
@@ -44,6 +45,8 @@ namespace SBE
         PhysicalDevice(VkPhysicalDevice nSelf)
         {
             self=nSelf;
+            // queueFamilies = new QueueFamilyCollection(this);
+            
             this->update();
         }
 
@@ -51,6 +54,8 @@ namespace SBE
         {
             self=nSelf;
             selfProps=nProps;
+            // queueFamilies = new QueueFamilyCollection(this);
+
             this->update();
         }
 
@@ -62,9 +67,7 @@ namespace SBE
             vkGetPhysicalDeviceFeatures(self, &selfFeats);
             vkGetPhysicalDeviceMemoryProperties(self, &selfMem);
 
-            vkGetPhysicalDeviceQueueFamilyProperties(self, &queueFamPropCount, nullptr);
-            selfQueueFamilyProperties.resize(queueFamPropCount);
-            vkGetPhysicalDeviceQueueFamilyProperties(self, &queueFamPropCount, *(selfQueueFamilyProperties.data()));
+            // queueFamilies->update();
         }
 
         //Accessors
@@ -73,8 +76,9 @@ namespace SBE
         auto getProperties() { return selfProps; }
         auto getFeatures() {  return selfFeats; }
         auto getMem() {  return selfMem; }
-        auto getQueueFamPropCount() {  return queueFamPropCount; }
-        auto getQueueFamilyProps() {  return selfQueueFamilyProperties; }
+        
+        // auto getQueueFamPropCount() {  return queueFamPropCount; }
+        // auto getQueueFamilyProps() {  return selfQueueFamilyProperties; }
 
     };
 };
