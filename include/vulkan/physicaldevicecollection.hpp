@@ -34,6 +34,15 @@ namespace SBE
         //Constructors
         //----------------------------------
 
+        PhysicalDeviceCollection()
+        {
+            host = new Instance;
+
+            updateCount();
+
+            updateDevices();
+        }
+
         PhysicalDeviceCollection(Instance* newHost)
         {
             //Set the instance in this collection to the instance passed by the parameter
