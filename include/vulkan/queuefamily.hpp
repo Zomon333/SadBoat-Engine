@@ -28,12 +28,23 @@ class QueueFamily
         VkQueueFamilyProperties* selfProps;
 
     public:
+        // Constructors 
+        //----------------------------------
+    
+        //Construct a QueueFamily given some parent and some properties
         QueueFamily(PhysicalDevice* parent, VkQueueFamilyProperties* selfProps)
         {
             this->parent=parent;
             this->selfProps=selfProps;
         }
 
+        // Accessors
+        //----------------------------------
+
+        // Get the QueueFamily's parent
+        auto getParent() { return parent; }
+
+        // Get the QueueFamily's properties
         auto getProps() { return selfProps; }
     };
 };
