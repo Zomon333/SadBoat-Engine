@@ -24,6 +24,9 @@ namespace SBE
     class PhysicalDevice
     {
     private:
+        // Where did we come from?
+        Instance* host;
+
         // What are we?
         VkPhysicalDevice self; 
 
@@ -42,16 +45,18 @@ namespace SBE
 
         //Constructors
         //----------------------------------
-        PhysicalDevice(VkPhysicalDevice nSelf)
+        PhysicalDevice(VkPhysicalDevice nSelf, Instance* host)
         {
+            this->host=host;
             self=nSelf;
             // queueFamilies = new QueueFamilyCollection(this);
             
             this->update();
         }
 
-        PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps)
+        PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps, Instance* host)
         {
+            this->host=host;
             self=nSelf;
             selfProps=nProps;
             // queueFamilies = new QueueFamilyCollection(this);
@@ -77,6 +82,8 @@ namespace SBE
         auto getFeatures() {  return selfFeats; }
         auto getMem() {  return selfMem; }
         
+        auto getHost() { return host; }
+
         // auto getQueueFamPropCount() {  return queueFamPropCount; }
         // auto getQueueFamilyProps() {  return selfQueueFamilyProperties; }
 

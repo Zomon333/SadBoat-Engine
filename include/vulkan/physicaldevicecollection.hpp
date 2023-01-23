@@ -91,7 +91,7 @@ namespace SBE
             for(int i = 0; i<tmp.size(); i++)
             {
                 vkGetPhysicalDeviceProperties(tmp[i],&tmpProps[i]);
-                devices[i]=new PhysicalDevice(tmp[i],tmpProps[i]);
+                devices[i]=new PhysicalDevice(tmp[i],tmpProps[i], host);
             }
 
             return devices;
