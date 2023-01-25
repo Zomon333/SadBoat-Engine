@@ -159,7 +159,6 @@
                </Iron>
                <Titanium></Titanium>
           </Alloys>
-          <Ceramics></Ceramics>
           <Composites>
                <Concrete>
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
