@@ -38,12 +38,17 @@ namespace SBE
         // Make a device, assume some info
         LogicalDevice(PhysicalDevice* parent)
         {
+            this->parent=parent;
+            this->host=parent->getHost();
+
             // We need to initialize our LogicalDevice, so we're setting up some boilerplate structs to store the info for the constructor.
             VkDeviceCreateInfo initInfo;
             initInfo.sType=VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
             initInfo.pNext=nullptr;
             initInfo.flags=0;
 
+            auto queueFams = QueueFamilyCollection(parent);
+            auto optimalFam = queueFams.getOptimal().second;
 
             // We need some info on the Queues we're initializing inside of it, too.
             VkDeviceQueueCreateInfo initDevQueue;
@@ -64,27 +69,36 @@ namespace SBE
                 -Player
                 -Projectiles
                 -Enemies
-                -Background & UI
+                -UI
+                -Background
                 -Other
             */
-            initDevQueue.queueCount=5;
+            initDevQueue.queueCount=1;
 
             // An optional pointer to an array of floats representing priority of work submitted to each of the queues. These values are normalized.
             // Use this later for prioritizing rendering for high mobility objects and the player model
             // Setting this to nullptr has the device treat every queue the same
             initDevQueue.pQueuePriorities=nullptr;
             
-            initInfo.queueCreateInfoCount=5;
-            // initInfo.pQueueCreateInfos=
+            initInfo.queueCreateInfoCount=1;
+            VkDeviceQueueCreateInfo infos[1];
+            for(int i=0; i<1; i++)
+            {
+                infos[i]=initDevQueue;
+            }
 
+            initInfo.pQueueCreateInfos=infos;
 
+            initInfo.enabledLayerCount=0;
+            initInfo.ppEnabledLayerNames=nullptr;
 
+            initInfo.enabledExtensionCount=0;
+            initInfo.ppEnabledExtensionNames=nullptr;
 
-            // initInfo.enabledLayerCount=
-            // initInfo.ppEnabledLayerNames=
-            // initInfo.enabledExtensionCount=
-            // initInfo.ppEnabledExtensionNames=
-            // initInfo.pEnabledFeatures=
+            // We generally don't want this to be nullptr. This is just as a proof of concept.
+            initInfo.pEnabledFeatures=nullptr;
+
+            vkCreateDevice(parent->getDevice(), &initInfo, parent->getHost()->getAllocationInfo(), &self);
         }
 
         // Make a device, assume no info
