@@ -111,7 +111,7 @@ namespace SBE
             this->host=parent->getHost();
             this->creationInfo=creationInfo;
             this->requiredFeatures=requiredFeatures;
-            
+
             // Todo: Add code for requiredFeatures to be checked against parent's features
 
             vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
@@ -129,12 +129,14 @@ namespace SBE
         void setParent(auto parent) { this->parent=parent; }
         void setHost(auto host) { this->host=host; }
         void setCreationInfo(auto creationInfo) { this->creationInfo=creationInfo; }
+        void setRequiredFeats(auto requiredFeats) { this->requiredFeatures=requiredFeats; }
 
         // Accessors
         auto getParent() { return parent; }
         auto getHost() { return host; }
         auto getSelf() { return self; }
         auto getCreationInfo() { return creationInfo; }
+        auto getRequiredFeats() { return requiredFeatures; }
     };
 };
 #endif
