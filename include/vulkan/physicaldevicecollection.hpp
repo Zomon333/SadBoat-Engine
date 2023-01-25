@@ -104,6 +104,17 @@ namespace SBE
         uint32_t getNumDevices() { return numDevices; }
         vector<PhysicalDevice*> getDevices() { return devices; }
 
+        PhysicalDevice* getOptimal() 
+        { 
+            // Todo: Implement device choice workflow
+            // 1) Prefer device listed in config
+            // 2) If no config, Intelligently choose best device as backup, save to config
+            // 3) If no device to choose, blindly choose 0th device 
+            return devices[0];
+
+
+        }
+
     };
 };
 #endif
