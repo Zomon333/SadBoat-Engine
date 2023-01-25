@@ -62,7 +62,7 @@ namespace SBE
 
             // Specifies the family of the queues we want to create
             // Set to the index in the array of queue families stored in QueueFamilyCollection
-            initDevQueue.queueFamilyIndex=0;
+            initDevQueue.queueFamilyIndex=queueFams.getOptimal().first;
 
             /*
             Render categories:
@@ -73,15 +73,15 @@ namespace SBE
                 -Background
                 -Other
             */
-            initDevQueue.queueCount=1;
+            initDevQueue.queueCount=6;
 
             // An optional pointer to an array of floats representing priority of work submitted to each of the queues. These values are normalized.
             // Use this later for prioritizing rendering for high mobility objects and the player model
             // Setting this to nullptr has the device treat every queue the same
             initDevQueue.pQueuePriorities=nullptr;
             
-            initInfo.queueCreateInfoCount=1;
-            VkDeviceQueueCreateInfo infos[1];
+            initInfo.queueCreateInfoCount=6;
+            VkDeviceQueueCreateInfo infos[6];
             for(int i=0; i<1; i++)
             {
                 infos[i]=initDevQueue;
