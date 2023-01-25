@@ -110,16 +110,11 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
     
-    Instance vulkanInstance;
-    PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(&vulkanInstance);
+    Instance* vulkanInstance = new Instance;
+    // vulkanInstance.setAllocationInfo(nullptr);
 
-    // Todo: Implement device choice workflow
-    // 1) Prefer device listed in config
-    // 2) If no config, Intelligently choose best device as backup, save to config
-    // 3) If no device to choose, blindly choose 0th device 
-    auto chosenDevice = vulkanDevices.getDevices()[0];
-
-    LogicalDevice testDevice = LogicalDevice(chosenDevice);
+    PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(vulkanInstance);
+    LogicalDevice testDevice = LogicalDevice(vulkanDevices.getOptimal());
 
     return 0;
 }
