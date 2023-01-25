@@ -22,12 +22,12 @@
                     <ABS>
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>1070</Density>
-                         <YungsModulous>000000000000.00</YungsModulous>
+                         <YungsModulous>2490000000</YungsModulous>
                     </ABS>
                     <PETG>
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>1260</Density>
-                         <YungsModulous>000000000000.00</YungsModulous>
+                         <YungsModulous>2060000000</YungsModulous>
                     </PETG>
                </Plastics>
           </Polymers>
