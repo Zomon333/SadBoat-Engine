@@ -114,7 +114,13 @@ int main(int argc, char* argv[])
     // vulkanInstance.setAllocationInfo(nullptr);
 
     PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(vulkanInstance);
-    LogicalDevice testDevice = LogicalDevice(vulkanDevices.getOptimal());
+
+    VkPhysicalDeviceFeatures requiredFeats;
+    requiredFeats.multiDrawIndirect=VK_TRUE;
+    requiredFeats.tessellationShader=VK_TRUE;
+    requiredFeats.geometryShader=VK_TRUE;
+
+    LogicalDevice testDevice = LogicalDevice(vulkanDevices.getOptimal(), &requiredFeats);
 
     return 0;
 }
