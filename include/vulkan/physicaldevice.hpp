@@ -25,7 +25,7 @@ namespace SBE
     {
     private:
         // Where did we come from?
-        Instance* host;
+        Instance*host;
 
         // What are we?
         VkPhysicalDevice self; 
@@ -78,9 +78,9 @@ namespace SBE
         //Accessors
         //----------------------------------
         auto getDevice() { return self; }
-        auto getProperties() { return selfProps; }
-        auto getFeatures() {  return selfFeats; }
-        auto getMem() {  return selfMem; }
+        auto getProperties() { return &selfProps; }
+        auto getFeatures() {  return &selfFeats; }
+        auto getMem() {  return &selfMem; }
         
         auto getHost() { return host; }
 
