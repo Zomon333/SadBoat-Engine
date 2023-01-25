@@ -70,8 +70,12 @@ namespace SBE
         
         // Returns queue family from backing
         auto getQueueFamily(int which) { return selfQueueFamilies[which]; }
-
         auto describeQueue(int which) { return selfQueueFamilies[which].getProps(); }
+        
+        auto getOptimal() 
+        {
+            return pair<int,QueueFamily>(0, selfQueueFamilies[0]);
+        }
 
     };
 
