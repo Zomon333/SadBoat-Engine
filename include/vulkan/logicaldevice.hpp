@@ -30,22 +30,26 @@ namespace SBE
         Instance* host;
         PhysicalDevice* parent;
 
+        VkPhysicalDeviceFeatures* requiredFeatures;
+
         VkDeviceCreateInfo* creationInfo;
         VkDevice self;
     public:
         // Constructors
 
         // Make a device, assume some info
-        LogicalDevice(PhysicalDevice* parent)
+        LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr)
         {
             this->parent=parent;
             this->host=parent->getHost();
+            this->creationInfo=new VkDeviceCreateInfo;
+            this->requiredFeatures=requiredFeatures;
 
             // We need to initialize our LogicalDevice, so we're setting up some boilerplate structs to store the info for the constructor.
-            VkDeviceCreateInfo initInfo;
-            initInfo.sType=VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-            initInfo.pNext=nullptr;
-            initInfo.flags=0;
+            // VkDeviceCreateInfo initInfo;
+            creationInfo->sType=VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+            creationInfo->pNext=nullptr;
+            creationInfo->flags=0;
 
             auto queueFams = QueueFamilyCollection(parent);
             auto optimalFam = queueFams.getOptimal().second;
@@ -80,32 +84,36 @@ namespace SBE
             // Setting this to nullptr has the device treat every queue the same
             initDevQueue.pQueuePriorities=nullptr;
             
-            initInfo.queueCreateInfoCount=6;
+            creationInfo->queueCreateInfoCount=6;
             VkDeviceQueueCreateInfo infos[6];
             for(int i=0; i<1; i++)
             {
                 infos[i]=initDevQueue;
             }
 
-            initInfo.pQueueCreateInfos=infos;
+            creationInfo->pQueueCreateInfos=infos;
 
-            initInfo.enabledLayerCount=0;
-            initInfo.ppEnabledLayerNames=nullptr;
+            creationInfo->enabledLayerCount=0;
+            creationInfo->ppEnabledLayerNames=nullptr;
 
-            initInfo.enabledExtensionCount=0;
-            initInfo.ppEnabledExtensionNames=nullptr;
+            creationInfo->enabledExtensionCount=0;
+            creationInfo->ppEnabledExtensionNames=nullptr;
 
             // We generally don't want this to be nullptr. This is just as a proof of concept.
-            initInfo.pEnabledFeatures=nullptr;
+            creationInfo->pEnabledFeatures=this->requiredFeatures;
 
-            vkCreateDevice(parent->getDevice(), &initInfo, parent->getHost()->getAllocationInfo(), &self);
+            vkCreateDevice(parent->getDevice(), creationInfo, parent->getHost()->getAllocationInfo(), &self);
         }
 
         // Make a device, assume no info
-        LogicalDevice(PhysicalDevice* parent, VkDeviceCreateInfo* creationInfo)
+        LogicalDevice(PhysicalDevice* parent, VkDeviceCreateInfo* creationInfo, VkPhysicalDeviceFeatures* requiredFeatures={})
         {
             this->host=parent->getHost();
             this->creationInfo=creationInfo;
+            this->requiredFeatures=requiredFeatures;
+            
+            // Todo: Add code for requiredFeatures to be checked against parent's features
+
             vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
         }
 
