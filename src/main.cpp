@@ -91,6 +91,7 @@ string testSetup(int argc, char* argv[], string possibleName)
     return name;
 }
 
+
 //----------------------------------
 //  main(int argc, char* argv[]) function:
 //
@@ -109,12 +110,17 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
     
-    Instance vulkanInstance;
-    PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(&vulkanInstance);
+    Instance* vulkanInstance = new Instance;
+    // vulkanInstance.setAllocationInfo(nullptr);
 
-    auto devices = vulkanDevices.getDevices();
+    PhysicalDeviceCollection vulkanDevices = PhysicalDeviceCollection(vulkanInstance);
 
+    VkPhysicalDeviceFeatures requiredFeats;
+    requiredFeats.multiDrawIndirect=VK_TRUE;
+    requiredFeats.tessellationShader=VK_TRUE;
+    requiredFeats.geometryShader=VK_TRUE;
 
+    LogicalDevice testDevice = LogicalDevice(vulkanDevices.getOptimal(), &requiredFeats);
 
     return 0;
 }

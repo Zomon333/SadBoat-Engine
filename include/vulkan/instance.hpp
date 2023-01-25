@@ -96,6 +96,7 @@ namespace SBE
             {
                 throw new runtime_error("Vulkan Instance did not initialize.");
             }
+            this->allocationInfo=nullptr;
             
         }
 
@@ -111,6 +112,7 @@ namespace SBE
             {
                 throw new runtime_error("Vulkan Instance did not initialize.");
             }
+            // this->allocationInfo=nullptr;
             
         }
 
@@ -126,6 +128,7 @@ namespace SBE
             {
                 throw new runtime_error("Vulkan Instance did not initialize.");
             }
+            // this->allocationInfo=nullptr;
             
         }
 
@@ -141,6 +144,7 @@ namespace SBE
             {
                 throw new runtime_error("Vulkan Instance did not initialize.");
             }
+            // this->allocationInfo=nullptr;
             
         }
 
@@ -186,6 +190,7 @@ namespace SBE
         VkAllocationCallbacks* getAllocationInfo()
         {
             return this->allocationInfo;
+            // return nullptr;
         }
 
         VkResult getResult()

@@ -2,7 +2,7 @@
 #	Engine Version & Name
 #---------------------------------------------------
 NAME = "SadBoatEngine-V"
-VERSION = "0.02.9V"
+VERSION = "0.03.1V"
 
 
 #
@@ -47,7 +47,9 @@ prod:
 debug:
 	mkdir ./output &
 	g++ $(FLAGS) $(DEFINES) $(PRODUCTION_RELEASE) $(SOURCE_DIR)/*.cpp $(INCLUDE_DIRS) -L$(LIBRARY_DIR) $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)"-dbg"
+	script ./debug_log.txt
 	valgrind --leak-check=full --track-origins=yes $(OUT_DIR)/$(NAME)$(VERSION)"-dbg"
+	exit
 
 #Compiles with tests
 test:

@@ -20,28 +20,73 @@ using namespace std;
 
 namespace SBE
 {
+
     class PhysicalDevice
     {
     private:
+        // Where did we come from?
+        Instance*host;
+
+        // What are we?
         VkPhysicalDevice self; 
+
+        // What can we do?
         VkPhysicalDeviceProperties selfProps;
+        VkPhysicalDeviceFeatures selfFeats;
+
+        // Where do we do it?
+        VkPhysicalDeviceMemoryProperties selfMem;
+
+        // How do we do it?
+        // QueueFamilyCollection* queueFamilies;
+
 
     public:
-        PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps)
+
+        //Constructors
+        //----------------------------------
+        PhysicalDevice(VkPhysicalDevice nSelf, Instance* host)
         {
+            this->host=host;
+            self=nSelf;
+            // queueFamilies = new QueueFamilyCollection(this);
+            
+            this->update();
+        }
+
+        PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps, Instance* host)
+        {
+            this->host=host;
             self=nSelf;
             selfProps=nProps;
+            // queueFamilies = new QueueFamilyCollection(this);
+
+            this->update();
         }
 
-        auto getDevice()
+        //Mutators
+        //----------------------------------
+        void update()
         {
-            return self;
+            vkGetPhysicalDeviceProperties(self, &selfProps);
+            vkGetPhysicalDeviceFeatures(self, &selfFeats);
+            vkGetPhysicalDeviceMemoryProperties(self, &selfMem);
+
+            // queueFamilies->update();
         }
 
-        auto getProperties()
-        {
-            return selfProps;
-        }
+        //Accessors
+        //----------------------------------
+        auto getDevice() { return self; }
+        auto getProperties() { return &selfProps; }
+        auto getFeatures() {  return &selfFeats; }
+        auto getMem() {  return &selfMem; }
+        
+        auto getHost() { return host; }
+
+        // auto getQueueFamPropCount() {  return queueFamPropCount; }
+        // auto getQueueFamilyProps() {  return selfQueueFamilyProperties; }
+
     };
 };
 #endif
