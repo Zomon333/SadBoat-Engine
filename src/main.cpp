@@ -109,38 +109,6 @@ int main(int argc, char* argv[])
 
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
-    
-    struct VulkanDispatchables
-    {
-        Instance* vulkanInstance;
-        PhysicalDeviceCollection* vulkanDevices;
-        PhysicalDevice* preferredDevice;
-
-        VkPhysicalDeviceFeatures* requiredFeatures;
-
-        LogicalDevice* vulkanLogicalDevice;
-
-        Event<VulkanDispatchables*, VulkanDispatchables*> setup = Event<VulkanDispatchables*, VulkanDispatchables*>(
-            F(VulkanDispatchables* toInit)
-            {
-                toInit->vulkanInstance = new Instance;
-
-                toInit->vulkanDevices = new PhysicalDeviceCollection(toInit->vulkanInstance);
-                toInit->preferredDevice = toInit->vulkanDevices->getOptimal();
-
-                toInit->requiredFeatures = new VkPhysicalDeviceFeatures;
-                toInit->requiredFeatures->multiDrawIndirect=VK_TRUE;
-                toInit->requiredFeatures->tessellationShader=VK_TRUE;
-                toInit->requiredFeatures->geometryShader=VK_TRUE;
-
-                toInit->vulkanLogicalDevice = new LogicalDevice(toInit->preferredDevice, toInit->requiredFeatures);
-
-                return toInit;
-            }
-        );
-    };
-
-    
 
     VulkanDispatchables vulkanEnvironment;
     vulkanEnvironment.setup.launch(&vulkanEnvironment);
