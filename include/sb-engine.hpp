@@ -62,6 +62,7 @@ Disclaimer:
 #include "../include/events/event.hpp"
 #include "../include/events/timedevent.hpp"
 #include "../include/events/recurringevent.hpp"
+#include "../include/events/eventpool.hpp"
 
 
 // Primitive Includes
