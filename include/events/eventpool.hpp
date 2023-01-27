@@ -35,8 +35,9 @@ namespace SBE
                 period = milliseconds(20);
 
                 parser = RecurringEvent<int>(
-                [&pool](int a)
+                [this](int a)
                 {
+                    auto pool = this->getPool();
                     while(pool.size()>0)
                     {
                         pool.top().second->call(pool.top().first);
@@ -56,8 +57,9 @@ namespace SBE
                 this->period=std::chrono::duration_cast<milliseconds>(period);
 
                 parser = RecurringEvent<int>(
-                [&pool](int a)
+                [this](int a)
                 {
+                    auto pool = this->getPool();
                     while(pool.size()>0)
                     {
                         pool.top().second->call(pool.top().first);
@@ -76,6 +78,7 @@ namespace SBE
             // Accessors
             auto getParser() { return parser; }
             auto getPeriod() { return period; }
+            auto getPool() { return &pool; }
 
             // Mutators
             void setPeriod(auto period)
