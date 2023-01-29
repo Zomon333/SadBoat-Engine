@@ -110,8 +110,27 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
 
+
+    //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
     VulkanDispatchables vulkanEnvironment;
-    vulkanEnvironment.setup.launch(&vulkanEnvironment);
+
+    vulkanEnvironment.enabledExtFilter = new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
+        F(vector<VkExtensionProperties>* toParse)
+        {
+            toParse->clear();
+            return toParse;
+        }
+    );
+
+    vulkanEnvironment.enabledLayerFilter = new Event<vector<VkLayerProperties>*,vector<VkLayerProperties>*>(
+        F(vector<VkLayerProperties>* toParse)
+        {
+            toParse->clear();
+            return toParse;
+        }
+    );
+
+    vulkanEnvironment.setup(&vulkanEnvironment);
 
     return 0;
 }
