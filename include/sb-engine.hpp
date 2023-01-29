@@ -89,7 +89,11 @@ Disclaimer:
 ---------------------------------------------------------------------------------------------------------------------
 */
 #ifdef INCLUDE_VULKAN
+    
     #include "./vulkan/vulkan.hpp"
+
+
+
     #include "../include/vulkan/instance.hpp"
 
     #include "../include/vulkan/physicaldevice.hpp"
@@ -100,7 +104,8 @@ Disclaimer:
 
     #include "../include/vulkan/logicaldevice.hpp"
 
-
+    #include "../include/vulkan/layercollection.hpp"
+    #include "../include/vulkan/extensioncollection.hpp"
 
     #include "../include/vulkan/vulkandispatchables.hpp"
 #endif
