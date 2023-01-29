@@ -38,7 +38,7 @@ namespace SBE
         // Constructors
 
         // Make a device, assume some info
-        LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr)
+        LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr, vector<VkLayerProperties> layersToEnable=vector<VkLayerProperties>(), vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
         {
             this->parent=parent;
             this->host=parent->getHost();
@@ -93,11 +93,24 @@ namespace SBE
 
             creationInfo->pQueueCreateInfos=infos;
 
-            creationInfo->enabledLayerCount=0;
-            creationInfo->ppEnabledLayerNames=nullptr;
+            // Enable the layers named by the parameter
+            creationInfo->enabledLayerCount=layersToEnable.size();
+            char** layArr = new char*[layersToEnable.size()];
+            for(int i = 0; i<layersToEnable.size(); i++)
+            {
+                layArr[i]=layersToEnable[i].layerName;
+            }
+            creationInfo->ppEnabledLayerNames=layArr;
 
-            creationInfo->enabledExtensionCount=0;
-            creationInfo->ppEnabledExtensionNames=nullptr;
+
+            // Enable the extensions named by the parameter
+            creationInfo->enabledExtensionCount=extToEnable.size();
+            char** strArr = new char*[extToEnable.size()];
+            for(int i = 0; i<extToEnable.size(); i++)
+            {
+                strArr[i]=extToEnable[i].extensionName;
+            }
+            creationInfo->ppEnabledExtensionNames=strArr;
 
             // We generally don't want this to be nullptr. This is just as a proof of concept.
             creationInfo->pEnabledFeatures=this->requiredFeatures;
