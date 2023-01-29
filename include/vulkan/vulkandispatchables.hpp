@@ -21,28 +21,66 @@ namespace SBE
 {
     struct VulkanDispatchables
     {
+        // Our wrapper for the Vulkan instance
+        // 
         Instance* vulkanInstance;
+        
+        // Our wrapper for all Vulkan enabled devices
+        // Used to determine the optimal device, but also backup devices
         PhysicalDeviceCollection* vulkanDevices;
+        ExtensionCollection* vulkanExtensions;
+
+        Event<vector<VkExtensionProperties>*, vector<VkExtensionProperties>*>* enabledExtFilter;
+        vector<VkExtensionProperties> enabledExtensions;
+
+        // Our wrapper for the physical Vulkan device
+        // This is the preferred device as determined by our device collection
         PhysicalDevice* preferredDevice;
 
+        LayerCollection* vulkanLayers;
+        Event<vector<VkLayerProperties>*, vector<VkLayerProperties>*>* enabledLayerFilter;
+        vector<VkLayerProperties> enabledLayers;
+
+        // The struct requesting specific device features
+        // Will request these be enabled in the LogicalDevice
         VkPhysicalDeviceFeatures* requiredFeatures;
 
+        // Our wrapper for the Vulkan logical device
+        // Used for interfacing with the actual device, queues, etc.
         LogicalDevice* vulkanLogicalDevice;
 
+
+        // The event to set up all of our Vulkan environment.
+        // Useful so the Vulkan environment can be set up in basically two lines of code, while also being multithreaded.
         Event<VulkanDispatchables*, VulkanDispatchables*> setup = Event<VulkanDispatchables*, VulkanDispatchables*>(
             F(VulkanDispatchables* toInit)
             {
+                // Setup the instance
                 toInit->vulkanInstance = new Instance;
 
+                // Find what devices exist in it, and get the optimal device
                 toInit->vulkanDevices = new PhysicalDeviceCollection(toInit->vulkanInstance);
                 toInit->preferredDevice = toInit->vulkanDevices->getOptimal();
+                
+                // Find the extensions and layers available on the optimal device
+                toInit->vulkanExtensions = new ExtensionCollection(toInit->preferredDevice);
+                toInit->vulkanLayers = new LayerCollection(toInit->preferredDevice);
 
+                // Save the available extensions and layers for parsing
+                toInit->enabledExtensions = toInit->vulkanExtensions->getProps();
+                toInit->enabledLayers = toInit->vulkanLayers->getProps();
+
+                // Use the events in the struct to parse
+                toInit->enabledExtFilter->call(&(toInit->enabledExtensions));
+                toInit->enabledLayerFilter->call(&(toInit->enabledLayers));
+
+                // Finish setup
                 toInit->requiredFeatures = new VkPhysicalDeviceFeatures;
                 toInit->requiredFeatures->multiDrawIndirect=VK_TRUE;
                 toInit->requiredFeatures->tessellationShader=VK_TRUE;
                 toInit->requiredFeatures->geometryShader=VK_TRUE;
 
-                toInit->vulkanLogicalDevice = new LogicalDevice(toInit->preferredDevice, toInit->requiredFeatures);
+                toInit->vulkanLogicalDevice = new LogicalDevice(toInit->preferredDevice, toInit->requiredFeatures, toInit->enabledLayers, toInit->enabledExtensions);
 
                 return toInit;
             }
