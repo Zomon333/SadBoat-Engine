@@ -19,7 +19,7 @@ using namespace std;
 
 namespace SBE
 {
-    class SomeClass : public Inheritance
+    class SomeClass
     {
     private:
         
