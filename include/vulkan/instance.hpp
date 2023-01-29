@@ -35,7 +35,7 @@ namespace SBE
     public:
         //Constructors
         //---------------------------------- 
-        Instance()
+        Instance(vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
         {
             creationInfo = new VkInstanceCreateInfo;
 
@@ -68,11 +68,13 @@ namespace SBE
             //Names of instance layers we'll be enabling
             creationInfo->ppEnabledLayerNames=nullptr;
             
-            //Number of extensions we would like to enable
-            creationInfo->enabledExtensionCount=0;
-            //Names of extensions we'll be enabling
-            creationInfo->ppEnabledExtensionNames=nullptr;
-
+            creationInfo->enabledExtensionCount=extToEnable.size();
+            char** strArr = new char*[extToEnable.size()];
+            for(int i = 0; i<extToEnable.size(); i++)
+            {
+                strArr[i]=extToEnable[i].extensionName;
+            }
+            creationInfo->ppEnabledExtensionNames=strArr;
 
             /*
             allocationInfo is a pointer to a struct of memory-management callbacks used by our program.
