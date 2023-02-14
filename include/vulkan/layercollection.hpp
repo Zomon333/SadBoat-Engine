@@ -20,6 +20,9 @@ using namespace std;
 
 namespace SBE
 {
+    // LayerCollection: Graphics
+    // Generalized container for querying and accessing the various layers available on the PhysicalDevice provided
+    
     class LayerCollection
     {
     private:

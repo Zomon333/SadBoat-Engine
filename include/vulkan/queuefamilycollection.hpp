@@ -20,6 +20,8 @@ using namespace std;
 
 namespace SBE
 {
+    // QueueFamilyCollection: Graphics
+    // Generalized container for querying and storage of QueueFamilies from a given PhysicalDevice
     class QueueFamilyCollection
     {
     private:

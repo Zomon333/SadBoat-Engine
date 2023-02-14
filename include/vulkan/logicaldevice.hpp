@@ -24,6 +24,8 @@ using namespace std;
 
 namespace SBE
 {
+    // LogicalDevice: Graphics
+    // Vulkan wrapper for the logical device used for rendering
     class LogicalDevice
     {
     private:
@@ -36,6 +38,7 @@ namespace SBE
         VkDevice self;
     public:
         // Constructors
+        //----------------------------------
 
         // Make a device, assume some info
         LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr, vector<VkLayerProperties> layersToEnable=vector<VkLayerProperties>(), vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
@@ -130,7 +133,17 @@ namespace SBE
             vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
         }
 
+        // Deconstructors
+        //----------------------------------
+
+        ~LogicalDevice()
+        {
+            vkDeviceWaitIdle(self);
+            vkDestroyDevice(self, host->getAllocationInfo());
+        }
+
         // Mutators
+        //----------------------------------
 
         void update()
         {
@@ -145,11 +158,19 @@ namespace SBE
         void setRequiredFeats(auto requiredFeats) { this->requiredFeatures=requiredFeats; }
 
         // Accessors
+        //----------------------------------
+
         auto getParent() { return parent; }
         auto getHost() { return host; }
         auto getSelf() { return self; }
         auto getCreationInfo() { return creationInfo; }
         auto getRequiredFeats() { return requiredFeatures; }
+
+        template <class Function>
+        Function getFunc(const char* pName)
+        {
+            return ((Function)(vkGetDeviceProcAddr(self, pName)));
+        }
     };
 };
 #endif

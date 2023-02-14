@@ -21,6 +21,8 @@ using namespace std;
 
 namespace SBE
 {
+    // ExtensionCollection: Graphics
+    // Generalized container for querying and selecting the extensions available on the given PhysicalDevice
     class ExtensionCollection
     {
     private:

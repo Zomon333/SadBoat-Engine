@@ -169,12 +169,10 @@ namespace SBE
         //----------------------------------
         ~Instance()
         {
+            vkDestroyInstance(*vulkanInstance, allocationInfo);
+
             delete creationInfo;
             delete allocationInfo;
-
-            /*
-                Todo: Learn how to destroy a Vulkan Instance and put it here
-            */
         }
 
         //Accessors
@@ -198,6 +196,12 @@ namespace SBE
         VkResult getResult()
         {
             return creationResult;
+        }
+
+        template <class Function=PFN_vkVoidFunction>
+        Function getFunc(const char* pName)
+        {
+            return ((Function)(vkGetInstanceProcAddr(*(this->getInstance()), pName)));
         }
 
         //Mutators

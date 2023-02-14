@@ -20,12 +20,13 @@ using namespace std;
 
 namespace SBE
 {
-
+    // PhysicalDevice: Graphics
+    // Wrapper object for enumerated physical devices found by the Vulkan instance
     class PhysicalDevice
     {
     private:
         // Where did we come from?
-        Instance*host;
+        Instance* host;
 
         // What are we?
         VkPhysicalDevice self; 

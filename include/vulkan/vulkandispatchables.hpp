@@ -19,6 +19,8 @@ using namespace std;
 
 namespace SBE
 {
+    // VulkanDispatchables: Graphics
+    // Struct for the creation of the Vulkan graphics environment and relevant coinciding parts
     struct VulkanDispatchables
     {
         // Our wrapper for the Vulkan instance

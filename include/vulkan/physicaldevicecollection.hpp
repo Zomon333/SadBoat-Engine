@@ -22,6 +22,8 @@ using namespace std;
 
 namespace SBE
 {
+    // PhysicalDeviceCollection: Graphics
+    // Generalized container for the querying and generation of PhysicalDevices using a given instance
     class PhysicalDeviceCollection
     {
     private:

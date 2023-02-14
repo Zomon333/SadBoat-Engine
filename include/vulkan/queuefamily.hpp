@@ -20,6 +20,8 @@ using namespace std;
 
 namespace SBE
 {
+    // QueueFamily: Graphics
+    // Class for generalized containing of properties of a given QueueFamily
 class QueueFamily
     {
     private:
