@@ -57,6 +57,12 @@ Disclaimer:
 //----------------------------------
 #include "../include/utilities/defines.hpp"
 
+//  Resource Includes
+//----------------------------------
+#include "../include/resources/idmanager.hpp"
+#include "../include/resources/resourcehandle.hpp"
+#include "../include/resources/resourcemanager.hpp"
+
 // Event Includes
 //----------------------------------
 #include "../include/events/event.hpp"
