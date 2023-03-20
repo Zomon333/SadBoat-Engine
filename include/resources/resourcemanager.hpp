@@ -30,7 +30,8 @@ namespace SBE
         unordered_map<int,void*> resources;
         unordered_map<int, bool> persistent;
 
-        unordered_map<int,stack<ResourceHandle*>> handles;
+        unordered_map<int,IDManager> handleIDs;
+        unordered_map<int,unordered_map<int,ResourceHandle*>> handles;
 
         // Manager for IDs in use by resource manager
         IDManager idTracker;
@@ -87,9 +88,12 @@ namespace SBE
                 this->persistent[id]=persistent;
 
                 // Set Handle.
-                handles[id].emplace(ResourceHandle(resource, resources[id], size, id));
+                int newID = handleIDs[id].allocate();
+                ResourceHandle* tmp = new ResourceHandle(resource, resources[id], size, id, newID);
+                handles[id][newID] = tmp;
+                handles[id][-1] = tmp;
 
-                return handles[id].top();
+                return handles[id][newID];
             }
             catch(invalid_argument &e)
             {
@@ -109,9 +113,11 @@ namespace SBE
         {
             if(handles[id].size()==0) return nullptr;
 
-            handles[id].emplace(ResourceHandle(*(handles[id].top())));
+            // handles[id].emplace(ResourceHandle(*(handles[id].top())));
+            int newID=handleIDs[id].allocate();
+            handles[id][newID] = new ResourceHandle(*(handles[id][-1]));
 
-            return handles[id].top();
+            return handles[id][newID];
         }
 
         // Deallocators
@@ -127,10 +133,9 @@ namespace SBE
             idTracker.free(id);
 
             // Destroy all handles
-            while(handles[id].size()>0)
+            for(int i = 0; i<handles[id].size(); i++)
             {
-               delete handles[id].top();
-               handles[id].pop(); 
+                delete handles[id][i];
             }
 
             // Clear all data.
@@ -138,15 +143,20 @@ namespace SBE
         }
 
         // Follow handle rules, free handle
-        void freeHandle(int id)
+        void freeHandle(int resID, int handID)
         {
-            delete handles[id].top();
-            handles[id].pop();
+            delete handles[resID][handID];
 
-            if(handles[id].size()==0 && persistent[id]==false)
+            if(handles[resID].size()==0 && persistent[resID]==false)
             {
-                unload(id);
+                unload(resID);
             }
+        }
+
+        // Follow handle rules, free handle
+        void freeHandle(ResourceHandle* resHandle)
+        {
+            this->freeHandle(resHandle->getResID(), resHandle->getHandID());
         }
     };
 };
