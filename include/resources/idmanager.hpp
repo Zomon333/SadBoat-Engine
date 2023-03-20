@@ -24,11 +24,10 @@ namespace SBE
     class IDManager
     {
     private:
-
-        int idCount;
+        Range idRange;
 
         unordered_map<int, bool> usedIDs;       // Store for ID usage state
-        stack<int> recycledIDs;                 // Store for previously used IDs
+        stack<int> recycledIDs;                 // Store unused IDs
 
     public:
         // Constructors
@@ -37,7 +36,7 @@ namespace SBE
         // Set idCount to zero.
         IDManager()
         {
-            idCount=0;
+            idRange = Range(0,1);
         }
 
         // Mutators
@@ -46,25 +45,21 @@ namespace SBE
         // Associate an ID with some data.
         int allocate()
         {
-            // If there is an ID to be recycled, recycle it.
+            int id=0;
+            
             if(recycledIDs.size()>0)
             {
-                // Get a free ID and set it as in use
-                int id=recycledIDs.top();
-                usedIDs[id]=true;
+                id=recycledIDs.top();
                 recycledIDs.pop();
-
-                // Associate and track the ID.
-                idCount++;
-
-                // Return the ID.
-                return id;
+            }
+            else
+            {
+                idRange+=pair<double,double>(0,1);
+                id=idRange.getMax();
             }
 
-            // Otherwise, create a new ID
-            idCount++;
-            usedIDs[idCount]=true;
-            return idCount;
+            usedIDs[id]=true;
+            return id;
         }
 
         // Free an ID from association with data.
@@ -73,17 +68,16 @@ namespace SBE
             // Set the id usage to false.
             usedIDs[id]=false;
 
-            // Push ID to stack for recycling.
             recycledIDs.push(id);
         }
 
         // Accessors
         //----------------------------------
 
-        // Get the number of IDs available.
+        // Get the number of IDs in use.
         int getCount()
         {
-            return idCount;
+            return idRange.getMax()-recycledIDs.size();
         }
 
         // Get whether an ID is being used or not.
