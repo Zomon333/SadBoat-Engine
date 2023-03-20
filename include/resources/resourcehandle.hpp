@@ -27,7 +27,8 @@ namespace SBE
     private:
         string path;
 
-        int id;
+        int resourceID;
+        int handleID;
 
         void* data;
         size_t dataSize;
@@ -36,10 +37,11 @@ namespace SBE
         // Constructors
         //----------------------------------
 
-        ResourceHandle(string path, void* data, size_t size, int id)
+        ResourceHandle(string path, void* data, size_t size, int resID, int handID)
         {
             this->path=path;
-            this->id=id;
+            this->resourceID=resID;
+            this->handleID=handID;
             this->dataSize=size;
 
             this->data=data;
@@ -79,9 +81,15 @@ namespace SBE
         }
 
         // Returns the data's ID.
-        int getID()
+        int getResID()
         {
-            return id;
+            return resourceID;
+        }
+
+        // Returns the handle's ID.
+        int getHandID()
+        {
+            return handleID;
         }
 
         // Returns the data's path.
