@@ -72,6 +72,28 @@ namespace SBE
             return (!inRange(toCheck) && !onBounds(toCheck));
         }
 
+
+        //Arithmetic Operators
+        //----------------------------------    
+        Range operator+(pair<double, double> rhs)
+        {
+            return Range(this->getMin()+rhs.first, this->getMax()+rhs.second);
+        }
+        Range operator-(pair<double, double> rhs)
+        {
+            return Range(this->getMin()-rhs.first, this->getMax()-rhs.second);   
+        }
+        void operator+=(pair<double, double> rhs)
+        {
+            this->min+=rhs.first;
+            this->max+=rhs.second;
+        }
+        void operator-=(pair<double, double> rhs)
+        {
+            this->min-=rhs.first;
+            this->min-=rhs.second;
+        }
+
         //Equivalence Operators
         //----------------------------------    
         bool operator==(Range rhs)
