@@ -38,3 +38,4 @@ output/*
 *.tar.xz.1
 lib/wayland
 lib/wayland-protocols
+docs/notes.txt
