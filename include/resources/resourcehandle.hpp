@@ -21,81 +21,63 @@ namespace SBE
 {
     // ResourceHandle:     Utility
     // A wrapper for abstract data access. Ensures data access follows uniform routes and management schemes.
-    // Directly ties into ResourceManager for automated reference counting for memory management.
+    // Directly ties into Resource for automated reference counting for memory management.
     class ResourceHandle
     {
     private:
-        string path;
-
-        int resourceID;
-        int handleID;
-
-        void* data;
+        // Data reference & size
+        binary_semaphore* dataAccess;
+        void* dataReference;
         size_t dataSize;
 
+        // ResourceHandle ID
+        int handleID;
+        int resourceID;
     public:
         // Constructors
         //----------------------------------
 
-        ResourceHandle(string path, void* data, size_t size, int resID, int handID)
+        // Create a handle given some id, data, and size.
+        ResourceHandle(int id, binary_semaphore* dataAccess, int parentID, void* data, size_t dataSize)
         {
-            this->path=path;
-            this->resourceID=resID;
-            this->handleID=handID;
-            this->dataSize=size;
-
-            this->data=data;
+            this->resourceID=parentID;
+            this->dataAccess=dataAccess;
+            this->handleID=id;
+            this->dataReference=data;
+            this->dataSize=dataSize;
         }
-
-        // Destructors
-        //----------------------------------
 
         ~ResourceHandle()
         {
-            // Just set data to nullptr to ensure data persistence. 
-            // Actual data deletion is handled by ResourceManager using an ARC.
-            data=nullptr;
+            // Explicitly do not delete dataReference!
+            // Just set it to nullptr.
+            dataReference = nullptr;
         }
 
         // Accessors
         //----------------------------------
 
-        // Returns the data casted to the provided type.
-        template<class dataType>
-        dataType getData()
+        // Get the data. Optionally, provide some data type.
+        template<class type=void*>
+        type getData()
         {
-            return (*(dataType*)(data));
+            dataAccess->acquire();
+            auto toReturn = ((type)(dataReference));
+            dataAccess->release();
+            
+            return toReturn;
         }
 
-        // Returns the data casted to the provided pointer.
-        template<class dataType>
-        dataType* getDataPtr()
-        {
-            return (dataType*)(data);
-        }
-
-        // Returns the size of the data.
-        size_t getDataSize()
-        {
-            return dataSize;
-        }
-
-        // Returns the data's ID.
-        int getResID()
-        {
-            return resourceID;
-        }
-
-        // Returns the handle's ID.
-        int getHandID()
+        // Get the ID of the ResourceHandle.
+        int getHandleID()
         {
             return handleID;
         }
 
-        // Returns the data's path.
-        string getPath()
+        // Get the ID of the Resource.
+        int getResourceID()
         {
-            return path;
+            return this->resourceID;
         }
     };
 };
