@@ -46,6 +46,7 @@ Disclaimer:
 #include <future>
 #include <iostream>
 #include <iomanip>
+#include <semaphore>
 #include <stack>
 #include <string>
 #include <thread>
@@ -61,6 +62,7 @@ Disclaimer:
 //----------------------------------
 #include "../include/resources/idmanager.hpp"
 #include "../include/resources/resourcehandle.hpp"
+#include "../include/resources/resource.hpp"
 #include "../include/resources/resourcemanager.hpp"
 
 // Event Includes
@@ -154,6 +156,8 @@ This is controlled through the makefile;
     #include "../include/tests/test_timedevent.hpp"
     #include "../include/tests/test_recurringevent.hpp"
 
+    // Test Resource Loading
+    #include "../include/tests/test_resourcehandle.hpp"
 
 #endif
 #endif
