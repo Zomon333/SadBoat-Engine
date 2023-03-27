@@ -14,6 +14,7 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #define IDMANAGER_H
 
 #include "sb-engine.hpp"
+#include "../primitives/range.hpp"
 
 using namespace std;
 
