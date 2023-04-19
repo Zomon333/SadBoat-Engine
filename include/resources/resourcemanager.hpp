@@ -23,29 +23,19 @@ namespace SBE
     class ResourceManager
     {
         private:
-            Config* resourceConfiguration;
-
             IDManager resIDMan;
             unordered_map<int, Resource*> intResource;
             unordered_map<string, Resource*> strResource;
 
 
         public:
-            ResourceManager(Config resourceConfiguration)
-            {
-                auto assets = resourceConfiguration["Assets"];
-                for(int i=0; i<assets.size(); i++)
-                {
-                    int id = resIDMan.allocate();
-                    intResource[id]=new Resource(
-                        id, 
-                        assets[i].getContents<string>(), 
-                        assets[i].getAttribs()[0].second=="true", 
-                        assets[i].getAttribs()[1].second=="true"
-                    );
-                    strResource[assets[i].getContents<string>()]=intResource[id];
-                }
+            ResourceManager(){}
 
+            Resource* createResource(string filename, bool persistence=false, bool preload=false)
+            {
+                int id = resIDMan.allocate();
+                Resource* toCreate = new Resource(id, filename, persistence, preload);
+                return toCreate;
             }
 
     };

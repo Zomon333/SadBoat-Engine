@@ -110,6 +110,54 @@ int main(int argc, char* argv[])
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
 
+    
+    
+    // Resource and Configuration Setup
+    //----------------------------------
+
+    // Declare our intent to manage resources and configs
+    ResourceManager resources;
+    ConfigManager configs;
+
+    // Create necessary callbacks to handle processing of data once loaded
+    Event<void*, ConfigNode> resourceCallback(
+        [&resources](ConfigNode n)
+        {
+            auto datum = resources.createResource(
+                n.getContents<string>(),
+                (n.getAttribs()[0].first=="persistence") ? (n.getAttribs()[0].second=="true") : false,
+                (n.getAttribs()[1].first=="preload") ? (n.getAttribs()[1].second=="true") : false
+            );
+
+            return datum;
+        }
+    );
+    // Assign callbacks
+    configs.assignCallback("Asset", &resourceCallback);
+
+    // Create config callback
+    Event<void*, ConfigNode> configCallback(
+        [&configs](ConfigNode n)
+        {
+            configs.loadConfig(
+                n.getContents<string>(),
+                (n.getAttribs()[0].first=="desc") ? n.getAttribs()[0].second : "Empty description."
+            );      
+            return nullptr;
+        }
+    );
+    // Assign callback
+    configs.assignCallback("Config", &configCallback);
+
+    // Load initialization file
+    configs = ConfigManager("./assets/configs.xml");
+
+
+
+
+
+    // Vulkan Environment Setup
+    //----------------------------------
 
     //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
     VulkanDispatchables vulkanEnvironment;
@@ -131,6 +179,9 @@ int main(int argc, char* argv[])
     );
 
     vulkanEnvironment.setup(&vulkanEnvironment);
+
+    
+
 
     return 0;
 }

@@ -34,6 +34,9 @@ namespace SBE
         // Nodes from the parsed file
         vector<ConfigNode> nodes;
 
+        // Config Callbacks
+        unordered_map<string, Event<void*, ConfigNode>*>* callbacks;
+
         // Raw XML document
         // Will be used in future implementations for config writing
         xml_document<> doc;
@@ -74,6 +77,11 @@ namespace SBE
                 // Set the results of the node hunt to the storage in the node
                 toReturn.setContents(children);
                 
+                if((*callbacks)[toReturn.getName()]!=nullptr)
+                {
+                    (*callbacks)[toReturn.getName()]->call(toReturn);
+                }
+
                 // Return the node
                 return toReturn;
             }
@@ -81,6 +89,10 @@ namespace SBE
             else
             {
                 toReturn.setContents(node->value());
+                if((*callbacks)[toReturn.getName()]!=nullptr)
+                {
+                    (*callbacks)[toReturn.getName()]->call(toReturn);
+                }
             }
             
             return toReturn;
@@ -117,10 +129,11 @@ namespace SBE
         //----------------------------------
 
         // Load a config given a file name and an ID
-        Config(string filename, int id, string desc="")
+        Config(string filename, int id, string desc="", unordered_map<string, Event<void*, ConfigNode>*>* callbacks=nullptr)
         {
             this->id=id;
             this->desc=desc;
+            this->callbacks=callbacks;
 
             load(filename);
             return;

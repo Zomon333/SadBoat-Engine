@@ -65,6 +65,13 @@ Disclaimer:
 //----------------------------------
 #include "../include/utilities/defines.hpp"
 
+// Event Includes
+//----------------------------------
+#include "../include/events/event.hpp"
+#include "../include/events/timedevent.hpp"
+#include "../include/events/recurringevent.hpp"
+#include "../include/events/eventpool.hpp"
+
 //  Configuration Includes
 //----------------------------------
 #include "../include/resources/idmanager.hpp"
@@ -78,13 +85,6 @@ Disclaimer:
 #include "../include/resources/resourcehandle.hpp"
 #include "../include/resources/resource.hpp"
 #include "../include/resources/resourcemanager.hpp"
-
-// Event Includes
-//----------------------------------
-#include "../include/events/event.hpp"
-#include "../include/events/timedevent.hpp"
-#include "../include/events/recurringevent.hpp"
-#include "../include/events/eventpool.hpp"
 
 
 // Primitive Includes

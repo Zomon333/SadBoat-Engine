@@ -27,26 +27,33 @@ namespace SBE
         unordered_map<int, Config*> intConfig;
         unordered_map<string, Config*> strConfig;
 
+        unordered_map<string, Event<void*, ConfigNode>*> callbacks;
+
     public:
+        ConfigManager()
+        {
+
+        }
         // Initializes the configManager, loading in other configs from the given initConfig.
         // This will load all configs within <Config> tags in initConfig.
         // Format: <Config desc="">filename</Config>
-        ConfigManager(string initConfig)
+        ConfigManager(string initConfig, vector<pair<string, Event<void*, ConfigNode>*>>* newCallbacks = nullptr)
         {
-            auto otherConfigs = (this->loadConfig(initConfig, "Initialization config. Used to load other configs."))->operator[]("Config");
-            for(int i = 0; i<otherConfigs.size(); i++)
+            if(newCallbacks!=nullptr)
             {
-                this->loadConfig(
-                    otherConfigs[i].getContents<string>(),
-                    otherConfigs[i].getAttribs()[0].second
-                );
-            }
+                for(int i=0; i<newCallbacks->size(); i++)
+                {
+                    this->callbacks[newCallbacks->at(i).first] = newCallbacks->at(i).second;
+                }
+            }         
+            
+            this->loadConfig(initConfig, "Initialization config. Used to load other configs.");
         }
 
         Config* loadConfig(string filename, string desc="")
         {
             int id = configsIDs.allocate();
-            intConfig[id] = new Config(filename, id, desc);
+            intConfig[id] = new Config(filename, id, desc, &(this->callbacks));
             strConfig[filename] = intConfig[id];
 
             return intConfig[id];
@@ -70,6 +77,10 @@ namespace SBE
             return strConfig[filename];
         }
 
+        void assignCallback(string xmlTag, Event<void*, ConfigNode>* callback)
+        {
+            callbacks[xmlTag]=callback;
+        }
 
         Config* operator[](int id)
         {
