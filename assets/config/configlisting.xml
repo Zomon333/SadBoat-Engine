@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Files>
-    <File>configlisting.xml</File>
-    <File>solidMaterials.xml</File>
-    <File>liquidMaterials.xml</File>
-    <File>gaseousMaterials.xml</File>
-    <File>otherMaterials.xml</File>
-    <File>quotes.xml</File>
-</Files>

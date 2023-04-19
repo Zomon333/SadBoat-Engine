@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Assets of a visual nature. Includes sprites, shaders, etc.
+-->
+<Visual dir="./visual">
+    <Sprite>
+        /sprites/bobby/pieces/outlines/Bishop.png
+    </Sprite>
+    <Sprite>
+        /sprites/bobby/pieces/outlines/Pawn.png
+    </Sprite>
+    <Sprite>
+        /sprites/bobby/pieces/outlines/Rook.png
+    </Sprite>
+
+</Visual>
+
+<!--
+    Assets of an auditory nature. Includes sound effects, music, etc.
+-->
+<Audio dir="./audio">
+</Audio>
+
+<!--
+    Assets of a configuratory nature. Includes config files, static gamedata, etc.
+-->
+<Config dir="./config">
+
+    <XMLFile>
+        /liquidMaterials.xml
+    </XMLFile>
+
+    <XMLFile>
+        /quotes.xml
+    </XMLFile>
+
+    <XMLFile>
+        /solidMaterials.xml
+    </XMLFile>
+
+</Config>
