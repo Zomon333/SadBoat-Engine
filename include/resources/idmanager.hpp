@@ -87,6 +87,16 @@ namespace SBE
             return usedIDs[id];
         }
         
+        // Get a vector of all used IDs.
+        vector<int> getUsedIDs()
+        {
+            vector<int> results;
+            for(const std::pair<int, bool>& n : this->usedIDs)
+            {
+                if(n.second) results.push_back(n.first);
+            }
+            return results;
+        }
     };
 };
 #endif
