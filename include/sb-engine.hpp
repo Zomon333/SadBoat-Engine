@@ -58,6 +58,12 @@ Disclaimer:
 //----------------------------------
 #include "../include/utilities/defines.hpp"
 
+//  Configuration Includes
+//----------------------------------
+#include "../include/utilities/configs/config.hpp"
+#include "../include/utilities/configs/configmanager.hpp"
+
+
 //  Resource Includes
 //----------------------------------
 #include "../include/resources/idmanager.hpp"
