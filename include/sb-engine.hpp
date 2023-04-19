@@ -41,6 +41,7 @@ Disclaimer:
 #include <any>
 #include <chrono>
 #include <cmath>
+#include <cstring>
 #include <fstream>
 #include <functional>
 #include <future>
@@ -52,7 +53,13 @@ Disclaimer:
 #include <thread>
 #include <unordered_map>
 #include <utility>
+#include <variant>
 
+
+//RapidXML Include
+#include "../lib/rapidxml-1.13/rapidxml.hpp" //RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
+#include "../lib/rapidxml-1.13/rapidxml_utils.hpp"
+#include "../lib/rapidxml-1.13/rapidxml_print.hpp"
 
 //  Engine Specific Defines
 //----------------------------------
@@ -60,13 +67,14 @@ Disclaimer:
 
 //  Configuration Includes
 //----------------------------------
+#include "../include/resources/idmanager.hpp"
+#include "../include/utilities/configs/confignode.hpp"
 #include "../include/utilities/configs/config.hpp"
 #include "../include/utilities/configs/configmanager.hpp"
 
 
 //  Resource Includes
 //----------------------------------
-#include "../include/resources/idmanager.hpp"
 #include "../include/resources/resourcehandle.hpp"
 #include "../include/resources/resource.hpp"
 #include "../include/resources/resourcemanager.hpp"
@@ -125,10 +133,7 @@ Disclaimer:
 #endif
 
 
-//RapidXML Include
-#ifdef INCLUDE_RAPIDXML
-    #include "../lib/rapidxml-1.13/rapidxml.hpp" //RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
-#endif
+
 
 /*
 ---------------------------------------------------------------------------------------------------------------------
