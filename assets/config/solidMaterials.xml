@@ -6,6 +6,15 @@
     2-B) Tags *with* children can take up numerous lines.
     3) If a tag will only contain one value, write it on one line. RapidXML *reads line breaks*!
 
+
+                                                    NOTE TO FUTURE XML WRITER:
+                                    ___________________________________________________________________________
+                                        EACH TREE OF DATA IN THE XML FILE MUST HAVE SOME TERMINATION POINT.
+                                        DO NOT LEAVE EMPTY TAGS AT THE BOTTOM OF THE TREE.
+                                        IT WILL CRASH THE WHOLE PROGRAM.
+                                        PUT SOME FILLER DATA IN, LIKE EXAMPLEMATERIAL OR 0 OR SOMETHING.
+
+
 -->
 <!--
 <ExampleMaterial>
@@ -16,7 +25,7 @@
 -->
 <SolidMaterials>
      <HomogenousSolids>
-          <Compounds></Compounds>
+          <Compounds>{FILLER:REPLACE ME!}</Compounds>
           <Polymers>
                <Plastics>
                     <ABS>
@@ -109,14 +118,14 @@
                          <YungsModulous>000000000000.00</YungsModulous>
                     </Uranium>
                </Metals>
-               <NonMetals></NonMetals>
+               <NonMetals>{FILLER:REPLACE ME!}</NonMetals>
           </Elements>
      </HomogenousSolids>
      <NonHomogenousSolids>
           <Alloys>
-               <Aluminum></Aluminum>
+               <Aluminum>{FILLER:REPLACE ME!}</Aluminum>
                <Copper>
-                    <Brass></Brass>
+                    <Brass>{FILLER:REPLACE ME!}</Brass>
                     <Bronze>
                          <AluminumBronze>
                               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
@@ -157,7 +166,7 @@
                          <YungsModulous>000000000000.00</YungsModulous>
                     </StainlessSteel>
                </Iron>
-               <Titanium></Titanium>
+               <Titanium>{FILLER:REPLACE ME!}</Titanium>
           </Alloys>
           <Composites>
                <Concrete>
@@ -192,7 +201,7 @@
                                         <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                                         <Density>755</Density>
                                         <YungsModulous>000000000000.00</YungsModulous>
-                                   <WhiteOak>
+                                   </WhiteOak>
                               </Oaks>
                          </Wood>
                     </Tree>
@@ -205,7 +214,7 @@
                <Density>1</Density>
                <YungsModulous>1.00</YungsModulous>
           </JeanBaptiste><!-- A generic substance for testing purposes-->
-          <BedRock></BedRock><!-- Infinite Density -->
-          <Unobtanium></Unobtanium><!-- Infinite FYFM -->
+          <BedRock>{FILLER:REPLACE ME!}</BedRock><!-- Infinite Density -->
+          <Unobtanium>{FILLER:REPLACE ME!}</Unobtanium><!-- Infinite FYFM -->
      </Dev>
 </SolidMaterials>
