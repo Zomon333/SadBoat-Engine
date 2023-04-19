@@ -112,7 +112,31 @@ namespace SBE
                 cout<<e->what()<<endl;
             }
         }
-    
+
+        // Initialize a data store of a given size.
+        void load(size_t dataSize)
+        {
+            try
+            {
+                if(dataSize==0)
+                {
+                    throw new invalid_argument("Data cannot have no size. Refusing to store uninitialized data.");
+                }
+
+                dataAccess.acquire();
+
+                this->data = malloc(dataSize);
+                this->dataSize=dataSize;
+                this->initialSize=dataSize;
+                
+                dataAccess.release();
+            }
+            catch(invalid_argument* e)
+            {
+                cout<<e->what()<<endl;
+            }
+        }
+
         void unload()
         {
 
@@ -159,6 +183,35 @@ namespace SBE
             if(preload)
             {
                 load(filename);
+            }
+        }
+
+        // Create a resource for some raw memory. Optionally, copy from an existing location.
+        Resource(int id, size_t dataSize, bool persistence=false, bool copy=false, void* initData=nullptr)
+        {
+            this->dataID=id;
+            this->persistent=persistence;
+            
+            this->dataSize=dataSize;
+            this->initialSize=dataSize;
+            this->handleCount=0;
+
+            load(dataSize);
+            if(copy)
+            {
+                try
+                {
+                    if(initData==nullptr)
+                    {
+                        throw new invalid_argument("initData was nullptr with copy setting. Refusing to copy invalid data range.");
+                    }
+
+                    memcpy(this->data,initData,dataSize);
+                }
+                catch(invalid_argument* e)
+                {
+                    cout<<e->what()<<endl;
+                }
             }
         }
 
