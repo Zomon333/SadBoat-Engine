@@ -22,10 +22,64 @@ namespace SBE
     class ConfigManager
     {
     private:
-        
+        IDManager configsIDs;
+
+        unordered_map<int, Config*> intConfig;
+        unordered_map<string, Config*> strConfig;
 
     public:
-        
+        // Initializes the configManager, loading in other configs from the given initConfig.
+        // This will load all configs within <Config> tags in initConfig.
+        // Format: <Config desc="">filename</Config>
+        ConfigManager(string initConfig)
+        {
+            auto otherConfigs = (this->loadConfig(initConfig, "Initialization config. Used to load other configs."))->operator[]("Config");
+            for(int i = 0; i<otherConfigs.size(); i++)
+            {
+                this->loadConfig(
+                    otherConfigs[i].getContents<string>(),
+                    otherConfigs[i].getAttribs()[0].second
+                );
+            }
+        }
+
+        Config* loadConfig(string filename, string desc="")
+        {
+            int id = configsIDs.allocate();
+            intConfig[id] = new Config(filename, id, desc);
+            strConfig[filename] = intConfig[id];
+
+            return intConfig[id];
+        }
+
+        void unloadConfig(string filename)
+        {
+            int id = strConfig[filename]->getID();
+            delete intConfig[id];
+            strConfig[filename]=nullptr;
+            
+            configsIDs.free(id);
+        }
+
+        Config* getConfig(int id)
+        {
+            return intConfig[id];
+        }
+        Config* getConfig(string filename)
+        {
+            return strConfig[filename];
+        }
+
+
+        Config* operator[](int id)
+        {
+            return intConfig[id];
+        }
+        Config* operator[](string filename)
+        {
+            return strConfig[filename];
+        }
+
     };
 };
 #endif
