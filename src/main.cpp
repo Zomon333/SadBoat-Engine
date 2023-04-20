@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 
     
     
-    // Resource and Configuration Setup
+    // Config Callback Setup
     //----------------------------------
 
     // Declare our intent to manage resources and configs
@@ -161,11 +161,8 @@ int main(int argc, char* argv[])
     configs.assignCallback("Material", &materialCallback);
 
     // Load initialization file
-    configs = ConfigManager("./assets/configs.xml");
-
-
-
-
+    configs.loadConfig("./assets/configs.xml", "Initialization Config");
+    
 
     // Vulkan Environment Setup
     //----------------------------------

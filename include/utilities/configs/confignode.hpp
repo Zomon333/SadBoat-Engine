@@ -29,7 +29,7 @@ namespace SBE
         };
         CONTENT_TYPE contType;
 
-        // std::variant allows you to store one of two data types in the variable at one time. It does not allow both, but can be interchanged.
+        // std::variant allows you to store one of multiple data types in the variable at one time. It does not allow both, but can be interchanged.
         // This is used alongside the CONTENT_TYPE enum to create a discriminated variant.
         // We always know exactly what's in the variant, even though it can change.
         variant<string,vector<ConfigNode>> contents = variant<string,vector<ConfigNode>>();
@@ -50,7 +50,7 @@ namespace SBE
             this->contents="";
             this->contType=STRING;
         }
-        
+
         // Initialize a configuration node with custom values
         ConfigNode(string name, vector<pair<string, string>> attribs, variant<string,vector<ConfigNode>> contents, CONTENT_TYPE contType)
         {
@@ -181,7 +181,8 @@ namespace SBE
                 
                 return toReturn;
             }
-            return;
+            
+            return vector<ConfigNode>();
         }
     
         // Destructors

@@ -125,7 +125,9 @@
           <MaterialCategory type="Alloys">
                <MaterialCategory type="Aluminum">{FILLER:REPLACE ME!}</MaterialCategory>
                <MaterialCategory type="Copper">
-                    <Material state="solid" name="Brass">{FILLER:REPLACE ME!}</Material>
+                    <MaterialCategory type="Brass">
+                         {FILLER:REPLACE ME!}
+                    </MaterialCategory>
                     <MaterialCategory type="Bronze">
                          <Material state="solid" name="AluminumBronze">
                               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
@@ -209,12 +211,25 @@
           </MaterialCategory>
      </MaterialCategory>
      <MaterialCategory type="Dev">
+          <!-- A generic substance for testing purposes-->
           <Material state="solid" name="JeanBaptiste">
                <CoeficientOfRestitution>0.5</CoeficientOfRestitution>
                <Density>1</Density>
                <YungsModulous>1.00</YungsModulous>
-          </Material><!-- A generic substance for testing purposes-->
-          <Material state="solid" name="BedRock">{FILLER:REPLACE ME!}</Material><!-- Infinite Density -->
-          <Material state="solid" name="Unobtanium">{FILLER:REPLACE ME!}</Material><!-- Infinite FYFM -->
+          </Material>
+          <!--      -->
+          <!-- Infinite Density -->
+          <Material state="solid" name="BedRock">
+               <CoeficientOfRestitution>0.5</CoeficientOfRestitution>
+               <Density>1000000000</Density>
+               <YungsModulous>1.00</YungsModulous>
+          </Material>
+          <!--      -->
+          <!-- Infinite FYFM -->
+          <Material state="solid" name="Unobtanium">
+               <CoeficientOfRestitution>0.5</CoeficientOfRestitution>
+               <Density>1</Density>
+               <YungsModulous>1.00</YungsModulous>
+          </Material>
      </MaterialCategory>
 </MaterialCategory>

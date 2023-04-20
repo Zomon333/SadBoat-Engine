@@ -37,23 +37,17 @@ namespace SBE
         // Initializes the configManager, loading in other configs from the given initConfig.
         // This will load all configs within <Config> tags in initConfig.
         // Format: <Config desc="">filename</Config>
-        ConfigManager(string initConfig, vector<pair<string, Event<void*, ConfigNode>*>>* newCallbacks = nullptr)
-        {
-            if(newCallbacks!=nullptr)
-            {
-                for(int i=0; i<newCallbacks->size(); i++)
-                {
-                    this->callbacks[newCallbacks->at(i).first] = newCallbacks->at(i).second;
-                }
-            }         
-            
+        ConfigManager(string initConfig)
+        {        
             this->loadConfig(initConfig, "Initialization config. Used to load other configs.");
         }
 
-        Config* loadConfig(string filename, string desc="")
+        Config* loadConfig(string filename, string desc="Generic Config")
         {
+            cout<<"Loading "<<filename<<" as \""<<desc<<"\""<<endl;
             int id = configsIDs.allocate();
-            intConfig[id] = new Config(filename, id, desc, &(this->callbacks));
+
+            intConfig[id] = new Config(filename, id, &callbacks, desc);
             strConfig[filename] = intConfig[id];
 
             return intConfig[id];
@@ -79,7 +73,11 @@ namespace SBE
 
         void assignCallback(string xmlTag, Event<void*, ConfigNode>* callback)
         {
-            callbacks[xmlTag]=callback;
+            (callbacks)[xmlTag]=callback;
+        }
+        Event<void*, ConfigNode>* getCallback(string xmlTag)
+        {
+            return callbacks[xmlTag];
         }
 
         Config* operator[](int id)

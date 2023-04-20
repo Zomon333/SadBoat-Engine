@@ -129,7 +129,7 @@ namespace SBE
         //----------------------------------
 
         // Load a config given a file name and an ID
-        Config(string filename, int id, string desc="", unordered_map<string, Event<void*, ConfigNode>*>* callbacks=nullptr)
+        Config(string filename, int id, unordered_map<string, Event<void*, ConfigNode>*>* callbacks, string desc="")
         {
             this->id=id;
             this->desc=desc;
