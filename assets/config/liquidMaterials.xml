@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-<ExampleMaterial>
+<Material state="liquid" name="something">
      <Density>0000.00</Density> Use kg/m^3,
      <Viscosity>000000000000.00</Viscosity> Use N*s/m^2,
-</ExampleMaterial>
+</Material>
 
                                                     NOTE TO FUTURE XML WRITER:
                                     ___________________________________________________________________________
@@ -13,16 +13,16 @@
                                         PUT SOME FILLER DATA IN, LIKE EXAMPLEMATERIAL OR 0 OR SOMETHING.
 
 -->
-<LiquidMaterials>
-    <HomogenousLiquids>
-        <Compounds>
+<MaterialCategory type="LiquidMaterials">
+    <MaterialCategory type="HomogenousLiquids">
+        <MaterialCategory type="Compounds">
             {FILLER:REPLACE ME!}
-        </Compounds>
-        <Elements>
+        </MaterialCategory>
+        <MaterialCategory type="Elements">
             {FILLER:REPLACE ME!}
-        </Elements>
-    </HomogenousLiquids>
-    <NonHomogenousLiquids>
+        </MaterialCategory>
+    </MaterialCategory>
+    <MaterialCategory type="NonHomogenousLiquids">
         {FILLER:REPLACE ME!}
-    </NonHomogenousLiquids>
-</LiquidMaterials>
+    </MaterialCategory>
+</MaterialCategory>

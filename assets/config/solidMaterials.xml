@@ -17,204 +17,204 @@
 
 -->
 <!--
-<ExampleMaterial>
+<Material state="solid" name="SomeMaterial">
      <CoeficientOfRestitution>0.00</CoeficientOfRestitution> half the true value
      <Density>0000.00</Density> Use kg/m^3,
      <YungsModulous>000000000000.00</YungsModulous> Use Pascals,
-</ExampleMaterial>
+</Material>
 -->
-<SolidMaterials>
-     <HomogenousSolids>
-          <Compounds>{FILLER:REPLACE ME!}</Compounds>
-          <Polymers>
-               <Plastics>
-                    <ABS>
+<MaterialCategory type="SolidMaterials">
+     <MaterialCategory type="HomogenousSolids">
+          <MaterialCategory type="Compounds">{FILLER:REPLACE ME!}</MaterialCategory>
+          <MaterialCategory type="Polymers">
+               <MaterialCategory type="Plastics">
+                    <Material state="solid" name="ABS">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>1070</Density>
                          <YungsModulous>2490000000</YungsModulous>
-                    </ABS>
-                    <PETG>
+                    </Material>
+                    <Material state="solid" name="PETG">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>1260</Density>
                          <YungsModulous>2060000000</YungsModulous>
-                    </PETG>
-               </Plastics>
-          </Polymers>
-          <Elements>
-               <Metals>
-                    <Aluminum>
+                    </Material>
+               </MaterialCategory>
+          </MaterialCategory>
+          <MaterialCategory type="Elements">
+               <MaterialCategory type="Metals">
+                    <Material state="solid" name="Aluminum">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>2700</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Aluminum>
-                    <Americium>
+                    </Material>
+                    <Material state="solid" name="Americium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>13780</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Americium>
-                    <Copper>
+                    </Material>
+                    <Material state="solid" name="Copper">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>8940</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Copper>
-                    <Iron>
+                    </Material>
+                    <Material state="solid" name="Iron">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7874</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Iron>
-                    <Lead>
+                    </Material>
+                    <Material state="solid" name="Lead">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>11340</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Lead>
-                    <Lithium>
+                    </Material>
+                    <Material state="solid" name="Lithium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>535</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Lithium>
-                    <Magnesium>
+                    </Material>
+                    <Material state="solid" name="Magnesium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>1738</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Magnesium>
-                    <Neodymium>
+                    </Material>
+                    <Material state="solid" name="Neodymium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7010</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Neodymium>
-                    <Osmium>
+                    </Material>
+                    <Material state="solid" name="Osmium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>22610</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Osmium>
-                    <Potassium>
+                    </Material>
+                    <Material state="solid" name="Potassium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>856</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Potassium>
-                    <Radium>
+                    </Material>
+                    <Material state="solid" name="Radium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>5500</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Radium>
-                    <Sodium>
+                    </Material>
+                    <Material state="solid" name="Sodium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>968</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Sodium>
-                    <Titanium>
+                    </Material>
+                    <Material state="solid" name="Titanium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>4507</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Titanium>
-                    <Tungsten>
+                    </Material>
+                    <Material state="solid" name="Tungsten">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>19250</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Tungsten>
-                    <Uranium>
+                    </Material>
+                    <Material state="solid" name="Uranium">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>19050</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </Uranium>
-               </Metals>
-               <NonMetals>{FILLER:REPLACE ME!}</NonMetals>
-          </Elements>
-     </HomogenousSolids>
-     <NonHomogenousSolids>
-          <Alloys>
-               <Aluminum>{FILLER:REPLACE ME!}</Aluminum>
-               <Copper>
-                    <Brass>{FILLER:REPLACE ME!}</Brass>
-                    <Bronze>
-                         <AluminumBronze>
+                    </Material>
+               </MaterialCategory>
+               <MaterialCategory type="NonMetals">{FILLER:REPLACE ME!}</MaterialCategory>
+          </MaterialCategory>
+     </MaterialCategory>
+     <MaterialCategory type="NonHomogenousSolids">
+          <MaterialCategory type="Alloys">
+               <MaterialCategory type="Aluminum">{FILLER:REPLACE ME!}</MaterialCategory>
+               <MaterialCategory type="Copper">
+                    <Material state="solid" name="Brass">{FILLER:REPLACE ME!}</Material>
+                    <MaterialCategory type="Bronze">
+                         <Material state="solid" name="AluminumBronze">
                               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                               <Density>7640</Density>
                               <YungsModulous>000000000000.00</YungsModulous>
-                         </AluminumBronze>
-                         <NickelAluminumBronze>
+                         </Material>
+                         <Material state="solid" name="NickelAluminumBronze">
                               <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                               <Density>7580</Density>
                               <YungsModulous>000000000000.00</YungsModulous>
-                         </NickelAluminumBronze>
-                    </Bronze>
-               </Copper>
-               <Iron>
-                    <DuctileCastIron>
+                         </Material>
+                    </MaterialCategory>
+               </MaterialCategory>
+               <MaterialCategory type="Iron">
+                    <Material state="solid" name="DuctileCastIron">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7300</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </DuctileCastIron>
-                    <HighCarbonSteel>
+                    </Material>
+                    <Material state="solid" name="HighCarbonSteel">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7810</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </HighCarbonSteel>
-                    <MediumCarbonSteel>
+                    </Material>
+                    <Material state="solid" name="MediumCarbonSteel">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7830</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </MediumCarbonSteel>
-                    <MildSteel>
+                    </Material>
+                    <Material state="solid" name="MildSteel">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7850</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </MildSteel>
-                    <StainlessSteel>
+                    </Material>
+                    <Material state="solid" name="StainlessSteel">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>7900</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-                    </StainlessSteel>
-               </Iron>
-               <Titanium>{FILLER:REPLACE ME!}</Titanium>
-          </Alloys>
-          <Composites>
-               <Concrete>
+                    </Material>
+               </MaterialCategory>
+               <MaterialCategory type="Titanium">{FILLER:REPLACE ME!}</MaterialCategory>
+          </MaterialCategory>
+          <MaterialCategory type="Composites">
+               <Material state="solid" name="Concrete">
                          <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                          <Density>2600</Density>
                          <YungsModulous>000000000000.00</YungsModulous>
-               </Concrete>
-               <Plywood>
+               </Material>
+               <Material state="solid" name="Plywood">
                     <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                     <Density>600</Density>
                     <YungsModulous>000000000000.00</YungsModulous>
-               </Plywood>
-          </Composites>
-          <Organics>
-               <CelluloseBased>
-                    <Tree>
-                         <Wood>
-                              <Acacias>
-                                   <IronwoodWattle>
+               </Material>
+          </MaterialCategory>
+          <MaterialCategory type="Organics">
+               <MaterialCategory type="CelluloseBased">
+                    <MaterialCategory type="Tree">
+                         <MaterialCategory type="Wood">
+                              <MaterialCategory type="Acacias">
+                                   <Material state="solid" name="IronwoodWattle">
                                         <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                                         <Density>1150</Density>
                                         <YungsModulous>000000000000.00</YungsModulous>
-                                   </IronwoodWattle>
-                              </Acacias>
-                              <Oaks>
-                                   <LiveOak>
+                                   </Material>
+                              </MaterialCategory>
+                              <MaterialCategory type="Oaks">
+                                   <Material state="solid" name="LiveOak">
                                         <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                                         <Density>1000</Density>
                                         <YungsModulous>000000000000.00</YungsModulous>
-                                   </LiveOak>
-                                   <WhiteOak>
+                                   </Material>
+                                   <Material state="solid" name="WhiteOak">
                                         <CoeficientOfRestitution>0.00</CoeficientOfRestitution>
                                         <Density>755</Density>
                                         <YungsModulous>000000000000.00</YungsModulous>
-                                   </WhiteOak>
-                              </Oaks>
-                         </Wood>
-                    </Tree>
-               </CelluloseBased>
-          </Organics>
-     </NonHomogenousSolids>
-     <Dev>
-          <JeanBaptiste>
+                                   </Material>
+                              </MaterialCategory>
+                         </MaterialCategory>
+                    </MaterialCategory>
+               </MaterialCategory>
+          </MaterialCategory>
+     </MaterialCategory>
+     <MaterialCategory type="Dev">
+          <Material state="solid" name="JeanBaptiste">
                <CoeficientOfRestitution>0.5</CoeficientOfRestitution>
                <Density>1</Density>
                <YungsModulous>1.00</YungsModulous>
-          </JeanBaptiste><!-- A generic substance for testing purposes-->
-          <BedRock>{FILLER:REPLACE ME!}</BedRock><!-- Infinite Density -->
-          <Unobtanium>{FILLER:REPLACE ME!}</Unobtanium><!-- Infinite FYFM -->
-     </Dev>
-</SolidMaterials>
+          </Material><!-- A generic substance for testing purposes-->
+          <Material state="solid" name="BedRock">{FILLER:REPLACE ME!}</Material><!-- Infinite Density -->
+          <Material state="solid" name="Unobtanium">{FILLER:REPLACE ME!}</Material><!-- Infinite FYFM -->
+     </MaterialCategory>
+</MaterialCategory>

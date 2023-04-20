@@ -149,6 +149,17 @@ int main(int argc, char* argv[])
     // Assign callback
     configs.assignCallback("Config", &configCallback);
 
+    // Create callback to process materials into MaterialManager
+    Event<void*, ConfigNode> materialCallback(
+        [](ConfigNode n)
+        {
+
+            return nullptr;
+        }
+    );
+    // Assign callback
+    configs.assignCallback("Material", &materialCallback);
+
     // Load initialization file
     configs = ConfigManager("./assets/configs.xml");
 
