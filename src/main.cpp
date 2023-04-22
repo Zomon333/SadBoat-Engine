@@ -113,9 +113,11 @@ int main(int argc, char* argv[])
     
     
     // Config Callback Setup
+    // ---
+    // Creates manager classes, creates callbacks for configs
+    // Loads certain assets and physics materials
     //----------------------------------
 
-    // Declare our intent to manage resources and configs
     ResourceManager resources;
     ConfigManager configs;
 
@@ -132,7 +134,6 @@ int main(int argc, char* argv[])
             return datum;
         }
     );
-    // Assign callbacks
     configs.assignCallback("Asset", &resourceCallback);
 
     // Create config callback
@@ -146,7 +147,6 @@ int main(int argc, char* argv[])
             return nullptr;
         }
     );
-    // Assign callback
     configs.assignCallback("Config", &configCallback);
 
     // Create callback to process materials into MaterialManager
@@ -157,7 +157,6 @@ int main(int argc, char* argv[])
             return nullptr;
         }
     );
-    // Assign callback
     configs.assignCallback("Material", &materialCallback);
 
     // Load initialization file
