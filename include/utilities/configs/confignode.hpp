@@ -158,6 +158,48 @@ namespace SBE
             }
         }
     
+        // Revert the node back to XML
+        string unparse()
+        {
+            string openingTag = "<";
+            openingTag+=name;
+            if(attribs.size()>0)
+            {
+                for(int i=0; i<attribs.size(); i++)
+                {
+                    openingTag+=" ";
+                    openingTag+=attribs[i].first;
+                    openingTag+="=\"";
+                    openingTag+=attribs[i].second;
+                    openingTag+="\"";
+                }
+            }
+            openingTag+=">";
+            
+
+            string closingTag = "</";
+            closingTag+=name;
+            closingTag+=">";
+
+            if(contType==STRING)
+            {
+                openingTag.append(get<string>(contents));
+            }
+            else
+            {
+                string innerResults="";
+                vector<ConfigNode> children = get<vector<ConfigNode>>(contents);
+                for(int i=0; i<children.size(); i++)
+                {
+                    innerResults+=children[i].unparse();
+                }
+                openingTag.append(innerResults);
+            }
+
+            openingTag.append(closingTag);
+            return openingTag;
+        }
+
         // Operators
         //----------------------------------
 
