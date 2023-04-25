@@ -96,15 +96,101 @@ namespace SBE
         uint32_t getNumDevices() { return numDevices; }
         vector<PhysicalDevice*> getDevices() { return devices; }
 
-        PhysicalDevice* getOptimal() 
+        PhysicalDevice* getOptimal(Config* deviceConfig=nullptr) 
         { 
-            // Todo: Implement device choice workflow
-            // 1) Prefer device listed in config
-            // 2) If no config, Intelligently choose best device as backup, save to config
-            // 3) If no device to choose, blindly choose 0th device 
-            return devices[0];
 
+            // noConfig finds what it believes to be the best device given the slim amount of criteria we have access to
+            // - It first breaks down all of the devices into categories
+            // - It continues to sort the categories by the most to least dedicated GPU
+            // - It calculates from the order of most to least dedicated GPU, which one has the most VRAM
+            // - It returns the most dedicated GPU with the most VRAM. This is likely the best GPU.
+            Event<PhysicalDevice*, int> noConfig(
+                lF(int a)
+                {
+                    // No config provided, so...
+                    // 1) Intelligently choose best device as backup, save to config
+                    
+                    // Sort existing devices by category.
+                    unordered_map<VkPhysicalDeviceType,vector<PhysicalDevice*>> deviceMap;
+                    for(int i=0; i<this->devices.size(); i++)
+                    {
+                        deviceMap[this->devices[i]->getProperties()->deviceType].push_back(this->devices[i]);
+                    }
+                    
+                    // sortMem returns the device with the most VRAM.
+                    Event<PhysicalDevice*, VkPhysicalDeviceType> sortMem(
+                        [&deviceMap](VkPhysicalDeviceType typeToCheck)
+                        {
+                            if(deviceMap[typeToCheck].size()<=0)
+                            {
+                                return ((PhysicalDevice*)(nullptr));
+                            }
 
+                            int highestHeap = 0;
+                            int heapIndex = 0;
+                            for(int i=0; i<deviceMap[typeToCheck].size(); i++)
+                            {
+                                if(deviceMap[typeToCheck][i]->getMem()->memoryHeapCount>highestHeap)
+                                {
+                                    highestHeap = deviceMap[typeToCheck][i]->getMem()->memoryHeapCount;
+                                    heapIndex = i;
+                                }
+                            }
+                            
+                            return deviceMap[typeToCheck][heapIndex];
+                        }
+                    );
+                    
+                    PhysicalDevice* result;
+                    vector<VkPhysicalDeviceType> priorities = {
+                        VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU,
+                        VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU,
+                        VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU,
+                        VK_PHYSICAL_DEVICE_TYPE_CPU
+                    };
+
+                    do
+                    {
+                        result = (sortMem(priorities.back())!=nullptr) ? sortMem(priorities.back()) : result;
+                        priorities.pop_back();
+                    }
+                    while(priorities.size()>0);
+                    
+                    if(result!=nullptr)
+                    {
+                        cout<<"Preferred device"<<": "<<result->getProperties()->deviceName<<endl;
+                        return result;
+                    }        
+
+                    // 2) If no device to choose, choose a-th device
+                    return this->devices[a];
+                }
+            );
+
+            // Do we have a config to check?
+            if(deviceConfig==nullptr)
+            {
+                return noConfig(0);
+            }
+            else
+            {
+                // Verify the device is listed in the config
+                string deviceName = "";
+                
+                deviceName = string((*deviceConfig)["GraphicsOptions"][0]["PreferredDevice"][0]["DeviceName"][0].getContents());
+
+                // Check to see if the device we're looking for by name exists. If yes, use!
+                for(int i=0; i<devices.size(); i++)
+                {
+                    if(string(devices[i]->getProperties()->deviceName)==string(deviceName))
+                    {
+                        return devices[i];
+                    }
+                }
+
+                // If the device we're looking for doesn't exist by name, use no config provided settings...
+                return noConfig(0);
+            }
         }
 
     };

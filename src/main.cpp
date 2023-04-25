@@ -153,7 +153,6 @@ int main(int argc, char* argv[])
     Event<void*, ConfigNode> materialCallback(
         [](ConfigNode n)
         {
-
             return nullptr;
         }
     );
@@ -168,6 +167,8 @@ int main(int argc, char* argv[])
 
     //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
     VulkanDispatchables vulkanEnvironment;
+    
+    vulkanEnvironment.deviceConfig=(configs.getConfig("./assets/config/graphicsOptions.xml"));
 
     vulkanEnvironment.enabledExtFilter = new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
         F(vector<VkExtensionProperties>* toParse)

@@ -5,3 +5,4 @@
 <Config desc="Config containing liquid material properties for physics">./assets/config/liquidMaterials.xml</Config>
 <Config desc="Config containing solid material properties for physics">./assets/config/solidMaterials.xml</Config>
 <Config desc="Config containing quotes for Bobby game">./assets/config/quotes.xml</Config>
+<Config desc="Config containing graphical options such as preferred Vulkan device">./assets/config/graphicsOptions.xml</Config>

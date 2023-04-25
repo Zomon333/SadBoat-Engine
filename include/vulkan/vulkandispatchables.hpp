@@ -27,6 +27,9 @@ namespace SBE
         // 
         Instance* vulkanInstance;
         
+        // Config settings for device
+        Config* deviceConfig;
+
         // Our wrapper for all Vulkan enabled devices
         // Used to determine the optimal device, but also backup devices
         PhysicalDeviceCollection* vulkanDevices;
@@ -55,14 +58,14 @@ namespace SBE
         // The event to set up all of our Vulkan environment.
         // Useful so the Vulkan environment can be set up in basically two lines of code, while also being multithreaded.
         Event<VulkanDispatchables*, VulkanDispatchables*> setup = Event<VulkanDispatchables*, VulkanDispatchables*>(
-            F(VulkanDispatchables* toInit)
+            lF(VulkanDispatchables* toInit)
             {
                 // Setup the instance
                 toInit->vulkanInstance = new Instance;
 
                 // Find what devices exist in it, and get the optimal device
                 toInit->vulkanDevices = new PhysicalDeviceCollection(toInit->vulkanInstance);
-                toInit->preferredDevice = toInit->vulkanDevices->getOptimal();
+                toInit->preferredDevice = toInit->vulkanDevices->getOptimal(this->deviceConfig);
                 
                 // Find the extensions and layers available on the optimal device
                 toInit->vulkanExtensions = new ExtensionCollection(toInit->preferredDevice);
