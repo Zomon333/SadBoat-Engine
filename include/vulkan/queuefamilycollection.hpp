@@ -49,15 +49,15 @@ namespace SBE
         void update()
         {
             vkGetPhysicalDeviceQueueFamilyProperties(parent->getDevice(), &queueFamPropCount, nullptr);            
-            vector<VkQueueFamilyProperties*> tmp;
-            tmp.resize(queueFamPropCount);
             
-            vkGetPhysicalDeviceQueueFamilyProperties(parent->getDevice(), &queueFamPropCount, *(tmp.data()));
+            VkQueueFamilyProperties* tmp = new VkQueueFamilyProperties[queueFamPropCount];
+
+            vkGetPhysicalDeviceQueueFamilyProperties(parent->getDevice(), &queueFamPropCount, tmp);
 
             selfQueueFamilies.clear();
             for(int i = 0; i<queueFamPropCount; i++)
             {
-                selfQueueFamilies.push_back(QueueFamily(parent, tmp[i]));
+                selfQueueFamilies.push_back(QueueFamily(parent, &(tmp[i])));
             }
         }
 
