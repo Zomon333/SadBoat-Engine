@@ -80,16 +80,17 @@ namespace SBE
                 -Background
                 -Other
             */
-            initDevQueue.queueCount=6;
+            const int queueCount = 6;
+            initDevQueue.queueCount=queueCount;
 
             // An optional pointer to an array of floats representing priority of work submitted to each of the queues. These values are normalized.
             // Use this later for prioritizing rendering for high mobility objects and the player model
             // Setting this to nullptr has the device treat every queue the same
             initDevQueue.pQueuePriorities=nullptr;
             
-            creationInfo->queueCreateInfoCount=6;
-            VkDeviceQueueCreateInfo infos[6];
-            for(int i=0; i<1; i++)
+            creationInfo->queueCreateInfoCount=queueCount;
+            VkDeviceQueueCreateInfo infos[queueCount];
+            for(int i=0; i<creationInfo->queueCreateInfoCount; i++)
             {
                 infos[i]=initDevQueue;
             }
@@ -118,7 +119,7 @@ namespace SBE
             // We generally don't want this to be nullptr. This is just as a proof of concept.
             creationInfo->pEnabledFeatures=this->requiredFeatures;
 
-            vkCreateDevice(parent->getDevice(), creationInfo, parent->getHost()->getAllocationInfo(), &self);
+            vkCreateDevice(parent->getDevice(), creationInfo, this->host->getAllocationInfo(), &self);
         }
 
         // Make a device, assume no info
