@@ -263,5 +263,79 @@ namespace SBE
             }
 
     };
+
+    /*
+        Different template specializations for different states of void for parameters and returns.
+        These aren't fully tested yet and may not be fully functional.
+    */
+
+    template<class Return>
+    class Event<Return, void> : Event<Return, int>
+    {
+        Event(auto func)
+        {
+            Event<Return, int> EventB([&func](int a){
+                return func();
+            });
+            ((Event<Return, int>*)(this))->operator=(EventB);
+        }
+
+        Return call()
+        {
+            return ((Event<Return, int>*)(this))->call(0);
+        }
+        void launch()
+        {
+            ((Event<Return, int>*)(this))->launch(0);
+        }
+    };
+
+    template<class ...Parameters>
+    class Event<void, Parameters...> : Event<int, Parameters...>
+    {
+        public:
+        Event(auto func)
+        {
+            Event<int, Parameters...> EventB([&func](Parameters... a){
+                func(a...);
+                return 0;
+            });
+            ((Event<int, Parameters...>*)(this))->operator=(EventB);
+        }
+        void call(Parameters... params)
+        {
+            ((Event<int, Parameters...>(this)))->call(params...);
+        }
+        void launch(Parameters... params)
+        {
+            ((Event<int, Parameters...>)(this))->launch(params...);
+        }
+    };
+
+    template<>
+    class Event<void, void> : Event<int, int>
+    {
+        public:
+
+        Event(auto func)
+        {
+            Event<int, int> EventB([&func](int a){
+                func();
+                return a;
+            });
+            ((Event<int, int>*)(this))->operator=(EventB);
+        }
+
+        void call()
+        {
+            ((Event<int, int>*)(this))->call(0);
+        }
+
+        void launch()
+        {
+            ((Event<int, int>*)(this))->launch(0);
+        }
+
+    };
 };
 #endif
