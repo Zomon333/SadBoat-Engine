@@ -25,34 +25,34 @@ namespace SBE
     {
         // Our wrapper for the Vulkan instance
         // 
-        Instance* vulkanInstance;
+        Instance* vulkanInstance=nullptr;
         
         // Config settings for device
-        Config* deviceConfig;
+        Config* deviceConfig=nullptr;
 
         // Our wrapper for all Vulkan enabled devices
         // Used to determine the optimal device, but also backup devices
-        PhysicalDeviceCollection* vulkanDevices;
-        ExtensionCollection* vulkanExtensions;
+        PhysicalDeviceCollection* vulkanDevices=nullptr;
+        ExtensionCollection* vulkanExtensions=nullptr;
 
-        Event<vector<VkExtensionProperties>*, vector<VkExtensionProperties>*>* enabledExtFilter;
+        Event<vector<VkExtensionProperties>*, vector<VkExtensionProperties>*>* enabledExtFilter=nullptr;
         vector<VkExtensionProperties> enabledExtensions;
 
         // Our wrapper for the physical Vulkan device
         // This is the preferred device as determined by our device collection
-        PhysicalDevice* preferredDevice;
+        PhysicalDevice* preferredDevice=nullptr;
 
-        LayerCollection* vulkanLayers;
-        Event<vector<VkLayerProperties>*, vector<VkLayerProperties>*>* enabledLayerFilter;
+        LayerCollection* vulkanLayers=nullptr;
+        Event<vector<VkLayerProperties>*, vector<VkLayerProperties>*>* enabledLayerFilter=nullptr;
         vector<VkLayerProperties> enabledLayers;
 
         // The struct requesting specific device features
         // Will request these be enabled in the LogicalDevice
-        VkPhysicalDeviceFeatures* requiredFeatures;
+        VkPhysicalDeviceFeatures* requiredFeatures=nullptr;
 
         // Our wrapper for the Vulkan logical device
         // Used for interfacing with the actual device, queues, etc.
-        LogicalDevice* vulkanLogicalDevice;
+        LogicalDevice* vulkanLogicalDevice=nullptr;
 
 
         // The event to set up all of our Vulkan environment.
@@ -75,6 +75,22 @@ namespace SBE
                 toInit->enabledExtensions = toInit->vulkanExtensions->getProps();
                 toInit->enabledLayers = toInit->vulkanLayers->getProps();
 
+                toInit->enabledExtFilter = (toInit->enabledExtFilter==nullptr) ? new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
+                    F(vector<VkExtensionProperties>* toParse)
+                    {
+                        return toParse;
+                    }
+                ) : toInit->enabledExtFilter;
+
+                toInit->enabledLayerFilter = (toInit->enabledLayerFilter==nullptr) ? new Event<vector<VkLayerProperties>*,vector<VkLayerProperties>*>(
+                    F(vector<VkLayerProperties>* toParse)
+                    {
+                        toParse->clear();
+                        return toParse;
+                    }
+                ) : toInit->enabledLayerFilter;
+
+
                 // Use the events in the struct to parse
                 toInit->enabledExtFilter->call(&(toInit->enabledExtensions));
                 toInit->enabledLayerFilter->call(&(toInit->enabledLayers));
@@ -86,6 +102,12 @@ namespace SBE
                 toInit->requiredFeatures->geometryShader=VK_TRUE;
 
                 toInit->vulkanLogicalDevice = new LogicalDevice(toInit->preferredDevice, toInit->requiredFeatures, toInit->enabledLayers, toInit->enabledExtensions);
+
+                
+                
+
+                
+
 
                 return toInit;
             }

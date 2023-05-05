@@ -76,7 +76,27 @@ namespace SBE
         
         auto getOptimal() 
         {
-            return pair<int,QueueFamily>(0, selfQueueFamilies[0]);
+            pair<int,QueueFamily> result(0, selfQueueFamilies[0]);
+
+            for(int i=0; i<selfQueueFamilies.size(); i++)
+            {
+                if(
+                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_GRAPHICS_BIT) &&
+                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_TRANSFER_BIT) &&
+                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_COMPUTE_BIT) &&
+                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_SPARSE_BINDING_BIT) &&
+                    (selfQueueFamilies[i].getProps()->queueCount >= result.second.getProps()->queueCount)
+                )
+                {
+                    result=pair<int,QueueFamily>(i,selfQueueFamilies[i]);
+                }
+            }
+
+
+            cout<<"Choosing queueFamily number "<<result.first<<", which supports ";
+            cout<<result.second.getProps()->queueCount<<" queues.\n";
+            
+            return result;
         }
 
     };

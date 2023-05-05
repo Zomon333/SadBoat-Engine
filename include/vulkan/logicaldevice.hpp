@@ -51,51 +51,37 @@ namespace SBE
             // We need to initialize our LogicalDevice, so we're setting up some boilerplate structs to store the info for the constructor.
             // VkDeviceCreateInfo initInfo;
             creationInfo->sType=VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-            creationInfo->pNext=nullptr;
-            creationInfo->flags=0;
 
             auto queueFams = QueueFamilyCollection(parent);
-            auto optimalFam = queueFams.getOptimal().second;
+            auto optimalFamPair = queueFams.getOptimal();
+            auto optimalFam = optimalFamPair.second;
+
+            const int queues = optimalFam.getProps()->queueCount;
 
             // We need some info on the Queues we're initializing inside of it, too.
             VkDeviceQueueCreateInfo initDevQueue;
             initDevQueue.sType=VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-            initDevQueue.pNext=nullptr;
-            initDevQueue.flags=0;
+            initDevQueue.queueFamilyIndex=optimalFamPair.first-1;
+            initDevQueue.queueCount=queues;
 
-            // Find some queue family in the collection of queue families.
-            // Ideally, we'd do more work here to find the *right* queue family but for this boilerplate
-            // we're just going to assume the first queue fam is fine.
 
-            // Specifies the family of the queues we want to create
-            // Set to the index in the array of queue families stored in QueueFamilyCollection
-            initDevQueue.queueFamilyIndex=queueFams.getOptimal().first;
-
-            /*
-            Render categories:
-                -Player
-                -Projectiles
-                -Enemies
-                -UI
-                -Background
-                -Other
-            */
-            const int queueCount = 6;
-            initDevQueue.queueCount=queueCount;
-
-            // An optional pointer to an array of floats representing priority of work submitted to each of the queues. These values are normalized.
-            // Use this later for prioritizing rendering for high mobility objects and the player model
-            // Setting this to nullptr has the device treat every queue the same
-            initDevQueue.pQueuePriorities=nullptr;
-            
-            creationInfo->queueCreateInfoCount=queueCount;
-            VkDeviceQueueCreateInfo infos[queueCount];
-            for(int i=0; i<creationInfo->queueCreateInfoCount; i++)
+            float* queuePriorities = new float[queues];
+            for(int i=0; i<queues; i++)
             {
-                infos[i]=initDevQueue;
+                queuePriorities[i]=1.0f;
+            }       
+            initDevQueue.pQueuePriorities=queuePriorities;
+
+
+
+            VkDeviceQueueCreateInfo* queue = new VkDeviceQueueCreateInfo[queues];
+            for(int i=0; i<queues; i++)
+            {
+                queue[i]=VkDeviceQueueCreateInfo(initDevQueue);
             }
 
-            creationInfo->pQueueCreateInfos=infos;
+            creationInfo->queueCreateInfoCount=queues;
+            creationInfo->pQueueCreateInfos=queue;
 
             // Enable the layers named by the parameter
             creationInfo->enabledLayerCount=layersToEnable.size();
@@ -117,9 +103,10 @@ namespace SBE
             creationInfo->ppEnabledExtensionNames=strArr;
 
             // We generally don't want this to be nullptr. This is just as a proof of concept.
-            creationInfo->pEnabledFeatures=this->requiredFeatures;
+            // creationInfo->pEnabledFeatures=this->requiredFeatures;
+            creationInfo->pEnabledFeatures=nullptr;
 
-            vkCreateDevice(parent->getDevice(), creationInfo, this->host->getAllocationInfo(), &self);
+            auto result = vkCreateDevice(parent->getDevice(), creationInfo, nullptr, &self);
         }
 
         // Make a device, assume no info
