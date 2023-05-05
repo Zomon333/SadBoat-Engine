@@ -36,6 +36,9 @@ namespace SBE
 
         VkDeviceCreateInfo* creationInfo;
         VkDevice self;
+
+        unordered_map<int, string> resultLookup;
+
     public:
         // Constructors
         //----------------------------------
@@ -43,70 +46,138 @@ namespace SBE
         // Make a device, assume some info
         LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr, vector<VkLayerProperties> layersToEnable=vector<VkLayerProperties>(), vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
         {
-            this->parent=parent;
+
+            Event<void*, void*> setupLookup(lF(void* map)
+            {
+                #define LOOKUP(a,b) this->resultLookup[b]=a
+
+                LOOKUP("VK_SUCCESS",0);
+                LOOKUP("VK_NOT_READY",1);
+                LOOKUP("VK_TIMEOUT",2);
+                LOOKUP("VK_EVENT_SET",3);
+                LOOKUP("VK_EVENT_RESET",4);
+                LOOKUP("VK_INCOMPLETE",5);
+                LOOKUP("VK_ERROR_OUT_OF_HOST_MEMORY",-1);
+                LOOKUP("VK_ERROR_OUT_OF_DEVICE_MEMORY",-2);
+                LOOKUP("VK_ERROR_INITIALIZATION_FAILED",-3);
+                LOOKUP("VK_ERROR_DEVICE_LOST",-4);
+                LOOKUP("VK_ERROR_MEMORY_MAP_FAILED",-5);
+                LOOKUP("VK_ERROR_LAYER_NOT_PRESENT",-6);
+                LOOKUP("VK_ERROR_EXTENSION_NOT_PRESENT",-7);
+                LOOKUP("VK_ERROR_FEATURE_NOT_PRESENT",-8);
+                LOOKUP("VK_ERROR_INCOMPATIBLE_DRIVER",-9);
+                LOOKUP("VK_ERROR_TOO_MANY_OBJECTS",-10);
+                LOOKUP("VK_ERROR_FORMAT_NOT_SUPPORTED",-11);
+                LOOKUP("VK_ERROR_FRAGMENTED_POOL",-12);
+                LOOKUP("VK_ERROR_UNKNOWN",-13);
+                LOOKUP("VK_ERROR_OUT_OF_POOL_MEMORY",-1000069000);
+                LOOKUP("VK_ERROR_INVALID_EXTERNAL_HANDLE",-1000072003);
+                LOOKUP("VK_ERROR_FRAGMENTATION",-1000161000);
+                LOOKUP("VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS",-1000257000);
+                LOOKUP("VK_PIPELINE_COMPILE_REQUIRED",1000297000);
+                LOOKUP("VK_ERROR_SURFACE_LOST_KHR",-1000000000);
+                LOOKUP("VK_ERROR_NATIVE_WINDOW_IN_USE_KHR",-1000000001);
+                LOOKUP("VK_SUBOPTIMAL_KHR",1000001003);
+                LOOKUP("VK_ERROR_OUT_OF_DATE_KHR",-1000001004);
+                LOOKUP("VK_ERROR_INCOMPATIBLE_DISPLAY_KHR",-1000003001);
+                LOOKUP("VK_ERROR_VALIDATION_FAILED_EXT",-1000011001);
+                LOOKUP("VK_ERROR_INVALID_SHADER_NV",-1000012000);
+                LOOKUP("VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR",-1000023000);
+                LOOKUP("VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR",-1000023001);
+                LOOKUP("VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR",-1000023002);
+                LOOKUP("VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR",-1000023003);
+                LOOKUP("VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR",-1000023004);
+                LOOKUP("VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR",-1000023005);
+                LOOKUP("VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT",-1000158000);
+                LOOKUP("VK_ERROR_NOT_PERMITTED_KHR",-1000174001);
+                LOOKUP("VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT",-1000255000);
+                LOOKUP("VK_THREAD_IDLE_KHR",1000268000);
+                LOOKUP("VK_THREAD_DONE_KHR",1000268001);
+                LOOKUP("VK_OPERATION_DEFERRED_KHR",1000268002);
+                LOOKUP("VK_OPERATION_NOT_DEFERRED_KHR",1000268003);
+                LOOKUP("VK_ERROR_COMPRESSION_EXHAUSTED_EXT",-1000338000);
+                LOOKUP("VK_ERROR_OUT_OF_POOL_MEMORY_KHR",-1000069000);
+                LOOKUP("VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR",-1000072003);
+                LOOKUP("VK_ERROR_FRAGMENTATION_EXT",-1000161000);
+                LOOKUP("VK_ERROR_NOT_PERMITTED_EXT",-1000174001);
+                LOOKUP("VK_ERROR_INVALID_DEVICE_ADDRESS_EXT",-1000257000);
+                LOOKUP("VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR",-1000257000);
+                LOOKUP("VK_PIPELINE_COMPILE_REQUIRED_EXT",1000297000);
+                LOOKUP("VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT",1000297000);
+                LOOKUP("VK_RESULT_MAX_ENUM",0x7FFFFFFF);
+                
+
+                #undef LOOKUP(a,b)
+
+                return map;
+            });
+            setupLookup(nullptr);
+
+            // Save device data passed in by parameters
             this->host=parent->getHost();
-            this->creationInfo=new VkDeviceCreateInfo;
-            this->requiredFeatures=requiredFeatures;
+            this->parent=parent;
+            
+            // Enable all features by default.
+            this->requiredFeatures = parent->getFeatures();
 
-            // We need to initialize our LogicalDevice, so we're setting up some boilerplate structs to store the info for the constructor.
-            // VkDeviceCreateInfo initInfo;
-            creationInfo->sType=VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+            // Start querying queue families to use for queues.
+            QueueFamilyCollection deviceQueueFamilies = QueueFamilyCollection(parent);
+            vector<VkDeviceQueueCreateInfo> deviceQueueCreateInfos;
 
-            auto queueFams = QueueFamilyCollection(parent);
-            auto optimalFamPair = queueFams.getOptimal();
-            auto optimalFam = optimalFamPair.second;
+            // Find the optimal queue family
+            auto optimalFamily = deviceQueueFamilies.getOptimal();
 
-            const int queues = optimalFam.getProps()->queueCount;
+            // Generate the struct to create as many queues within the family as possible.
+            deviceQueueCreateInfos.emplace_back(
+                VkDeviceQueueCreateInfo{
+                    VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,                     // VkStructureType             sType;
+                    nullptr,                                                        // const void*                 pNext;
+                    0,                                                              // VkDeviceQueueCreateFlags    flags;
+                    (unsigned int)(optimalFamily.first),                            // uint32_t                    queueFamilyIndex;
+                    optimalFamily.second.getProps()->queueCount,                    // uint32_t                    queueCount;
+                    nullptr                                                         // const float*                pQueuePriorities;
+                }
+            );
 
-            // We need some info on the Queues we're initializing inside of it, too.
-            VkDeviceQueueCreateInfo initDevQueue;
-            initDevQueue.sType=VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-            initDevQueue.queueFamilyIndex=optimalFamPair.first-1;
-            initDevQueue.queueCount=queues;
-
-
-            float* queuePriorities = new float[queues];
-            for(int i=0; i<queues; i++)
+            
+            // Query all of the possible extensions for the physical device
+            ExtensionCollection deviceExtensions = ExtensionCollection(parent);
+            vector<char*> extensionsToEnable;
+            // Sort through them all and choose any that are shared between our list of requested extensions
+            for(int i=0; i<deviceExtensions.getProps().size(); i++)
             {
-                queuePriorities[i]=1.0f;
-            }       
-            initDevQueue.pQueuePriorities=queuePriorities;
-
-
-
-            VkDeviceQueueCreateInfo* queue = new VkDeviceQueueCreateInfo[queues];
-            for(int i=0; i<queues; i++)
-            {
-                queue[i]=VkDeviceQueueCreateInfo(initDevQueue);
+                for(int j=0; j<extToEnable.size(); j++)
+                {
+                    if((extToEnable[j].extensionName==deviceExtensions.getProp(i).extensionName) && (extToEnable[j].specVersion==deviceExtensions.getProp(i).specVersion))
+                    {
+                        extensionsToEnable.emplace_back(extToEnable[j].extensionName);
+                    }
+                }
             }
 
-            creationInfo->queueCreateInfoCount=queues;
-            creationInfo->pQueueCreateInfos=queue;
+            // Pass the info we need to create the device to the struct
+            this->creationInfo = new VkDeviceCreateInfo{
+                    VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,                                                   // VkStructureType                      sType;
+                    nullptr,                                                                                // const void*                          pNext;
+                    0, /*Reserved for future use*/                                                          // VkDeviceCreateFlags                  flags;
+                    (unsigned int)(deviceQueueCreateInfos.size()),                                          // uint32_t                             queueCreateInfoCount;
+                    deviceQueueCreateInfos.data(),                                                          // const VkDeviceQueueCreateInfo*       pQueueCreateInfos;
+                    0, /*Deprecated*/                                                                       // uint32_t                             enabledLayerCount;
+                    nullptr, /*Deprecated*/                                                                 // const char* const*                   ppEnabledLayerNames;
+                    (unsigned int)(extensionsToEnable.size()),                                              // uint32_t                             enabledExtensionCount;
+                    extensionsToEnable.data(),                                                              // const char* const*                   ppEnabledExtensionNames;
+                    this->requiredFeatures                                                                  // const VkPhysicalDeviceFeatures*      pEnabledFeatures;
+            };
 
-            // Enable the layers named by the parameter
-            creationInfo->enabledLayerCount=layersToEnable.size();
-            char** layArr = new char*[layersToEnable.size()];
-            for(int i = 0; i<layersToEnable.size(); i++)
-            {
-                layArr[i]=layersToEnable[i].layerName;
-            }
-            creationInfo->ppEnabledLayerNames=layArr;
 
 
-            // Enable the extensions named by the parameter
-            creationInfo->enabledExtensionCount=extToEnable.size();
-            char** strArr = new char*[extToEnable.size()];
-            for(int i = 0; i<extToEnable.size(); i++)
-            {
-                strArr[i]=extToEnable[i].extensionName;
-            }
-            creationInfo->ppEnabledExtensionNames=strArr;
-
-            // We generally don't want this to be nullptr. This is just as a proof of concept.
-            // creationInfo->pEnabledFeatures=this->requiredFeatures;
-            creationInfo->pEnabledFeatures=nullptr;
-
-            auto result = vkCreateDevice(parent->getDevice(), creationInfo, nullptr, &self);
+            auto result = vkCreateDevice(
+                this->parent->getDevice(),
+                this->creationInfo,
+                this->host->getAllocationInfo(),
+                &self
+            );
+            cout<<"LogicalDevice created with result: "<<resultLookup[result]<<endl;
         }
 
         // Make a device, assume no info
@@ -114,7 +185,7 @@ namespace SBE
         {
             this->host=parent->getHost();
             this->creationInfo=creationInfo;
-            this->requiredFeatures=requiredFeatures;
+            this->requiredFeatures=parent->getFeatures();
 
             // Todo: Add code for requiredFeatures to be checked against parent's features
 
