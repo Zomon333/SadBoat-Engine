@@ -124,10 +124,10 @@ Disclaimer:
     #include "../include/vulkan/queuefamily.hpp"
     #include "../include/vulkan/queuefamilycollection.hpp"
 
-    #include "../include/vulkan/logicaldevice.hpp"
-
     #include "../include/vulkan/layercollection.hpp"
     #include "../include/vulkan/extensioncollection.hpp"
+
+    #include "../include/vulkan/logicaldevice.hpp"
 
     #include "../include/vulkan/vulkandispatchables.hpp"
 #endif
