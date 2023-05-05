@@ -167,28 +167,27 @@ int main(int argc, char* argv[])
 
     //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
     VulkanDispatchables vulkanEnvironment;
-    
+
     vulkanEnvironment.deviceConfig=(configs.getConfig("./assets/config/graphicsOptions.xml"));
-
-    vulkanEnvironment.enabledExtFilter = new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
-        F(vector<VkExtensionProperties>* toParse)
-        {
-            toParse->clear();
-            return toParse;
-        }
-    );
-
-    vulkanEnvironment.enabledLayerFilter = new Event<vector<VkLayerProperties>*,vector<VkLayerProperties>*>(
-        F(vector<VkLayerProperties>* toParse)
-        {
-            toParse->clear();
-            return toParse;
-        }
-    );
 
     vulkanEnvironment.setup(&vulkanEnvironment);
 
-    
+
+
+    /*VkBuffer bufferTest;
+
+    VkBufferCreateInfo creationInfo = VkBufferCreateInfo{
+        VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
+        0,
+        1024 * 1024,
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_SHARING_MODE_EXCLUSIVE,
+        0, nullptr
+    };
+
+    auto result2 = vkCreateBuffer(vulkanEnvironment.vulkanLogicalDevice->getSelf(), &creationInfo, nullptr, &bufferTest);
+
+    cout<<result2<<endl;*/
 
 
     return 0;
