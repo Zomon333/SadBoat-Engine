@@ -107,7 +107,7 @@ namespace SBE
                 LOOKUP("VK_RESULT_MAX_ENUM",0x7FFFFFFF);
                 
 
-                #undef LOOKUP(a,b)
+                #undef LOOKUP
 
                 return map;
             });
