@@ -114,20 +114,30 @@ Disclaimer:
     
     #include "./vulkan/vulkan.hpp"
 
+    // VkResult helper function
+    #include "../include/vulkan/vulkanresultlookup.hpp"
 
-
+    // Instances
     #include "../include/vulkan/instance.hpp"
 
+    // Physical Devices
     #include "../include/vulkan/physicaldevice.hpp"
     #include "../include/vulkan/physicaldevicecollection.hpp"
 
+    // Queues
     #include "../include/vulkan/queuefamily.hpp"
     #include "../include/vulkan/queuefamilycollection.hpp"
 
+    // Layers, Extensions
     #include "../include/vulkan/layercollection.hpp"
     #include "../include/vulkan/extensioncollection.hpp"
 
+    // Logical Devices
     #include "../include/vulkan/logicaldevice.hpp"
+
+    // Memory models
+    #include "../include/vulkan/buffer.hpp"
+
 
     #include "../include/vulkan/vulkandispatchables.hpp"
 #endif

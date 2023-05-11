@@ -57,7 +57,7 @@ namespace SBE
             selfQueueFamilies.clear();
             for(int i = 0; i<queueFamPropCount; i++)
             {
-                selfQueueFamilies.push_back(QueueFamily(parent, &(tmp[i])));
+                selfQueueFamilies.push_back(QueueFamily(parent, (unsigned int)(i), &(tmp[i])));
             }
         }
 

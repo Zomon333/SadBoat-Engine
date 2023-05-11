@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
 
 
 
-    VkBuffer bufferTest;
+    // VkBuffer bufferTest;
 
     VkBufferCreateInfo creationInfo = VkBufferCreateInfo{
         VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
@@ -185,7 +185,11 @@ int main(int argc, char* argv[])
         0, nullptr
     };
 
-    auto result2 = vkCreateBuffer(vulkanEnvironment.vulkanLogicalDevice->getSelf(), &creationInfo, nullptr, &bufferTest);
+    // auto result2 = vkCreateBuffer(vulkanEnvironment.vulkanLogicalDevice->getSelf(), &creationInfo, nullptr, &bufferTest);
+
+    // Buffer testBufferA(vulkanEnvironment.vulkanLogicalDevice, creationInfo);
+    // Buffer testBufferB(vulkanEnvironment.vulkanLogicalDevice, 1024*1024, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+    Buffer testBufferC(vulkanEnvironment.vulkanLogicalDevice, 1024*1024, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, {vulkanEnvironment.vulkanLogicalDevice->getOptimalQueueFam()->getIndex()});
 
     return 0;
 }

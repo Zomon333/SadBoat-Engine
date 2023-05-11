@@ -26,6 +26,7 @@ class QueueFamily
     {
     private:
         PhysicalDevice* parent;
+        unsigned int index;
 
         VkQueueFamilyProperties* selfProps;
 
@@ -34,9 +35,10 @@ class QueueFamily
         //----------------------------------
     
         //Construct a QueueFamily given some parent and some properties
-        QueueFamily(PhysicalDevice* parent, VkQueueFamilyProperties* selfProps)
+        QueueFamily(PhysicalDevice* parent, unsigned int index, VkQueueFamilyProperties* selfProps)
         {
             this->parent=parent;
+            this->index=index;
             this->selfProps=selfProps;
         }
 
@@ -48,6 +50,9 @@ class QueueFamily
 
         // Get the QueueFamily's properties
         auto getProps() { return selfProps; }
+
+        // Get the QueueFamily's index
+        auto getIndex() { return index; }
     };
 };
 #endif
