@@ -173,6 +173,27 @@ namespace SBE
                 return temp;
             }
 
+            // 
+            // Combines two explicitly given events into a new event, where the return of the 2nd operand is the parameter to the 1st operand
+            // 
+            // Because B is called with A's return, B must accept A's return as a parameter.
+            // Unlike the other addition operator, B may return a different value than A.
+            // 
+            template<class Intermediary=Return>
+            Event<Return, Parameters...> combine(Event<Return, Intermediary> &second, Event<Intermediary, Parameters...> &first)
+            {
+                Event<Return, Parameters...> tmpEvent(
+                    [&first, &second](Parameters... params)
+                    {
+                        first.launch(params...);
+                        second.launch(first.getResult());
+                        return second.getResult();
+                    }
+                );
+
+                return tmpEvent;
+            }
+
             //
             //  Performs event addition as described above. Sets the current event to the sum of the two events.
             //
