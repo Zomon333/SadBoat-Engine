@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
 
 
 
-    /*VkBuffer bufferTest;
+    VkBuffer bufferTest;
 
     VkBufferCreateInfo creationInfo = VkBufferCreateInfo{
         VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
@@ -186,9 +186,6 @@ int main(int argc, char* argv[])
     };
 
     auto result2 = vkCreateBuffer(vulkanEnvironment.vulkanLogicalDevice->getSelf(), &creationInfo, nullptr, &bufferTest);
-
-    cout<<result2<<endl;*/
-
 
     return 0;
 }
