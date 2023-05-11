@@ -31,6 +31,8 @@ namespace SBE
         //  Recursion Control Variables
         //----------------------------------
 
+        mutex accessible;
+
         std::promise<bool> returnable;
         
         milliseconds tOff;
@@ -43,6 +45,7 @@ namespace SBE
 
         int localDefer(Parameters... params)
         {
+            accessible.lock();
             //Copy the intended recursion
             const std::function<int(Parameters...)> func = 
                     std::function<int(Parameters...)>(                       
@@ -70,7 +73,7 @@ namespace SBE
                 //And return the value of the *copied* function with the *normal* parameters.
                 return oldFunc(params...);
             };
-
+            accessible.unlock();
             //Call the new function
             return nFunc(params...);
         }
@@ -81,14 +84,16 @@ namespace SBE
 
         RecurringEvent(auto f, auto period)
         {
+            accessible.lock();
             this->function = std::function<int(Parameters...)>(f);
 
             this->tOff = std::chrono::duration_cast<milliseconds>(period);
-            
+            accessible.unlock();
         }
 
         RecurringEvent()
         {
+            accessible.lock();
             this->function = std::function<int(Parameters...)>(
                 [](int a=0)
                 {
@@ -97,10 +102,12 @@ namespace SBE
             );
 
             this->tOff = defaultFrequency;
+            accessible.unlock();
         }
 
         RecurringEvent(Event<int, Parameters...> f, auto period)
         {
+            accessible.lock();
             this->function = std::function<int(Parameters...)>(
                 [f](Parameters... params)
                 {
@@ -110,10 +117,12 @@ namespace SBE
             );
 
             this->tOff = std::chrono::duration_cast<milliseconds>(period);
+            accessible.unlock();
         }
 
         RecurringEvent(TimedEvent<int, Parameters...> f, auto period)
         {
+            accessible.lock();
             this->function = std::function<int(Parameters...)>(
                 [f](Parameters... params)
                 {
@@ -123,6 +132,7 @@ namespace SBE
             );
 
             this->tOff = std::chrono::duration_cast<milliseconds>(period);
+            accessible.unlock();
         }
 
         //  Recursion Flow Control Functions
@@ -198,12 +208,16 @@ namespace SBE
 
         void recur()
         {
+            accessible.lock();
             this->recur(Parameters()...);
+            accessible.unlock();
         }
 
         int end()
         {
+            accessible.lock();
             returnable.set_value(true);
+            accessible.unlock();
             //return this->getResult(); //Result is stored in loop. Why would I want to get the result of the RecurringEvent? It doesn't have a result!
             return 0;
         }
@@ -213,7 +227,9 @@ namespace SBE
         
         void setFreq(auto period)
         {
+            accessible.lock();
             this->tOff = std::chrono::duration_cast<milliseconds>(period);
+            accessible.unlock();
         }
 
         //  Accessors

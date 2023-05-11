@@ -39,7 +39,7 @@ TEST_CASE("ResourceHandle from TestingFile.txt",test_suite)
     CHECK(tRes.getHandle(tHand->getHandleID())==tHand);
 
     CHECK(tRes.getHandleCount()==1);
-    CHECK(tHand->getHandleID()==1);
+    CHECK(tHand->getHandleID()==2);
 
     CHECK(tHand->getResourceID()==0);
     

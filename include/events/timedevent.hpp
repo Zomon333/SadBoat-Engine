@@ -32,6 +32,8 @@ namespace SBE{
         steady_clock::time_point exeTime;
         bool suppressed = false;
 
+        mutex accessible;
+
     public:
         //  Constructors
         //----------------------------------
@@ -66,13 +68,17 @@ namespace SBE{
         //Do not launch event on time
         void suppress()
         {
+            accessible.lock();
             suppressed = true;
+            accessible.unlock();
         }
 
         //Undo suppress
         void release()
         {
+            accessible.lock();
             suppressed = false;
+            accessible.unlock();
         }
 
         //  Launch Style Functions
@@ -82,6 +88,7 @@ namespace SBE{
         //Don't use this for long running conditions! It opens a watchdog thread!
         void defer(steady_clock::time_point execution, Parameters... params)
         {
+            accessible.lock();
             //Copy TimedEvent's intended function
             const std::function<Return(Parameters...)> func = 
                     std::function<Return(Parameters...)>(                       
@@ -121,16 +128,20 @@ namespace SBE{
             this->function = std::function<Return(Parameters...)>(nFunc);
 
             //Launch a thread with the deferred function
+            accessible.unlock();
             this->launch(params...);
+            accessible.lock();
 
             //Set the event's function back to the non-deferred version
             this->function = std::function<Return(Parameters...)>(func);
+            accessible.unlock();
         }
 
         //Launches thread, but awaits time==exeTime before running event.
         //Don't use this for long running conditions! It opens a watchdog thread!
         void defer(Parameters... params)
         {
+            accessible.lock();
             //Copy TimedEvent's intended function
             const std::function<Return(Parameters...)> func = 
                     std::function<Return(Parameters...)>(                       
@@ -170,10 +181,13 @@ namespace SBE{
             this->function = std::function<Return(Parameters...)>(nFunc);
 
             //Launch a thread with the deferred function
+            accessible.unlock();
             this->launch(params...);
+            accessible.lock();
 
             //Set the event's function back to the non-deferred version
             this->function = std::function<Return(Parameters...)>(func);
+            accessible.unlock();
         }
 
         Return call(Parameters... params)
@@ -185,10 +199,12 @@ namespace SBE{
 
         void launch(Parameters... params)
         {
+            accessible.lock();
             if(!suppressed)
             {    
                 Event<Return, Parameters...>::launch(params...);
             }
+            accessible.unlock();
         }
 
         //  Accessors
@@ -196,12 +212,20 @@ namespace SBE{
 
         steady_clock::time_point getTime()
         {
-            return exeTime;
+            accessible.lock();
+            auto time = exeTime;
+            accessible.unlock();
+
+            return time;
         }
 
         bool getSuppressed()
         {
-            return suppressed;
+            accessible.lock();
+            auto sup = suppressed;
+            accessible.unlock();
+
+            return sup;
         }
 
         //  Mutators
@@ -209,7 +233,9 @@ namespace SBE{
 
         void setTime(steady_clock::time_point nTime)
         {
+            accessible.lock();
             exeTime=nTime;
+            accessible.unlock();
         }
         
         //  Operators
@@ -217,7 +243,7 @@ namespace SBE{
 
         Return operator()(Parameters... rhs)
         {
-        return this->function(rhs...);
+            return this->function(rhs...);
         }
 
         bool operator==(steady_clock::time_point rhs)

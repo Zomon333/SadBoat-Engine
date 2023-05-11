@@ -32,7 +32,8 @@ namespace SBE
         protected:
             //Holds the function to be executed
             std::function<Return(Parameters...)> function;// = std::function<int(int)>([](int a){return a;});
-            
+
+            std::mutex accessible;            
 
             //Holds the concactenated function
             std::vector<std::function<Return(Parameters...)>*> concFuncs;
@@ -87,6 +88,8 @@ namespace SBE
             //Wait for the result, then get it when it exists.
             Return getResult()
             {
+                accessible.lock();
+
                 //If there are no results to get, give a default answer.
                 if(callStack.size()==0)
                 {
@@ -99,17 +102,27 @@ namespace SBE
                 idStack.pop();
                 threadStack.pop();
 
+                accessible.unlock();
+
                 return result;
             }
 
             std::jthread::id getID()
             {
-                return idStack.top();
+                accessible.lock();
+                auto id = idStack.top();
+                accessible.unlock();
+
+                return id;
             }
 
             std::jthread* getThread()
             {
-                return threadStack.top();
+                accessible.lock();
+                auto thread = threadStack.top();
+                accessible.unlock();
+
+                return thread;
             }
 
             //  Execution modes
@@ -118,6 +131,8 @@ namespace SBE
             //Launch as it's own thread
             void launch(Parameters... params)
             {
+                accessible.lock();
+
                 //Get the function as a task
                 auto task = copyPackage();
 
@@ -132,6 +147,8 @@ namespace SBE
 
                 //Be free, my child!
                 thread.detach();
+
+                accessible.unlock();
             }
 
             //Do not create a new thread; run synchronously.
@@ -151,7 +168,9 @@ namespace SBE
             //Copies the function of the given event into this event. Does not copy the call stack.
             void operator=(Event& rhs)
             {
+                accessible.lock();
                 this->function = std::function<Return(Parameters...)>(static_cast<const std::function<Return(Parameters...)>>(rhs.function));
+                accessible.unlock();
             }
 
             //
@@ -162,6 +181,7 @@ namespace SBE
             //
             Event<Return, Parameters...> operator+(Event<Return, Return> &rhs)
             {
+                accessible.lock();
                 Event<Return, Parameters...> temp = Event<Return, Parameters...>(
                     [this, &rhs](Parameters... params)
                     {
@@ -169,7 +189,7 @@ namespace SBE
                         return rhs(this->getResult());
                     }
                 );
-
+                accessible.unlock();
                 return temp;
             }
 
@@ -182,6 +202,7 @@ namespace SBE
             template<class Intermediary=Return>
             Event<Return, Parameters...> combine(Event<Return, Intermediary> &second, Event<Intermediary, Parameters...> &first)
             {
+                accessible.lock();
                 Event<Return, Parameters...> tmpEvent(
                     [&first, &second](Parameters... params)
                     {
@@ -190,7 +211,7 @@ namespace SBE
                         return second.getResult();
                     }
                 );
-
+                accessible.unlock();
                 return tmpEvent;
             }
 
@@ -201,6 +222,7 @@ namespace SBE
             //
             void operator+=(Event<Return, Return> &rhs)
             {
+                accessible.lock();
                 //Make a new blank function
                 std::function<Return(Parameters...)>* old = new std::function<Return(Parameters...)>([](Parameters... params){return Return();});
                 
@@ -217,6 +239,7 @@ namespace SBE
                         return rhs(old->operator()(params...));
                     }
                 );
+                accessible.unlock();
             }
 
             
@@ -233,6 +256,7 @@ namespace SBE
             //
             Event<Return, Return> operator*(int i)
             {
+                accessible.lock();
                 Event<Return, Return> returnable(
                     [this, i](Return start)
                     {
@@ -244,7 +268,7 @@ namespace SBE
                         return temp;
                     }
                 );
-
+                accessible.unlock();
                 return returnable;
             }
 
@@ -256,7 +280,8 @@ namespace SBE
             //  -Equivalence updates itself to it's new multiplied value once the operation is done.
             //
             void operator*=(int i)
-            {          
+            {                          
+                accessible.lock();
                 //Make a new blank function
                 std::function<Return(Parameters...)>* old = new std::function<Return(Parameters...)>([](Parameters... params){return Return();});
 
@@ -281,6 +306,7 @@ namespace SBE
 
                 //Set the stored function to the old function many times
                 this->function = toUse.function;
+                accessible.unlock();
             }
 
     };
