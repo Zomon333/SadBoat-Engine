@@ -32,6 +32,9 @@ namespace SBE
         Instance* host;
         PhysicalDevice* parent;
 
+        mutex allocationMod;
+        int allocationCount;
+
         QueueFamily* optimalFamily;
 
         VkPhysicalDeviceFeatures* requiredFeatures;
@@ -46,6 +49,7 @@ namespace SBE
         // Make a device, assume some info
         LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr, vector<VkLayerProperties> layersToEnable=vector<VkLayerProperties>(), vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
         {
+            allocationCount=0;
 
             // Save device data passed in by parameters
             this->host=parent->getHost();
@@ -117,6 +121,8 @@ namespace SBE
         // Make a device, assume no info
         LogicalDevice(PhysicalDevice* parent, VkDeviceCreateInfo* creationInfo, VkPhysicalDeviceFeatures* requiredFeatures={})
         {
+            allocationCount=0;
+
             this->host=parent->getHost();
             this->creationInfo=creationInfo;
             this->requiredFeatures=parent->getFeatures();
@@ -149,6 +155,21 @@ namespace SBE
         void setHost(auto host) { this->host=host; }
         void setCreationInfo(auto creationInfo) { this->creationInfo=creationInfo; }
         void setRequiredFeats(auto requiredFeats) { this->requiredFeatures=requiredFeats; }
+
+        int incAllocs()
+        {
+            allocationMod.lock();
+            allocationCount+=1;
+            allocationMod.unlock();
+            return allocationCount;
+        }
+        int decAllocs()
+        {
+            allocationMod.lock();
+            allocationCount-=1;
+            allocationMod.unlock();
+            return allocationCount;
+        }
 
         // Accessors
         //----------------------------------
