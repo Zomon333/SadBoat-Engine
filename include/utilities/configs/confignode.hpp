@@ -135,16 +135,17 @@ namespace SBE
         // Print the node's contents. Optionally, define spacing for legibility.
         void print(string spacer="-", string prefix="")
         {
-            cout<<prefix<<"Name: "<<name<<" Attribs: ";
+            stringstream strstream;
+            strstream<<prefix<<"Name: "<<name<<" Attribs: ";
             for(int i=0; i<attribs.size(); i++)
             {
-                cout<<"("<<attribs[i].first<<","<<attribs[i].second<<") ";
+                strstream<<"("<<attribs[i].first<<","<<attribs[i].second<<") ";
             }
             
             if(contType==STRING)
             {
-                cout<<""<<"Contents: ";
-                cout<<""<<std::get<string>(contents)<<endl;
+                strstream<<""<<"Contents: ";
+                strstream<<""<<std::get<string>(contents)<<endl;
             }
 
             else
@@ -152,10 +153,12 @@ namespace SBE
                 string tmp = prefix.append(spacer);
                 for(int i=0; i<std::get<vector<ConfigNode>>(contents).size(); i++)
                 {
-                    cout<<endl;
+                    strstream<<endl;
                     std::get<vector<ConfigNode>>(contents)[i].print(spacer, tmp);
                 }
             }
+
+            log->info(strstream.str());
         }
     
         // Revert the node back to XML

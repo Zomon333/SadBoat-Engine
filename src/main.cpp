@@ -43,6 +43,8 @@ Disclaimer:
 //----------------------------------
 #include "sb-engine.hpp"
 
+
+
 using namespace std;
 using namespace SBE;
 
@@ -54,18 +56,20 @@ string testSetup(int argc, char* argv[], string possibleName)
     int results;
 
     //Write a long line for visual clarity.
+    string tmp="";
     int i = 100;
     while(i>0)
     {
-        std::cout<<"-";
+        tmp+="-";
         i--;
     }
-    std::cout<<endl;
-
+    // std::cout<<endl;
+    SBE::log->debug(tmp);
     
     //This code only gets included into our program if we run "make" or "make prod" during compilation.
     #ifdef CONFIG_PROD
-        std::cout<<"Launching engine...\n";
+        // std::cout<<"Launching engine...\n";
+        SBE::log->debug("Launching engine...");
         name = possibleName;
     #endif
 
@@ -74,15 +78,16 @@ string testSetup(int argc, char* argv[], string possibleName)
         //If we ran the catch session, the results variable may change, indicating a failed test.
         //Do not launch the game if the tests fail.
 
-        std::cout<<"Running tests...\n";
+        SBE::log->debug("Running tests...");
+
         results = Catch::Session().run(argc, argv);
         if(results!=0)
         {
-            std::cout<<"Tests failed, engine aborting.\n";
+            SBE::log->critical("Tests failed, engine aborting.");
             throw new exception();
         }
 
-        std::cout<<"Tests succeeded, engine launching.\n";
+        SBE::log->debug("Tests succeeded, engine launching.");
         name = "Test Stage - ";
         name+=possibleName;
         
@@ -101,6 +106,16 @@ string testSetup(int argc, char* argv[], string possibleName)
 //----------------------------------
 int main(int argc, char* argv[])
 {
+    // Logging setup
+    //----------------------------------
+
+    SBE::logger = new LogManager("./log.txt");
+    SBE::log = logger->allocateHandle(0b11111);
+
+    // LogManager logger* = LogManager("./log.txt");
+    // auto log = logger.allocateHandle(0b11111);
+ 
+
     //  Unit Test Setup
     //----------------------------------
 
@@ -109,8 +124,6 @@ int main(int argc, char* argv[])
 
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
     string name = testSetup(argc, argv, gameName);
-
-    
     
     // Config Callback Setup
     // ---
@@ -171,6 +184,7 @@ int main(int argc, char* argv[])
     vulkanEnvironment.setup(&vulkanEnvironment);
 
 
-
+    
+    cout<<endl;
     return 0;
 }

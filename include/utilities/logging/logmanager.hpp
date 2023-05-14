@@ -14,20 +14,12 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #define LOGMANAGER_H
 
 #include "sb-engine.hpp"
+#include "../include/utilities/logging/loghandle.hpp"
 
 using namespace std;
 
 namespace SBE
 {
-    enum LogFlags
-    {
-        DEBUG=0b00001,
-        INFO=0b00010,
-        WARNING=0b00100,
-        ERROR=0b01000,
-        CRITICAL=0b10000
-    };
-
     class LogManager
     {
     private:
@@ -37,7 +29,9 @@ namespace SBE
         string fileName;
 
         mutex accessible;
-        fstream logAccess;       
+        ofstream logAccess;    
+
+        Event<string,pair<LogFlags,string>>* loggingFunction;   
 
     public:
         // Constructors
@@ -46,7 +40,17 @@ namespace SBE
         {
             this->fileName=fileName;
 
-            logAccess.open(fileName);
+            logAccess.open(fileName, ios::binary);
+
+            loggingFunction = new Event<string,pair<LogFlags,string>>(
+                lF(pair<LogFlags, string> logRequest)
+                {
+                    string toReturn = this->generateLine(logRequest);
+                    (*this)<<logRequest;
+                    return toReturn;
+                }
+            );
+
         }
 
         // Mutators
@@ -63,35 +67,8 @@ namespace SBE
             accessible.unlock();
         }
 
-        // Accessors
-        //----------------------------------
-        auto allocateHandle()
+        string generateLine(pair<LogFlags, string> logRequest)
         {
-            accessible.lock();
-            int id = logHandleIDs.allocate();
-            handles[id] = new LogHandle(this, id);
-
-            accessible.unlock();
-            return handles[id];
-        }
-        vector<LogHandle*> getHandles()
-        {
-            vector<LogHandle*> list;
-            auto usedIDs = logHandleIDs.getUsedIDs();
-            list.resize(usedIDs.size());
-            for(int i=0; i<usedIDs.size(); i++)
-            {
-                list[i]=handles[usedIDs[i]];
-            }
-            return list;
-        }
-        
-        // Operators
-        //----------------------------------
-        void operator<<(pair<LogFlags, string> logRequest)
-        {
-            accessible.lock();
-
             string toWrite="";
             string timeStamp="";
             string errorCode="[";
@@ -125,14 +102,48 @@ namespace SBE
             timeStamp+=ctime(&convertedNow);
             timeStamp+="]";
 
-            toWrite=timeStamp;
-            toWrite+=" ";
+            toWrite=timeStamp.substr(0,timeStamp.size()-2);
+            toWrite+="] ";
             toWrite+=errorCode;
             toWrite+=" ";
             toWrite+=logRequest.second;
-            toWrite+="\n";
 
-            logAccess.write(toWrite.c_str(), toWrite.length());
+            return toWrite;
+        }
+
+        // Accessors
+        //----------------------------------
+        auto allocateHandle(unsigned int logLevel = 0b00000)
+        {
+            accessible.lock();
+            int id = logHandleIDs.allocate();
+            handles[id] = new LogHandle(loggingFunction, id, logLevel);
+
+            accessible.unlock();
+            return handles[id];
+        }
+        vector<LogHandle*> getHandles()
+        {
+            vector<LogHandle*> list;
+            auto usedIDs = logHandleIDs.getUsedIDs();
+            list.resize(usedIDs.size());
+            for(int i=0; i<usedIDs.size(); i++)
+            {
+                list[i]=handles[usedIDs[i]];
+            }
+            return list;
+        }
+        
+        // Operators
+        //----------------------------------
+        void operator<<(pair<LogFlags, string> logRequest)
+        {
+            accessible.lock();
+
+            string toWrite = generateLine(logRequest);
+            logAccess<<toWrite<<endl;
+            cout<<endl;
+
             accessible.unlock();
 
         }
@@ -146,6 +157,9 @@ namespace SBE
             {
                 freeHandle(toDelete[i]);
             }
+
+            logAccess.flush();
+            logAccess.close();
         }
         
     };

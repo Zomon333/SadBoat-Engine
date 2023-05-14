@@ -64,6 +64,7 @@ namespace SBE
                 // Verify resource opened
                 if(!file.is_open() || file.bad())
                 {
+                    log->error(((string)("Provided file did not open. File: ")).append(filename).c_str());
                     throw new invalid_argument(
                         ((string)("Provided file did not open. File: ")).append(filename).c_str()
                     );
@@ -83,6 +84,7 @@ namespace SBE
                 // Verify resource has a size
                 if(dataSize==0)
                 {
+                    log->error(((string)("Provided file has size of zero bytes. File: ")).append(filename).c_str());
                     throw new out_of_range(
                         ((string)("Provided file has size of zero bytes. File: ")).append(filename).c_str()
                     );
@@ -98,18 +100,17 @@ namespace SBE
                 // Save data.
                 file.read(((char*)(data)),dataSize);
                 
-                // cout<<"Loading file "<<filename<<" into memory at location "<<data<<" with data size "<<dataSize<<" bytes."<<endl;
                 file.close();
                 
                 dataAccess.release();
             }
             catch(invalid_argument* e)
             {
-                cout<<e->what()<<endl;
+                log->error(e->what());
             }
             catch(out_of_range* e)
             {
-                cout<<e->what()<<endl;
+                log->error(e->what());
             }
         }
 
@@ -133,7 +134,7 @@ namespace SBE
             }
             catch(invalid_argument* e)
             {
-                cout<<e->what()<<endl;
+                log->error(e->what());
             }
         }
 
@@ -153,7 +154,6 @@ namespace SBE
                 return;
             }
 
-            // cout<<"Clearing data. Data at "<<data<<" with size "<<dataSize<<" will be deleted."<<endl;
 
             if(data!=nullptr)
             {
@@ -210,7 +210,7 @@ namespace SBE
                 }
                 catch(invalid_argument* e)
                 {
-                    cout<<e->what()<<endl;
+                    log->error(e->what());
                 }
             }
         }

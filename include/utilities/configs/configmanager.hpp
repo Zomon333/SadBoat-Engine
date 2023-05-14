@@ -44,7 +44,8 @@ namespace SBE
 
         Config* loadConfig(string filename, string desc="Generic Config")
         {
-            cout<<"Loading "<<filename<<" as \""<<desc<<"\""<<endl;
+            log->info(string("Loading ").append(filename).append(" as \"").append(desc).append("\""));
+
             int id = configsIDs.allocate();
 
             intConfig[id] = new Config(filename, id, &callbacks, desc);

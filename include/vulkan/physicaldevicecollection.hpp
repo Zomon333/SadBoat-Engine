@@ -57,6 +57,7 @@ namespace SBE
             auto result = vkEnumeratePhysicalDevices(*(host->getInstance()),&numDevices,nullptr);
             if(result!=VK_SUCCESS)
             {
+                log->critical("Vulkan failed to query number of devices from Vulkan Instance");
                 throw new runtime_error("Vulkan failed to query number of devices from Vulkan Instance");
             }
 
@@ -77,6 +78,7 @@ namespace SBE
             auto result = vkEnumeratePhysicalDevices(*(host->getInstance()), &numDevices, &tmp[0]);
             if(result!=VK_SUCCESS)
             {
+                log->critical("Vulkan failed to query which devices exist within the provided instance.");
                 throw new runtime_error("Vulkan failed to query which devices exist within the provided instance.");
             }
 
@@ -158,7 +160,10 @@ namespace SBE
                     
                     if(result!=nullptr)
                     {
-                        cout<<"Preferred device"<<": "<<result->getProperties()->deviceName<<endl;
+                        stringstream tmpstream;
+                        tmpstream<<"Preferred device"<<": "<<result->getProperties()->deviceName;
+                        log->debug(tmpstream.str());
+
                         return result;
                     }        
 

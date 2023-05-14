@@ -1,5 +1,5 @@
 /*
-Copyright 2022 Dagan Poulin, Justice Guillory
+Copyright 2023 Dagan Poulin, Justice Guillory
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -10,30 +10,16 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef ENGINE_DEFINES_H
-#define ENGINE_DEFINES_H
+#ifndef STARTUPLOGGER_H
+#define STARTUPLOGGER_H
+
+#include "sb-engine.hpp"
 
 using namespace std;
 
-//  Engine specific defines
-//----------------------------------
-
-enum LogFlags
+namespace SBE
 {
-    DEBUG=0b00001,
-    INFO=0b00010,
-    WARNING=0b00100,
-    ERROR=0b01000,
-    CRITICAL=0b10000
+    LogManager* logger;
+    LogHandle* log;
 };
-
-//Shorthand lambda function body
-#define F(a...) [](a...)
-
-//Shorthand lambda function for internal captures
-#define lF(a...) [this](a...)
-
-//pow(2, -47)-- engine unit tolerance. Arbitrarily small.
-#define uTol pow(2,-32)
-
 #endif

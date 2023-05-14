@@ -115,7 +115,10 @@ namespace SBE
                 this->host->getAllocationInfo(),
                 &self
             );
-            cout<<"LogicalDevice created with result: "<<VkResultLookup(result)<<endl;
+            
+            stringstream tmpstream;
+            tmpstream<<"LogicalDevice created with result: "<<VkResultLookup(result);
+            log->debug(tmpstream.str());
         }
 
         // Make a device, assume no info

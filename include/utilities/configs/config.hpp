@@ -117,7 +117,8 @@ namespace SBE
             }
             catch(rapidxml::parse_error* e)
             {
-                cout<<"RapidXML Parsing error thrown.\nStatus: "<<e->what()<<endl;
+                log->error("RapidXML Parsing error thrown.");
+                log->error(string("Status: ").append(e->what()));
                 return;
             }
 

@@ -14,6 +14,7 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #define LOGHANDLE_H
 
 #include "sb-engine.hpp"
+#include "../include/utilities/logging/logmanager.hpp"
 
 using namespace std;
 
@@ -22,28 +23,118 @@ namespace SBE
     class LogHandle
     {
     private:
-        
+        Event<string,pair<LogFlags,string>>* logFunction;
+        int id;
+
+        unsigned int consoleLevel = 0b00000;
 
     public:
         // Constructors
         //----------------------------------
-        LogHandle(int id)
+        LogHandle(Event<string,pair<LogFlags,string>>* logFunction, int id, unsigned int consoleLevel=0b00000)
         {
-
+            this->logFunction=logFunction;
+            this->id=id;
+            this->consoleLevel = consoleLevel;
         }
         // Mutators
         //----------------------------------
 
+        void enableFlag(LogFlags flag)
+        {
+            consoleLevel = (consoleLevel | flag);
+        }
+        void disableFlag(LogFlags flag)
+        {
+            consoleLevel = (consoleLevel ^ flag);
+        }
+
+        void enableAllFlags()
+        {
+            consoleLevel = 0b11111;
+        }
+        void disableAllFlags()
+        {
+            consoleLevel = 0b00000;
+        }
+
+        void setConsoleLevel(unsigned int newLevel)
+        {
+            this->consoleLevel = newLevel;
+        }
+
         // Accessors
         //----------------------------------
+        void debug(string log)
+        {
+            const LogFlags level = DEBUG;
+
+            string result = logFunction->call(pair<LogFlags, string>(level, log));
+            if(consoleLevel & level)
+            {
+                cout<<result;
+            }
+        }
+
+        void info(string log)
+        {
+            const LogFlags level = INFO;
+            
+            string result = logFunction->call(pair<LogFlags, string>(level, log));
+            if(consoleLevel & level)
+            {
+                cout<<result;
+            }
+        }
+        
+        void warn(string log)
+        {
+            const LogFlags level = WARNING;
+            
+            string result = logFunction->call(pair<LogFlags, string>(level, log));
+            if(consoleLevel & level)
+            {
+                cout<<result;
+            }
+        }
+        
+        void error(string log)
+        {
+            const LogFlags level = ERROR;
+            
+            string result = logFunction->call(pair<LogFlags, string>(level, log));
+            if(consoleLevel & level)
+            {
+                cout<<result;
+            }
+        }
+        
+        void critical(string log)
+        {
+            const LogFlags level = CRITICAL;
+            
+            string result = logFunction->call(pair<LogFlags, string>(level, log));
+            if(consoleLevel & level)
+            {
+                cout<<result;
+            }
+        }
+
+        int getID()
+        {
+            return id;
+        }
 
         // Operators
         //----------------------------------
 
         // Destructors
         //----------------------------------
-
-        
+        ~LogHandle()
+        {
+            delete logFunction;
+        }
     };
+
 };
 #endif

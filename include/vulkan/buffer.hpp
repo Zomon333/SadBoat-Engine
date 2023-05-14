@@ -56,16 +56,18 @@ namespace SBE
             if(optimalMemIndex==-1)
             {
                 // If there aren't any, then throw an exception and don't allocate.
+                log->error("Required memory type not supported-- should support VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT and VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT");
                 throw new bad_alloc();
             }
 
             // Verify we're even *able* to allocate more memory types.
             auto allocs = parent->incAllocs();
             auto maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
-            cout<<"Allocating memory for buffer, allocation number "<<allocs<<" / "<<maxAllocs<<endl;
+            log->debug(string("Allocating memory for buffer, allocation number ").append(to_string(allocs)).append(" / ").append(to_string(maxAllocs)));
             if(allocs>maxAllocs)
             {
                 parent->decAllocs();
+                log->error("Maximum number of resource allocations exceeded.");
                 throw new bad_alloc();
             }
 
@@ -79,7 +81,7 @@ namespace SBE
 
             // Attempt to allocate, output result, throw if invalid.
             auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
-            cout<<"Buffer memory allocated with size of "<<this->createInfo.size<<", resulting: "<<VkResultLookup(result)<<endl;
+            log->debug(string("Buffer memory allocated with size of ").append(to_string((this->createInfo.size))).append(", resulting: ").append(VkResultLookup(result)));
             if(result!=0) throw new bad_alloc();
         }
 
@@ -93,7 +95,11 @@ namespace SBE
             }
 
             auto result = vkBindBufferMemory(parent->getSelf(), internalBuffer, internalBacking, 0);
-            cout<<"Binding buffer memory to buffer. MemoryTypeBits: "<<memReqs.memoryTypeBits<<", Relevant bit: "<< ((((memReqs.memoryTypeBits>>(allocationInfo.memoryTypeIndex-1) & 1))==1) ? "Supported" : "Unsupported") <<", with result of: "<<VkResultLookup(result)<<endl;
+
+            stringstream tmpStream;
+            tmpStream<<"Binding buffer memory to buffer. MemoryTypeBits: "<<memReqs.memoryTypeBits<<", Relevant bit: "<< ((((memReqs.memoryTypeBits>>(allocationInfo.memoryTypeIndex-1) & 1))==1) ? "Supported" : "Unsupported") <<", with result of: "<<VkResultLookup(result);
+            log->debug(tmpStream.str());
+
             mapped=false;
         }
 
@@ -123,7 +129,10 @@ namespace SBE
 
             // Attempt to create buffer, output result, throw if invalid.
             auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
-            cout<<"Buffer created with result: "<<VkResultLookup(result)<<endl;
+            stringstream tmpstream;
+            tmpstream<<"Buffer created with result: "<<VkResultLookup(result);
+            log->debug(tmpstream.str());
+
             if(result!=0) throw new runtime_error("Failed to create buffer.");
 
             // Attempt to allocate memory for the buffer.
@@ -161,7 +170,9 @@ namespace SBE
 
             // Attempt to create buffer, output result, throw if invalid.
             auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
-            cout<<"Buffer created with result: "<<VkResultLookup(result)<<endl;
+            stringstream tmpstream;
+            tmpstream<<"Buffer created with result: "<<VkResultLookup(result);
+            log->debug(tmpstream.str());
             if(result!=0) throw new runtime_error("Failed to create buffer.");
 
             // Attempt to allocate memory for the buffer.
@@ -186,7 +197,7 @@ namespace SBE
 
             // Create the buffer and output the result
             auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
-            cout<<"Buffer created with result: "<<VkResultLookup(result)<<endl;
+            log->debug(string("Buffer created with result: ").append(VkResultLookup(result)));
 
             // Throw an allocation exception
             if(result!=0) throw new runtime_error("Failed to create buffer.");
@@ -280,7 +291,7 @@ namespace SBE
             // Destroy any buffer views that have been created of this buffer.
             // vkDestroyBufferView(parent->getSelf(), VkBufferView bufferView, parent->getHost()->getAllocationInfo());
 
-            cout<<"Destroying buffer."<<endl;
+            log->debug("Destroying buffer.");
         }
         
     };

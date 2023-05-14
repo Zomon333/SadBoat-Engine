@@ -92,9 +92,10 @@ namespace SBE
                 }
             }
 
-
-            cout<<"Choosing queueFamily number "<<result.first<<", which supports ";
-            cout<<result.second.getProps()->queueCount<<" queues.\n";
+            stringstream tmpstream;
+            tmpstream<<"Choosing queueFamily number "<<result.first<<", which supports ";
+            tmpstream<<result.second.getProps()->queueCount<<" queues.";
+            log->debug(tmpstream.str());
             
             return result;
         }

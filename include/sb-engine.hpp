@@ -73,17 +73,18 @@ Disclaimer:
 #include "../include/events/recurringevent.hpp"
 #include "../include/events/eventpool.hpp"
 
-//  Configuration Includes
+//  Logging Includes
 //----------------------------------
 #include "../include/resources/idmanager.hpp"
+#include "../include/utilities/logging/logmanager.hpp"
+#include "../include/utilities/logging/loghandle.hpp"
+#include "../include/utilities/logging/startuplogger.hpp"
+
+//  Configuration Includes
+//----------------------------------
 #include "../include/utilities/configs/confignode.hpp"
 #include "../include/utilities/configs/config.hpp"
 #include "../include/utilities/configs/configmanager.hpp"
-
-//  Logging Includes
-//----------------------------------
-#include "../include/utilities/logging/logmanager.hpp"
-#include "../include/utilities/logging/loghandle.hpp"
 
 //  Resource Includes
 //----------------------------------
