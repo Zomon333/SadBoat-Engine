@@ -55,6 +55,9 @@ namespace SBE
         LogicalDevice* vulkanLogicalDevice=nullptr;
 
 
+        VkBufferCreateInfo* bufferInfo=nullptr;
+        Buffer* buffer=nullptr;
+
         // The event to set up all of our Vulkan environment.
         // Useful so the Vulkan environment can be set up in basically two lines of code, while also being multithreaded.
         Event<VulkanDispatchables*, VulkanDispatchables*> setup = Event<VulkanDispatchables*, VulkanDispatchables*>(
@@ -103,8 +106,15 @@ namespace SBE
 
                 toInit->vulkanLogicalDevice = new LogicalDevice(toInit->preferredDevice, toInit->requiredFeatures, toInit->enabledLayers, toInit->enabledExtensions);
 
-                
-                
+                toInit->bufferInfo = new VkBufferCreateInfo{
+                    VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
+                    0,
+                    1920*1080*4,
+                    VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                    VK_SHARING_MODE_EXCLUSIVE,
+                    0, nullptr
+                };
+                toInit->buffer = new Buffer(toInit->vulkanLogicalDevice, *bufferInfo);
 
                 
 

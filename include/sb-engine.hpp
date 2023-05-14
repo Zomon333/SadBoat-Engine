@@ -80,6 +80,10 @@ Disclaimer:
 #include "../include/utilities/configs/config.hpp"
 #include "../include/utilities/configs/configmanager.hpp"
 
+//  Logging Includes
+//----------------------------------
+#include "../include/utilities/logging/logmanager.hpp"
+#include "../include/utilities/logging/loghandle.hpp"
 
 //  Resource Includes
 //----------------------------------
