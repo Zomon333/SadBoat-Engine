@@ -27,8 +27,13 @@ namespace SBE
         LogicalDevice* parent;
         VkBufferCreateInfo createInfo;
 
+        VkMemoryAllocateInfo allocationInfo;
+        VkMemoryRequirements memReqs;
+
         VkDeviceMemory internalBacking;
         VkBuffer internalBuffer;
+
+        bool mapped;
 
         // Allocate memory into internalBacking
         void allocate()
@@ -65,17 +70,31 @@ namespace SBE
             }
 
             // Assign allocation info
-            VkMemoryAllocateInfo allocation = {
+            allocationInfo = {
                 VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                 nullptr,
                 this->createInfo.size,
-                optimalMemIndex // memoryTypeIndex, determining what type of memory we need, which should be chosen from vkGetPhysicalDeviceMemoryProperties.
+                (unsigned int)(optimalMemIndex) // memoryTypeIndex, determining what type of memory we need, which should be chosen from vkGetPhysicalDeviceMemoryProperties.
             };
 
             // Attempt to allocate, output result, throw if invalid.
-            auto result = vkAllocateMemory((parent->getSelf()), &allocation, (parent->getHost()->getAllocationInfo()), &internalBacking);
+            auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
             cout<<"Buffer memory allocated with size of "<<this->createInfo.size<<", resulting: "<<VkResultLookup(result)<<endl;
             if(result!=0) throw new bad_alloc();
+        }
+
+        // Bind the internalBacking to the internalBuffer
+        void bind()
+        {
+            vkGetBufferMemoryRequirements(parent->getSelf(), internalBuffer, &memReqs);
+            if((memReqs.memoryTypeBits>>(allocationInfo.memoryTypeIndex-1) & 1)!=1)
+            {
+                throw new bad_alloc();
+            }
+
+            auto result = vkBindBufferMemory(parent->getSelf(), internalBuffer, internalBacking, 0);
+            cout<<"Binding buffer memory to buffer. MemoryTypeBits: "<<memReqs.memoryTypeBits<<", Relevant bit: "<< ((((memReqs.memoryTypeBits>>(allocationInfo.memoryTypeIndex-1) & 1))==1) ? "Supported" : "Unsupported") <<", with result of: "<<VkResultLookup(result)<<endl;
+            mapped=false;
         }
 
     public:
@@ -109,6 +128,8 @@ namespace SBE
 
             // Attempt to allocate memory for the buffer.
             allocate();
+            // Attempt to bind memory to the buffer.
+            bind();
         }
 
         // Create buffer given a parent, size, and use case
@@ -145,6 +166,8 @@ namespace SBE
 
             // Attempt to allocate memory for the buffer.
             allocate();
+            // Attempt to bind memory to the buffer.
+            bind();
         }
 
         // Create buffer given a parent, size, usage, and sharing needs.
@@ -170,13 +193,75 @@ namespace SBE
 
             // Attempt to allocate memory for the buffer.
             allocate();     
+            // Attempt to bind memory to the buffer.
+            bind();
         }
 
         // Mutators
         //----------------------------------
+        
+        /*
+            No mutators currently exist for the buffer as we do not know how we're going to use it. Just that it exists.
+        */
 
         // Accessors
         //----------------------------------
+
+        void* map()
+        {
+            // Check if memory has the VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT set
+            if((parent->getParent()->getMem()->memoryTypes[allocationInfo.memoryTypeIndex].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)==0)
+            {
+                return nullptr;
+            }
+            
+            if(mapped) 
+            {
+                return nullptr;
+            }
+            mapped=true;
+
+            void* mapLocation;
+            vkMapMemory(parent->getSelf(), internalBacking, 0, allocationInfo.allocationSize, {}, &mapLocation);
+            return mapLocation;
+        }
+        void* map(Range mappedRange)
+        {
+            if((parent->getParent()->getMem()->memoryTypes[allocationInfo.memoryTypeIndex].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)==0)
+            {
+                return nullptr;
+            }
+
+            if(mapped || mappedRange.getMax()>allocationInfo.allocationSize) 
+            {
+                return nullptr;
+            }
+            mapped=true;
+
+            void* mapLocation;
+            vkMapMemory(parent->getSelf(), internalBacking, mappedRange.getMin(), mappedRange.getMax(), {}, &mapLocation);
+            return mapLocation;
+        }
+
+        void unmap()
+        {
+            if(!mapped)
+            {
+                return;
+            }
+            mapped=false;
+
+            vkUnmapMemory(parent->getSelf(), internalBacking);
+        }
+
+        bool isMapped() { return mapped; }
+
+        auto getBuffer() { return this->internalBuffer; }        
+        auto getMemory() { return this->internalBacking; }
+        auto getParent() { return parent; }
+        auto getAllocInfo() { return allocationInfo; }
+        auto getCreateInfo() { return createInfo; }
+        auto getMemReqs() { return memReqs; }
 
         // Operators
         //----------------------------------
@@ -186,7 +271,16 @@ namespace SBE
 
         ~Buffer()
         {
+            // Verify that no work is pending on the buffer
+            
+            vkFreeMemory(parent->getSelf(), internalBacking, parent->getHost()->getAllocationInfo());
             parent->decAllocs();
+            vkDestroyBuffer(parent->getSelf(), internalBuffer, parent->getHost()->getAllocationInfo());
+
+            // Destroy any buffer views that have been created of this buffer.
+            // vkDestroyBufferView(parent->getSelf(), VkBufferView bufferView, parent->getHost()->getAllocationInfo());
+
+            cout<<"Destroying buffer."<<endl;
         }
         
     };

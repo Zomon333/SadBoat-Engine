@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
     VkBufferCreateInfo creationInfo = VkBufferCreateInfo{
         VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
         0,
-        1024 * 1024,
+        1920*1080*4,
         VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_SHARING_MODE_EXCLUSIVE,
         0, nullptr
@@ -187,9 +187,9 @@ int main(int argc, char* argv[])
 
     // auto result2 = vkCreateBuffer(vulkanEnvironment.vulkanLogicalDevice->getSelf(), &creationInfo, nullptr, &bufferTest);
 
-    // Buffer testBufferA(vulkanEnvironment.vulkanLogicalDevice, creationInfo);
+    Buffer testBufferA(vulkanEnvironment.vulkanLogicalDevice, creationInfo);
     // Buffer testBufferB(vulkanEnvironment.vulkanLogicalDevice, 1024*1024, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-    Buffer testBufferC(vulkanEnvironment.vulkanLogicalDevice, 1024*1024, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, {vulkanEnvironment.vulkanLogicalDevice->getOptimalQueueFam()->getIndex()});
+    // Buffer testBufferC(vulkanEnvironment.vulkanLogicalDevice, 1024*1024, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, {vulkanEnvironment.vulkanLogicalDevice->getOptimalQueueFam()->getIndex()});
 
     return 0;
 }
