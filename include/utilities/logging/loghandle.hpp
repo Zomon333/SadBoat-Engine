@@ -72,6 +72,7 @@ namespace SBE
             string result = logFunction->call(pair<LogFlags, string>(level, log));
             if(consoleLevel & level)
             {
+                cout<<endl;
                 cout<<result;
             }
         }
@@ -83,6 +84,7 @@ namespace SBE
             string result = logFunction->call(pair<LogFlags, string>(level, log));
             if(consoleLevel & level)
             {
+                cout<<endl;
                 cout<<result;
             }
         }
@@ -94,6 +96,7 @@ namespace SBE
             string result = logFunction->call(pair<LogFlags, string>(level, log));
             if(consoleLevel & level)
             {
+                cout<<endl;
                 cout<<result;
             }
         }
@@ -105,6 +108,7 @@ namespace SBE
             string result = logFunction->call(pair<LogFlags, string>(level, log));
             if(consoleLevel & level)
             {
+                cout<<endl;
                 cout<<result;
             }
         }
@@ -116,6 +120,7 @@ namespace SBE
             string result = logFunction->call(pair<LogFlags, string>(level, log));
             if(consoleLevel & level)
             {
+                cout<<endl;
                 cout<<result;
             }
         }

@@ -142,7 +142,7 @@ namespace SBE
 
             string toWrite = generateLine(logRequest);
             logAccess<<toWrite<<endl;
-            cout<<endl;
+            // 
 
             accessible.unlock();
 

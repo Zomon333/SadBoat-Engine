@@ -111,9 +111,6 @@ int main(int argc, char* argv[])
 
     SBE::logger = new LogManager("./log.txt");
     SBE::log = logger->allocateHandle(0b11111);
-
-    // LogManager logger* = LogManager("./log.txt");
-    // auto log = logger.allocateHandle(0b11111);
  
 
     //  Unit Test Setup
