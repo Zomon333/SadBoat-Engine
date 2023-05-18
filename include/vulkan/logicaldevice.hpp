@@ -36,6 +36,7 @@ namespace SBE
         int allocationCount;
 
         QueueFamily* optimalFamily;
+        unsigned int queueCount;
 
         VkPhysicalDeviceFeatures* requiredFeatures;
 
@@ -65,6 +66,8 @@ namespace SBE
             // Find the optimal queue family
             this->optimalFamily = new QueueFamily(deviceQueueFamilies.getOptimal().second);
 
+            this->queueCount = (optimalFamily->getProps()->queueCount>16) ? 16 : optimalFamily->getProps()->queueCount;
+
             // Generate the struct to create as many queues within the family as possible.
             deviceQueueCreateInfos.emplace_back(
                 VkDeviceQueueCreateInfo{
@@ -72,7 +75,7 @@ namespace SBE
                     nullptr,                                                        // const void*                 pNext;
                     0,                                                              // VkDeviceQueueCreateFlags    flags;
                     (unsigned int)(optimalFamily->getIndex()),                            // uint32_t                    queueFamilyIndex;
-                    (optimalFamily->getProps()->queueCount>16) ? 16 : optimalFamily->getProps()->queueCount,                    // uint32_t                    queueCount;
+                    this->queueCount,                    // uint32_t                    queueCount;
                     nullptr                                                         // const float*                pQueuePriorities;
                 }
             );
@@ -130,6 +133,9 @@ namespace SBE
             this->creationInfo=creationInfo;
             this->requiredFeatures=parent->getFeatures();
 
+            // this->creationInfo->pQueueCreateInfos->queueCount = (this->creationInfo->pQueueCreateInfos->queueCount>16) ? 16 : this->creationInfo->pQueueCreateInfos->queueCount;
+            this->queueCount = creationInfo->pQueueCreateInfos->queueCount;
+
             // Todo: Add code for requiredFeatures to be checked against parent's features
 
             vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
@@ -183,7 +189,7 @@ namespace SBE
         auto getCreationInfo() { return creationInfo; }
         auto getRequiredFeats() { return requiredFeatures; }
         auto getOptimalQueueFam() { return optimalFamily; }
-
+        auto getQueueCount() { return queueCount; }
 
         template <class Function>
         Function getFunc(const char* pName)
