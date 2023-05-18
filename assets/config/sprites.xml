@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Sprites>
-    <Resource color="white" type="Bishop">./assets/visual/sprites/bobby/pieces/outlines/Bishop.png</Resource>
-    <Resource color="white" type="Pawn">./assets/visual/sprites/bobby/pieces/outlines/Pawn.png</Resource>
-    <Resource color="white" type="Rook">./assets/visual/sprites/bobby/pieces/outlines/Rook.png</Resource>
-    <Resource color="white" type="Queen">./assets/visual/sprites/bobby/pieces/outlines/Queen.png</Resource>
-    <Resource color="white" type="King">./assets/visual/sprites/bobby/pieces/outlines/King.png</Resource>
-    <Resource color="white" type="Knight">./assets/visual/sprites/bobby/pieces/outlines/Knight.png</Resource>
+    <Resource color="white" type="Bishop">./assets/visual/sprites/bobby/pieces/white/Bishop.png</Resource>
+    <Resource color="white" type="Pawn">./assets/visual/sprites/bobby/pieces/white/Pawn.png</Resource>
+    <Resource color="white" type="Rook">./assets/visual/sprites/bobby/pieces/white/Rook.png</Resource>
+    <Resource color="white" type="Queen">./assets/visual/sprites/bobby/pieces/white/Queen.png</Resource>
+    <Resource color="white" type="King">./assets/visual/sprites/bobby/pieces/white/King.png</Resource>
+    <Resource color="white" type="Knight">./assets/visual/sprites/bobby/pieces/white/Knight.png</Resource>
     
-    <Resource color="black" type="Bishop">./assets/visual/sprites/bobby/pieces/outlines/BlackBishop.png</Resource>
-    <Resource color="black" type="Pawn">./assets/visual/sprites/bobby/pieces/outlines/BlackPawn.png</Resource>
-    <Resource color="black" type="Rook">./assets/visual/sprites/bobby/pieces/outlines/BlackRook.png</Resource>
-    <Resource color="black" type="Queen">./assets/visual/sprites/bobby/pieces/outlines/BlackQueen.png</Resource>
-    <Resource color="black" type="King">./assets/visual/sprites/bobby/pieces/outlines/BlackKing.png</Resource>
-    <Resource color="black" type="Knight">./assets/visual/sprites/bobby/pieces/outlines/BlackKnight.png</Resource>
+    <Resource color="black" type="Bishop">./assets/visual/sprites/bobby/pieces/black/BlackBishop.png</Resource>
+    <Resource color="black" type="Pawn">./assets/visual/sprites/bobby/pieces/black/BlackPawn.png</Resource>
+    <Resource color="black" type="Rook">./assets/visual/sprites/bobby/pieces/black/BlackRook.png</Resource>
+    <Resource color="black" type="Queen">./assets/visual/sprites/bobby/pieces/black/BlackQueen.png</Resource>
+    <Resource color="black" type="King">./assets/visual/sprites/bobby/pieces/black/BlackKing.png</Resource>
+    <Resource color="black" type="Knight">./assets/visual/sprites/bobby/pieces/black/BlackKnight.png</Resource>
 </Sprite>
