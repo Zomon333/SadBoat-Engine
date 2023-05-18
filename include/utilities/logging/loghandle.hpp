@@ -130,8 +130,18 @@ namespace SBE
             return id;
         }
 
+        unsigned int getLevel()
+        {
+            return consoleLevel;
+        }
+
         // Operators
         //----------------------------------
+
+        void operator()(string rhs)
+        {
+            this->info(rhs);
+        }
 
         // Destructors
         //----------------------------------
