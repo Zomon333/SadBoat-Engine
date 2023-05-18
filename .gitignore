@@ -39,3 +39,4 @@ output/*
 lib/wayland
 lib/wayland-protocols
 docs/notes.txt
+log.txt
