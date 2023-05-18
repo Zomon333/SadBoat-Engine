@@ -116,9 +116,8 @@ namespace SBE
                 };
                 toInit->buffer = new Buffer(toInit->vulkanLogicalDevice, *bufferInfo);
 
+                QueueCollection* queues = new QueueCollection(toInit->vulkanLogicalDevice, toInit->vulkanLogicalDevice->getOptimalQueueFam(), toInit->vulkanLogicalDevice->getQueueCount());
                 
-
-
                 return toInit;
             }
         );

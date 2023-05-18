@@ -141,6 +141,10 @@ Disclaimer:
     // Logical Devices
     #include "../include/vulkan/logicaldevice.hpp"
 
+    // Queues Continued
+    #include "../include/vulkan/queue.hpp"
+    #include "../include/vulkan/queuecollection.hpp"
+
     // Memory models
     #include "../include/vulkan/buffer.hpp"
 

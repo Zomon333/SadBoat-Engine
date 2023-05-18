@@ -64,12 +64,14 @@ string testSetup(int argc, char* argv[], string possibleName)
         i--;
     }
     // std::cout<<endl;
-    SBE::log->debug(tmp);
+    SBE::log->info(tmp);
     
     //This code only gets included into our program if we run "make" or "make prod" during compilation.
     #ifdef CONFIG_PROD
         // std::cout<<"Launching engine...\n";
-        SBE::log->debug("Launching engine...");
+        SBE::log->info("Launching engine...");
+        SBE::log->info(tmp);
+
         name = possibleName;
     #endif
 
