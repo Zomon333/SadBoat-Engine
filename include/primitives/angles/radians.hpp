@@ -51,6 +51,11 @@ namespace SBE
             {
                 return c*piTerms;
             }
+            double getDegrees()
+            {
+                return ((this->get())*(180.0/M_PI));
+            }
+            
             //Get c and piTerms so you can do math in terms of pi
             std::pair<double, double> getPair()
             {

@@ -42,6 +42,11 @@ namespace SBE
                 return theta;
             }
 
+            double getRadians()
+            {
+                return ((theta)/(180.0/M_PI));
+            }
+
             //Mutators
             //----------------------------------
 

@@ -76,6 +76,7 @@
         "span": "cpp",
         "cfenv": "cpp",
         "__nullptr": "cpp",
-        "target": "cpp"
+        "target": "cpp",
+        "zlib.h": "c"
     }
 }

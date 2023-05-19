@@ -34,11 +34,9 @@ namespace SBE
         public:
             //Constructors
             //----------------------------------
-            Point()
+            Point(double x=0, double y=0, double z=0) : Point(std::tuple<double, double, double>(x, y, z))
             {
-                this->x=0;
-                this->y=0;
-                this->z=0;
+                return;
             }
             
             Point(std::tuple<double, double, double> p)
@@ -47,10 +45,7 @@ namespace SBE
                 this->y=std::get<1>(p);
                 this->z=std::get<2>(p);
             }
-            Point(double x, double y, double z) : Point(std::tuple<double, double, double>(x, y, z))
-            {
-                return;
-            }
+
 
             //Mutators
             //----------------------------------

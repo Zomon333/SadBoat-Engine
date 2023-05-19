@@ -58,6 +58,8 @@ namespace SBE
         VkBufferCreateInfo* bufferInfo=nullptr;
         Buffer* buffer=nullptr;
 
+        QueueCollection* queues=nullptr;
+
         // The event to set up all of our Vulkan environment.
         // Useful so the Vulkan environment can be set up in basically two lines of code, while also being multithreaded.
         Event<VulkanDispatchables*, VulkanDispatchables*> setup = Event<VulkanDispatchables*, VulkanDispatchables*>(
@@ -116,7 +118,7 @@ namespace SBE
                 };
                 toInit->buffer = new Buffer(toInit->vulkanLogicalDevice, *bufferInfo);
 
-                QueueCollection* queues = new QueueCollection(toInit->vulkanLogicalDevice, toInit->vulkanLogicalDevice->getOptimalQueueFam(), toInit->vulkanLogicalDevice->getQueueCount());
+                toInit->queues = new QueueCollection(toInit->vulkanLogicalDevice, toInit->vulkanLogicalDevice->getOptimalQueueFam(), toInit->vulkanLogicalDevice->getQueueCount());
                 
                 return toInit;
             }
