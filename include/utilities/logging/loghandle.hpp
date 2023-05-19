@@ -25,6 +25,7 @@ namespace SBE
     private:
         Event<string,pair<LogFlags,string>>* logFunction;
         int id;
+        mutex handleUse;
 
         unsigned int consoleLevel = 0b00000;
 
@@ -67,6 +68,7 @@ namespace SBE
         //----------------------------------
         void debug(string log)
         {
+            handleUse.lock();
             const LogFlags level = DEBUG;
 
             string result = logFunction->call(pair<LogFlags, string>(level, log));
@@ -75,10 +77,12 @@ namespace SBE
                 cout<<endl;
                 cout<<result;
             }
+            handleUse.unlock();
         }
 
         void info(string log)
         {
+            handleUse.lock();
             const LogFlags level = INFO;
             
             string result = logFunction->call(pair<LogFlags, string>(level, log));
@@ -87,10 +91,12 @@ namespace SBE
                 cout<<endl;
                 cout<<result;
             }
+            handleUse.unlock();
         }
         
         void warn(string log)
         {
+            handleUse.lock();
             const LogFlags level = WARNING;
             
             string result = logFunction->call(pair<LogFlags, string>(level, log));
@@ -99,10 +105,12 @@ namespace SBE
                 cout<<endl;
                 cout<<result;
             }
+            handleUse.unlock();
         }
         
         void error(string log)
         {
+            handleUse.lock();
             const LogFlags level = ERROR;
             
             string result = logFunction->call(pair<LogFlags, string>(level, log));
@@ -111,10 +119,12 @@ namespace SBE
                 cout<<endl;
                 cout<<result;
             }
+            handleUse.unlock();
         }
         
         void critical(string log)
         {
+            handleUse.lock();
             const LogFlags level = CRITICAL;
             
             string result = logFunction->call(pair<LogFlags, string>(level, log));
@@ -123,6 +133,7 @@ namespace SBE
                 cout<<endl;
                 cout<<result;
             }
+            handleUse.unlock();
         }
 
         int getID()
