@@ -1,7 +1,7 @@
-prefix=/home/dagan/bin/SadBoat-Engine/lib/libpng-compiled
+prefix=/usr
 exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include/libpng16
+libdir=/usr/lib64
+includedir=/usr/include/libpng16
 
 Name: libpng
 Description: Loads and saves PNG files

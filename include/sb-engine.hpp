@@ -62,6 +62,12 @@ Disclaimer:
 #include "../lib/rapidxml-1.13/rapidxml_utils.hpp"
 #include "../lib/rapidxml-1.13/rapidxml_print.hpp"
 
+// LibPNG includes
+#include "zlib.h"
+#include "../lib/libpng/include/libpng16/png.h"
+#include "../lib/libpng/include/libpng16/pngconf.h"
+#include "../lib/libpng/include/libpng16/pnglibconf.h"
+
 //  Engine Specific Defines
 //----------------------------------
 #include "../include/utilities/defines.hpp"

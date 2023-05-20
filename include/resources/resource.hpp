@@ -32,7 +32,7 @@ namespace SBE
         // Data Variables
         //----------------------------------
 
-        binary_semaphore dataAccess{1};
+        mutex dataAccess;
 
         void* data;
         size_t initialSize;
@@ -55,7 +55,7 @@ namespace SBE
             if(handleCount>0) return;
             try
             {
-                dataAccess.acquire();
+                dataAccess.lock();
 
                 // Open resource
                 fstream file;
@@ -102,7 +102,7 @@ namespace SBE
                 
                 file.close();
                 
-                dataAccess.release();
+                dataAccess.unlock();
             }
             catch(invalid_argument* e)
             {
@@ -112,6 +112,8 @@ namespace SBE
             {
                 log->error(e->what());
             }
+
+            log->debug(string("Loaded file ").append(filename).append(" into RAM."));
         }
 
         // Initialize a data store of a given size.
@@ -124,18 +126,20 @@ namespace SBE
                     throw new invalid_argument("Data cannot have no size. Refusing to store uninitialized data.");
                 }
 
-                dataAccess.acquire();
+                dataAccess.lock();
 
                 this->data = malloc(dataSize);
                 this->dataSize=dataSize;
                 this->initialSize=dataSize;
                 
-                dataAccess.release();
+                dataAccess.unlock();
             }
             catch(invalid_argument* e)
             {
                 log->error(e->what());
             }
+
+            log->debug(string("Loaded arbitrary RAM into memory of size ").append(to_string(dataSize)));
         }
 
         void unload()
@@ -237,7 +241,7 @@ namespace SBE
 
             handleCount++;
             int id = handleIDs.allocate();
-            handles[id]=new ResourceHandle(id, &(this->dataAccess), this->dataID, this->data, this->dataSize);
+            handles[id]=new ResourceHandle(id, &dataAccess, this->dataID, this->data, this->dataSize);
 
             return handles[id];
         }
@@ -303,6 +307,12 @@ namespace SBE
         size_t getSize()
         {
             return this->dataSize;
+        }
+
+        template<class T>
+        T getData()
+        {
+            return ((T)(this->data));
         }
 
         // Mutators

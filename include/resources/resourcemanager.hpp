@@ -38,6 +38,20 @@ namespace SBE
                 return toCreate;
             }
 
+            ResourceHandle* getHandle(string name)
+            {
+                return strResource[name]->allocateHandle();
+            }
+            ResourceHandle* getHandle(int id)
+            {
+                return intResource[id]->allocateHandle();
+            }
+
+            auto getValidResources()
+            {
+                return resIDMan.getUsedIDs();
+            }
+
     };
 };
 #endif

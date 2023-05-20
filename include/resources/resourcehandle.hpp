@@ -26,7 +26,7 @@ namespace SBE
     {
     private:
         // Data reference & size
-        binary_semaphore* dataAccess;
+        mutex* dataAccess;
         void* dataReference;
         size_t dataSize;
 
@@ -38,7 +38,7 @@ namespace SBE
         //----------------------------------
 
         // Create a handle given some id, data, and size.
-        ResourceHandle(int id, binary_semaphore* dataAccess, int parentID, void* data, size_t dataSize)
+        ResourceHandle(int id, mutex* dataAccess, int parentID, void* data, size_t dataSize)
         {
             this->resourceID=parentID;
             this->dataAccess=dataAccess;
@@ -61,9 +61,9 @@ namespace SBE
         template<class type=void*>
         type getData()
         {
-            dataAccess->acquire();
+            dataAccess->lock();
             auto toReturn = ((type)(dataReference));
-            dataAccess->release();
+            dataAccess->unlock();
             
             return toReturn;
         }

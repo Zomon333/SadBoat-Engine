@@ -143,10 +143,12 @@ int main(int argc, char* argv[])
                 (n.getAttribs()[1].first=="preload") ? (n.getAttribs()[1].second=="true") : false
             );
 
+            SBE::log->info("Resource created.");
+
             return datum;
         }
     );
-    configs.assignCallback("Asset", &resourceCallback);
+    configs.assignCallback("Resource", &resourceCallback);
 
     // Create config callback
     Event<void*, ConfigNode> configCallback(
@@ -183,7 +185,6 @@ int main(int argc, char* argv[])
     vulkanEnvironment.setup(&vulkanEnvironment);
 
 
-    
     cout<<endl;
     return 0;
 }

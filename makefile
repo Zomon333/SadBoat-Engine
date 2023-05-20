@@ -12,7 +12,7 @@ CC = g++
 FLAGS = -std=c++20 -ffreestanding -fpermissive -pthread
 DEFINES = -DINCLUDE_VULKAN -DINCLUDE_RAPIDXML
 
-LIBS = "-lvulkan"
+LIBS = "-lvulkan" "-l:libpng16.so.16.39.0" "-lz"
 
 PRODUCTION_RELEASE = -DCONFIG_PROD
 TEST_RELEASE = -DCONFIG_TEST
@@ -23,8 +23,8 @@ TEST_RELEASE = -DCONFIG_TEST
 SOURCE_DIR = ./src
 OUT_DIR = ./output
 
-INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/"
-LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib"
+INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/" "-I./lib/libpng/include/libpng16"
+LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib" "-L./lib/libpng/lib64"
 
 
 #
