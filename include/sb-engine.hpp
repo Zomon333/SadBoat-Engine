@@ -153,7 +153,12 @@ Disclaimer:
 
     // Memory models
     #include "../include/vulkan/buffer.hpp"
+    #include "../include/vulkan/image.hpp"
 
+    // Command Classes
+    #include "../include/vulkan/commandbuffer.hpp"
+    #include "../include/vulkan/commandpool.hpp"
+    #include "../include/vulkan/commandpoolmanager.hpp"
 
     #include "../include/vulkan/vulkandispatchables.hpp"
 #endif

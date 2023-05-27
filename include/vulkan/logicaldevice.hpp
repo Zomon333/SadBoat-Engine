@@ -18,7 +18,9 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 
 #include "./instance.hpp"
 #include "./physicaldevice.hpp"
-
+#include "./queuefamily.hpp"
+#include "./queuefamilycollection.hpp"
+#include "./extensioncollection.hpp"
 
 using namespace std;
 
@@ -138,7 +140,10 @@ namespace SBE
 
             // Todo: Add code for requiredFeatures to be checked against parent's features
 
-            vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
+            auto result = vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
+            stringstream info;
+            info<<"LogicalDevice created with result: "<<VkResultLookup(result);
+            log->info(&info);
         }
 
         // Deconstructors
@@ -190,6 +195,14 @@ namespace SBE
         auto getRequiredFeats() { return requiredFeatures; }
         auto getOptimalQueueFam() { return optimalFamily; }
         auto getQueueCount() { return queueCount; }
+        unsigned int* getQueueCountArray() {
+            unsigned int array[queueCount];
+            for(int i=0; i<queueCount; i++)
+            {
+                array[i]=i;
+            }
+            return array;
+        }
 
         template <class Function>
         Function getFunc(const char* pName)

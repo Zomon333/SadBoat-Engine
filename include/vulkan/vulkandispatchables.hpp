@@ -83,6 +83,10 @@ namespace SBE
                 toInit->enabledExtFilter = (toInit->enabledExtFilter==nullptr) ? new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
                     F(vector<VkExtensionProperties>* toParse)
                     {
+                        for(int i=0; i<toParse->size(); i++)
+                        {
+                            SBE::log->debug(string("Enabling extension: ").append(toParse->at(i).extensionName));
+                        }
                         return toParse;
                     }
                 ) : toInit->enabledExtFilter;
@@ -120,6 +124,27 @@ namespace SBE
 
                 toInit->queues = new QueueCollection(toInit->vulkanLogicalDevice, toInit->vulkanLogicalDevice->getOptimalQueueFam(), toInit->vulkanLogicalDevice->getQueueCount());
                 
+
+                VkImageCreateInfo tmp = 
+                {
+                    VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,    //  sType
+                    nullptr,                                //  pNext
+                    0,                                      //  flags
+                    VK_IMAGE_TYPE_2D,                       //  imageType
+                    VK_FORMAT_R8G8B8A8_UNORM,               //  format
+                    { 1024, 1024, 1 },                      //  extent
+                    10,                                     //  mipLevels
+                    1,                                      //  arrayLayers
+                    VK_SAMPLE_COUNT_1_BIT,                  //  samples
+                    VK_IMAGE_TILING_OPTIMAL,                //  tiling
+                    VK_IMAGE_USAGE_SAMPLED_BIT,             //  usage
+                    VK_SHARING_MODE_EXCLUSIVE,              //  sharingMode
+                    0,                                      //  queueFamilyIndexCount
+                    nullptr,                                //  pQueueFamilyIndices
+                    VK_IMAGE_LAYOUT_UNDEFINED               //  initialLayout
+                };
+                Image* testImage = new Image(toInit->vulkanLogicalDevice, &tmp);
+
                 return toInit;
             }
         );

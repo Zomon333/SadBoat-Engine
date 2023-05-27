@@ -27,6 +27,8 @@ namespace SBE
         int id;
         mutex handleUse;
 
+        stringstream commitment;
+
         unsigned int consoleLevel = 0b00000;
 
     public:
@@ -66,10 +68,9 @@ namespace SBE
 
         // Accessors
         //----------------------------------
-        void debug(string log)
+        void log(string log, LogFlags level)
         {
             handleUse.lock();
-            const LogFlags level = DEBUG;
 
             string result = logFunction->call(pair<LogFlags, string>(level, log));
             if(consoleLevel & level)
@@ -79,13 +80,27 @@ namespace SBE
             }
             handleUse.unlock();
         }
+        void debug(string log){this->log(log, DEBUG);}
+        void info(string log){this->log(log, INFO);}
+        void warn(string log){this->log(log, WARNING);}
+        void error(string log){this->log(log, ERROR);}
+        void critical(string log){this->log(log, CRITICAL);}
 
-        void info(string log)
+        void debug(stringstream* log){this->debug(log->str());}
+        void info(stringstream* log){this->info(log->str());}
+        void warn(stringstream* log){this->warn(log->str());}
+        void error(stringstream* log){this->error(log->str());}
+        void critical(stringstream* log){this->critical(log->str());}
+
+        void commit(LogFlags level)
         {
             handleUse.lock();
-            const LogFlags level = INFO;
+            // const LogFlags level = CRITICAL;
             
-            string result = logFunction->call(pair<LogFlags, string>(level, log));
+            string commitString = commitment.str();
+            commitment.clear();
+
+            string result = logFunction->call(pair<LogFlags, string>(level, commitString));
             if(consoleLevel & level)
             {
                 cout<<endl;
@@ -93,58 +108,14 @@ namespace SBE
             }
             handleUse.unlock();
         }
-        
-        void warn(string log)
-        {
-            handleUse.lock();
-            const LogFlags level = WARNING;
-            
-            string result = logFunction->call(pair<LogFlags, string>(level, log));
-            if(consoleLevel & level)
-            {
-                cout<<endl;
-                cout<<result;
-            }
-            handleUse.unlock();
-        }
-        
-        void error(string log)
-        {
-            handleUse.lock();
-            const LogFlags level = ERROR;
-            
-            string result = logFunction->call(pair<LogFlags, string>(level, log));
-            if(consoleLevel & level)
-            {
-                cout<<endl;
-                cout<<result;
-            }
-            handleUse.unlock();
-        }
-        
-        void critical(string log)
-        {
-            handleUse.lock();
-            const LogFlags level = CRITICAL;
-            
-            string result = logFunction->call(pair<LogFlags, string>(level, log));
-            if(consoleLevel & level)
-            {
-                cout<<endl;
-                cout<<result;
-            }
-            handleUse.unlock();
-        }
+        stringstream* getStream(){return &commitment;}
 
         int getID()
         {
             return id;
         }
 
-        unsigned int getLevel()
-        {
-            return consoleLevel;
-        }
+        unsigned int getLevel(){return consoleLevel;}
 
         // Operators
         //----------------------------------
@@ -152,6 +123,11 @@ namespace SBE
         void operator()(string rhs)
         {
             this->info(rhs);
+        }
+        LogHandle* operator<<(string rhs)
+        {
+            this->commitment<<rhs;
+            return (this);
         }
 
         // Destructors

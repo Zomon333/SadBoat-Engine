@@ -33,6 +33,7 @@ namespace SBE
         VkDeviceMemory internalBacking;
         VkBuffer internalBuffer;
 
+        bool sparse;
         bool mapped;
 
         // Allocate memory into internalBacking
@@ -63,7 +64,7 @@ namespace SBE
             // Verify we're even *able* to allocate more memory types.
             auto allocs = parent->incAllocs();
             auto maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
-            log->debug(string("Allocating memory for buffer, allocation number ").append(to_string(allocs)).append(" / ").append(to_string(maxAllocs)));
+            log->info(string("Allocating memory for buffer, allocation number ").append(to_string(allocs)).append(" / ").append(to_string(maxAllocs)));
             if(allocs>maxAllocs)
             {
                 parent->decAllocs();
@@ -81,9 +82,59 @@ namespace SBE
 
             // Attempt to allocate, output result, throw if invalid.
             auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
-            log->debug(string("Buffer memory allocated with size of ").append(to_string((this->createInfo.size))).append(", resulting: ").append(VkResultLookup(result)));
+            log->info(string("Buffer memory allocated with size of ").append(to_string((this->createInfo.size))).append(", resulting: ").append(VkResultLookup(result)));
+            if(result!=VK_SUCCESS) throw new bad_alloc();
+        }
+
+        void allocate(VkDeviceSize bufferSize)
+        {
+            // Check the memory types supported by the device
+            auto mem = parent->getParent()->getMem();
+            int optimalMemIndex = -1;
+
+            // Search through them all for one that is on the GPU but CPU visible
+            for(int i=0; i<mem->memoryTypeCount; i++)
+            {
+                auto flags = mem->memoryTypes[i].propertyFlags;
+                if(flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT && flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+                {
+                    // Save it
+                    optimalMemIndex = i;
+                    break;
+                }
+            }
+            if(optimalMemIndex==-1)
+            {
+                // If there aren't any, then throw an exception and don't allocate.
+                log->error("Required memory type not supported-- should support VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT and VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT");
+                throw new bad_alloc();
+            }
+
+            // Verify we're even *able* to allocate more memory types.
+            auto allocs = parent->incAllocs();
+            auto maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
+            log->info(string("Allocating memory for buffer, allocation number ").append(to_string(allocs)).append(" / ").append(to_string(maxAllocs)));
+            if(allocs>maxAllocs)
+            {
+                parent->decAllocs();
+                log->error("Maximum number of resource allocations exceeded.");
+                throw new bad_alloc();
+            }
+
+            // Assign allocation info
+            allocationInfo = {
+                VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                nullptr,
+                bufferSize,
+                (unsigned int)(optimalMemIndex) // memoryTypeIndex, determining what type of memory we need, which should be chosen from vkGetPhysicalDeviceMemoryProperties.
+            };
+
+            // Attempt to allocate, output result, throw if invalid.
+            auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
+            log->info(string("Buffer memory allocated with size of ").append(to_string((bufferSize))).append(", resulting: ").append(VkResultLookup(result)));
             if(result!=0) throw new bad_alloc();
         }
+
 
         // Bind the internalBacking to the internalBuffer
         void bind()
@@ -98,7 +149,7 @@ namespace SBE
 
             stringstream tmpStream;
             tmpStream<<"Binding buffer memory to buffer. MemoryTypeBits: "<<memReqs.memoryTypeBits<<", Relevant bit: "<< ((((memReqs.memoryTypeBits>>(allocationInfo.memoryTypeIndex-1) & 1))==1) ? "Supported" : "Unsupported") <<", with result of: "<<VkResultLookup(result);
-            log->debug(tmpStream.str());
+            log->info(tmpStream.str());
 
             mapped=false;
         }
@@ -108,11 +159,12 @@ namespace SBE
         //----------------------------------
         
         // Create buffer given a parent and all the creation info
-        Buffer(LogicalDevice* parent, VkBufferCreateInfo createInfo)
+        Buffer(LogicalDevice* parent, VkBufferCreateInfo createInfo, bool sparse=false)
         {
             // Assign our data
             this->parent=parent;
             this->createInfo=createInfo;
+            this->sparse=sparse;
 
             // Check for format
             if(createInfo.usage & VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT || createInfo.usage & VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT)
@@ -131,7 +183,7 @@ namespace SBE
             auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
             stringstream tmpstream;
             tmpstream<<"Buffer created with result: "<<VkResultLookup(result);
-            log->debug(tmpstream.str());
+            log->info(tmpstream.str());
 
             if(result!=0) throw new runtime_error("Failed to create buffer.");
 
@@ -142,17 +194,20 @@ namespace SBE
         }
 
         // Create buffer given a parent, size, and use case
-        Buffer(LogicalDevice* parent, VkDeviceSize size, VkBufferUsageFlags usage)
+        Buffer(LogicalDevice* parent, VkDeviceSize size, VkBufferUsageFlags usage, bool sparse=false)
         {
             // Assign our data
+            this->sparse=sparse;
             this->parent=parent;
+            unsigned int accessNumber = (unsigned int)(parent->getOptimalQueueFam()->getIndex());
             this->createInfo={
                 VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
                 0,
                 size,
                 usage,
-                VK_SHARING_MODE_EXCLUSIVE,
-                0, nullptr
+                VK_SHARING_MODE_CONCURRENT,
+                1, 
+                &accessNumber
             };
 
             // Check for format
@@ -172,7 +227,7 @@ namespace SBE
             auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
             stringstream tmpstream;
             tmpstream<<"Buffer created with result: "<<VkResultLookup(result);
-            log->debug(tmpstream.str());
+            log->info(tmpstream.str());
             if(result!=0) throw new runtime_error("Failed to create buffer.");
 
             // Attempt to allocate memory for the buffer.
@@ -182,9 +237,10 @@ namespace SBE
         }
 
         // Create buffer given a parent, size, usage, and sharing needs.
-        Buffer(LogicalDevice* parent, VkDeviceSize size, VkBufferUsageFlags usage, vector<unsigned int> queueFamIndices)
+        Buffer(LogicalDevice* parent, VkDeviceSize size, VkBufferUsageFlags usage, vector<unsigned int> queueFamIndices, bool sparse=false)
         {
             // Assign the data we need for the buffer
+            this->sparse=sparse;
             this->parent=parent;
             this->createInfo={
                 VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO, nullptr,
@@ -197,7 +253,7 @@ namespace SBE
 
             // Create the buffer and output the result
             auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
-            log->debug(string("Buffer created with result: ").append(VkResultLookup(result)));
+            log->info(string("Buffer created with result: ").append(VkResultLookup(result)));
 
             // Throw an allocation exception
             if(result!=0) throw new runtime_error("Failed to create buffer.");
@@ -291,7 +347,7 @@ namespace SBE
             // Destroy any buffer views that have been created of this buffer.
             // vkDestroyBufferView(parent->getSelf(), VkBufferView bufferView, parent->getHost()->getAllocationInfo());
 
-            log->debug("Destroying buffer.");
+            log->info("Destroying buffer.");
         }
         
     };
