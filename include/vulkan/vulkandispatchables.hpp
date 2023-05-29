@@ -83,10 +83,22 @@ namespace SBE
                 toInit->enabledExtFilter = (toInit->enabledExtFilter==nullptr) ? new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
                     F(vector<VkExtensionProperties>* toParse)
                     {
+                        vector<VkExtensionProperties> toReturn;
                         for(int i=0; i<toParse->size(); i++)
                         {
-                            SBE::log->debug(string("Enabling extension: ").append(toParse->at(i).extensionName));
+                            if(toParse->at(i).extensionName[3]=='K')
+                            {
+                                SBE::log->debug(string("Enabling extension: ").append(toParse->at(i).extensionName));
+                                toReturn.push_back(toParse->at(i));
+                            }
+                            // else
+                            // {
+                            //     // SBE::log->debug(string("Not enabling optional extension: ").append(toParse->at(i).extensionName));
+                            // }
                         }
+
+                        (*toParse) = toReturn;
+
                         return toParse;
                     }
                 ) : toInit->enabledExtFilter;
@@ -94,6 +106,11 @@ namespace SBE
                 toInit->enabledLayerFilter = (toInit->enabledLayerFilter==nullptr) ? new Event<vector<VkLayerProperties>*,vector<VkLayerProperties>*>(
                     F(vector<VkLayerProperties>* toParse)
                     {
+                        // for(int i=0; i<toParse->size(); i++)
+                        // {
+                        //     // SBE::log->debug(string("Layer exists: ").append(toParse->at(i).layerName));
+                        // }
+
                         toParse->clear();
                         return toParse;
                     }

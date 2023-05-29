@@ -196,7 +196,7 @@ namespace SBE
         auto getOptimalQueueFam() { return optimalFamily; }
         auto getQueueCount() { return queueCount; }
         unsigned int* getQueueCountArray() {
-            unsigned int array[queueCount];
+            unsigned int* array = new unsigned int[queueCount];
             for(int i=0; i<queueCount; i++)
             {
                 array[i]=i;
