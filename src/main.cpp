@@ -184,7 +184,7 @@ int main(int argc, char* argv[])
     vulkanEnvironment.deviceConfig=(configs.getConfig("./assets/config/graphicsOptions.xml"));
     vulkanEnvironment.setup(&vulkanEnvironment);
 
+    CommandPoolManager testPool(vulkanEnvironment.vulkanLogicalDevice);
 
-    cout<<endl;
     return 0;
 }

@@ -95,7 +95,7 @@ namespace SBE
             stringstream tmpstream;
             tmpstream<<"Choosing queueFamily number "<<result.first<<", which supports ";
             tmpstream<<result.second.getProps()->queueCount<<" queues.";
-            log->debug(tmpstream.str());
+            log->info(&tmpstream);
             
             return result;
         }

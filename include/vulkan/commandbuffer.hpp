@@ -15,7 +15,6 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 
 #include "sb-engine.hpp"
 #include "./queuecollection.hpp"
-#include "./commandpool.hpp"
 
 using namespace std;
 
@@ -24,15 +23,19 @@ namespace SBE
     class CommandBuffer
     {
     private:
-        QueueCollection* queues;
-        CommandPool* parent;
+        LogicalDevice* parent;
 
+        QueueCollection* queues;
+
+        VkCommandBuffer self;
     public:
         // Constructors
         //----------------------------------
-        CommandBuffer()
+        CommandBuffer(LogicalDevice* parent, QueueCollection* queues, VkCommandBuffer self)
         {
-            
+            this->parent=parent;
+            this->queues=queues;
+            this->self=self;
         }
         // Mutators
         //----------------------------------

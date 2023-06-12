@@ -112,7 +112,7 @@ Disclaimer:
 
 //  Utility Includes
 //----------------------------------
-
+#include "../include/utilities/manager.hpp"
 
 //  Physics Includes
 //----------------------------------

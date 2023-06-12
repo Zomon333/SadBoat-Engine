@@ -86,11 +86,11 @@ namespace SBE
         void error(string log){this->log(log, ERROR);}
         void critical(string log){this->log(log, CRITICAL);}
 
-        void debug(stringstream* log){this->debug(log->str());}
-        void info(stringstream* log){this->info(log->str());}
-        void warn(stringstream* log){this->warn(log->str());}
-        void error(stringstream* log){this->error(log->str());}
-        void critical(stringstream* log){this->critical(log->str());}
+        void debug(stringstream* log){this->debug(log->str()); log->str("");}
+        void info(stringstream* log){this->info(log->str()); log->str("");}
+        void warn(stringstream* log){this->warn(log->str()); log->str("");}
+        void error(stringstream* log){this->error(log->str()); log->str("");}
+        void critical(stringstream* log){this->critical(log->str()); log->str("");}
 
         void commit(LogFlags level)
         {
@@ -98,7 +98,7 @@ namespace SBE
             // const LogFlags level = CRITICAL;
             
             string commitString = commitment.str();
-            commitment.clear();
+            commitment.str("");
 
             string result = logFunction->call(pair<LogFlags, string>(level, commitString));
             if(consoleLevel & level)

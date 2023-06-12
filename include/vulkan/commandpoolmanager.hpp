@@ -14,6 +14,7 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #define COMMANDPOOLMANAGER_H
 
 #include "sb-engine.hpp"
+#include "./commandpool.hpp"
 
 using namespace std;
 
@@ -22,14 +23,16 @@ namespace SBE
     class CommandPoolManager
     {
     private:
-        
+        LogicalDevice* parent;
 
+        Manager<CommandPool> poolManager;
     public:
         // Constructors
         //----------------------------------
-        CommandPoolManager()
+        CommandPoolManager(LogicalDevice* parent)
         {
-
+            this->parent=parent;
+            poolManager.allocateData(new CommandPool(parent));
         }
         
         // Mutators

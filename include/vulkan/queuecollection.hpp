@@ -54,7 +54,9 @@ namespace SBE
                 queues[i] = new Queue(parent, queueFamily, i);
             }
 
-            this->log->debug(string("Initializing QueueCollection with a total of ").append(to_string(queueCount)).append(" queues."));
+            stringstream result;
+            result<<"Initializing QueueCollection with a total of "<<to_string(queueCount)<<" queues.";
+            this->log->info(&result);
         }
 
 
