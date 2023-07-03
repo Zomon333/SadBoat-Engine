@@ -61,9 +61,6 @@ namespace SBE
 
             accessible.unlock();
         }
-
-        // Accessors
-        //----------------------------------
         int allocateData(datum* toAllocate)
         {
             accessible.lock();
@@ -73,6 +70,9 @@ namespace SBE
             accessible.unlock();
             return id;
         }
+        
+        // Accessors
+        //---------------------------------- 
         vector<datum*> getData()
         {
             vector<datum*> list;
@@ -92,6 +92,11 @@ namespace SBE
         int getID(datum* toGet)
         {
             return reverseData[toGet];
+        }
+
+        vector<int> getUsedIDs()
+        {
+            return dataIDs.getUsedIDs();
         }
 
         // Operators

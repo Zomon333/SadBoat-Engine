@@ -40,6 +40,7 @@ namespace SBE
 
         // Accessors
         //----------------------------------
+        auto getPools(){return poolManager.getData();}
 
         // Operators
         //----------------------------------

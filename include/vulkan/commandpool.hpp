@@ -117,12 +117,35 @@ namespace SBE
 
         // Mutators
         //----------------------------------
-
+        void freeBuffer(int id)
+        {
+            vkFreeCommandBuffers(parent->getSelf(), self, 1, buffers[id]->getSelf());
+        }
+        void freeBuffers(int* ids, int count=1)
+        {
+            for(int i=0; i<count; i++)
+            {
+                this->freeBuffer(ids[i]);
+            }
+        }
+        
         // Accessors
         //----------------------------------
+        auto getSelf(){return self;}
+        auto getParent(){return parent;}
+        auto getQueues(){return queues;}
+
+        auto getCreateInfo(){return pCreateInfo;}
+        auto getAllocateInfo(){return pAllocateInfo;}
+
+        auto getBuffers(){return buffers.getData();}
 
         // Operators
         //----------------------------------
+        CommandBuffer* operator[](int rhs)
+        {
+            return (buffers[rhs]);
+        }
 
         // Destructors
         //----------------------------------

@@ -42,7 +42,8 @@ namespace SBE
 
         // Accessors
         //----------------------------------
-
+        auto getSelf(){return &self;}
+        
         // Operators
         //----------------------------------
 
