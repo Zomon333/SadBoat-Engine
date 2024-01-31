@@ -41,3 +41,4 @@ lib/wayland
 lib/wayland-protocols
 docs/notes.txt
 log.txt
+compile_log.txt
