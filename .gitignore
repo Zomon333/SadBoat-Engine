@@ -1,7 +1,6 @@
 # Local Libraries
-*lib/mesa*
-*lib/vulkan*
-*lib/eigen*
+*lib/*
+
 
 # Prerequisites
 *.d
