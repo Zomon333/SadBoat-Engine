@@ -1,6 +1,7 @@
 # Local Libraries
 *lib/mesa*
 *lib/vulkan*
+*lib/eigen*
 
 # Prerequisites
 *.d
@@ -34,11 +35,12 @@
 *.exe
 ./output/SadBoatEngine*
 output/*
+
+# Settings
 .vscode/settings.json
 .vscode/c_cpp_properties.json
-*.tar.xz.1
-lib/wayland
-lib/wayland-protocols
+
+# Notes
 docs/notes.txt
 log.txt
 compile_log.txt
