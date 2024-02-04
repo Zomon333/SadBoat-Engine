@@ -23,7 +23,7 @@ TEST_RELEASE = -DCONFIG_TEST
 SOURCE_DIR = ./src
 OUT_DIR = ./output
 
-INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/" "-I./lib/libpng/include/libpng16"
+INCLUDE_DIRS = "-I./include/" "-I/usr/include/vulkan/" "-I./lib/libpng/include/libpng16" "-I./lib/eigen/Eigen"
 LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib" "-L./lib/libpng/lib64" "-L./lib/vulkan/*/x86_64/lib"
 
 LOG_NAME = "compile_log.txt"
@@ -52,11 +52,7 @@ test:
 clean:
 	rm -rf $(OUT_DIR)/* 	&
 
-#Install the Vulkan SDK
-vulkan_lunarg:
-	yes | rm -r ./lib/vulkan/* &
-	curl "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz" --output ./lib/vulkan/vulkan-sdk.tar.gz
-	tar --extract -f ./lib/vulkan/vulkan-sdk.tar.gz -C ./lib/vulkan
-	./lib/vulkan/*/vulkansdk
+libs:
+	bash ./get_libs.sh
 
 
