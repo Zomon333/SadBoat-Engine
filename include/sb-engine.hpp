@@ -57,7 +57,7 @@ Disclaimer:
 #include <variant>
 
 
-//RapidXML Include
+// RapidXML Include
 #include "../lib/rapidxml-1.13/rapidxml.hpp" //RapidXML is a FOSS header only library for XML reading. We use it for settings and config files.
 #include "../lib/rapidxml-1.13/rapidxml_utils.hpp"
 #include "../lib/rapidxml-1.13/rapidxml_print.hpp"
@@ -67,6 +67,11 @@ Disclaimer:
 #include "../lib/libpng/include/libpng16/png.h"
 #include "../lib/libpng/include/libpng16/pngconf.h"
 #include "../lib/libpng/include/libpng16/pnglibconf.h"
+
+// Eigen include
+//----------------------------------
+#include "../lib/eigen/Eigen/Eigen"
+
 
 //  Engine Specific Defines
 //----------------------------------
@@ -117,14 +122,7 @@ Disclaimer:
 //  Physics Includes
 //----------------------------------
 
-/*
----------------------------------------------------------------------------------------------------------------------
-    Eigen Includes
----------------------------------------------------------------------------------------------------------------------
-*/
-#ifdef INCLUDE_EIGEN
-    #include "../lib/eigen/Eigen/Eigen"
-#endif
+
 
 /*
 ---------------------------------------------------------------------------------------------------------------------

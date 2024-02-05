@@ -17,7 +17,7 @@ mkdir ./lib/eigen/build/
 cmake -S ./lib/eigen/ -B ./lib/eigen/build/
 pushd ./
 cd ./lib/eigen/build
-make install
+sudo make install
 popd
 
 # Install Catch
