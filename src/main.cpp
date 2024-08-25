@@ -43,8 +43,6 @@ Disclaimer:
 //----------------------------------
 #include "sb-engine.hpp"
 
-
-
 using namespace std;
 using namespace SBE;
 
@@ -113,7 +111,6 @@ int main(int argc, char* argv[])
 
     SBE::logger = new LogManager("./log.txt");
     SBE::log = logger->allocateHandle(0b11111);
- 
 
     //  Unit Test Setup
     //----------------------------------
@@ -185,6 +182,9 @@ int main(int argc, char* argv[])
     vulkanEnvironment.setup(&vulkanEnvironment);
 
     CommandPoolManager testPool(vulkanEnvironment.vulkanLogicalDevice);
+    CommandPool* cmdPool = testPool.getPools()[0];
+    vector<CommandBuffer*> cmdBuffers = cmdPool->getBuffers();
+    
 
     return 0;
 }

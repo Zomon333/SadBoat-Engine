@@ -63,7 +63,7 @@ namespace SBE
         // The event to set up all of our Vulkan environment.
         // Useful so the Vulkan environment can be set up in basically two lines of code, while also being multithreaded.
         Event<VulkanDispatchables*, VulkanDispatchables*> setup = Event<VulkanDispatchables*, VulkanDispatchables*>(
-            lF(VulkanDispatchables* toInit)
+            [this](VulkanDispatchables* toInit)
             {
                 // Setup the instance
                 toInit->vulkanInstance = new Instance;
@@ -80,7 +80,7 @@ namespace SBE
                 toInit->enabledExtensions = toInit->vulkanExtensions->getProps();
                 toInit->enabledLayers = toInit->vulkanLayers->getProps();
 
-                toInit->enabledExtFilter = (toInit->enabledExtFilter==nullptr) ? new Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
+                toInit->enabledExtFilter = (toInit->enabledExtFilter==nullptr) ? new                Event<vector<VkExtensionProperties>*,vector<VkExtensionProperties>*>(
                     F(vector<VkExtensionProperties>* toParse)
                     {
                         vector<VkExtensionProperties> toReturn;
@@ -140,7 +140,6 @@ namespace SBE
                 toInit->buffer = new Buffer(toInit->vulkanLogicalDevice, *bufferInfo);
 
                 toInit->queues = new QueueCollection(toInit->vulkanLogicalDevice, toInit->vulkanLogicalDevice->getOptimalQueueFam(), toInit->vulkanLogicalDevice->getQueueCount());
-                
 
                 VkImageCreateInfo tmp = 
                 {
