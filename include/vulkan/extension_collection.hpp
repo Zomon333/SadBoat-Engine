@@ -13,11 +13,10 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef EXTENSION_COLLECTION_H
 #define EXTENSION_COLLECTION_H
 
-#include "sb-engine.hpp"
 #include "./vulkan/vulkan.hpp"
-#include "../include/vulkan/physicaldevice.hpp"
+#include "../include/vulkan/physical_device.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {

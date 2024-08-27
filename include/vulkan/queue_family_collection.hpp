@@ -13,10 +13,9 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef QUEUE_FAMILY_COLLECTION_H
 #define QUEUE_FAMILY_COLLECTION_H
 
-#include "sb-engine.hpp"
 #include "./vulkan/vulkan.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {

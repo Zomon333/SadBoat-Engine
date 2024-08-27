@@ -24,8 +24,8 @@ SRC_DIR = ./src
 OBJ_DIR = ./obj
 OUT_DIR = ./output
 
-INCLUDE_DIRS = "-I./include/" "-I./lib/"
-#LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib" "-L./lib/libpng/lib64" "-L./lib/vulkan/*/x86_64/lib"
+INCLUDE_DIRS = "-I./include/" "-I./lib/" "-I/usr/include/vulkan/" "-I./lib/libpng/include/libpng16" "-I./lib/eigen/Eigen"
+LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib" "-L./lib/libpng/lib64" "-L./lib/vulkan/*/x86_64/lib"
 
 LOG_NAME = "compile_log.txt"
 
@@ -38,7 +38,8 @@ engine:
 	make events
 	make utilities
 	make resources
-
+	make vulkan
+	
 events:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/events/event.cpp -o $(OBJ_DIR)/event.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/events/timed_event.cpp -o $(OBJ_DIR)/timed_event.o
@@ -67,7 +68,8 @@ logging:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/logging/log_manager.cpp -o $(OBJ_DIR)/log_manager.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/logging/startup_logger.cpp -o $(OBJ_DIR)/startup_logger.o
 
-
+vulkan:
+	echo To Be Implemented
 
 clean:
 	rm -rf $(OBJ_DIR)/* $(OUT_DIR)/* 	&

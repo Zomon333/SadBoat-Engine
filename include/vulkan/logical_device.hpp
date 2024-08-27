@@ -13,16 +13,13 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef LOGICAL_DEVICE_H
 #define LOGICAL_DEVICE_H
 
-#include "sb-engine.hpp"
 #include "./vulkan/vulkan.hpp"
 
-#include "./instance.hpp"
-#include "./physicaldevice.hpp"
-#include "./queuefamily.hpp"
-#include "./queuefamilycollection.hpp"
-#include "./extensioncollection.hpp"
-
-using namespace std;
+#include "vulkan/instance.hpp"
+#include "vulkan/physical_device.hpp"
+#include "vulkan/queue_family.hpp"
+#include "vulkan/queue_family_collection.hpp"
+#include "vulkan/extension_collection.hpp"
 
 namespace SBE
 {

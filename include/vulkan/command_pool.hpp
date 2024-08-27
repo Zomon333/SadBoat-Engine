@@ -16,7 +16,7 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #include "sb-engine.hpp"
 #include "./commandbuffer.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {

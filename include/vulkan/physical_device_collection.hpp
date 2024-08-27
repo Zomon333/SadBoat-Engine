@@ -18,7 +18,7 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #include "vulkan/physicaldevice.hpp"
 #include "./vulkan/vulkan.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {

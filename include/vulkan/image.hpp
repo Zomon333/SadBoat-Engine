@@ -19,7 +19,7 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #include "./logicaldevice.hpp"
 #include "./vulkanresultlookup.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {

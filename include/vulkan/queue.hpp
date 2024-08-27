@@ -18,7 +18,7 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #include "./logicaldevice.hpp"
 #include "./queuefamily.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {

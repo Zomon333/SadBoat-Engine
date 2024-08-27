@@ -10,47 +10,48 @@ Copyright 2023 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef COMMANDBUFFER_H
-#define COMMANDBUFFER_H
+#ifndef QUEUE_FAMILY_H
+#define QUEUE_FAMILY_H
 
-#include "sb-engine.hpp"
-#include "./queuecollection.hpp"
+#include "./vulkan/vulkan.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {
-    class CommandBuffer
+    // QueueFamily: Graphics
+    // Class for generalized containing of properties of a given QueueFamily
+class QueueFamily
     {
     private:
-        LogicalDevice* parent;
+        PhysicalDevice* parent;
+        unsigned int index;
 
-        QueueCollection* queues;
+        VkQueueFamilyProperties* selfProps;
 
-        VkCommandBuffer self;
     public:
-        // Constructors
+        // Constructors 
         //----------------------------------
-        CommandBuffer(LogicalDevice* parent, QueueCollection* queues, VkCommandBuffer self)
+    
+        //Construct a QueueFamily given some parent and some properties
+        QueueFamily(PhysicalDevice* parent, unsigned int index, VkQueueFamilyProperties* selfProps)
         {
             this->parent=parent;
-            this->queues=queues;
-            this->self=self;
+            this->index=index;
+            this->selfProps=selfProps;
         }
-        // Mutators
-        //----------------------------------
 
         // Accessors
         //----------------------------------
-        auto getSelf(){return &self;}
-        
-        // Operators
-        //----------------------------------
 
-        // Destructors
-        //----------------------------------
+        // Get the QueueFamily's parent
+        auto getParent() { return parent; }
 
-        
+        // Get the QueueFamily's properties
+        auto getProps() { return selfProps; }
+
+        // Get the QueueFamily's index
+        auto getIndex() { return index; }
     };
 };
 #endif

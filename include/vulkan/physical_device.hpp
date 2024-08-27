@@ -13,10 +13,9 @@ Copyright 2022 Dagan Poulin, Justice Guillory
 #ifndef PHYSICALDEVICE_H
 #define PHYSICALDEVICE_H
 
-#include "sb-engine.hpp"
 #include "./vulkan/vulkan.hpp"
 
-using namespace std;
+
 
 namespace SBE
 {
