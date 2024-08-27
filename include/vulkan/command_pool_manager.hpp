@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Dagan Poulin, Justice Guillory
+Copyright 2024 Dagan Poulin, Justice Guillory
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -13,9 +13,9 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef COMMANDPOOLMANAGER_H
 #define COMMANDPOOLMANAGER_H
 
-#include "sb-engine.hpp"
-#include "./commandpool.hpp"
-
+#include "utilities/manager.hpp"
+#include "vulkan/logical_device.hpp"
+#include "vulkan/command_pool.hpp"
 
 
 namespace SBE
@@ -29,18 +29,14 @@ namespace SBE
     public:
         // Constructors
         //----------------------------------
-        CommandPoolManager(LogicalDevice* parent)
-        {
-            this->parent=parent;
-            poolManager.allocateData(new CommandPool(parent));
-        }
+        CommandPoolManager(LogicalDevice* parent);
         
         // Mutators
         //----------------------------------
 
         // Accessors
         //----------------------------------
-        auto getPools(){return poolManager.getData();}
+        std::vector<CommandPool*> getPools();
 
         // Operators
         //----------------------------------

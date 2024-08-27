@@ -13,10 +13,9 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "sb-engine.hpp"
 
-#include "./logicaldevice.hpp"
-#include "./queuefamily.hpp"
+#include "vulkan/logical_device.hpp"
+#include "vulkan/queue_family.hpp"
 
 
 

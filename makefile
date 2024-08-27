@@ -41,35 +41,51 @@ engine:
 	make vulkan
 	
 events:
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/events/event.cpp -o $(OBJ_DIR)/event.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/events/timed_event.cpp -o $(OBJ_DIR)/timed_event.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/events/recurring_event.cpp -o $(OBJ_DIR)/recurring_event.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/events/event_pool.cpp -o $(OBJ_DIR)/event_pool.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/events/event.cpp -o $(OBJ_DIR)/event.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/events/timed_event.cpp -o $(OBJ_DIR)/timed_event.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/events/recurring_event.cpp -o $(OBJ_DIR)/recurring_event.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/events/event_pool.cpp -o $(OBJ_DIR)/event_pool.o
 
 resources:
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/resources/id_manager.cpp -o $(OBJ_DIR)/id_manager.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/resources/resource_handle.cpp -o $(OBJ_DIR)/resource_handle.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/resources/resource_manager.cpp -o $(OBJ_DIR)/resource_manager.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/resources/resource.cpp -o $(OBJ_DIR)/resource.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/id_manager.cpp -o $(OBJ_DIR)/id_manager.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/resource_handle.cpp -o $(OBJ_DIR)/resource_handle.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/resource_manager.cpp -o $(OBJ_DIR)/resource_manager.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/resource.cpp -o $(OBJ_DIR)/resource.o
 
 utilities:
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/defines.cpp -o $(OBJ_DIR)/defines.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/manager.cpp -o $(OBJ_DIR)/manager.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/defines.cpp -o $(OBJ_DIR)/defines.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/manager.cpp -o $(OBJ_DIR)/manager.o
 	make configs
 	make logging
 
 configs:
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/configs/config_node.cpp -o $(OBJ_DIR)/config_node.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/configs/config.cpp -o $(OBJ_DIR)/config.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/configs/config_manager.cpp -o $(OBJ_DIR)/config_manager.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/configs/config_node.cpp -o $(OBJ_DIR)/config_node.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/configs/config.cpp -o $(OBJ_DIR)/config.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/configs/config_manager.cpp -o $(OBJ_DIR)/config_manager.o
 
 logging:
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/logging/log_handle.cpp -o $(OBJ_DIR)/log_handle.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/logging/log_manager.cpp -o $(OBJ_DIR)/log_manager.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) -c $(SRC_DIR)/utilities/logging/startup_logger.cpp -o $(OBJ_DIR)/startup_logger.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/logging/log_handle.cpp -o $(OBJ_DIR)/log_handle.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/logging/log_manager.cpp -o $(OBJ_DIR)/log_manager.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/logging/startup_logger.cpp -o $(OBJ_DIR)/startup_logger.o
 
 vulkan:
-	echo To Be Implemented
+
+# Order to compile:
+# instance
+# physicaldevice
+# physicaldevicecollection
+# extensioncollection
+# layercollection
+# logicaldevice
+# queuefamily
+# queuefamilycollection
+# queuecollection
+# queue
+# commandbuffer
+# commandpool
+# commandpoolmanager
+# buffer
+# image
 
 clean:
 	rm -rf $(OBJ_DIR)/* $(OUT_DIR)/* 	&

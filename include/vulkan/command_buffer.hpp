@@ -13,9 +13,9 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef COMMANDBUFFER_H
 #define COMMANDBUFFER_H
 
-#include "sb-engine.hpp"
-#include "./queuecollection.hpp"
-
+#include "./vulkan/vulkan.hpp"
+#include "vulkan/queue_collection.hpp"
+#include "vulkan/logical_device.hpp"
 
 
 namespace SBE
@@ -31,18 +31,13 @@ namespace SBE
     public:
         // Constructors
         //----------------------------------
-        CommandBuffer(LogicalDevice* parent, QueueCollection* queues, VkCommandBuffer self)
-        {
-            this->parent=parent;
-            this->queues=queues;
-            this->self=self;
-        }
+        CommandBuffer(LogicalDevice* parent, QueueCollection* queues, VkCommandBuffer self);
         // Mutators
         //----------------------------------
 
         // Accessors
         //----------------------------------
-        auto getSelf(){return &self;}
+        VkCommandBuffer* getSelf();
         
         // Operators
         //----------------------------------
