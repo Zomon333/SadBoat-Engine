@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Dagan Poulin, Justice Guillory
+Copyright 2024 Dagan Poulin, Justice Guillory
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -14,7 +14,9 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #define COMMANDPOOL_H
 
 #include "./vulkan/vulkan.hpp"
+
 #include "vulkan/command_buffer.hpp"
+#include "utilities/manager.hpp"
 
 
 namespace SBE
