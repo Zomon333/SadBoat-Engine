@@ -6,11 +6,9 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "${default}",
-            "cppStandard": "gnu++20",
-            "intelliSenseMode": "linux-gcc-x64",
-            "configurationProvider": "ms-vscode.cpptools"
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4

@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Dagan Poulin, Justice Guillory
+Copyright 2024 Dagan Poulin, Justice Guillory
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -13,9 +13,11 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "sb-engine.hpp"
+#include <unordered_map>
+#include <vector>
+#include <mutex>
 
-using namespace std;
+#include "resources/id_manager.hpp"
 
 namespace SBE
 {
@@ -24,99 +26,144 @@ namespace SBE
     {
     private:
         IDManager dataIDs;
-        unordered_map<int, datum*> data;
-        unordered_map<datum*, int> reverseData;
+        std::unordered_map<int, datum*> data;
+        std::unordered_map<datum*, int> reverseData;
 
-        mutex accessible;
+        std::mutex accessible;
 
     public:
         // Constructors
         //----------------------------------
-        Manager(){}
+        Manager();
         
         // Mutators
         //----------------------------------
-        void freeData(datum* toFree)
-        {
-            accessible.lock();
-
-            int id = reverseData[toFree];
-            reverseData[toFree]=0;
-            data[id]=nullptr;
-            dataIDs.free(id);
-
-            delete toFree;
-
-            accessible.unlock();
-        }
-        void freeData(int id)
-        {
-            accessible.lock();
-
-            datum* toFree = data[id];
-            reverseData[toFree]=nullptr;
-            data[id]=nullptr;
-            dataIDs.free(id);
-            delete toFree;
-
-            accessible.unlock();
-        }
-        int allocateData(datum* toAllocate)
-        {
-            accessible.lock();
-            int id = dataIDs.allocate();
-            data[id] = toAllocate;
-
-            accessible.unlock();
-            return id;
-        }
+        void freeData(datum* toFree);
+        void freeData(int id);
+        int allocateData(datum* toAllocate);
         
         // Accessors
         //---------------------------------- 
-        vector<datum*> getData()
-        {
-            vector<datum*> list;
-            auto usedIDs = dataIDs.getUsedIDs();
-            list.resize(usedIDs.size());
-            for(int i=0; i<usedIDs.size(); i++)
-            {
-                list[i]=data[usedIDs[i]];
-            }
-            return list;
-        }
+        std::vector<datum*> getData();
         
-        datum* getData(int id)
-        {
-            return data[id];
-        }
-        int getID(datum* toGet)
-        {
-            return reverseData[toGet];
-        }
+        datum* getData(int id);
+        int getID(datum* toGet);
 
-        vector<int> getUsedIDs()
-        {
-            return dataIDs.getUsedIDs();
-        }
+        std::vector<int> getUsedIDs();
 
         // Operators
         //----------------------------------
-        datum* operator[](int rhs)
-        {
-            return data[rhs];
-        }
+        datum* operator[](int rhs);
 
         // Destructors
         //----------------------------------
-        ~Manager()
-        {
-            auto toDelete = getData();
-            for(int i=0; i<toDelete.size(); i++)
-            {
-                freeData(toDelete[i]);
-            }
-        }
+        ~Manager();
         
     };
+
+
+    // Constructors
+    //----------------------------------
+    template<class datum>
+    Manager<datum>::Manager()
+    {
+
+    }
+
+    // Mutators
+    //----------------------------------
+    template<class datum>
+    void Manager<datum>::freeData(datum* toFree)
+    {
+        accessible.lock();
+
+        int id = reverseData[toFree];
+        reverseData[toFree]=0;
+        data[id]=nullptr;
+        dataIDs.free(id);
+
+        delete toFree;
+
+        accessible.unlock();
+    }
+
+    template<class datum>
+    void Manager<datum>::freeData(int id)
+    {
+        accessible.lock();
+
+        datum* toFree = data[id];
+        reverseData[toFree]=nullptr;
+        data[id]=nullptr;
+        dataIDs.free(id);
+        delete toFree;
+
+        accessible.unlock();
+    }
+
+    template<class datum>
+    int Manager<datum>::allocateData(datum* toAllocate)
+    {
+        accessible.lock();
+        int id = dataIDs.allocate();
+        data[id] = toAllocate;
+
+        accessible.unlock();
+        return id;
+    }
+
+    // Accessors
+    //---------------------------------- 
+    template<class datum>
+    std::vector<datum*> Manager<datum>::getData()
+    {
+        std::vector<datum*> list;
+        auto usedIDs = dataIDs.getUsedIDs();
+        list.resize(usedIDs.size());
+        for(int i=0; i<usedIDs.size(); i++)
+        {
+            list[i]=data[usedIDs[i]];
+        }
+        return list;
+    }
+
+    template<class datum>
+    datum* Manager<datum>::getData(int id)
+    {
+        return data[id];
+    }
+
+    template<class datum>
+    int Manager<datum>::getID(datum* toGet)
+    {
+        return reverseData[toGet];
+    }
+
+    template<class datum>
+    std::vector<int> Manager<datum>::getUsedIDs()
+    {
+        return dataIDs.getUsedIDs();
+    }
+
+    // Operators
+    //----------------------------------
+    template<class datum>
+    datum* Manager<datum>::operator[](int rhs)
+    {
+        return data[rhs];
+    }
+
+    // Destructors
+    //----------------------------------
+    template<class datum>
+    Manager<datum>::~Manager()
+    {
+        auto toDelete = getData();
+        for(int i=0; i<toDelete.size(); i++)
+        {
+            freeData(toDelete[i]);
+        }
+    }
+        
 };
 #endif

@@ -1,6 +1,9 @@
 /*
-Copyright 2022 Dagan Poulin, Justice Guillory
-   Licensed under the Apache License, Version 2.0 (the "License");
+Copyright 2024 Dagan Poulin, Justice Guillory
+   Licensed under the Apache License, Version 2.0 (the "License")
+    {
+        
+    }
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
        http://www.apache.org/licenses/LICENSE-2.0
@@ -9,52 +12,39 @@ Copyright 2022 Dagan Poulin, Justice Guillory
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
----------------------------------------------------------------------------------------------------------------------
-SadBoat Engine:
-    The SadBoat Engine is an open-source, free to use game engine being designed in C++.
-    Most of it's functionality is defined in it's header files, making it a mostly header only engine.
-    Consequently, you do not need this main.cpp, specifically, to run your game. It is, however, recommended.
-    Opting to not use this main.cpp file means you may need to reimplement the code found herein. This is up to your discretion.
-
-Disclaimer:
-    We are not responsible for what you do with our code. You can use it as intended, or make your own use of it.
-    If you decide to use it within the parameters we've defined, our documentation exists to help you!
-    If something is not clear in our documentation, you can email contact@sadboat.com and we'll try and clarify.
-    If your usage is outside of the scope of our documentation, we may not be able to provide you any helpful results.
----------------------------------------------------------------------------------------------------------------------
 */
 
-//
-//  Engine Defines
-//
-//  This adds RapidXML and Vulkan to our include path
-//  You can disable these if you'd like, but I'd suggest against it.
-//
-#define INCLUDE_RAPIDXML
-#define INCLUDE_VULKAN
+#include <iostream>
 
-//
-//  Engine Include
-//
-//  This file contains all the includes for the engine. 
-//  It's all you need to get started.
-//
-//----------------------------------
-#include "sb-engine.hpp"
+#include "events/event.hpp"
+#include "events/timed_event.hpp"
+#include "events/recurring_event.hpp"
+#include "events/event_pool.hpp"
 
-using namespace std;
-using namespace SBE;
+#include "utilities/defines.hpp"
+#include "utilities/configs/config_node.hpp"
+#include "utilities/configs/config.hpp"
+#include "utilities/configs/config_manager.hpp"
+#include "utilities/logging/log_handle.hpp"
+#include "utilities/logging/log_manager.hpp"
+#include "utilities/logging/startup_logger.hpp"
+SBE::LogManager* SBE::logger;
+SBE::LogHandle* SBE::log;
+
+#include "resources/id_manager.hpp"
+#include "resources/resource_manager.hpp"
+#include "resources/resource.hpp"
+#include "resources/resource_handle.hpp"
+
 
 //A short test driver to determine window name and whether to boot Catch.
-string testSetup(int argc, char* argv[], string possibleName)
+std::string testSetup(int argc, char* argv[], std::string possibleName)
 {
     //Declare an empty name.
-    string name = "";
-    int results;
+    std::string name = "";
 
     //Write a long line for visual clarity.
-    string tmp="";
+    std::string tmp="";
     int i = 100;
     while(i>0)
     {
@@ -65,7 +55,7 @@ string testSetup(int argc, char* argv[], string possibleName)
     SBE::log->info(tmp);
     
     //This code only gets included into our program if we run "make" or "make prod" during compilation.
-    #ifdef CONFIG_PROD
+    #ifndef CONFIG_TEST
         // std::cout<<"Launching engine...\n";
         SBE::log->info("Launching engine...");
         SBE::log->info(tmp);
@@ -79,8 +69,7 @@ string testSetup(int argc, char* argv[], string possibleName)
         //Do not launch the game if the tests fail.
 
         SBE::log->debug("Running tests...");
-
-        results = Catch::Session().run(argc, argv);
+        int results = Catch::Session().run(argc, argv);
         if(results!=0)
         {
             SBE::log->critical("Tests failed, engine aborting.");
@@ -97,29 +86,22 @@ string testSetup(int argc, char* argv[], string possibleName)
 }
 
 
-//----------------------------------
-//  main(int argc, char* argv[]) function:
-//
-//      Entry point for program. Manages testing runtimes, and launches other session managers.
-//      Return point for all session managers, processes engine shutdown.
-//
-//----------------------------------
 int main(int argc, char* argv[])
 {
     // Logging setup
     //----------------------------------
 
-    SBE::logger = new LogManager("./log.txt");
-    SBE::log = logger->allocateHandle(0b11111);
+    SBE::logger = new SBE::LogManager("./log.txt");
+    SBE::log = SBE::logger->allocateHandle(0b11111);
 
     //  Unit Test Setup
     //----------------------------------
 
     //gameName: A constant identifier for what our game should be called.
-    const string gameName = "SadBoat Engine";
+    const std::string gameName = "SadBoat Engine";
 
     //name: An identifier for what our game will actually be called. Dependent on test cases and compilation status.
-    string name = testSetup(argc, argv, gameName);
+    std::string name = testSetup(argc, argv, gameName);
     
     // Config Callback Setup
     // ---
@@ -127,15 +109,15 @@ int main(int argc, char* argv[])
     // Loads certain assets and physics materials
     //----------------------------------
 
-    ResourceManager resources;
-    ConfigManager configs;
+    SBE::ResourceManager resources;
+    SBE::ConfigManager configs;
 
     // Create necessary callbacks to handle processing of data once loaded
-    Event<void*, ConfigNode> resourceCallback(
-        [&resources](ConfigNode n)
+    SBE::Event<void*, SBE::ConfigNode> resourceCallback(
+        [&resources](SBE::ConfigNode n)
         {
             auto datum = resources.createResource(
-                n.getContents<string>(),
+                n.getContents<std::string>(),
                 (n.getAttribs()[0].first=="persistence") ? (n.getAttribs()[0].second=="true") : false,
                 (n.getAttribs()[1].first=="preload") ? (n.getAttribs()[1].second=="true") : false
             );
@@ -148,11 +130,11 @@ int main(int argc, char* argv[])
     configs.assignCallback("Resource", &resourceCallback);
 
     // Create config callback
-    Event<void*, ConfigNode> configCallback(
-        [&configs](ConfigNode n)
+    SBE::Event<void*, SBE::ConfigNode> configCallback(
+        [&configs](SBE::ConfigNode n)
         {
             configs.loadConfig(
-                n.getContents<string>(),
+                n.getContents<std::string>(),
                 (n.getAttribs()[0].first=="desc") ? n.getAttribs()[0].second : "Empty description."
             );      
             return nullptr;
@@ -161,8 +143,8 @@ int main(int argc, char* argv[])
     configs.assignCallback("Config", &configCallback);
 
     // Create callback to process materials into MaterialManager
-    Event<void*, ConfigNode> materialCallback(
-        [](ConfigNode n)
+    SBE::Event<void*, SBE::ConfigNode> materialCallback(
+        [](SBE::ConfigNode n)
         {
             return nullptr;
         }
@@ -177,14 +159,13 @@ int main(int argc, char* argv[])
     //----------------------------------
 
     //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
-    VulkanDispatchables vulkanEnvironment;
-    vulkanEnvironment.deviceConfig=(configs.getConfig("./assets/config/graphicsOptions.xml"));
-    vulkanEnvironment.setup(&vulkanEnvironment);
+    // VulkanDispatchables vulkanEnvironment;
+    // vulkanEnvironment.deviceConfig=(configs.getConfig("./assets/config/graphicsOptions.xml"));
+    // vulkanEnvironment.setup(&vulkanEnvironment);
 
-    CommandPoolManager testPool(vulkanEnvironment.vulkanLogicalDevice);
-    CommandPool* cmdPool = testPool.getPools()[0];
-    vector<CommandBuffer*> cmdBuffers = cmdPool->getBuffers();
-    
+    // CommandPoolManager testPool(vulkanEnvironment.vulkanLogicalDevice);
+    // CommandPool* cmdPool = testPool.getPools()[0];
+    // vector<CommandBuffer*> cmdBuffers = cmdPool->getBuffers();
 
-    return 0;
+    return 1;
 }

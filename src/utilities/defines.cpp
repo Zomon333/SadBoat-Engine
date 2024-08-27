@@ -10,32 +10,3 @@ Copyright 2024 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#ifndef ENGINE_DEFINES_H
-#define ENGINE_DEFINES_H
-
-//  Engine specific defines
-//----------------------------------
-
-namespace SBE
-{
-    enum LogFlags
-    {
-        DEBUG=0b00001,
-        INFO=0b00010,
-        WARNING=0b00100,
-        ERROR=0b01000,
-        CRITICAL=0b10000
-    };
-}
-
-
-//Shorthand lambda function body
-#define F(a...) [](a...)
-
-//Shorthand lambda function for internal captures
-#define lF(a...) [this](a...)
-
-//pow(2, -47)-- engine unit tolerance. Arbitrarily small.
-#define uTol pow(2,-32)
-
-#endif

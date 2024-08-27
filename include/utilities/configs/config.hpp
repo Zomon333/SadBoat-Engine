@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Dagan Poulin, Justice Guillory
+Copyright 2024 Dagan Poulin, Justice Guillory
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -13,10 +13,13 @@ Copyright 2023 Dagan Poulin, Justice Guillory
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "sb-engine.hpp"
+#include "rapidxml-1.13/rapidxml.hpp"
+#include "utilities/configs/config_node.hpp"
+#include "events/event.hpp"
 
-using namespace std;
-using namespace rapidxml;
+#include <string>
+#include <vector>
+#include <unordered_map>
 
 namespace SBE
 {
@@ -26,103 +29,27 @@ namespace SBE
         // ID of the config file
         int id;
         // Name and path of the config file
-        string filename;
+        std::string filename;
 
         // Description of the config
-        string desc;
+        std::string desc;
 
         // Nodes from the parsed file
-        vector<ConfigNode> nodes;
+        std::vector<ConfigNode> nodes;
 
         // Config Callbacks
-        unordered_map<string, Event<void*, ConfigNode>*>* callbacks;
+        std::unordered_map<std::string, Event<void*, ConfigNode>*>* callbacks;
 
         // Raw XML document
         // Will be used in future implementations for config writing
-        xml_document<> doc;
+        rapidxml::xml_document<> doc;
         char* docContents;
 
         // A recursive node parser for an XML file.
-        ConfigNode parseNode(rapidxml::xml_node<char>* node)
-        {
-            // The data we're preparing to return
-            ConfigNode toReturn;
+        ConfigNode parseNode(rapidxml::xml_node<char>* node);
 
-
-            // Get the node name
-            toReturn.setName(node->name());
-            
-            // Get the node attributes
-            auto attrib = node->first_attribute();
-            while(attrib!=0)
-            {
-                toReturn.addAttrib(make_pair<string,string>(attrib->name(),attrib->value()));
-                attrib = attrib->next_attribute();
-            }
-
-            // Recursive case: Node contains more nodes. Call the node parser on the contained nodes.
-            if(node->first_node()->type()!=node_data && node->first_node()->type()!=node_cdata)
-            {
-                // Create a store for those nodes
-                vector<ConfigNode> children;
-
-                auto next = node->first_node();
-                while(next!=0)
-                {
-                    // Find the nodes and recursively parse and store them
-                    children.push_back(parseNode(next));
-                    next = next->next_sibling();
-                }
-
-                // Set the results of the node hunt to the storage in the node
-                toReturn.setContents(children);
-                
-                if((*callbacks)[toReturn.getName()]!=nullptr)
-                {
-                    (*callbacks)[toReturn.getName()]->call(toReturn);
-                }
-
-                // Return the node
-                return toReturn;
-            }
-            // Base case: Node just contains a string, just parse as a normal value.
-            else
-            {
-                toReturn.setContents(node->value());
-                if((*callbacks)[toReturn.getName()]!=nullptr)
-                {
-                    (*callbacks)[toReturn.getName()]->call(toReturn);
-                }
-            }
-            
-            return toReturn;
-        }
         // Loads a file into the config.
-        void load(string filename)
-        {
-            try
-            {
-                rapidxml::file<> xmlFile(filename.c_str());
-                this->docContents=xmlFile.data();
-                this->doc.parse<0>(docContents);
-
-                auto workingNode = doc.first_node();
-                while(workingNode!=0)
-                {
-                    this->nodes.push_back(this->parseNode(workingNode));
-                    workingNode = workingNode->next_sibling();
-                }
-
-
-            }
-            catch(rapidxml::parse_error* e)
-            {
-                log->error("RapidXML Parsing error thrown.");
-                log->error(string("Status: ").append(e->what()));
-                return;
-            }
-
-        }
+        void load(std::string filename);
 
     public:
         
@@ -130,127 +57,58 @@ namespace SBE
         //----------------------------------
 
         // Load a config given a file name and an ID
-        Config(string filename, int id, unordered_map<string, Event<void*, ConfigNode>*>* callbacks, string desc="")
-        {
-            this->id=id;
-            this->desc=desc;
-            this->callbacks=callbacks;
-
-            load(filename);
-            return;
-        }
+        Config(std::string filename, int id, std::unordered_map<std::string, Event<void*, ConfigNode>*>* callbacks, std::string desc="");
     
         // Mutators
         //----------------------------------
 
         // Update the filename. Reloads file by default.
-        void setFilename(string filename, bool reload=true)
-        {
-            this->filename=filename;
-            
-            if(reload)
-            {
-                load(filename);
-            }
-        }
+        void setFilename(std::string filename, bool reload=true);
+
         // Sets the nodes in the config.
-        void setNodes(vector<ConfigNode> nodes)
-        {
-            this->nodes=nodes;
-        }
+        void setNodes(std::vector<ConfigNode> nodes);
+
         // Sets the document's contents in the config. Reparses by default.
-        void setDocContents(char* newContent, bool reparse=true)
-        {
-            this->docContents=newContent;
-            if(reparse)
-            {
-                this->doc.parse<0>(docContents);
-            }
-        }
+        void setDocContents(char* newContent, bool reparse=true);
+
         // Sets the config's description.
-        void setDescription(string newDesc)
-        {
-            this->desc=newDesc;
-        }
+        void setDescription(std::string newDesc);
 
         // Adds nodes to the config.
-        void addNodes(vector<ConfigNode> nodes)
-        {
-            for(int i=0; i<nodes.size(); i++)
-            {
-                this->nodes.push_back(nodes[i]);
-            }
-        }
+        void addNodes(std::vector<ConfigNode> nodes);
+
         // Adds a single node to the config.
-        void addNode(ConfigNode node)
-        {
-            this->nodes.push_back(node);
-        }
+        void addNode(ConfigNode node);
         
         // Accessors
         //----------------------------------
 
         // Returns the config's ID.
-        auto getID()
-        {
-            return id;
-        }
+        int getID();
+
         // Returns the config's filename.
-        auto getFilename()
-        {
-            return filename;
-        }
+        std::string getFilename();
+
         // Returns the nodes in the config.
-        auto getNodes()
-        {
-            return nodes;
-        }
+        std::vector<ConfigNode> getNodes();
+
         // Returns the documents raw contents.
-        auto getDocContents()
-        {
-            return docContents;
-        }
+        char* getDocContents();
+
         // Returns the config's description
-        auto getDesc()
-        {
-            return desc;
-        }
+        std::string getDesc();
 
         // Prints the config to the console.
-        void print()
-        {
-            for(int i=0; i<nodes.size(); i++)
-            {
-                nodes[i].print();
-            }
-        }
+        void print();
 
         // Operators
         //----------------------------------
         
         // Returns the n-th element from the backing array
-        ConfigNode operator[](int rhs)
-        {
-            return nodes[rhs];
-        }
-        // Searches the backing array for XML tags with names matching the parameter.
-        vector<ConfigNode> operator[](string rhs)
-        {
-            vector<ConfigNode> toReturn;
-            for(int i=0; i<nodes.size(); i++)
-            {
-                if(nodes[i].getName()==rhs)
-                {
-                    toReturn.push_back(nodes[i]);
-                }
-            }
+        ConfigNode operator[](int rhs);
 
-            if(toReturn.size()==0)
-            {
-                throw new runtime_error((string("").append("Parameter of ").append(rhs).append(" not found within Config.")));
-            }
-            return toReturn;
-        }
+        // Searches the backing array for XML tags with names matching the parameter.
+        std::vector<ConfigNode> operator[](std::string rhs);
     };
 };
 #endif
