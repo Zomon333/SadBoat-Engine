@@ -33,8 +33,7 @@ game:
 	make engine
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(OBJ_DIR)/* $(SRC_DIR)/main.cpp -o $(OUT_DIR)/$(NAME)$(VERSION)
 
-engine:
-	make clean
+engine: clean
 	make events
 	make utilities
 	make resources
@@ -46,7 +45,7 @@ events:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/events/recurring_event.cpp -o $(OBJ_DIR)/recurring_event.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/events/event_pool.cpp -o $(OBJ_DIR)/event_pool.o
 
-resources:
+resources: events
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/id_manager.cpp -o $(OBJ_DIR)/id_manager.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/resource_handle.cpp -o $(OBJ_DIR)/resource_handle.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/resources/resource_manager.cpp -o $(OBJ_DIR)/resource_manager.o
@@ -69,7 +68,7 @@ logging:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/logging/startup_logger.cpp -o $(OBJ_DIR)/startup_logger.o
 
 vulkan:
-
+	
 # Order to compile:
 # instance
 # physicaldevice
@@ -88,4 +87,16 @@ vulkan:
 # image
 
 clean:
-	rm -rf $(OBJ_DIR)/* $(OUT_DIR)/* 	&
+	@echo Cleaning build environment...
+ifdef $(OBJ_DIR)
+ifneq ($(strip $(OBJ_DIR)),)
+	@echo Deleting contents of $(OBJ_DIR)/
+	rm -rf $(OBJ_DIR)/* &
+endif
+endif
+ifdef $(OUT_DIR)
+ifneq ($(strip $(OUT_DIR)),)
+	@echo Deleting contents of $(OUT_DIR)/
+	rm -rf $(OUT_DIR)/* &
+endif
+endif
