@@ -66,11 +66,11 @@ namespace SBE
         ExtensionCollection deviceExtensions = ExtensionCollection(parent);
         std::vector<char *> extensionsToEnable;
         // Sort through them all and choose any that are shared between our list of requested extensions
-        for (int i = 0; i < deviceExtensions.getProps().size(); i++)
+        for (unsigned int i = 0; i < deviceExtensions.getProps().size(); i++)
         {
-            for (int j = 0; j < extToEnable.size(); j++)
+            for (unsigned int j = 0; j < extToEnable.size(); j++)
             {
-                if ((extToEnable[j].extensionName == deviceExtensions.getProp(i).extensionName) && (extToEnable[j].specVersion == deviceExtensions.getProp(i).specVersion))
+                if ((std::string(extToEnable[j].extensionName) == std::string(deviceExtensions.getProp(i).extensionName)) && (extToEnable[j].specVersion == deviceExtensions.getProp(i).specVersion))
                 {
                     extensionsToEnable.emplace_back(extToEnable[j].extensionName);
                 }
@@ -160,7 +160,7 @@ namespace SBE
         this->requiredFeatures = requiredFeats;
     }
 
-    int LogicalDevice::incAllocs()
+    unsigned int LogicalDevice::incAllocs()
     {
         allocationMod.lock();
         allocationCount += 1;
@@ -168,7 +168,7 @@ namespace SBE
         return allocationCount;
     }
 
-    int LogicalDevice::decAllocs()
+    unsigned int LogicalDevice::decAllocs()
     {
         allocationMod.lock();
         allocationCount -= 1;

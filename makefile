@@ -4,6 +4,13 @@
 NAME = "SadBoatEngine-V"
 VERSION = "0.03.1V"
 
+#
+#	Color Data
+#---------------------------------------------------
+NONE = "\033[0;0m"
+RED = "\033[0;031m"
+GREEN = "\033[0;32m"
+CYAN = "\033[0;36m"
 
 #
 #	General Compilation Info
@@ -30,8 +37,7 @@ LIBRARY_DIR = "-Lusr/lib/x86_64-linux-gnu" "-L./lib" "-L./lib/libpng/lib64" "-L.
 LOG_NAME = "compile_log.txt"
 
 game:
-	make engine
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(OBJ_DIR)/* $(SRC_DIR)/main.cpp -o $(OUT_DIR)/$(NAME)$(VERSION)
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) $(OBJ_DIR)/* $(SRC_DIR)/main.cpp -o $(OUT_DIR)/$(NAME)$(VERSION)
 
 engine: clean
 	make events
@@ -69,21 +75,21 @@ logging:
 
 vulkan:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/vulkan_result_lookup.cpp -o $(OBJ_DIR)/vulkan_result_lookup.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/instance.cpp -o $(OBJ_DIR)/instance.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/physical_device.cpp -o $(OBJ_DIR)/physical_device.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/physical_device_collection.cpp -o $(OBJ_DIR)/physical_device_collection.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/extension_collection.cpp -o $(OBJ_DIR)/extension_collection.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/layer_collection.cpp -o $(OBJ_DIR)/layer_collection.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/logical_device.cpp -o $(OBJ_DIR)/logical_device.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue_family.cpp -o $(OBJ_DIR)/queue_family.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue_family_collection.cpp -o $(OBJ_DIR)/queue_family_collection.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue_collection.cpp -o $(OBJ_DIR)/queue_collection.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue.cpp -o $(OBJ_DIR)/queue.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_buffer.cpp -o $(OBJ_DIR)/command_buffer.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_pool.cpp -o $(OBJ_DIR)/command_pool.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_pool_manager.cpp -o $(OBJ_DIR)/command_pool_manager.o
-	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/buffer.cpp -o $(OBJ_DIR)/buffer.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/layer_collection.cpp -o $(OBJ_DIR)/layer_collection.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/instance.cpp -o $(OBJ_DIR)/instance.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/image.cpp -o $(OBJ_DIR)/image.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/buffer.cpp -o $(OBJ_DIR)/buffer.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_pool.cpp -o $(OBJ_DIR)/command_pool.o
 
 clean:
 	@echo Cleaning build environment...

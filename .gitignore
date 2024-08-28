@@ -43,3 +43,4 @@ output/*
 docs/notes.txt
 log.txt
 compile_log.txt
+assets/visual/sprites/*

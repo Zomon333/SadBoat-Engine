@@ -120,7 +120,7 @@ namespace SBE
         std::vector<datum*> list;
         auto usedIDs = dataIDs.getUsedIDs();
         list.resize(usedIDs.size());
-        for(int i=0; i<usedIDs.size(); i++)
+        for(unsigned int i=0; i<usedIDs.size(); i++)
         {
             list[i]=data[usedIDs[i]];
         }
@@ -159,7 +159,7 @@ namespace SBE
     Manager<datum>::~Manager()
     {
         auto toDelete = getData();
-        for(int i=0; i<toDelete.size(); i++)
+        for(unsigned int i=0; i<toDelete.size(); i++)
         {
             freeData(toDelete[i]);
         }

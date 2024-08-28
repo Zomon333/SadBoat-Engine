@@ -15,6 +15,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "./vulkan/vulkan.hpp"
 
+#include "vulkan/physical_device.hpp"
+
 namespace SBE
 {
     // QueueFamily: Graphics

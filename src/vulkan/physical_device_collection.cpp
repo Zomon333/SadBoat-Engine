@@ -98,7 +98,7 @@ namespace SBE
         return devices;
     }
 
-    PhysicalDevice *PhysicalDeviceCollection::getOptimal(Config *deviceConfig = nullptr)
+    PhysicalDevice *PhysicalDeviceCollection::getOptimal(Config *deviceConfig)
     {
 
         // noConfig finds what it believes to be the best device given the slim amount of criteria we have access to
@@ -127,9 +127,9 @@ namespace SBE
                             return ((PhysicalDevice *)(nullptr));
                         }
 
-                        int highestHeap = 0;
-                        int heapIndex = 0;
-                        for (int i = 0; i < deviceMap[typeToCheck].size(); i++)
+                        unsigned int highestHeap = 0;
+                        unsigned int heapIndex = 0;
+                        for (unsigned int i = 0; i < deviceMap[typeToCheck].size(); i++)
                         {
                             if (deviceMap[typeToCheck][i]->getMem()->memoryHeapCount > highestHeap)
                             {

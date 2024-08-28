@@ -27,7 +27,7 @@ namespace SBE
         SBE::log->info(&info);
 
         queues = new QueueCollection(parent, parent->getOptimalQueueFam(), parent->getOptimalQueueFam()->getProps()->queueCount);
-        for (int i = 0; i < parent->getOptimalQueueFam()->getProps()->queueCount; i++)
+        for (unsigned int i = 0; i < parent->getOptimalQueueFam()->getProps()->queueCount; i++)
         {
             buffers.allocateData(new CommandBuffer(parent, queues, bufferBacking[i]));
         }
@@ -35,7 +35,7 @@ namespace SBE
 
     // Constructors
     //----------------------------------
-    CommandPool::CommandPool(LogicalDevice *parent, VkCommandPoolCreateInfo *pCreateInfo, VkCommandBufferAllocateInfo *pAllocateInfo, unsigned int bufferCount = 0)
+    CommandPool::CommandPool(LogicalDevice *parent, VkCommandPoolCreateInfo *pCreateInfo, VkCommandBufferAllocateInfo *pAllocateInfo, unsigned int bufferCount)
     {
         this->parent = parent;
         this->pCreateInfo = pCreateInfo;
@@ -66,7 +66,7 @@ namespace SBE
         allocate(bufferCount);
     }
 
-    CommandPool::CommandPool(LogicalDevice *parent, bool isTransient = true, bool isResettable = true, unsigned int bufferCount = 0)
+    CommandPool::CommandPool(LogicalDevice *parent, bool isTransient, bool isResettable, unsigned int bufferCount)
     {
         this->parent = parent;
 
@@ -106,7 +106,7 @@ namespace SBE
     {
         vkFreeCommandBuffers(parent->getSelf(), self, 1, buffers[id]->getSelf());
     }
-    void CommandPool::freeBuffers(int *ids, int count = 1)
+    void CommandPool::freeBuffers(int *ids, int count)
     {
         for (int i = 0; i < count; i++)
         {

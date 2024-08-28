@@ -90,6 +90,9 @@ namespace SBE
 
     Instance::Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks allocationInfo)
     {
+        this->creationInfo = new VkInstanceCreateInfo();
+        this->allocationInfo = new VkAllocationCallbacks();
+
         *(this->creationInfo) = creationInfo;
         *(this->allocationInfo) = allocationInfo;
 
@@ -107,6 +110,7 @@ namespace SBE
     Instance::Instance(VkInstanceCreateInfo *creationInfo, VkAllocationCallbacks allocationInfo)
     {
         this->creationInfo = creationInfo;
+        this->allocationInfo = new VkAllocationCallbacks();
         *(this->allocationInfo) = allocationInfo;
 
         vulkanInstance = new VkInstance;
@@ -122,6 +126,7 @@ namespace SBE
 
     Instance::Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks *allocationInfo)
     {
+        this->creationInfo = new VkInstanceCreateInfo();
         *(this->creationInfo) = creationInfo;
         this->allocationInfo = allocationInfo;
 

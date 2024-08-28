@@ -65,7 +65,7 @@ namespace SBE
         //----------------------------------
 
         void *map();
-        void *map(std::pair<int, int> mappedRange);
+        void *map(std::pair<unsigned int, unsigned int> mappedRange);
 
         void unmap();
 

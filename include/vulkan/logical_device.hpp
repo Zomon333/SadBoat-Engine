@@ -13,7 +13,10 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef LOGICAL_DEVICE_H
 #define LOGICAL_DEVICE_H
 
+
 #include "./vulkan/vulkan.hpp"
+
+
 
 #include "vulkan/instance.hpp"
 #include "vulkan/physical_device.hpp"
@@ -32,7 +35,7 @@ namespace SBE
         PhysicalDevice *parent;
 
         std::mutex allocationMod;
-        int allocationCount;
+        unsigned int allocationCount;
 
         QueueFamily *optimalFamily;
         unsigned int queueCount;
@@ -67,8 +70,8 @@ namespace SBE
         void setCreationInfo(VkDeviceCreateInfo *creationInfo);
         void setRequiredFeats(VkPhysicalDeviceFeatures *requiredFeats);
 
-        int incAllocs();
-        int decAllocs();
+        unsigned int incAllocs();
+        unsigned int decAllocs();
 
         // Accessors
         //----------------------------------

@@ -44,7 +44,7 @@ namespace SBE
         vkGetPhysicalDeviceQueueFamilyProperties(parent->getDevice(), &queueFamPropCount, tmp);
 
         selfQueueFamilies.clear();
-        for (int i = 0; i < queueFamPropCount; i++)
+        for (unsigned int i = 0; i < queueFamPropCount; i++)
         {
             selfQueueFamilies.push_back(QueueFamily(parent, (unsigned int)(i), &(tmp[i])));
         }
@@ -60,13 +60,13 @@ namespace SBE
     }
 
     // Returns number of queue families
-    unsigned int QueueFamilyCollection::getFamilyCount() 
+    unsigned int QueueFamilyCollection::getFamilyCount()
     {
         return queueFamPropCount;
     }
 
     // Returns queue family from backing
-    QueueFamily QueueFamilyCollection::getQueueFamily(int which) 
+    QueueFamily QueueFamilyCollection::getQueueFamily(int which)
     {
         return selfQueueFamilies[which];
     }
@@ -83,10 +83,10 @@ namespace SBE
         for (unsigned int i = 0; i < selfQueueFamilies.size(); i++)
         {
             if (
-                (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_GRAPHICS_BIT) &&
-                (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_TRANSFER_BIT) &&
-                (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_COMPUTE_BIT) &&
-                (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_SPARSE_BINDING_BIT) &&
+                (selfQueueFamilies[i].getProps()->queueFlags & VK_QUEUE_GRAPHICS_BIT) &&
+                (selfQueueFamilies[i].getProps()->queueFlags & VK_QUEUE_TRANSFER_BIT) &&
+                (selfQueueFamilies[i].getProps()->queueFlags & VK_QUEUE_COMPUTE_BIT) &&
+                (selfQueueFamilies[i].getProps()->queueFlags & VK_QUEUE_SPARSE_BINDING_BIT) &&
                 (selfQueueFamilies[i].getProps()->queueCount >= result.second.getProps()->queueCount))
             {
                 result = std::pair<int, QueueFamily>(i, selfQueueFamilies[i]);

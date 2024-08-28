@@ -15,6 +15,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "./vulkan/vulkan.hpp"
 
+#include "vulkan/instance.hpp"
+
 namespace SBE
 {
     // PhysicalDevice: Graphics

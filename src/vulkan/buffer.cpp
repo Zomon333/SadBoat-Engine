@@ -45,8 +45,8 @@ namespace SBE
         }
 
         // Verify we're even *able* to allocate more memory types.
-        auto allocs = parent->incAllocs();
-        auto maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
+        unsigned int allocs = parent->incAllocs();
+        unsigned int maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
         SBE::log->info(std::string("Allocating memory for buffer, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
         if (allocs > maxAllocs)
         {
@@ -77,7 +77,7 @@ namespace SBE
         int optimalMemIndex = -1;
 
         // Search through them all for one that is on the GPU but CPU visible
-        for (int i = 0; i < mem->memoryTypeCount; i++)
+        for (unsigned int i = 0; i < mem->memoryTypeCount; i++)
         {
             auto flags = mem->memoryTypes[i].propertyFlags;
             if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT && flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
@@ -95,8 +95,8 @@ namespace SBE
         }
 
         // Verify we're even *able* to allocate more memory types.
-        auto allocs = parent->incAllocs();
-        auto maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
+        unsigned int allocs = parent->incAllocs();
+        unsigned int maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
         SBE::log->info(std::string("Allocating memory for buffer, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
         if (allocs > maxAllocs)
         {
@@ -276,7 +276,7 @@ namespace SBE
         vkMapMemory(parent->getSelf(), internalBacking, 0, allocationInfo.allocationSize, {}, &mapLocation);
         return mapLocation;
     }
-    void *Buffer::map(std::pair<int, int> mappedRange)
+    void *Buffer::map(std::pair<unsigned int, unsigned int> mappedRange)
     {
         if ((parent->getParent()->getMem()->memoryTypes[allocationInfo.memoryTypeIndex].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0)
         {

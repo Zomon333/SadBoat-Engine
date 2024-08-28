@@ -64,7 +64,7 @@ namespace SBE
         void *getMappedLocation();
 
         void *map();
-        void *map(std::pair<int, int> toMap);
+        void *map(std::pair<unsigned int, unsigned int> toMap);
 
         void unmap();
 
