@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef COMMANDPOOL_H
 #define COMMANDPOOL_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "vulkan/command_buffer.hpp"
 #include "utilities/manager.hpp"

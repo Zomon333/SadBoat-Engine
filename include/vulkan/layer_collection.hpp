@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef LAYER_COLLECTION_H
 #define LAYER_COLLECTION_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include <vector>
 

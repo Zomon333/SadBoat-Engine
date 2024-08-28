@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef EXTENSION_COLLECTION_H
 #define EXTENSION_COLLECTION_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 #include "../include/vulkan/physical_device.hpp"
 
 namespace SBE

@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef PHYSICALDEVICE_H
 #define PHYSICALDEVICE_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "vulkan/instance.hpp"
 

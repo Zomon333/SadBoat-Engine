@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef RESULT_LOOKUP_H
 #define RESULT_LOOKUP_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 namespace SBE
 {

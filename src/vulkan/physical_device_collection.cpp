@@ -11,7 +11,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
    limitations under the License.
 */
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include <vector>
 
@@ -170,6 +170,7 @@ namespace SBE
         // Do we have a config to check?
         if (deviceConfig == nullptr)
         {
+            SBE::log->warn("No configuration file for graphics settings detected. Resorting to default.");
             return noConfig(0);
         }
         else
@@ -189,6 +190,7 @@ namespace SBE
             }
 
             // If the device we're looking for doesn't exist by name, use no config provided settings...
+            SBE::log->error("Graphics device saved in device config does not exist. Resorting to default.");
             return noConfig(0);
         }
     }

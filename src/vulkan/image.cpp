@@ -10,7 +10,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "utilities/logging/startup_logger.hpp"
 #include "vulkan/logical_device.hpp"

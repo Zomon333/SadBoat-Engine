@@ -36,7 +36,7 @@ SBE::LogHandle* SBE::log;
 #include "resources/resource.hpp"
 #include "resources/resource_handle.hpp"
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 
 //A short test driver to determine window name and whether to boot Catch.

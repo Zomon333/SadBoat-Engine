@@ -11,7 +11,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
    limitations under the License.
 */
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 #include "vulkan/extension_collection.hpp"
 #include "vulkan/physical_device.hpp"
 

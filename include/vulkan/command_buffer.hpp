@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef COMMANDBUFFER_H
 #define COMMANDBUFFER_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 #include "vulkan/queue_collection.hpp"
 #include "vulkan/logical_device.hpp"
 

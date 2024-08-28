@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef QUEUE_FAMILY_H
 #define QUEUE_FAMILY_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "vulkan/physical_device.hpp"
 

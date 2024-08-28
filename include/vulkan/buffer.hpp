@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 #include "vulkan/logical_device.hpp"
 
 namespace SBE

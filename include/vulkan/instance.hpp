@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef INSTANCE_H
 #define INSTANCE_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 #include <vector>
 
 namespace SBE

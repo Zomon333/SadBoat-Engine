@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef PDC_H
 #define PDC_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "utilities/logging/startup_logger.hpp"
 #include "utilities/configs/config.hpp"

@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "vulkan/logical_device.hpp"
 #include "vulkan/vulkan_result_lookup.hpp"

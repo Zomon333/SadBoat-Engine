@@ -14,8 +14,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #define LOGICAL_DEVICE_H
 
 
-#include "./vulkan/vulkan.hpp"
-
+#include "vulkan.hpp"
 
 
 #include "vulkan/instance.hpp"

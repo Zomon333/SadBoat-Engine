@@ -13,7 +13,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef QUEUE_COLLECTION_H
 #define QUEUE_COLLECTION_H
 
-#include "./vulkan/vulkan.hpp"
+#include "vulkan.hpp"
 
 #include "utilities/logging/startup_logger.hpp"
 #include "vulkan/logical_device.hpp"
