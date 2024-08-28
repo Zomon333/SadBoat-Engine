@@ -19,7 +19,7 @@ CC = g++
 FLAGS = -lstdc++ -std=c++20 -fpermissive -pthread -Wall
 DEFINES = -DINCLUDE_VULKAN -DINCLUDE_RAPIDXML
 
-LIBS = -lvulkan -l:libpng16.so.16.39.0 -lz
+LIBS = -lvulkan -l:libpng16.so.16.39.0 -lz -lglfw3
 
 PRODUCTION_RELEASE = -DCONFIG_PROD
 TEST_RELEASE = -DCONFIG_TEST
@@ -31,8 +31,8 @@ SRC_DIR = ./src
 OBJ_DIR = ./obj
 OUT_DIR = ./output
 
-INCLUDE_DIRS = -I./include/ -I./lib/ -I/usr/include/vulkan/ -I./lib/libpng/include/libpng16 -I./lib/eigen/Eigen
-LIBRARY_DIR = -Lusr/lib/x86_64-linux-gnu -L./lib -L./lib/libpng/lib64 -L./lib/vulkan/*/x86_64/lib
+INCLUDE_DIRS = -I./include/ -I./lib/ -I/usr/include/vulkan/ -I./lib/libpng/include/libpng16 -I./lib/eigen/Eigen -I./lib/glfw/include/GLFW/
+LIBRARY_DIR = -Lusr/lib/x86_64-linux-gnu -L./lib -L./lib/libpng/lib64 -L./lib/vulkan/*/x86_64/lib -L./lib/glfw/build/src
 
 LOG_NAME = "compile_log.txt"
 

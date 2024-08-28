@@ -6,6 +6,14 @@ curl "https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz" --outp
 tar --extract -f ./lib/vulkan/vulkan-sdk.tar.gz -C ./lib/vulkan
 ./lib/vulkan/*/vulkansdk
 
+# Install GLFW
+yes | rm -rf ./lib/glfw &
+git clone https://github.com/glfw/glfw ./lib/
+mkdir ./lib/glfw/build
+cmake -S ./lib/glfw -B ./lib/glfw/build
+make -C ./lib/glfw/build
+sudo make -C ./lib/glfw/build install
+
 # Install Eigen
 yes | rm -r ./lib/eigen/* &
 curl "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz" --output ./lib/eigen/eigen.tar.gz
