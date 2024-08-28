@@ -13,81 +13,50 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef QUEUE_H
 #define QUEUE_H
 
-
 #include "vulkan/logical_device.hpp"
 #include "vulkan/queue_family.hpp"
-
-
 
 namespace SBE
 {
     class Queue
     {
     private:
-        LogicalDevice* parent;
-        QueueFamily* family;
+        LogicalDevice *parent;
+        QueueFamily *family;
         int queueNumber;
 
         VkQueue self;
-        mutex queueSync;
-
-        LogHandle* log;
+        std::mutex queueSync;
 
     public:
+        LogHandle *log;
+
         // Constructors
         //----------------------------------
-        Queue(LogicalDevice* parent, QueueFamily* family, int queueNumber)
-        {
-            this->parent=parent;
-            this->family=family;
-            this->queueNumber=queueNumber;
-
-            this->log = logger->allocateHandle(0b11111);
-
-            vkGetDeviceQueue(parent->getSelf(), family->getIndex(), queueNumber, &self);
-        }
+        Queue(LogicalDevice *parent, QueueFamily *family, int queueNumber);
 
         // Mutators
         //----------------------------------
 
         // Do something here
-        VkResult submitWork()
-        {
-            queueSync.lock();
-            // Do our something!
+        VkResult submitWork();
 
-            queueSync.unlock();
-
-            // Temporary pending actual code here
-            return VK_SUCCESS;
-        }
-        bool isBusy()
-        {
-            return false;
-        }
+        bool isBusy();
 
         // Accessors
         //----------------------------------
-        auto getParent(){return parent;}
-        auto getFamily(){return family;}
-        auto getQueueNumber(){return queueNumber;}
+        LogicalDevice *getParent();
+        QueueFamily *getFamily();
+        int getQueueNumber();
 
-        auto getSelf(){return self;}
+        VkQueue getSelf();
 
         // Operators
         //----------------------------------
 
         // Destructors
         //----------------------------------
-        ~Queue()
-        {
-            // Ensure the queue has no work to be done
-
-            // Free the log handle
-            logger->freeHandle(this->log->getID());
-            this->log=nullptr;
-        }
-        
+        ~Queue();
     };
 };
 #endif

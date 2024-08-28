@@ -17,35 +17,33 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/queue_collection.hpp"
 #include "vulkan/logical_device.hpp"
 
-
 namespace SBE
 {
     class CommandBuffer
     {
     private:
-        LogicalDevice* parent;
+        LogicalDevice *parent;
 
-        QueueCollection* queues;
+        QueueCollection *queues;
 
         VkCommandBuffer self;
+
     public:
         // Constructors
         //----------------------------------
-        CommandBuffer(LogicalDevice* parent, QueueCollection* queues, VkCommandBuffer self);
+        CommandBuffer(LogicalDevice *parent, QueueCollection *queues, VkCommandBuffer self);
         // Mutators
         //----------------------------------
 
         // Accessors
         //----------------------------------
-        VkCommandBuffer* getSelf();
-        
+        VkCommandBuffer *getSelf();
+
         // Operators
         //----------------------------------
 
         // Destructors
         //----------------------------------
-
-        
     };
 };
 #endif

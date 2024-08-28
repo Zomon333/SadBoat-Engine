@@ -21,7 +21,7 @@ namespace SBE
     class Buffer
     {
     private:
-        LogicalDevice* parent;
+        LogicalDevice *parent;
         VkBufferCreateInfo createInfo;
 
         VkMemoryAllocateInfo allocationInfo;
@@ -44,19 +44,19 @@ namespace SBE
     public:
         // Constructors
         //----------------------------------
-        
+
         // Create buffer given a parent and all the creation info
-        Buffer(LogicalDevice* parent, VkBufferCreateInfo createInfo, bool sparse=false);
+        Buffer(LogicalDevice *parent, VkBufferCreateInfo createInfo, bool sparse = false);
 
         // Create buffer given a parent, size, and use case
-        Buffer(LogicalDevice* parent, VkDeviceSize size, VkBufferUsageFlags usage, bool sparse=false);
+        Buffer(LogicalDevice *parent, VkDeviceSize size, VkBufferUsageFlags usage, bool sparse = false);
 
         // Create buffer given a parent, size, usage, and sharing needs.
-        Buffer(LogicalDevice* parent, VkDeviceSize size, VkBufferUsageFlags usage, std::vector<unsigned int> queueFamIndices, bool sparse=false);
+        Buffer(LogicalDevice *parent, VkDeviceSize size, VkBufferUsageFlags usage, std::vector<unsigned int> queueFamIndices, bool sparse = false);
 
         // Mutators
         //----------------------------------
-        
+
         /*
             No mutators currently exist for the buffer as we do not know how we're going to use it. Just that it exists.
         */
@@ -64,8 +64,8 @@ namespace SBE
         // Accessors
         //----------------------------------
 
-        void* map();
-        void* map(std::pair<int, int> mappedRange);
+        void *map();
+        void *map(std::pair<int, int> mappedRange);
 
         void unmap();
 
@@ -73,7 +73,7 @@ namespace SBE
 
         VkBuffer getBuffer();
         VkDeviceMemory getMemory();
-        SBE::LogicalDevice* getParent();
+        SBE::LogicalDevice *getParent();
         VkMemoryAllocateInfo getAllocInfo();
         VkBufferCreateInfo getCreateInfo();
         VkMemoryRequirements getMemReqs();
@@ -85,7 +85,6 @@ namespace SBE
         //----------------------------------
 
         ~Buffer();
-        
     };
 };
 #endif

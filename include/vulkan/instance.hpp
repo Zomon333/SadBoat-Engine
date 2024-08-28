@@ -14,218 +14,61 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #define INSTANCE_H
 
 #include "./vulkan/vulkan.hpp"
-
-
+#include <vector>
 
 namespace SBE
 {
-    //Instance: Graphics
-    //Helper class so it's easier to instantiate a Vulkan Instance
-    //
+    // Instance: Graphics
+    // Helper class so it's easier to instantiate a Vulkan Instance
     class Instance
     {
     private:
         VkResult creationResult;
 
-        VkInstance* vulkanInstance;
-        VkInstanceCreateInfo* creationInfo;
-        VkAllocationCallbacks* allocationInfo;
+        VkInstance *vulkanInstance;
+        VkInstanceCreateInfo *creationInfo;
+        VkAllocationCallbacks *allocationInfo;
 
     public:
-        //Constructors
-        //---------------------------------- 
-        Instance(vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
-        {
-            creationInfo = new VkInstanceCreateInfo;
-
-            //Tells Vulkan what type of Struct this is
-            creationInfo->sType=VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-            
-            //Allows for a linked list of structs to be passed in case we need to extend the parameter list
-            //We do not need to extend the parameter list, so it is nullptr
-            creationInfo->pNext=nullptr;
-
-            //Reserved for future use
-            creationInfo->flags=0;
-
-            
-            //Another struct describing our application. Optional.
-            VkApplicationInfo* appInfo = new VkApplicationInfo();
-            appInfo->sType=VK_STRUCTURE_TYPE_APPLICATION_INFO;      //What type of struct is this?
-            appInfo->pNext=nullptr;                                 //Do we need any extra parameters? (No)
-            appInfo->pApplicationName="SadBoat Engine";             //What is the name of the application?
-            appInfo->applicationVersion=0;                          //What is the version of the application?
-            appInfo->pEngineName="SadBoat Engine";                  //What is the name of the engine?
-            appInfo->engineVersion=29;                              //What is the version of the engine?
-            appInfo->apiVersion=VK_MAKE_VERSION(1,0,0);                 //What version of Vulkan are we using?*/
-
-            //Pointer to another struct describing our application. Optional, but highly recommended!
-            creationInfo->pApplicationInfo=appInfo;
-
-            //Number of instance layers we would like to enable
-            creationInfo->enabledLayerCount=0;
-            //Names of instance layers we'll be enabling
-            creationInfo->ppEnabledLayerNames=nullptr;
-            
-            creationInfo->enabledExtensionCount=extToEnable.size();
-            char** strArr = new char*[extToEnable.size()];
-            for(int i = 0; i<extToEnable.size(); i++)
-            {
-                strArr[i]=extToEnable[i].extensionName;
-            }
-            creationInfo->ppEnabledExtensionNames=strArr;
-
-            /*
-            allocationInfo is a pointer to a struct of memory-management callbacks used by our program.
-            By setting it to nullptr, Vulkan will use it's own internal memory manager instead of our own.
-            More info on memory management in Vulkan is in Chapter 2. For 0.02.9V, we are using the default memory model.
-            */
-            this->allocationInfo=nullptr;
-
-            //allocationInfo->pfnAllocation=;
-            //allocationInfo->pfnFree=;
-            //allocationInfo->pfnInternalAllocation=;
-            //allocationInfo->pfnInternalFree=;
-            //allocationInfo->pfnReallocation=;
-            //allocationInfo->pUserData=;
-
-            vulkanInstance = new VkInstance;
-
-            creationResult = vkCreateInstance(creationInfo, allocationInfo, vulkanInstance);
-
-            if(creationResult!=VK_SUCCESS)
-            {
-                log->critical("Vulkan instance did not initialize.");
-                throw new runtime_error("Vulkan Instance did not initialize.");
-            }
-            this->allocationInfo=nullptr;
-            
-        }
-
-        Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks allocationInfo)
-        {
-            *(this->creationInfo)=creationInfo;
-            *(this->allocationInfo)=allocationInfo;
-
-            vulkanInstance = new VkInstance;
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
-
-            if(creationResult!=VK_SUCCESS)
-            {
-                log->critical("Vulkan instance did not initialize.");
-                throw new runtime_error("Vulkan Instance did not initialize.");
-            }
-            // this->allocationInfo=nullptr;
-            
-        }
-
-        Instance(VkInstanceCreateInfo* creationInfo, VkAllocationCallbacks allocationInfo)
-        {
-            this->creationInfo=creationInfo;
-            *(this->allocationInfo)=allocationInfo;
-
-            vulkanInstance = new VkInstance;
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
-
-            if(creationResult!=VK_SUCCESS)
-            {
-                log->critical("Vulkan instance did not initialize.");
-                throw new runtime_error("Vulkan Instance did not initialize.");
-            }
-            // this->allocationInfo=nullptr;
-            
-        }
-
-        Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks* allocationInfo)
-        {
-            *(this->creationInfo)=creationInfo;
-            this->allocationInfo=allocationInfo;
-
-            vulkanInstance = new VkInstance;
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
-
-            if(creationResult!=VK_SUCCESS)
-            {
-                log->critical("Vulkan instance did not initialize.");
-                throw new runtime_error("Vulkan Instance did not initialize.");
-            }
-            // this->allocationInfo=nullptr;
-            
-        }
-
-        Instance(VkInstanceCreateInfo* creationInfo, VkAllocationCallbacks* allocationInfo)
-        {
-            this->creationInfo=creationInfo;
-            this->allocationInfo=allocationInfo;
-
-            vulkanInstance = new VkInstance;
-            creationResult = vkCreateInstance(this->creationInfo, this->allocationInfo, vulkanInstance);
-
-            if(creationResult!=VK_SUCCESS)
-            {
-                log->critical("Vulkan instance did not initialize.");
-                throw new runtime_error("Vulkan Instance did not initialize.");
-            }
-            
-        }
-
-        //Destructors
+        // Constructors
         //----------------------------------
-        ~Instance()
-        {
-            vkDestroyInstance(*vulkanInstance, allocationInfo);
+        Instance(std::vector<VkExtensionProperties> extToEnable = std::vector<VkExtensionProperties>());
 
-            delete creationInfo;
-            delete allocationInfo;
-        }
+        Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks allocationInfo);
 
-        //Accessors
+        Instance(VkInstanceCreateInfo *creationInfo, VkAllocationCallbacks allocationInfo);
+
+        Instance(VkInstanceCreateInfo creationInfo, VkAllocationCallbacks *allocationInfo);
+
+        Instance(VkInstanceCreateInfo *creationInfo, VkAllocationCallbacks *allocationInfo);
+
+        // Destructors
         //----------------------------------
-        VkInstance* getInstance()
-        {
-            return this->vulkanInstance;
-        }
+        ~Instance();
 
-        VkInstanceCreateInfo* getCreationInfo()
-        {
-            return this->creationInfo;
-        }
+        // Accessors
+        //----------------------------------
+        VkInstance *getInstance();
 
-        VkAllocationCallbacks* getAllocationInfo()
-        {
-            return this->allocationInfo;
-            // return nullptr;
-        }
+        VkInstanceCreateInfo *getCreationInfo();
 
-        VkResult getResult()
-        {
-            return creationResult;
-        }
+        VkAllocationCallbacks *getAllocationInfo();
 
-        template <class Function=PFN_vkVoidFunction>
-        Function getFunc(const char* pName)
+        VkResult getResult();
+
+        template <class Function = PFN_vkVoidFunction>
+        Function getFunc(const char *pName)
         {
             return ((Function)(vkGetInstanceProcAddr(*(this->getInstance()), pName)));
         }
 
-        //Mutators
+        // Mutators
         //----------------------------------
-        void setInstance(VkInstance* newInstance)
-        {
-            this->vulkanInstance=newInstance;
-        }
-        
-        void setCreationInfo(VkInstanceCreateInfo* newInfo)
-        {
-            this->creationInfo=newInfo;
-        }
-       
-        void setAllocationInfo(VkAllocationCallbacks* newAllocators)
-        {
-            this->allocationInfo=newAllocators;
-        }
-       
-       
+        void setInstance(VkInstance *newInstance);
+
+        void setCreationInfo(VkInstanceCreateInfo *newInfo);
+
+        void setAllocationInfo(VkAllocationCallbacks *newAllocators);
     };
 };
 #endif

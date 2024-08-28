@@ -28,18 +28,18 @@ namespace SBE
     class LogicalDevice
     {
     private:
-        Instance* host;
-        PhysicalDevice* parent;
+        Instance *host;
+        PhysicalDevice *parent;
 
-        mutex allocationMod;
+        std::mutex allocationMod;
         int allocationCount;
 
-        QueueFamily* optimalFamily;
+        QueueFamily *optimalFamily;
         unsigned int queueCount;
 
-        VkPhysicalDeviceFeatures* requiredFeatures;
+        VkPhysicalDeviceFeatures *requiredFeatures;
 
-        VkDeviceCreateInfo* creationInfo;
+        VkDeviceCreateInfo *creationInfo;
         VkDevice self;
 
     public:
@@ -47,162 +47,43 @@ namespace SBE
         //----------------------------------
 
         // Make a device, assume some info
-        LogicalDevice(PhysicalDevice* parent, VkPhysicalDeviceFeatures* requiredFeatures=nullptr, vector<VkLayerProperties> layersToEnable=vector<VkLayerProperties>(), vector<VkExtensionProperties> extToEnable=vector<VkExtensionProperties>())
-        {
-            allocationCount=0;
-
-            // Save device data passed in by parameters
-            this->host=parent->getHost();
-            this->parent=parent;
-            
-            // Enable all features by default.
-            this->requiredFeatures = parent->getFeatures();
-
-            // Start querying queue families to use for queues.
-            QueueFamilyCollection deviceQueueFamilies = QueueFamilyCollection(parent);
-            vector<VkDeviceQueueCreateInfo> deviceQueueCreateInfos;
-
-            // Find the optimal queue family
-            this->optimalFamily = new QueueFamily(deviceQueueFamilies.getOptimal().second);
-
-            this->queueCount = (optimalFamily->getProps()->queueCount>16) ? 16 : optimalFamily->getProps()->queueCount;
-
-            // Generate the struct to create as many queues within the family as possible.
-            deviceQueueCreateInfos.emplace_back(
-                VkDeviceQueueCreateInfo{
-                    VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,                     // VkStructureType             sType;
-                    nullptr,                                                        // const void*                 pNext;
-                    0,                                                              // VkDeviceQueueCreateFlags    flags;
-                    (unsigned int)(optimalFamily->getIndex()),                            // uint32_t                    queueFamilyIndex;
-                    this->queueCount,                    // uint32_t                    queueCount;
-                    nullptr                                                         // const float*                pQueuePriorities;
-                }
-            );
-
-            
-            // Query all of the possible extensions for the physical device
-            ExtensionCollection deviceExtensions = ExtensionCollection(parent);
-            vector<char*> extensionsToEnable;
-            // Sort through them all and choose any that are shared between our list of requested extensions
-            for(int i=0; i<deviceExtensions.getProps().size(); i++)
-            {
-                for(int j=0; j<extToEnable.size(); j++)
-                {
-                    if((extToEnable[j].extensionName==deviceExtensions.getProp(i).extensionName) && (extToEnable[j].specVersion==deviceExtensions.getProp(i).specVersion))
-                    {
-                        extensionsToEnable.emplace_back(extToEnable[j].extensionName);
-                    }
-                }
-            }
-
-            // Pass the info we need to create the device to the struct
-            this->creationInfo = new VkDeviceCreateInfo{
-                    VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,                                                   // VkStructureType                      sType;
-                    nullptr,                                                                                // const void*                          pNext;
-                    0, /*Reserved for future use*/                                                          // VkDeviceCreateFlags                  flags;
-                    (unsigned int)(deviceQueueCreateInfos.size()),                                          // uint32_t                             queueCreateInfoCount;
-                    deviceQueueCreateInfos.data(),                                                          // const VkDeviceQueueCreateInfo*       pQueueCreateInfos;
-                    0, /*Deprecated*/                                                                       // uint32_t                             enabledLayerCount;
-                    nullptr, /*Deprecated*/                                                                 // const char* const*                   ppEnabledLayerNames;
-                    (unsigned int)(extensionsToEnable.size()),                                              // uint32_t                             enabledExtensionCount;
-                    extensionsToEnable.data(),                                                              // const char* const*                   ppEnabledExtensionNames;
-                    this->requiredFeatures                                                                  // const VkPhysicalDeviceFeatures*      pEnabledFeatures;
-            };
-
-
-
-            auto result = vkCreateDevice(
-                this->parent->getDevice(),
-                this->creationInfo,
-                this->host->getAllocationInfo(),
-                &self
-            );
-            
-            stringstream tmpstream;
-            tmpstream<<"LogicalDevice created with result: "<<VkResultLookup(result);
-            log->debug(tmpstream.str());
-        }
+        LogicalDevice(PhysicalDevice *parent, VkPhysicalDeviceFeatures *requiredFeatures = nullptr, std::vector<VkLayerProperties> layersToEnable = std::vector<VkLayerProperties>(), std::vector<VkExtensionProperties> extToEnable = std::vector<VkExtensionProperties>());
 
         // Make a device, assume no info
-        LogicalDevice(PhysicalDevice* parent, VkDeviceCreateInfo* creationInfo, VkPhysicalDeviceFeatures* requiredFeatures={})
-        {
-            allocationCount=0;
-
-            this->host=parent->getHost();
-            this->creationInfo=creationInfo;
-            this->requiredFeatures=parent->getFeatures();
-
-            // this->creationInfo->pQueueCreateInfos->queueCount = (this->creationInfo->pQueueCreateInfos->queueCount>16) ? 16 : this->creationInfo->pQueueCreateInfos->queueCount;
-            this->queueCount = creationInfo->pQueueCreateInfos->queueCount;
-
-            // Todo: Add code for requiredFeatures to be checked against parent's features
-
-            auto result = vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
-            stringstream info;
-            info<<"LogicalDevice created with result: "<<VkResultLookup(result);
-            log->info(&info);
-        }
+        LogicalDevice(PhysicalDevice *parent, VkDeviceCreateInfo *creationInfo, VkPhysicalDeviceFeatures *requiredFeatures = {});
 
         // Deconstructors
         //----------------------------------
 
-        ~LogicalDevice()
-        {
-            vkDeviceWaitIdle(self);
-            vkDestroyDevice(self, host->getAllocationInfo());
-        }
+        ~LogicalDevice();
 
         // Mutators
         //----------------------------------
 
-        void update()
-        {
-            parent->update();
-            host=parent->getHost();
+        void update();
 
-        }
+        void setParent(PhysicalDevice *parent);
+        void setHost(Instance *host);
+        void setCreationInfo(VkDeviceCreateInfo *creationInfo);
+        void setRequiredFeats(VkPhysicalDeviceFeatures *requiredFeats);
 
-        void setParent(auto parent) { this->parent=parent; }
-        void setHost(auto host) { this->host=host; }
-        void setCreationInfo(auto creationInfo) { this->creationInfo=creationInfo; }
-        void setRequiredFeats(auto requiredFeats) { this->requiredFeatures=requiredFeats; }
-
-        int incAllocs()
-        {
-            allocationMod.lock();
-            allocationCount+=1;
-            allocationMod.unlock();
-            return allocationCount;
-        }
-        int decAllocs()
-        {
-            allocationMod.lock();
-            allocationCount-=1;
-            allocationMod.unlock();
-            return allocationCount;
-        }
+        int incAllocs();
+        int decAllocs();
 
         // Accessors
         //----------------------------------
 
-        auto getParent() { return parent; }
-        auto getHost() { return host; }
-        auto getSelf() { return self; }
-        auto getCreationInfo() { return creationInfo; }
-        auto getRequiredFeats() { return requiredFeatures; }
-        auto getOptimalQueueFam() { return optimalFamily; }
-        auto getQueueCount() { return queueCount; }
-        unsigned int* getQueueCountArray() {
-            unsigned int* array = new unsigned int[queueCount];
-            for(int i=0; i<queueCount; i++)
-            {
-                array[i]=i;
-            }
-            return array;
-        }
+        SBE::PhysicalDevice *getParent();
+        SBE::Instance *getHost();
+        VkDevice getSelf();
+        VkDeviceCreateInfo *getCreationInfo();
+        VkPhysicalDeviceFeatures *getRequiredFeats();
+        SBE::QueueFamily *getOptimalQueueFam();
+        unsigned int getQueueCount();
+        unsigned int *getQueueCountArray();
 
         template <class Function>
-        Function getFunc(const char* pName)
+        Function getFunc(const char *pName)
         {
             return ((Function)(vkGetDeviceProcAddr(self, pName)));
         }

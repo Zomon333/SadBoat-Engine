@@ -17,34 +17,32 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/logical_device.hpp"
 #include "vulkan/command_pool.hpp"
 
-
 namespace SBE
 {
     class CommandPoolManager
     {
     private:
-        LogicalDevice* parent;
+        LogicalDevice *parent;
 
         Manager<CommandPool> poolManager;
+
     public:
         // Constructors
         //----------------------------------
-        CommandPoolManager(LogicalDevice* parent);
-        
+        CommandPoolManager(LogicalDevice *parent);
+
         // Mutators
         //----------------------------------
 
         // Accessors
         //----------------------------------
-        std::vector<CommandPool*> getPools();
+        std::vector<CommandPool *> getPools();
 
         // Operators
         //----------------------------------
 
         // Destructors
         //----------------------------------
-
-        
     };
 };
 #endif

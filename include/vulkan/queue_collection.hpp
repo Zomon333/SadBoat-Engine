@@ -15,76 +15,50 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "./vulkan/vulkan.hpp"
 
+#include "utilities/logging/startup_logger.hpp"
 #include "vulkan/logical_device.hpp"
 #include "vulkan/queue.hpp"
 #include "vulkan/queue_family.hpp"
-
-
 
 namespace SBE
 {
     class QueueCollection
     {
     private:
-        LogicalDevice* parent;
-        QueueFamily* queueFamily;
+        LogicalDevice *parent;
+        QueueFamily *queueFamily;
         int queueCount;
 
-        LogHandle* log;
+        LogHandle *log;
 
-        vector<Queue*> queues;
+        std::vector<Queue *> queues;
 
     public:
         // Constructors
         //----------------------------------
-        QueueCollection(LogicalDevice* parent, QueueFamily* queueFamily, int queueCount)
-        {
-            this->parent=parent;
-            this->queueFamily=queueFamily;
-            this->queueCount=queueCount;
-
-            this->log = logger->allocateHandle(0b11111);
-
-            queues.resize(queueCount);
-
-            for(int i=0; i<queueCount; i++)
-            {
-                // Construct a Queue
-                queues[i] = new Queue(parent, queueFamily, i);
-            }
-
-            stringstream result;
-            result<<"Initializing QueueCollection with a total of "<<to_string(queueCount)<<" queues.";
-            this->log->info(&result);
-        }
-
+        QueueCollection(LogicalDevice *parent, QueueFamily *queueFamily, int queueCount);
 
         // Mutators
         //----------------------------------
 
-
         // Accessors
         //----------------------------------
-        auto getParent(){return parent;}
-        auto getFamily(){return queueFamily;}
-        auto getCount(){return queueCount;}
+        LogicalDevice *getParent();
 
-        auto getQueues(){return queues;}
-        auto getQueue(int i){return queues.at(i);}
+        QueueFamily *getFamily();
 
+        int getCount();
 
+        std::vector<Queue *> getQueues();
+
+        Queue *getQueue(int i);
 
         // Operators
         //----------------------------------
-        Queue* operator[](int rhs)
-        {
-            return queues.at(rhs);
-        }
+        Queue *operator[](int rhs);
 
         // Destructors
         //----------------------------------
-
-        
     };
 };
 #endif

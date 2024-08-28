@@ -16,8 +16,6 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "./vulkan/vulkan.hpp"
 #include "../include/vulkan/physical_device.hpp"
 
-
-
 namespace SBE
 {
     // ExtensionCollection: Graphics
@@ -26,33 +24,21 @@ namespace SBE
     {
     private:
         VkResult result;
-        PhysicalDevice* parent;
+        PhysicalDevice *parent;
 
         unsigned int count;
-        vector<VkExtensionProperties> properties;
+        std::vector<VkExtensionProperties> properties;
 
     public:
         // Constructors
-        ExtensionCollection(PhysicalDevice* parent)
-        {
-            this->parent=parent;
-            update();
-        }
-
+        ExtensionCollection(PhysicalDevice *parent);
 
         // Accessors
-        auto getProps(){return properties;}
-        auto getProp(int which){return properties[which];}
+        std::vector<VkExtensionProperties> getProps();
+        VkExtensionProperties getProp(int which);
 
         // Mutators
-        void update()
-        {
-            result = vkEnumerateDeviceExtensionProperties(parent->getDevice(),nullptr, &count, nullptr);
-            properties.resize(count);
-            result = vkEnumerateDeviceExtensionProperties(parent->getDevice(),nullptr, &count, (properties.data()));
-        }
-
-        
+        void update();
     };
 };
 #endif

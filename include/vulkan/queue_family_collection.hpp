@@ -15,8 +15,6 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "./vulkan/vulkan.hpp"
 
-
-
 namespace SBE
 {
     // QueueFamilyCollection: Graphics
@@ -24,83 +22,39 @@ namespace SBE
     class QueueFamilyCollection
     {
     private:
-        PhysicalDevice* parent;
+        PhysicalDevice *parent;
 
         uint32_t queueFamPropCount;
-        vector<QueueFamily> selfQueueFamilies;
+        std::vector<QueueFamily> selfQueueFamilies;
 
     public:
-        //Constructors    
+        // Constructors
         //----------------------------------
 
-        //Initialize a collection of QueueFamilies based on the parent device
-        QueueFamilyCollection(PhysicalDevice* parent)
-        {
-            this->parent=parent;
+        // Initialize a collection of QueueFamilies based on the parent device
+        QueueFamilyCollection(PhysicalDevice *parent);
 
-            this->update();
-        }
-
-        //Mutators
+        // Mutators
         //----------------------------------
 
-        //Update the collection of QueueFamilies based on the parent device
-        void update()
-        {
-            vkGetPhysicalDeviceQueueFamilyProperties(parent->getDevice(), &queueFamPropCount, nullptr);            
-            
-            VkQueueFamilyProperties* tmp = new VkQueueFamilyProperties[queueFamPropCount];
+        // Update the collection of QueueFamilies based on the parent device
+        void update();
 
-            vkGetPhysicalDeviceQueueFamilyProperties(parent->getDevice(), &queueFamPropCount, tmp);
-
-            selfQueueFamilies.clear();
-            for(int i = 0; i<queueFamPropCount; i++)
-            {
-                selfQueueFamilies.push_back(QueueFamily(parent, (unsigned int)(i), &(tmp[i])));
-            }
-        }
-
-        //Accessors
+        // Accessors
         //----------------------------------
 
         // Returns parent device
-        auto getParent(){ return parent; }
-        
+        PhysicalDevice *getParent();
+
         // Returns number of queue families
-        auto getFamilyCount() { return queueFamPropCount; }
-        
+        unsigned int getFamilyCount();
+
         // Returns queue family from backing
-        auto getQueueFamily(int which) { return selfQueueFamilies[which]; }
-        auto describeQueue(int which) { return selfQueueFamilies[which].getProps(); }
-        
-        auto getOptimal() 
-        {
-            pair<int,QueueFamily> result(0, selfQueueFamilies[0]);
+        QueueFamily getQueueFamily(int which);
 
-            for(int i=0; i<selfQueueFamilies.size(); i++)
-            {
-                if(
-                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_GRAPHICS_BIT) &&
-                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_TRANSFER_BIT) &&
-                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_COMPUTE_BIT) &&
-                    (selfQueueFamilies[i].getProps()->queueFlags && VK_QUEUE_SPARSE_BINDING_BIT) &&
-                    (selfQueueFamilies[i].getProps()->queueCount >= result.second.getProps()->queueCount)
-                )
-                {
-                    result=pair<int,QueueFamily>(i,selfQueueFamilies[i]);
-                }
-            }
+        VkQueueFamilyProperties *describeQueue(int which);
 
-            stringstream tmpstream;
-            tmpstream<<"Choosing queueFamily number "<<result.first<<", which supports ";
-            tmpstream<<result.second.getProps()->queueCount<<" queues.";
-            log->info(&tmpstream);
-            
-            return result;
-        }
-
+        std::pair<int, QueueFamily> getOptimal();
     };
-
 };
 #endif
-

@@ -13,48 +13,36 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef LAYER_COLLECTION_H
 #define LAYER_COLLECTION_H
 
-#include "sb-engine.hpp"
 #include "./vulkan/vulkan.hpp"
 
+#include <vector>
 
+#include "vulkan/physical_device.hpp"
 
 namespace SBE
 {
     // LayerCollection: Graphics
     // Generalized container for querying and accessing the various layers available on the PhysicalDevice provided
-    
+
     class LayerCollection
     {
     private:
         VkResult result;
-        PhysicalDevice* parent;
+        PhysicalDevice *parent;
 
         unsigned int count;
-        vector<VkLayerProperties> properties;
+        std::vector<VkLayerProperties> properties;
 
     public:
         // Constructors
-        LayerCollection(PhysicalDevice* parent)
-        {
-            this->parent=parent;
-            update();
-        }
-
+        LayerCollection(PhysicalDevice *parent);
 
         // Accessors
-        auto getProps(){return properties;}
-        auto getProp(int which){return properties[which];}
+        std::vector<VkLayerProperties> getProps();
+        VkLayerProperties getProp(int which);
 
         // Mutators
-        void update()
-        {
-            result = vkEnumerateDeviceLayerProperties(parent->getDevice(), &count, nullptr);
-            properties.resize(count);
-            result = vkEnumerateDeviceLayerProperties(parent->getDevice(), &count, (properties.data()));
-            
-        }
-
-        
+        void update();
     };
 };
 #endif

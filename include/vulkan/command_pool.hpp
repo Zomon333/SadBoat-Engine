@@ -18,55 +18,53 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/command_buffer.hpp"
 #include "utilities/manager.hpp"
 
-
 namespace SBE
 {
     class CommandPool
     {
     private:
         VkCommandPool self;
-        VkCommandPoolCreateInfo* pCreateInfo;
-        VkCommandBufferAllocateInfo* pAllocateInfo;
-        
-        LogicalDevice* parent;
-        VkCommandBuffer* bufferBacking;
+        VkCommandPoolCreateInfo *pCreateInfo;
+        VkCommandBufferAllocateInfo *pAllocateInfo;
+
+        LogicalDevice *parent;
+        VkCommandBuffer *bufferBacking;
         Manager<CommandBuffer> buffers;
 
-        QueueCollection* queues;
+        QueueCollection *queues;
 
         void allocate(unsigned int bufferCount);
 
     public:
         // Constructors
         //----------------------------------
-        CommandPool(LogicalDevice* parent, VkCommandPoolCreateInfo* pCreateInfo, VkCommandBufferAllocateInfo* pAllocateInfo, unsigned int bufferCount=0);
+        CommandPool(LogicalDevice *parent, VkCommandPoolCreateInfo *pCreateInfo, VkCommandBufferAllocateInfo *pAllocateInfo, unsigned int bufferCount = 0);
 
-        CommandPool(LogicalDevice* parent, bool isTransient=true, bool isResettable=true, unsigned int bufferCount=0);
+        CommandPool(LogicalDevice *parent, bool isTransient = true, bool isResettable = true, unsigned int bufferCount = 0);
 
         // Mutators
         //----------------------------------
         void freeBuffer(int id);
-        void freeBuffers(int* ids, int count=1);
-        
+        void freeBuffers(int *ids, int count = 1);
+
         // Accessors
         //----------------------------------
         VkCommandPool getSelf();
-        SBE::LogicalDevice* getParent();
-        SBE::QueueCollection* getQueues();
+        SBE::LogicalDevice *getParent();
+        SBE::QueueCollection *getQueues();
 
-        VkCommandPoolCreateInfo* getCreateInfo();
-        VkCommandBufferAllocateInfo* getAllocateInfo();
+        VkCommandPoolCreateInfo *getCreateInfo();
+        VkCommandBufferAllocateInfo *getAllocateInfo();
 
-        std::vector<CommandBuffer*> getBuffers();
+        std::vector<CommandBuffer *> getBuffers();
 
         // Operators
         //----------------------------------
-        CommandBuffer* operator[](int rhs);
+        CommandBuffer *operator[](int rhs);
 
         // Destructors
         //----------------------------------
         ~CommandPool();
-        
     };
 };
 #endif

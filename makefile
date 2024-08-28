@@ -68,35 +68,31 @@ logging:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/utilities/logging/startup_logger.cpp -o $(OBJ_DIR)/startup_logger.o
 
 vulkan:
-	
-# Order to compile:
-# instance
-# physicaldevice
-# physicaldevicecollection
-# extensioncollection
-# layercollection
-# logicaldevice
-# queuefamily
-# queuefamilycollection
-# queuecollection
-# queue
-# commandbuffer
-# commandpool
-# commandpoolmanager
-# buffer
-# image
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/vulkan_result_lookup.cpp -o $(OBJ_DIR)/vulkan_result_lookup.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/instance.cpp -o $(OBJ_DIR)/instance.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/physical_device.cpp -o $(OBJ_DIR)/physical_device.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/physical_device_collection.cpp -o $(OBJ_DIR)/physical_device_collection.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/extension_collection.cpp -o $(OBJ_DIR)/extension_collection.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/layer_collection.cpp -o $(OBJ_DIR)/layer_collection.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/logical_device.cpp -o $(OBJ_DIR)/logical_device.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue_family.cpp -o $(OBJ_DIR)/queue_family.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue_family_collection.cpp -o $(OBJ_DIR)/queue_family_collection.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue_collection.cpp -o $(OBJ_DIR)/queue_collection.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/queue.cpp -o $(OBJ_DIR)/queue.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_buffer.cpp -o $(OBJ_DIR)/command_buffer.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_pool.cpp -o $(OBJ_DIR)/command_pool.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/command_pool_manager.cpp -o $(OBJ_DIR)/command_pool_manager.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/buffer.cpp -o $(OBJ_DIR)/buffer.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(LIBS) -c $(SRC_DIR)/vulkan/image.cpp -o $(OBJ_DIR)/image.o
 
 clean:
 	@echo Cleaning build environment...
-ifdef $(OBJ_DIR)
+	@echo $(OBJ_DIR) $(OUT_DIR)
 ifneq ($(strip $(OBJ_DIR)),)
 	@echo Deleting contents of $(OBJ_DIR)/
 	rm -rf $(OBJ_DIR)/* &
 endif
-endif
-ifdef $(OUT_DIR)
 ifneq ($(strip $(OUT_DIR)),)
 	@echo Deleting contents of $(OUT_DIR)/
 	rm -rf $(OUT_DIR)/* &
-endif
 endif

@@ -16,21 +16,20 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/command_pool_manager.hpp"
 #include "vulkan/command_pool.hpp"
 
-
 namespace SBE
 {
-    CommandPoolManager::CommandPoolManager(LogicalDevice* parent)
+    CommandPoolManager::CommandPoolManager(LogicalDevice *parent)
     {
-        this->parent=parent;
+        this->parent = parent;
         poolManager.allocateData(new CommandPool(parent));
     }
-    
+
     // Mutators
     //----------------------------------
 
     // Accessors
     //----------------------------------
-    std::vector<CommandPool*> CommandPoolManager::getPools()
+    std::vector<CommandPool *> CommandPoolManager::getPools()
     {
         return poolManager.getData();
     }

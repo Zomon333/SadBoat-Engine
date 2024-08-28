@@ -15,43 +15,35 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "./vulkan/vulkan.hpp"
 
-
-
 namespace SBE
 {
     // QueueFamily: Graphics
     // Class for generalized containing of properties of a given QueueFamily
-class QueueFamily
+    class QueueFamily
     {
     private:
-        PhysicalDevice* parent;
+        PhysicalDevice *parent;
         unsigned int index;
 
-        VkQueueFamilyProperties* selfProps;
+        VkQueueFamilyProperties *selfProps;
 
     public:
-        // Constructors 
+        // Constructors
         //----------------------------------
-    
-        //Construct a QueueFamily given some parent and some properties
-        QueueFamily(PhysicalDevice* parent, unsigned int index, VkQueueFamilyProperties* selfProps)
-        {
-            this->parent=parent;
-            this->index=index;
-            this->selfProps=selfProps;
-        }
 
+        // Construct a QueueFamily given some parent and some properties
+        QueueFamily(PhysicalDevice *parent, unsigned int index, VkQueueFamilyProperties *selfProps);
         // Accessors
         //----------------------------------
 
         // Get the QueueFamily's parent
-        auto getParent() { return parent; }
+        PhysicalDevice *getParent();
 
         // Get the QueueFamily's properties
-        auto getProps() { return selfProps; }
+        VkQueueFamilyProperties *getProps();
 
         // Get the QueueFamily's index
-        auto getIndex() { return index; }
+        unsigned int getIndex();
     };
 };
 #endif

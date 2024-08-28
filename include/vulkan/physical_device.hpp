@@ -15,8 +15,6 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "./vulkan/vulkan.hpp"
 
-
-
 namespace SBE
 {
     // PhysicalDevice: Graphics
@@ -25,10 +23,10 @@ namespace SBE
     {
     private:
         // Where did we come from?
-        Instance* host;
+        Instance *host;
 
         // What are we?
-        VkPhysicalDevice self; 
+        VkPhysicalDevice self;
 
         // What can we do?
         VkPhysicalDeviceProperties selfProps;
@@ -40,53 +38,28 @@ namespace SBE
         // How do we do it?
         // QueueFamilyCollection* queueFamilies;
 
-
     public:
-
-        //Constructors
+        // Constructors
         //----------------------------------
-        PhysicalDevice(VkPhysicalDevice nSelf, Instance* host)
-        {
-            this->host=host;
-            self=nSelf;
-            // queueFamilies = new QueueFamilyCollection(this);
-            
-            this->update();
-        }
+        PhysicalDevice(VkPhysicalDevice nSelf, Instance *host);
 
-        PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps, Instance* host)
-        {
-            this->host=host;
-            self=nSelf;
-            selfProps=nProps;
-            // queueFamilies = new QueueFamilyCollection(this);
+        PhysicalDevice(VkPhysicalDevice nSelf, VkPhysicalDeviceProperties nProps, Instance *host);
 
-            this->update();
-        }
-
-        //Mutators
+        // Mutators
         //----------------------------------
-        void update()
-        {
-            vkGetPhysicalDeviceProperties(self, &selfProps);
-            vkGetPhysicalDeviceFeatures(self, &selfFeats);
-            vkGetPhysicalDeviceMemoryProperties(self, &selfMem);
+        void update();
 
-            // queueFamilies->update();
-        }
-
-        //Accessors
+        // Accessors
         //----------------------------------
-        auto getDevice() { return self; }
-        auto getProperties() { return &selfProps; }
-        auto getFeatures() {  return &selfFeats; }
-        auto getMem() {  return &selfMem; }
-        
-        auto getHost() { return host; }
+        VkPhysicalDevice getDevice();
+        VkPhysicalDeviceProperties *getProperties();
+        VkPhysicalDeviceFeatures *getFeatures();
+        VkPhysicalDeviceMemoryProperties *getMem();
+
+        Instance *getHost();
 
         // auto getQueueFamPropCount() {  return queueFamPropCount; }
         // auto getQueueFamilyProps() {  return selfQueueFamilyProperties; }
-
     };
 };
 #endif
