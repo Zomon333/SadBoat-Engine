@@ -14,6 +14,10 @@ Copyright 2024 Dagan Poulin, Justice Guillory
    limitations under the License.
 */
 
+#define GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_VULKAN
+#include "glfw/include/GLFW/glfw3.h"
+
 #include <iostream>
 
 #include "events/event.hpp"
@@ -37,6 +41,8 @@ SBE::LogHandle* SBE::log;
 #include "resources/resource_handle.hpp"
 
 #include "vulkan.hpp"
+
+#include "vulkan/vulkan_environment.hpp"
 
 
 //A short test driver to determine window name and whether to boot Catch.
@@ -156,9 +162,38 @@ int main(int argc, char* argv[])
     // Load initialization file
     configs.loadConfig("./assets/configs.xml", "Initialization Config");
     
+    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName);
+    
+
+
+    // while (!glfwWindowShouldClose(window)) {
+    //     // Render here (clear the screen to black)
+    //     // glClear(GL_COLOR_BUFFER_BIT);
+
+    //     // Swap front and back buffers
+    //     glfwSwapBuffers(window);
+
+    //     // Poll for and process events
+    //     glfwPollEvents();
+    // }
+
+    // // Terminate GLFW
+    // glfwDestroyWindow(window);
+    // glfwTerminate();
 
     // Vulkan Environment Setup
     //----------------------------------
+
+    // Create Vulkan surface from GLFW window
+    // 
+    // VkSurfaceKHR surface;
+    // if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+    //     std::cerr << "Failed to create Vulkan surface" << std::endl;
+    //     vkDestroyInstance(instance, nullptr);
+    //     glfwDestroyWindow(window);
+    //     glfwTerminate();
+    //     return -1;
+    // }
 
     //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
     // VulkanDispatchables vulkanEnvironment;
@@ -168,6 +203,12 @@ int main(int argc, char* argv[])
     // CommandPoolManager testPool(vulkanEnvironment.vulkanLogicalDevice);
     // CommandPool* cmdPool = testPool.getPools()[0];
     // vector<CommandBuffer*> cmdBuffers = cmdPool->getBuffers();
+
+    SBE::log->info("Shutting down...");
+    std::cout<<std::endl;
+
+    glfwDestroyWindow(windowEnvironment.getWindow());
+    glfwTerminate();
 
     return 1;
 }

@@ -2,7 +2,7 @@
 #	Engine Version & Name
 #---------------------------------------------------
 NAME = "SadBoatEngine-V"
-VERSION = "0.03.1V"
+VERSION = "0.03.1"
 
 #
 #	Color Data
@@ -37,6 +37,7 @@ LIBRARY_DIR = -Lusr/lib/x86_64-linux-gnu -L./lib -L./lib/libpng/lib64 -L./lib/vu
 LOG_NAME = "compile_log.txt"
 
 game:
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) -c $(SRC_DIR)/vulkan/vulkan_environment.cpp $(LIBS) -o $(OBJ_DIR)/vulkan_environment.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(OBJ_DIR)/* $(SRC_DIR)/main.cpp $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)
 
 engine: clean

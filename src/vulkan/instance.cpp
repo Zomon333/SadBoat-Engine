@@ -85,6 +85,10 @@ namespace SBE
             SBE::log->critical("Vulkan instance did not initialize.");
             throw new std::runtime_error("Vulkan Instance did not initialize.");
         }
+        else
+        {
+            SBE::log->info("Created Vulkan Instance.");
+        }
         this->allocationInfo = nullptr;
     }
 
@@ -104,6 +108,10 @@ namespace SBE
             SBE::log->critical("Vulkan instance did not initialize.");
             throw new std::runtime_error("Vulkan Instance did not initialize.");
         }
+        else
+        {
+            SBE::log->info("Created Vulkan Instance.");
+        }
         // this->allocationInfo=nullptr;
     }
 
@@ -121,6 +129,10 @@ namespace SBE
             SBE::log->critical("Vulkan instance did not initialize.");
             throw new std::runtime_error("Vulkan Instance did not initialize.");
         }
+        else
+        {
+            SBE::log->info("Created Vulkan Instance.");
+        }
         // this->allocationInfo=nullptr;
     }
 
@@ -137,6 +149,10 @@ namespace SBE
         {
             SBE::log->critical("Vulkan instance did not initialize.");
             throw new std::runtime_error("Vulkan Instance did not initialize.");
+        }
+        else
+        {
+            SBE::log->info("Created Vulkan Instance.");
         }
         // this->allocationInfo=nullptr;
     }
