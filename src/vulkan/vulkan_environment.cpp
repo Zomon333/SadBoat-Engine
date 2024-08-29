@@ -79,23 +79,30 @@ namespace SBE
         return toReturn;
     }
 
-    VulkanEnvironment::VulkanEnvironment(std::string gameName)
+    VulkanEnvironment::VulkanEnvironment(std::string gameName, Config* deviceConfig)
     {
-        std::cout << "A";
+        if(!deviceConfig)
+        {
+            SBE::ConfigManager configs;
+            this->deviceConfig = configs.getConfig("./assets/config/graphicsOptions.xml");
+        }
+        else
+        {
+            this->deviceConfig = deviceConfig;
+        }
+
         if (!glfwInit())
         {
             SBE::log->critical("Unable to initialize GLFW. Quitting program.");
             abort();
         }
 
-        std::cout << "A";
-
         glfwSetErrorCallback([](int error, const char *description)
                              {
             std::stringstream toLog;
             toLog<<"Error: "<<description;
             SBE::log->error(&toLog); });
-        
+
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         window = glfwCreateWindow(640, 480, gameName.c_str(), nullptr, nullptr);
@@ -104,20 +111,16 @@ namespace SBE
             SBE::log->critical("Unable to initialize GLFW Window. Quitting program.");
             abort();
         }
-        
-        SBE::ConfigManager configs;
-        deviceConfig = configs.getConfig("./assets/config/graphicsOptions.xml");
-        
+
         uint32_t extCount;
-        VkExtensionProperties* pProperties = new VkExtensionProperties;
+        VkExtensionProperties *pProperties = new VkExtensionProperties;
         SBE::log->debug(SBE::VkResultLookup(vkEnumerateInstanceExtensionProperties(
             NULL,
             &extCount,
-            pProperties
-        )));
-        
+            pProperties)));
+
         std::vector<VkExtensionProperties> toEnable;
-        for(unsigned int i = 0; i < extCount; i++)
+        for (unsigned int i = 0; i < extCount; i++)
         {
             toEnable.push_back(pProperties[i]);
         }
@@ -125,31 +128,24 @@ namespace SBE
         instance = new Instance(toEnable);
 
         devices = new PhysicalDeviceCollection(this->instance);
-        
+
         preferredDevice = devices->getOptimal(this->deviceConfig);
 
-
-        
         extensions = new ExtensionCollection(this->preferredDevice);
         layers = new LayerCollection(this->preferredDevice);
 
-        
         enabledExtensions = filterExtensions();
         enabledLayers = filterLayers();
 
-        
         requiredFeatures = new VkPhysicalDeviceFeatures;
         requiredFeatures->multiDrawIndirect = VK_TRUE;
         requiredFeatures->tessellationShader = VK_TRUE;
         requiredFeatures->geometryShader = VK_TRUE;
 
-        
         logicalDevice = new LogicalDevice(preferredDevice, requiredFeatures, enabledLayers, enabledExtensions);
 
-        
         queues = new QueueCollection(logicalDevice, logicalDevice->getOptimalQueueFam(), logicalDevice->getQueueCount());
 
-        
         if (glfwCreateWindowSurface(*(instance->getInstance()), window, nullptr, &surface) != VK_SUCCESS)
         {
             SBE::log->critical("Unable to get surface for instance! Aborting.");
@@ -165,74 +161,75 @@ namespace SBE
         }
 
         commandPools = new CommandPoolManager(logicalDevice);
+
     }
 
-    Config* VulkanEnvironment::getDeviceConfig()
+    Config *VulkanEnvironment::getDeviceConfig()
     {
         return deviceConfig;
     }
 
-    ExtensionCollection* VulkanEnvironment::getExtensionCollection()
+    ExtensionCollection *VulkanEnvironment::getExtensionCollection()
     {
         return extensions;
     }
-    
-    LayerCollection* VulkanEnvironment::getLayerCollection()
+
+    LayerCollection *VulkanEnvironment::getLayerCollection()
     {
         return layers;
     }
 
-    std::vector<VkExtensionProperties>* VulkanEnvironment::getEnabledExtensions()
+    std::vector<VkExtensionProperties> *VulkanEnvironment::getEnabledExtensions()
     {
         return &enabledExtensions;
     }
-    
-    std::vector<VkLayerProperties>* VulkanEnvironment::getEnabledLayers()
+
+    std::vector<VkLayerProperties> *VulkanEnvironment::getEnabledLayers()
     {
         return &enabledLayers;
     }
 
-    Instance* VulkanEnvironment::getInstance()
+    Instance *VulkanEnvironment::getInstance()
     {
         return instance;
     }
-    
-    PhysicalDeviceCollection* VulkanEnvironment::getDevices()
+
+    PhysicalDeviceCollection *VulkanEnvironment::getDevices()
     {
         return devices;
     }
-    
-    PhysicalDevice* VulkanEnvironment::getPreferredDevice()
+
+    PhysicalDevice *VulkanEnvironment::getPreferredDevice()
     {
         return preferredDevice;
     }
-    
-    VkPhysicalDeviceFeatures* VulkanEnvironment::getRequiredFeatures()
+
+    VkPhysicalDeviceFeatures *VulkanEnvironment::getRequiredFeatures()
     {
         return requiredFeatures;
     }
 
-    LogicalDevice* VulkanEnvironment::getLogicalDevice()
+    LogicalDevice *VulkanEnvironment::getLogicalDevice()
     {
         return logicalDevice;
     }
-    
-    QueueCollection* VulkanEnvironment::getQueues()
+
+    QueueCollection *VulkanEnvironment::getQueues()
     {
         return queues;
     }
 
-    GLFWwindow* VulkanEnvironment::getWindow()
+    GLFWwindow *VulkanEnvironment::getWindow()
     {
         return window;
     }
-    
-    VkSurfaceKHR* VulkanEnvironment::getSurface()
+
+    VkSurfaceKHR *VulkanEnvironment::getSurface()
     {
         return &surface;
     }
 
-    CommandPoolManager* VulkanEnvironment::getCommandPoolManager()
+    CommandPoolManager *VulkanEnvironment::getCommandPoolManager()
     {
         return commandPools;
     }

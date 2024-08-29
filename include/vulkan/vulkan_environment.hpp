@@ -62,7 +62,7 @@ namespace SBE
         CommandPoolManager* commandPools;
 
     public:
-        VulkanEnvironment(std::string gameName);
+        VulkanEnvironment(std::string gameName, Config* deviceConfig = nullptr);
 
         Config* getDeviceConfig();
         ExtensionCollection* getExtensionCollection();

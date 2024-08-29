@@ -2,5 +2,9 @@
 <GraphicsOptions>
     <PreferredDevice>
         <DeviceName>NVIDIA GeForce GTX 1660</DeviceName>
+        <Resolution>
+            <X>1920</X>
+            <Y>1080</Y>
+        </Resolution>
     </PreferredDevice>
 </GraphicsOptions>

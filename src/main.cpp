@@ -161,10 +161,10 @@ int main(int argc, char* argv[])
 
     // Load initialization file
     configs.loadConfig("./assets/configs.xml", "Initialization Config");
-    
-    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName);
-    
 
+    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName);
+
+    
 
     // while (!glfwWindowShouldClose(window)) {
     //     // Render here (clear the screen to black)
