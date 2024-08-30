@@ -203,6 +203,14 @@ namespace SBE
 
         commandPools = new CommandPoolManager(logicalDevice);
 
+        setupSwapchain();
+
+    }
+
+    void VulkanEnvironment::setupSwapchain()
+    {
+        std::stringstream toLog;
+
         VkSurfaceCapabilitiesKHR surfaceCapabilities;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(preferredDevice->getDevice(), surface, &surfaceCapabilities);
 
@@ -216,7 +224,6 @@ namespace SBE
         std::vector<VkPresentModeKHR> presentModes(presentModeCount);
         vkGetPhysicalDeviceSurfacePresentModesKHR(preferredDevice->getDevice(), surface, &presentModeCount, presentModes.data());
 
-        VkSurfaceFormatKHR swapchainFormat;
         if(surfaceFormats.size() == 1 && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
         {
             // swapchainFormat = { VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
@@ -297,6 +304,118 @@ namespace SBE
             SBE::log->debug(&toLog);
         }
 
+        uint32_t imageCount = 0;
+        toLog<< "Attempting to get swapchain image count: "<<SBE::VkResultLookup(vkGetSwapchainImagesKHR(logicalDevice->getSelf(), swapchain, &imageCount, nullptr));
+        SBE::log->debug(&toLog);
+        toLog<<"Swapchain image count: "<<imageCount;
+        SBE::log->info(&toLog);
+
+        swapchainImages.resize(imageCount);
+        toLog<< "Attempting to get swapchain images: "<<SBE::VkResultLookup(vkGetSwapchainImagesKHR(logicalDevice->getSelf(), swapchain, &imageCount, swapchainImages.data()));
+        SBE::log->debug(&toLog);
+
+
+        swapchainImageViews.resize(imageCount);
+        for(unsigned int i = 0; i < imageCount; i++)
+        {
+            // &(swapchainImages[i])
+            VkImageViewCreateInfo viewCreateInfo = {};
+            viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewCreateInfo.image = swapchainImages[i];
+            viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewCreateInfo.format = swapchainFormat.format;
+            viewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            viewCreateInfo.subresourceRange.baseMipLevel = 0;
+            viewCreateInfo.subresourceRange.levelCount = 1;
+            viewCreateInfo.subresourceRange.baseArrayLayer = 0;
+            viewCreateInfo.subresourceRange.layerCount = 1;
+
+            toLog<<"Attempting to create VkImageView for free swapchain image with index of "<<i<<". Result: "<<SBE::VkResultLookup(vkCreateImageView(logicalDevice->getSelf(), &viewCreateInfo, nullptr, &swapchainImageViews.data()[i]));
+            SBE::log->debug(&toLog);
+        }
+
+        setupRenderpass();
+
+        swapchainFramebuffers.resize(imageCount);
+        for(unsigned int i = 0; i < imageCount; i++)
+        {
+            VkFramebufferCreateInfo framebufferCreateInfo = {};
+            framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebufferCreateInfo.renderPass = renderPass;
+            framebufferCreateInfo.attachmentCount = 1;
+            framebufferCreateInfo.pAttachments = &swapchainImageViews.data()[i];
+            framebufferCreateInfo.width = swapchainExtent.width;
+            framebufferCreateInfo.height = swapchainExtent.height;
+            framebufferCreateInfo.layers = 1;
+
+            toLog<<"Attempting to create VkFramebuffer for swapchainImageView number "<<i<<": "<<SBE::VkResultLookup(vkCreateFramebuffer(logicalDevice->getSelf(), &framebufferCreateInfo, nullptr, &swapchainFramebuffers.data()[i]));
+            SBE::log->debug(&toLog);
+        }
+
+        // Record commands to command buffers
+        // Submit command buffers
+        // Present the image
+
+        // We'll also need to handle swapchain recreation.
+    }
+
+    void VulkanEnvironment::setupRenderpass()
+    {
+        std::stringstream toLog;
+        // ToDo: Add renderpass creation.
+        VkAttachmentDescription colorAttachment = {};
+        colorAttachment.format = VK_FORMAT_B8G8R8A8_UNORM; // Example format
+        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; // Clear attachment at the start
+        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; // Store result in memory
+        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // No stencil buffer
+        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Layout before render pass
+        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Layout after render pass
+
+        VkAttachmentReference colorAttachmentRef = {};
+        colorAttachmentRef.attachment = 0; // Index of the attachment in the array
+        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; // Layout used in this subpass
+
+        VkSubpassDescription subpass = {};
+        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS; // Pipeline type
+        subpass.colorAttachmentCount = 1; // Number of color attachments
+        subpass.pColorAttachments = &colorAttachmentRef; // Array of color attachments
+
+
+        VkSubpassDependency dependency = {};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL; // Synchronization dependency with external commands
+        dependency.dstSubpass = 0; // Subpass index
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; // Stages at which operations are performed
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0; // Access types needed for the source stage
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT; // Access types needed for the destination stage
+
+        VkAttachmentDescription attachments[] = { colorAttachment };
+
+        VkRenderPassCreateInfo renderPassInfo = {};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        renderPassInfo.attachmentCount = 1; // Number of attachments
+        renderPassInfo.pAttachments = attachments;
+        renderPassInfo.subpassCount = 1; // Number of subpasses
+        renderPassInfo.pSubpasses = &subpass;
+        renderPassInfo.dependencyCount = 1; // Number of dependencies
+        renderPassInfo.pDependencies = &dependency;
+
+        toLog<<"Attempting renderpass creation: "<<SBE::VkResultLookup(vkCreateRenderPass(logicalDevice->getSelf(), &renderPassInfo, nullptr, &renderPass));
+        SBE::log->debug(&toLog);
+
+    }
+
+    VkImageView VulkanEnvironment::getSwapchainImageView()
+    {
+        std::stringstream toLog;
+        uint32_t imageIndex;
+
+        toLog<< SBE::VkResultLookup(vkAcquireNextImageKHR(logicalDevice->getSelf(), swapchain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex))<<" on acquisition of swapchain image.";
+        SBE::log->info(&toLog);
+
+        return this->swapchainImageViews[imageIndex];
     }
 
     Config *VulkanEnvironment::getDeviceConfig()

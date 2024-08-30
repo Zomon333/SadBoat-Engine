@@ -55,12 +55,20 @@ namespace SBE
 
         LogicalDevice* logicalDevice;
         QueueCollection* queues;
+        CommandPoolManager* commandPools;
 
         GLFWwindow* window;
         VkSurfaceKHR surface;
-        VkSwapchainKHR swapchain;
 
-        CommandPoolManager* commandPools;
+        VkSemaphore imageAvailableSemaphore;
+        VkSwapchainKHR swapchain;
+        VkSurfaceFormatKHR swapchainFormat;
+        std::vector<VkImage> swapchainImages;
+        std::vector<VkImageView> swapchainImageViews;
+        std::vector<VkFramebuffer> swapchainFramebuffers;
+
+        VkRenderPass renderPass;
+
 
     public:
         VulkanEnvironment(std::string gameName, Config* deviceConfig = nullptr);
@@ -84,6 +92,10 @@ namespace SBE
 
         GLFWwindow* getWindow();
         VkSurfaceKHR* getSurface();
+        void setupSwapchain();
+        VkImageView VulkanEnvironment::getSwapchainImageView();
+
+        void setupRenderpass();
 
     };
 };
