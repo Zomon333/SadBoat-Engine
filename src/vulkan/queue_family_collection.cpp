@@ -98,6 +98,14 @@ namespace SBE
         tmpstream << result.second.getProps()->queueCount << " queues.";
         SBE::log->info(&tmpstream);
 
+        tmpstream<<"QueueFamily Capabilities: ";
+        tmpstream<<"VK_QUEUE_GRAPHICS_BIT: "<<(((result.second.getProps()->queueFlags & VK_QUEUE_GRAPHICS_BIT) > 0) ? "TRUE" : "FALSE")<<", ";
+        tmpstream<<"VK_QUEUE_COMPUTE_BIT: "<<(((result.second.getProps()->queueFlags & VK_QUEUE_COMPUTE_BIT) > 0) ? "TRUE" : "FALSE")<<", ";
+        tmpstream<<"VK_QUEUE_TRANSFER_BIT: "<<(((result.second.getProps()->queueFlags & VK_QUEUE_TRANSFER_BIT) > 0) ? "TRUE" : "FALSE")<<", ";
+        tmpstream<<"VK_QUEUE_SPARSE_BINDING_BIT: "<<(((result.second.getProps()->queueFlags & VK_QUEUE_SPARSE_BINDING_BIT) > 0) ? "TRUE" : "FALSE")<<", ";
+        tmpstream<<"VK_QUEUE_PROTECTED_BIT: "<<(((result.second.getProps()->queueFlags & VK_QUEUE_PROTECTED_BIT) > 0) ? "TRUE" : "FALSE");
+        SBE::log->debug(&tmpstream);
+
         return result;
     }
 };

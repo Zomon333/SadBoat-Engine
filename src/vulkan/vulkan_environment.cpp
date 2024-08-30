@@ -91,6 +91,42 @@ namespace SBE
             this->deviceConfig = deviceConfig;
         }
 
+        
+
+        uint32_t extCount;
+        SBE::log->debug(SBE::VkResultLookup(vkEnumerateInstanceExtensionProperties(
+            NULL,
+            &extCount,
+            nullptr)));
+
+        std::vector<VkExtensionProperties> pProperties = std::vector<VkExtensionProperties>(extCount);
+        SBE::log->debug(SBE::VkResultLookup(vkEnumerateInstanceExtensionProperties(
+            NULL,
+            &extCount,
+            pProperties.data())));
+
+        std::vector<VkExtensionProperties> toEnable;
+        std::unordered_map<char*, bool> instanceExtensions(false);
+
+        for (unsigned int i = 0; i < extCount; i++)
+        {
+            toEnable.push_back(pProperties[i]);
+            
+            std::stringstream toLog;
+            toLog<<"Enabling instance extension: "<<pProperties[i].extensionName;
+            SBE::log->debug(&toLog);
+
+            instanceExtensions[pProperties[i].extensionName] = true;
+        }
+
+        instance = new Instance(toEnable);
+
+        devices = new PhysicalDeviceCollection(this->instance);
+
+        preferredDevice = devices->getOptimal(this->deviceConfig);
+
+        std::stringstream toLog;
+
         if (!glfwInit())
         {
             SBE::log->critical("Unable to initialize GLFW. Quitting program.");
@@ -105,31 +141,33 @@ namespace SBE
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-        window = glfwCreateWindow(640, 480, gameName.c_str(), nullptr, nullptr);
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        
+        int displayXPos, displayYPos;
+        int displayX, displayY;
+        
+        if(monitor)
+        {    
+            glfwGetMonitorWorkarea(monitor, &displayXPos, &displayYPos, &displayX, &displayY);
+        }
+        else
+        {
+            displayX = 640;
+            displayY = 480;
+        }
+
+        window = glfwCreateWindow(displayX, displayY, gameName.c_str(), nullptr, nullptr);
         if (!window)
         {
             SBE::log->critical("Unable to initialize GLFW Window. Quitting program.");
             abort();
         }
-
-        uint32_t extCount;
-        VkExtensionProperties *pProperties = new VkExtensionProperties;
-        SBE::log->debug(SBE::VkResultLookup(vkEnumerateInstanceExtensionProperties(
-            NULL,
-            &extCount,
-            pProperties)));
-
-        std::vector<VkExtensionProperties> toEnable;
-        for (unsigned int i = 0; i < extCount; i++)
+        else
         {
-            toEnable.push_back(pProperties[i]);
+            toLog<<"Created GLFW window with dimensions "<<displayX<<" x "<<displayY<<". ";
+            SBE::log->debug(&toLog);
         }
 
-        instance = new Instance(toEnable);
-
-        devices = new PhysicalDeviceCollection(this->instance);
-
-        preferredDevice = devices->getOptimal(this->deviceConfig);
 
         extensions = new ExtensionCollection(this->preferredDevice);
         layers = new LayerCollection(this->preferredDevice);
@@ -148,6 +186,10 @@ namespace SBE
 
         if (glfwCreateWindowSurface(*(instance->getInstance()), window, nullptr, &surface) != VK_SUCCESS)
         {
+            // What this should probably do is iterate through every LogicalDevice that can be made from the PhysicalDeviceCollection.
+            // This way, if the system defaults to a non-presentable GPU it can search for a backup.
+            // This really should never happen, though...
+
             SBE::log->critical("Unable to get surface for instance! Aborting.");
             glfwDestroyWindow(window);
             glfwTerminate();
@@ -155,12 +197,105 @@ namespace SBE
         }
         else
         {
-            std::stringstream toLog;
             toLog << "Created new VkSurface through GLFW.";
             SBE::log->info(&toLog);
         }
 
         commandPools = new CommandPoolManager(logicalDevice);
+
+        VkSurfaceCapabilitiesKHR surfaceCapabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(preferredDevice->getDevice(), surface, &surfaceCapabilities);
+
+        uint32_t formatCount = 0;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(preferredDevice->getDevice(), surface, &formatCount, nullptr);
+        std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(preferredDevice->getDevice(), surface, &formatCount, surfaceFormats.data());
+
+        uint32_t presentModeCount = 0;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(preferredDevice->getDevice(), surface, &presentModeCount, nullptr);
+        std::vector<VkPresentModeKHR> presentModes(presentModeCount);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(preferredDevice->getDevice(), surface, &presentModeCount, presentModes.data());
+
+        VkSurfaceFormatKHR swapchainFormat;
+        if(surfaceFormats.size() == 1 && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
+        {
+            // swapchainFormat = { VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
+            swapchainFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
+            swapchainFormat.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        } 
+        else
+        {
+            bool found = false;
+            for (const auto& format : surfaceFormats)
+            {
+                if (format.format == VK_FORMAT_B8G8R8A8_UNORM && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) 
+                {
+                    swapchainFormat = format;
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                // 
+                abort();
+                // swapchainFormat = surfaceFormats[0];
+            }
+        }
+
+        VkPresentModeKHR swapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+        for (const auto& mode : presentModes) {
+            if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+                swapchainPresentMode = mode;
+                break;
+            }
+        }
+
+        VkExtent2D swapchainExtent = surfaceCapabilities.currentExtent;
+        if (surfaceCapabilities.currentExtent.width == UINT32_MAX) 
+        {
+            swapchainExtent.width = std::max(surfaceCapabilities.minImageExtent.width,
+                                            std::min(surfaceCapabilities.maxImageExtent.width, swapchainExtent.width));
+            swapchainExtent.height = std::max(surfaceCapabilities.minImageExtent.height,
+                                            std::min(surfaceCapabilities.maxImageExtent.height, swapchainExtent.height));
+        }
+
+        VkSwapchainCreateInfoKHR swapchainInfo = {};
+        swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        swapchainInfo.surface = surface;
+        swapchainInfo.minImageCount = surfaceCapabilities.minImageCount + 1;
+        swapchainInfo.imageFormat = swapchainFormat.format;
+        swapchainInfo.imageColorSpace = swapchainFormat.colorSpace;
+        swapchainInfo.imageExtent = swapchainExtent;
+        swapchainInfo.imageArrayLayers = 1;
+        swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+        // This should practically always be true, I think?
+        swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        uint32_t queueFamilyIndices[] = {(queues->getFamily()->getIndex())};
+
+        swapchainInfo.queueFamilyIndexCount = 1;
+        swapchainInfo.pQueueFamilyIndices = queueFamilyIndices;
+
+        swapchainInfo.preTransform = surfaceCapabilities.currentTransform;
+        swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        swapchainInfo.presentMode = swapchainPresentMode;
+        swapchainInfo.clipped = VK_TRUE;
+        swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
+
+        VkResult swapchainCreationResult = vkCreateSwapchainKHR(logicalDevice->getSelf(), &swapchainInfo, nullptr, &swapchain);
+
+        if(swapchainCreationResult)
+        {
+            toLog<<"Failed to create swapchain! Error: "<<SBE::VkResultLookup(swapchainCreationResult);
+            SBE::log->critical(&toLog);
+        }
+        else
+        {
+            toLog<<"Created swapchain with requested attributes. ";
+            SBE::log->debug(&toLog);
+        }
 
     }
 

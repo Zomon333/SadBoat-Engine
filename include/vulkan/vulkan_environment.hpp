@@ -58,6 +58,7 @@ namespace SBE
 
         GLFWwindow* window;
         VkSurfaceKHR surface;
+        VkSwapchainKHR swapchain;
 
         CommandPoolManager* commandPools;
 
