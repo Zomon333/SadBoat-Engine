@@ -13,6 +13,9 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #ifndef VK_ENV_h
 #define VK_ENV_H
 
+#include <queue>
+#include <any>
+
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
 #include "glfw/include/GLFW/glfw3.h"
@@ -38,6 +41,9 @@ namespace SBE
     class VulkanEnvironment
     {
     private:
+
+        std::queue<std::any> deletionQueue;
+
         Config* deviceConfig;
         ExtensionCollection* extensions;
         LayerCollection* layers;
@@ -60,7 +66,9 @@ namespace SBE
         GLFWwindow* window;
         VkSurfaceKHR surface;
 
+        // We want lower-level control over the swapchain, so less abstraction here.
         VkSemaphore imageAvailableSemaphore;
+        VkSwapchainCreateInfoKHR swapchainInfo;
         VkSwapchainKHR swapchain;
         VkSurfaceFormatKHR swapchainFormat;
         std::vector<VkImage> swapchainImages;
@@ -93,7 +101,9 @@ namespace SBE
         GLFWwindow* getWindow();
         VkSurfaceKHR* getSurface();
         void setupSwapchain();
-        VkImageView VulkanEnvironment::getSwapchainImageView();
+        uint32_t getSwapchainIndex();
+
+        void test();
 
         void setupRenderpass();
 

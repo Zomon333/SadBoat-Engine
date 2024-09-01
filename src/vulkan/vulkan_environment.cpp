@@ -81,6 +81,8 @@ namespace SBE
 
     VulkanEnvironment::VulkanEnvironment(std::string gameName, Config* deviceConfig)
     {
+        std::stringstream toLog;
+
         if(!deviceConfig)
         {
             SBE::ConfigManager configs;
@@ -112,7 +114,6 @@ namespace SBE
         {
             toEnable.push_back(pProperties[i]);
             
-            std::stringstream toLog;
             toLog<<"Enabling instance extension: "<<pProperties[i].extensionName;
             SBE::log->debug(&toLog);
 
@@ -125,7 +126,6 @@ namespace SBE
 
         preferredDevice = devices->getOptimal(this->deviceConfig);
 
-        std::stringstream toLog;
 
         if (!glfwInit())
         {
@@ -142,7 +142,6 @@ namespace SBE
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-        
         int displayXPos, displayYPos;
         int displayX, displayY;
         
@@ -182,6 +181,16 @@ namespace SBE
 
         logicalDevice = new LogicalDevice(preferredDevice, requiredFeatures, enabledLayers, enabledExtensions);
 
+        VkSemaphoreCreateInfo semInfo = {
+            VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+            nullptr,
+            0
+        };
+
+        toLog<<"Attempting to create semaphore: "<<SBE::VkResultLookup(vkCreateSemaphore(logicalDevice->getSelf(), &semInfo, nullptr, &imageAvailableSemaphore));
+        SBE::log->debug(&toLog);
+
+
         queues = new QueueCollection(logicalDevice, logicalDevice->getOptimalQueueFam(), logicalDevice->getQueueCount());
 
         if (glfwCreateWindowSurface(*(instance->getInstance()), window, nullptr, &surface) != VK_SUCCESS)
@@ -203,7 +212,112 @@ namespace SBE
 
         commandPools = new CommandPoolManager(logicalDevice);
 
+        setupRenderpass();
         setupSwapchain();
+
+        test();
+    }
+
+    void VulkanEnvironment::test()
+    {
+        // THIS IS A TEST
+
+        std::stringstream toLog;
+        VkCommandBufferBeginInfo beginInfo = {
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+            nullptr,
+            0,
+            nullptr
+        };
+
+        VkCommandBuffer* commandBuffer = commandPools->getPools()[0]->getBuffers()[0]->getSelf();
+        toLog<<"Attempting to begin commandBuffer: "<<SBE::VkResultLookup(vkBeginCommandBuffer(*commandBuffer, &beginInfo));
+        SBE::log->debug(&toLog);
+        
+
+        
+        // This NEEDS to be getSwapchainIndex() in the future.
+        // getSwapchainIndex segfaults, though. FIX THIS.
+        uint32_t index = getSwapchainIndex();
+        if (index >= swapchainFramebuffers.size())
+        {
+            SBE::log->error("Invalid swapchain framebuffer index");
+            abort();
+        }
+
+        if(!renderPass || !swapchainFramebuffers[index])
+        {
+            SBE::log->error("Invalid render pass or framebuffer");
+        }
+
+        if (!commandBuffer || !*commandBuffer) {
+            // Handle invalid command buffer
+            SBE::log->error("Invalid command buffer.");
+            return;
+        }
+
+
+        VkRenderPassBeginInfo renderPassInfo = {};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = renderPass;
+        renderPassInfo.framebuffer = this->swapchainFramebuffers[index];
+        renderPassInfo.renderArea.offset = { 0, 0 };
+        renderPassInfo.renderArea.extent = swapchainInfo.imageExtent;
+
+
+
+        VkClearValue clearColor = { {0.0f, 0.0f, 0.0f, 1.0f} };
+        renderPassInfo.clearValueCount = 1;
+        renderPassInfo.pClearValues = &clearColor;
+
+        vkCmdBeginRenderPass(*commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        SBE::log->debug("Beginning command recording.");
+        // Record draw commands here
+        // malloc(1);
+        // vkCmdDraw(*commandBuffer, 0, 0, 0, 0);
+
+        SBE::log->debug("Ending command recording.");
+        vkCmdEndRenderPass(*commandBuffer);
+
+
+        toLog<<"Attempting to end command buffer recording: "<<SBE::VkResultLookup(vkEndCommandBuffer(*commandBuffer));
+        SBE::log->debug(&toLog);
+
+        
+        VkPipelineStageFlags waitStages[] = {
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+        };
+
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = commandBuffer;
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = &imageAvailableSemaphore;
+        submitInfo.pWaitDstStageMask = waitStages;
+        submitInfo.signalSemaphoreCount = 1;
+
+        VkSemaphoreCreateInfo semInfo = {VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,nullptr,0};
+        VkSemaphore renderFinished;
+        toLog<<"Attempting to create new renderFinished semaphore: "<<SBE::VkResultLookup(vkCreateSemaphore(logicalDevice->getSelf(), &semInfo, nullptr, &renderFinished));
+        SBE::log->debug(&toLog);
+
+        submitInfo.pSignalSemaphores = &imageAvailableSemaphore;
+
+        toLog<<"Attempting to submit queue: "<<SBE::VkResultLookup(vkQueueSubmit(queues->getQueue(0)->getSelf(), 1, &submitInfo, VK_NULL_HANDLE));
+        SBE::log->debug(&toLog);
+
+        VkPresentInfoKHR presentInfo = {};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = &imageAvailableSemaphore;
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = &swapchain;
+        presentInfo.pImageIndices = &index;
+
+        toLog<<"Attempting to present work: "<<SBE::VkResultLookup(vkQueuePresentKHR(queues->getQueue(0)->getSelf(), &presentInfo));
+        SBE::log->debug(&toLog);
 
     }
 
@@ -267,7 +381,7 @@ namespace SBE
                                             std::min(surfaceCapabilities.maxImageExtent.height, swapchainExtent.height));
         }
 
-        VkSwapchainCreateInfoKHR swapchainInfo = {};
+        swapchainInfo = {};
         swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         swapchainInfo.surface = surface;
         swapchainInfo.minImageCount = surfaceCapabilities.minImageCount + 1;
@@ -334,8 +448,6 @@ namespace SBE
             SBE::log->debug(&toLog);
         }
 
-        setupRenderpass();
-
         swapchainFramebuffers.resize(imageCount);
         for(unsigned int i = 0; i < imageCount; i++)
         {
@@ -388,7 +500,7 @@ namespace SBE
         dependency.dstSubpass = 0; // Subpass index
         dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; // Stages at which operations are performed
         dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.srcAccessMask = 0; // Access types needed for the source stage
+        dependency.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT; // Access types needed for the source stage
         dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT; // Access types needed for the destination stage
 
         VkAttachmentDescription attachments[] = { colorAttachment };
@@ -407,15 +519,23 @@ namespace SBE
 
     }
 
-    VkImageView VulkanEnvironment::getSwapchainImageView()
+    uint32_t VulkanEnvironment::getSwapchainIndex()
     {
         std::stringstream toLog;
-        uint32_t imageIndex;
+        
+        uint64_t semValue = 0;
+        // imageAvailableSemaphore++;
+        toLog<<"vkGetSemaphoreCounterValue returns with: "<<SBE::VkResultLookup(vkGetSemaphoreCounterValue(logicalDevice->getSelf(), imageAvailableSemaphore, &semValue));
+        toLog<<"\t Returned Value: "<<semValue;
+        SBE::log->debug(&toLog);
 
+
+        uint32_t imageIndex = 0;
         toLog<< SBE::VkResultLookup(vkAcquireNextImageKHR(logicalDevice->getSelf(), swapchain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex))<<" on acquisition of swapchain image.";
+        toLog<<"\tReturned imageIndex: "<<imageIndex;
         SBE::log->info(&toLog);
 
-        return this->swapchainImageViews[imageIndex];
+        return imageIndex;
     }
 
     Config *VulkanEnvironment::getDeviceConfig()
