@@ -35,6 +35,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/queue_collection.hpp"
 #include "vulkan/queue.hpp"
 
+#include "vulkan/swapchain.hpp"
+
 namespace SBE
 {
     std::vector<VkExtensionProperties> VulkanEnvironment::filterExtensions()
@@ -114,8 +116,8 @@ namespace SBE
         {
             toEnable.push_back(pProperties[i]);
             
-            toLog<<"Enabling instance extension: "<<pProperties[i].extensionName;
-            SBE::log->debug(&toLog);
+            // toLog<<"Enabling instance extension: "<<pProperties[i].extensionName;
+            // SBE::log->debug(&toLog);
 
             instanceExtensions[pProperties[i].extensionName] = true;
         }
@@ -181,15 +183,7 @@ namespace SBE
 
         logicalDevice = new LogicalDevice(preferredDevice, requiredFeatures, enabledLayers, enabledExtensions);
 
-        VkSemaphoreCreateInfo semInfo = {
-            VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-            nullptr,
-            0
-        };
-
-        toLog<<"Attempting to create semaphore: "<<SBE::VkResultLookup(vkCreateSemaphore(logicalDevice->getSelf(), &semInfo, nullptr, &imageAvailableSemaphore));
-        SBE::log->debug(&toLog);
-
+        // ************
 
         queues = new QueueCollection(logicalDevice, logicalDevice->getOptimalQueueFam(), logicalDevice->getQueueCount());
 
@@ -213,9 +207,97 @@ namespace SBE
         commandPools = new CommandPoolManager(logicalDevice);
 
         setupRenderpass();
-        setupSwapchain();
+        
+        SBE::Swapchain testSwapchain = Swapchain(
+            preferredDevice,
+            logicalDevice,
+            queues,
+            surface,
+            &renderPass
+        );
 
-        test();
+// ******************************************************************************
+
+        VkCommandBufferBeginInfo beginInfo = {
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+            nullptr,
+            0,
+            nullptr
+        };
+
+        VkCommandBuffer* commandBuffer = commandPools->getPools()[0]->getBuffers()[0]->getSelf();
+        toLog<<"Attempting to begin commandBuffer: "<<SBE::VkResultLookup(vkBeginCommandBuffer(*commandBuffer, &beginInfo));
+        SBE::log->debug(&toLog);
+        
+
+        
+        std::tuple<uint32_t, VkImage, VkImageView, VkFramebuffer> frameData = testSwapchain.getFramedata();
+
+        // This NEEDS to be getSwapchainIndex() in the future.
+        // getSwapchainIndex segfaults, though. FIX THIS.
+        uint32_t index = std::get<0>(frameData);
+        
+        VkRenderPassBeginInfo renderPassInfo = {};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = renderPass;
+        renderPassInfo.framebuffer = std::get<3>(frameData);
+        renderPassInfo.renderArea.offset = { 0, 0 };
+        renderPassInfo.renderArea.extent = testSwapchain.getExtent();
+
+
+        VkClearValue clearColor = { {0.0f, 0.0f, 0.0f, 1.0f} };
+        renderPassInfo.clearValueCount = 1;
+        renderPassInfo.pClearValues = &clearColor;
+
+        vkCmdBeginRenderPass(*commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        SBE::log->debug("Beginning command recording.");
+        // Record draw commands here
+        // malloc(1);
+        // vkCmdDraw(*commandBuffer, 0, 0, 0, 0);
+
+        SBE::log->debug("Ending command recording.");
+        vkCmdEndRenderPass(*commandBuffer);
+
+
+        toLog<<"Attempting to end command buffer recording: "<<SBE::VkResultLookup(vkEndCommandBuffer(*commandBuffer));
+        SBE::log->debug(&toLog);
+
+        
+        VkPipelineStageFlags waitStages[] = {
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+        };
+
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = commandBuffer;
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = testSwapchain.getSemaphore();
+        submitInfo.pWaitDstStageMask = waitStages;
+        submitInfo.signalSemaphoreCount = 1;
+
+        VkSemaphoreCreateInfo semInfo = {VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,nullptr,0};
+        VkSemaphore renderFinished;
+        toLog<<"Attempting to create new renderFinished semaphore: "<<SBE::VkResultLookup(vkCreateSemaphore(logicalDevice->getSelf(), &semInfo, nullptr, &renderFinished));
+        SBE::log->debug(&toLog);
+
+        submitInfo.pSignalSemaphores = testSwapchain.getSemaphore();
+
+        toLog<<"Attempting to submit queue: "<<SBE::VkResultLookup(vkQueueSubmit(queues->getQueue(0)->getSelf(), 1, &submitInfo, VK_NULL_HANDLE));
+        SBE::log->debug(&toLog);
+
+        VkPresentInfoKHR presentInfo = {};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = testSwapchain.getSemaphore();
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = testSwapchain.getSwapchain();
+        presentInfo.pImageIndices = &index;
+
+        toLog<<"Attempting to present work: "<<SBE::VkResultLookup(vkQueuePresentKHR(queues->getQueue(0)->getSelf(), &presentInfo));
+        SBE::log->debug(&toLog);
+
     }
 
     void VulkanEnvironment::test()

@@ -91,6 +91,7 @@ vulkan:
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) -c $(SRC_DIR)/vulkan/image.cpp $(LIBS) -o $(OBJ_DIR)/image.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) -c $(SRC_DIR)/vulkan/buffer.cpp $(LIBS) -o $(OBJ_DIR)/buffer.o
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) -c $(SRC_DIR)/vulkan/command_pool.cpp $(LIBS) -o $(OBJ_DIR)/command_pool.o
+	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) -c $(SRC_DIR)/vulkan/swapchain.cpp $(LIBS) -o $(OBJ_DIR)/swapchain.o
 
 clean:
 	@echo Cleaning build environment...
