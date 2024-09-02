@@ -162,53 +162,15 @@ int main(int argc, char* argv[])
     // Load initialization file
     configs.loadConfig("./assets/configs.xml", "Initialization Config");
 
-    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName);
-
-    
-
-    // while (!glfwWindowShouldClose(window)) {
-    //     // Render here (clear the screen to black)
-    //     // glClear(GL_COLOR_BUFFER_BIT);
-
-    //     // Swap front and back buffers
-    //     glfwSwapBuffers(window);
-
-    //     // Poll for and process events
-    //     glfwPollEvents();
-    // }
-
-    // // Terminate GLFW
-    // glfwDestroyWindow(window);
-    // glfwTerminate();
 
     // Vulkan Environment Setup
     //----------------------------------
 
-    // Create Vulkan surface from GLFW window
-    // 
-    // VkSurfaceKHR surface;
-    // if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
-    //     std::cerr << "Failed to create Vulkan surface" << std::endl;
-    //     vkDestroyInstance(instance, nullptr);
-    //     glfwDestroyWindow(window);
-    //     glfwTerminate();
-    //     return -1;
-    // }
-
-    //vulkanEnvironment: A struct containing our abstracted Vulkan classes, some data, and some parsing events.
-    // VulkanDispatchables vulkanEnvironment;
-    // vulkanEnvironment.deviceConfig=(configs.getConfig("./assets/config/graphicsOptions.xml"));
-    // vulkanEnvironment.setup(&vulkanEnvironment);
-
-    // CommandPoolManager testPool(vulkanEnvironment.vulkanLogicalDevice);
-    // CommandPool* cmdPool = testPool.getPools()[0];
-    // vector<CommandBuffer*> cmdBuffers = cmdPool->getBuffers();
+    
+    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName);
 
     SBE::log->info("Shutting down...");
     std::cout<<std::endl;
-
-    glfwDestroyWindow(windowEnvironment.getWindow());
-    glfwTerminate();
 
     return 1;
 }

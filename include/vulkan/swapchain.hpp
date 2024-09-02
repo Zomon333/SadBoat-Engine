@@ -32,23 +32,23 @@ namespace SBE
     class Swapchain
     {
         private:
-                    VkSwapchainKHR swapchain;
-                    VkPresentModeKHR swapchainPresentMode;
-                    VkSwapchainCreateInfoKHR swapchainInfo;
-                    VkSurfaceFormatKHR swapchainFormat;
+            VkSwapchainKHR swapchain;
+            VkPresentModeKHR swapchainPresentMode;
+            VkSwapchainCreateInfoKHR swapchainInfo;
+            VkSurfaceFormatKHR swapchainFormat;
 
-                    VkSemaphore imageAvailability;
-                    std::vector<VkImage> swapchainImages;
-                    std::vector<VkImageView> swapchainImageViews;
-                    std::vector<VkFramebuffer> swapchainFramebuffers;
-        
-                    SBE::PhysicalDevice* parent;
+            VkSemaphore imageAvailability;
+            std::vector<VkImage> swapchainImages;
+            std::vector<VkImageView> swapchainImageViews;
+            std::vector<VkFramebuffer> swapchainFramebuffers;
 
-                    SBE::LogicalDevice* logicalDevice;
+            SBE::PhysicalDevice* parent;
 
-                    SBE::QueueCollection* queues;
-                    VkSurfaceKHR* surface;
-                    VkRenderPass* renderPass;
+            SBE::LogicalDevice* logicalDevice;
+
+            SBE::QueueCollection* queues;
+            VkSurfaceKHR* surface;
+            VkRenderPass* renderPass;
 
         public:
             Swapchain(SBE::PhysicalDevice* physicalDevice, SBE::LogicalDevice* logicalDevice, QueueCollection* queues, VkSurfaceKHR surface, VkRenderPass* renderPass);
