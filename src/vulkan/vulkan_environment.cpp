@@ -151,15 +151,39 @@ namespace SBE
         int displayXPos, displayYPos;
         int displayX, displayY;
         
-        if(monitor)
-        {    
-            glfwGetMonitorWorkarea(monitor, &displayXPos, &displayYPos, &displayX, &displayY);
+        if(deviceConfig)
+        {
+            try
+            {
+                SBE::log->info("Getting screen resolution from config file.");
+                std::string resX = (*deviceConfig)["GraphicsOptions"][0]["Resolution"][0]["X"][0].getContents<std::string>();
+                std::string resY = (*deviceConfig)["GraphicsOptions"][0]["Resolution"][0]["Y"][0].getContents<std::string>();
+
+                displayX = std::stoi(resX);
+                displayY = std::stoi(resY);
+            }
+            catch(const std::exception& e)
+            {
+                SBE::log->info("Failed to read config file. Getting screen resolution from display.");
+                glfwGetMonitorWorkarea(monitor, &displayXPos, &displayYPos, &displayX, &displayY);
+                std::cerr << e.what() << '\n';
+            }
         }
         else
         {
-            displayX = 640;
-            displayY = 480;
+            if(monitor)
+            {    
+                SBE::log->info("Getting screen resolution from display.");
+                glfwGetMonitorWorkarea(monitor, &displayXPos, &displayYPos, &displayX, &displayY);
+            }
+            else
+            {
+                SBE::log->info("Unable to read screen resolution from display. Assuming 1920x1080.");
+                displayX = 1920;
+                displayY = 1080;
+            }
         }
+        
 
         window = glfwCreateWindow(displayX, displayY, gameName.c_str(), nullptr, nullptr);
         if (!window)
@@ -205,7 +229,7 @@ namespace SBE
         else
         {
             toLog << "Created new VkSurface through GLFW.";
-            SBE::log->info(&toLog);
+            SBE::log->debug(&toLog);
         }
 
         commandPools = new CommandPoolManager(logicalDevice);
