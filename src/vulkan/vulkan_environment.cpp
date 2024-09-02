@@ -19,6 +19,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include <unistd.h>
 
+#include "events/recurring_event.hpp"
+
 #include "utilities/logging/startup_logger.hpp"
 #include "utilities/logging/log_manager.hpp"
 #include "utilities/logging/log_handle.hpp"
@@ -36,7 +38,6 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/logical_device.hpp"
 #include "vulkan/queue_collection.hpp"
 #include "vulkan/queue.hpp"
-
 #include "vulkan/swapchain.hpp"
 
 namespace SBE
@@ -141,7 +142,8 @@ namespace SBE
                              {
             std::stringstream toLog;
             toLog<<"Error: "<<description;
-            SBE::log->error(&toLog); });
+            SBE::log->error(&toLog); 
+            });
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
@@ -208,14 +210,14 @@ namespace SBE
 
         commandPools = new CommandPoolManager(logicalDevice);
 
-        setupRenderpass();
+        renderPass = new Renderpass(logicalDevice, nullptr);
         
-        SBE::Swapchain testSwapchain = Swapchain(
+        swapchain = new Swapchain(
             preferredDevice,
             logicalDevice,
             queues,
             surface,
-            &renderPass
+            renderPass->getRenderpass()
         );
 
 // ******************************************************************************
@@ -233,7 +235,7 @@ namespace SBE
         
 
         
-        std::tuple<uint32_t, VkImage, VkImageView, VkFramebuffer> frameData = testSwapchain.getFramedata();
+        std::tuple<uint32_t, VkImage, VkImageView, VkFramebuffer> frameData = swapchain->getFramedata();
 
         // This NEEDS to be getSwapchainIndex() in the future.
         // getSwapchainIndex segfaults, though. FIX THIS.
@@ -241,11 +243,10 @@ namespace SBE
         
         VkRenderPassBeginInfo renderPassInfo = {};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = renderPass;
+        renderPassInfo.renderPass = *(renderPass->getRenderpass());
         renderPassInfo.framebuffer = std::get<3>(frameData);
         renderPassInfo.renderArea.offset = { 0, 0 };
-        renderPassInfo.renderArea.extent = testSwapchain.getExtent();
-
+        renderPassInfo.renderArea.extent = swapchain->getExtent();
 
         VkClearValue clearColor = { {0.0f, 0.0f, 0.0f, 1.0f} };
         renderPassInfo.clearValueCount = 1;
@@ -275,7 +276,7 @@ namespace SBE
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = commandBuffer;
         submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = testSwapchain.getSemaphore();
+        submitInfo.pWaitSemaphores = swapchain->getSemaphore();
         submitInfo.pWaitDstStageMask = waitStages;
         submitInfo.signalSemaphoreCount = 1;
 
@@ -284,88 +285,43 @@ namespace SBE
         toLog<<"Attempting to create new renderFinished semaphore: "<<SBE::VkResultLookup(vkCreateSemaphore(logicalDevice->getSelf(), &semInfo, nullptr, &renderFinished));
         SBE::log->debug(&toLog);
 
-        submitInfo.pSignalSemaphores = testSwapchain.getSemaphore();
+        submitInfo.pSignalSemaphores = swapchain->getSemaphore();
 
-        toLog<<"Attempting to submit queue: "<<SBE::VkResultLookup(vkQueueSubmit(queues->getQueue(0)->getSelf(), 1, &submitInfo, VK_NULL_HANDLE));
-        SBE::log->debug(&toLog);
+        int frameCount = 0;
+        SBE::RecurringEvent<int> recurSum([this, &frameCount, index, submitInfo](int a)
+        {
+            std::stringstream toLog;
+            toLog<<"Attempting to submit queue: "<<SBE::VkResultLookup(vkQueueSubmit(queues->getQueue(0)->getSelf(), 1, &submitInfo, VK_NULL_HANDLE));
+            SBE::log->debug(&toLog);
 
-        VkPresentInfoKHR presentInfo = {};
-        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-        presentInfo.waitSemaphoreCount = 1;
-        presentInfo.pWaitSemaphores = testSwapchain.getSemaphore();
-        presentInfo.swapchainCount = 1;
-        presentInfo.pSwapchains = testSwapchain.getSwapchain();
-        presentInfo.pImageIndices = &index;
+            VkPresentInfoKHR presentInfo = {};
+            presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+            presentInfo.waitSemaphoreCount = 1;
+            presentInfo.pWaitSemaphores = swapchain->getSemaphore();
+            presentInfo.swapchainCount = 1;
+            presentInfo.pSwapchains = swapchain->getSwapchain();
+            presentInfo.pImageIndices = &index;
 
-        toLog<<"Attempting to present work: "<<SBE::VkResultLookup(vkQueuePresentKHR(queues->getQueue(0)->getSelf(), &presentInfo));
-        SBE::log->debug(&toLog);
-    }
+            toLog<<"Attempting to present work: "<<SBE::VkResultLookup(vkQueuePresentKHR(queues->getQueue(0)->getSelf(), &presentInfo));
+            SBE::log->debug(&toLog);
+            
+            toLog<<"Completed frame: "<<++frameCount;
+            SBE::log->debug(&toLog);
 
-    void VulkanEnvironment::setupRenderpass()
-    {
-        std::stringstream toLog;
-        // ToDo: Add renderpass creation.
-        VkAttachmentDescription colorAttachment = {};
-        colorAttachment.format = VK_FORMAT_B8G8R8A8_UNORM; // Example format
-        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; // Clear attachment at the start
-        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; // Store result in memory
-        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // No stencil buffer
-        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // Layout before render pass
-        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // Layout after render pass
+            if(!glfwWindowShouldClose(window))
+            {
+                glfwPollEvents();
+            }
 
-        VkAttachmentReference colorAttachmentRef = {};
-        colorAttachmentRef.attachment = 0; // Index of the attachment in the array
-        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; // Layout used in this subpass
+            return a;
+        }, std::chrono::microseconds(13000));
+        recurSum.recur(0);
 
-        VkSubpassDescription subpass = {};
-        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS; // Pipeline type
-        subpass.colorAttachmentCount = 1; // Number of color attachments
-        subpass.pColorAttachments = &colorAttachmentRef; // Array of color attachments
+        std::this_thread::sleep_for(std::chrono::seconds(5));  
+        recurSum.suppress();
+        recurSum.end();
 
-
-        VkSubpassDependency dependency = {};
-        dependency.srcSubpass = VK_SUBPASS_EXTERNAL; // Synchronization dependency with external commands
-        dependency.dstSubpass = 0; // Subpass index
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; // Stages at which operations are performed
-        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT; // Access types needed for the source stage
-        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT; // Access types needed for the destination stage
-
-        VkAttachmentDescription attachments[] = { colorAttachment };
-
-        VkRenderPassCreateInfo renderPassInfo = {};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-        renderPassInfo.attachmentCount = 1; // Number of attachments
-        renderPassInfo.pAttachments = attachments;
-        renderPassInfo.subpassCount = 1; // Number of subpasses
-        renderPassInfo.pSubpasses = &subpass;
-        renderPassInfo.dependencyCount = 1; // Number of dependencies
-        renderPassInfo.pDependencies = &dependency;
-
-        toLog<<"Attempting renderpass creation: "<<SBE::VkResultLookup(vkCreateRenderPass(logicalDevice->getSelf(), &renderPassInfo, nullptr, &renderPass));
-        SBE::log->debug(&toLog);
-
-    }
-
-    uint32_t VulkanEnvironment::getSwapchainIndex()
-    {
-        std::stringstream toLog;
-        
-        uint64_t semValue = 0;
-        // imageAvailableSemaphore++;
-        toLog<<"vkGetSemaphoreCounterValue returns with: "<<SBE::VkResultLookup(vkGetSemaphoreCounterValue(logicalDevice->getSelf(), imageAvailableSemaphore, &semValue));
-        toLog<<"\t Returned Value: "<<semValue;
-        SBE::log->debug(&toLog);
-
-
-        uint32_t imageIndex = 0;
-        toLog<< SBE::VkResultLookup(vkAcquireNextImageKHR(logicalDevice->getSelf(), swapchain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex))<<" on acquisition of swapchain image.";
-        toLog<<"\tReturned imageIndex: "<<imageIndex;
-        SBE::log->info(&toLog);
-
-        return imageIndex;
+        glfwDestroyWindow(window);
     }
 
     Config *VulkanEnvironment::getDeviceConfig()

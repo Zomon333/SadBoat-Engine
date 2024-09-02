@@ -35,6 +35,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include "vulkan/queue_collection.hpp"
 #include "vulkan/queue.hpp"
 #include "vulkan/command_pool_manager.hpp"
+#include "vulkan/swapchain.hpp"
+#include "vulkan/renderpass.hpp"
 
 namespace SBE
 {
@@ -66,16 +68,8 @@ namespace SBE
         GLFWwindow* window;
         VkSurfaceKHR surface;
 
-        // We want lower-level control over the swapchain, so less abstraction here.
-        VkSemaphore imageAvailableSemaphore;
-        VkSwapchainCreateInfoKHR swapchainInfo;
-        VkSwapchainKHR swapchain;
-        VkSurfaceFormatKHR swapchainFormat;
-        std::vector<VkImage> swapchainImages;
-        std::vector<VkImageView> swapchainImageViews;
-        std::vector<VkFramebuffer> swapchainFramebuffers;
-
-        VkRenderPass renderPass;
+        Swapchain* swapchain;
+        Renderpass* renderPass;
 
 
     public:
