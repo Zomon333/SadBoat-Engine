@@ -185,6 +185,9 @@ namespace SBE
             {
                 if (std::string(devices[i]->getProperties()->deviceName) == std::string(deviceName))
                 {
+                    std::stringstream toLog;
+                    toLog<<"Device with matching name found. Using "<<deviceName<<" for rendering.";
+                    SBE::log->info(&toLog);
                     return devices[i];
                 }
             }

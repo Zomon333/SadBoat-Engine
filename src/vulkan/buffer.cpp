@@ -47,7 +47,7 @@ namespace SBE
         // Verify we're even *able* to allocate more memory types.
         unsigned int allocs = parent->incAllocs();
         unsigned int maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
-        SBE::log->info(std::string("Allocating memory for buffer, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
+        SBE::log->debug(std::string("Allocating memory for buffer, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
         if (allocs > maxAllocs)
         {
             parent->decAllocs();
@@ -65,7 +65,7 @@ namespace SBE
 
         // Attempt to allocate, output result, throw if invalid.
         auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
-        log->info(std::string("Buffer memory allocated with size of ").append(std::to_string((this->createInfo.size))).append(", resulting: ").append(SBE::VkResultLookup(result)));
+        log->debug(std::string("Buffer memory allocated with size of ").append(std::to_string((this->createInfo.size))).append(", resulting: ").append(SBE::VkResultLookup(result)));
         if (result != VK_SUCCESS)
             throw new std::bad_alloc();
     }
@@ -97,7 +97,7 @@ namespace SBE
         // Verify we're even *able* to allocate more memory types.
         unsigned int allocs = parent->incAllocs();
         unsigned int maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
-        SBE::log->info(std::string("Allocating memory for buffer, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
+        SBE::log->debug(std::string("Allocating memory for buffer, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
         if (allocs > maxAllocs)
         {
             parent->decAllocs();
@@ -115,7 +115,7 @@ namespace SBE
 
         // Attempt to allocate, output result, throw if invalid.
         auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
-        SBE::log->info(std::string("Buffer memory allocated with size of ").append(std::to_string((bufferSize))).append(", resulting: ").append(VkResultLookup(result)));
+        SBE::log->debug(std::string("Buffer memory allocated with size of ").append(std::to_string((bufferSize))).append(", resulting: ").append(VkResultLookup(result)));
         if (result != 0)
             throw new std::bad_alloc();
     }
@@ -133,7 +133,7 @@ namespace SBE
 
         std::stringstream tmpStream;
         tmpStream << "Binding buffer memory to buffer. MemoryTypeBits: " << memReqs.memoryTypeBits << ", Relevant bit: " << ((((memReqs.memoryTypeBits >> (allocationInfo.memoryTypeIndex - 1) & 1)) == 1) ? "Supported" : "Unsupported") << ", with result of: " << VkResultLookup(result);
-        SBE::log->info(tmpStream.str());
+        SBE::log->debug(tmpStream.str());
 
         mapped = false;
     }
@@ -166,7 +166,7 @@ namespace SBE
         auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
         std::stringstream tmpstream;
         tmpstream << "Buffer created with result: " << VkResultLookup(result);
-        SBE::log->info(tmpstream.str());
+        SBE::log->debug(tmpstream.str());
 
         if (result != 0)
             throw new std::runtime_error("Failed to create buffer.");
@@ -210,7 +210,7 @@ namespace SBE
         auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
         std::stringstream tmpstream;
         tmpstream << "Buffer created with result: " << VkResultLookup(result);
-        SBE::log->info(tmpstream.str());
+        SBE::log->debug(tmpstream.str());
         if (result != 0)
             throw new std::runtime_error("Failed to create buffer.");
 
@@ -236,7 +236,7 @@ namespace SBE
 
         // Create the buffer and output the result
         auto result = vkCreateBuffer(parent->getSelf(), &(this->createInfo), parent->getHost()->getAllocationInfo(), &internalBuffer);
-        SBE::log->info(std::string("Buffer created with result: ").append(VkResultLookup(result)));
+        SBE::log->debug(std::string("Buffer created with result: ").append(VkResultLookup(result)));
 
         // Throw an allocation exception
         if (result != 0)
@@ -357,7 +357,7 @@ namespace SBE
         // Destroy any buffer views that have been created of this buffer.
         // vkDestroyBufferView(parent->getSelf(), VkBufferView bufferView, parent->getHost()->getAllocationInfo());
 
-        SBE::log->info("Destroying buffer.");
+        SBE::log->debug("Destroying buffer.");
     }
 
 };

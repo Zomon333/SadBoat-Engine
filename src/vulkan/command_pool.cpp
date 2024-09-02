@@ -24,7 +24,7 @@ namespace SBE
         auto result = vkAllocateCommandBuffers(parent->getSelf(), pAllocateInfo, bufferBacking);
         std::stringstream info;
         info << "Creating " << bufferCount << " CommandBuffers with result of " << VkResultLookup(result) << ". ";
-        SBE::log->info(&info);
+        SBE::log->debug(&info);
 
         queues = new QueueCollection(parent, parent->getOptimalQueueFam(), parent->getOptimalQueueFam()->getProps()->queueCount);
         for (unsigned int i = 0; i < parent->getOptimalQueueFam()->getProps()->queueCount; i++)
@@ -61,7 +61,7 @@ namespace SBE
         info << " ";
         info << "Resettable: " << ((pCreateInfo->flags & VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) ? "True" : "False");
         info << " ";
-        SBE::log->info(&info);
+        SBE::log->debug(&info);
 
         allocate(bufferCount);
     }

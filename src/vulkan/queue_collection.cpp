@@ -42,7 +42,7 @@ namespace SBE
 
         std::stringstream result;
         result << "Initializing QueueCollection with a total of " << std::to_string(queueCount) << " queues.";
-        this->log->info(&result);
+        this->log->debug(&result);
     }
 
     // Mutators

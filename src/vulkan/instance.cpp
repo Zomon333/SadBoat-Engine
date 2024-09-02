@@ -87,7 +87,7 @@ namespace SBE
         }
         else
         {
-            SBE::log->info("Created Vulkan Instance.");
+            SBE::log->debug("Created Vulkan Instance.");
         }
         this->allocationInfo = nullptr;
     }
@@ -110,7 +110,7 @@ namespace SBE
         }
         else
         {
-            SBE::log->info("Created Vulkan Instance.");
+            SBE::log->debug("Created Vulkan Instance.");
         }
         // this->allocationInfo=nullptr;
     }
@@ -131,7 +131,7 @@ namespace SBE
         }
         else
         {
-            SBE::log->info("Created Vulkan Instance.");
+            SBE::log->debug("Created Vulkan Instance.");
         }
         // this->allocationInfo=nullptr;
     }
@@ -152,7 +152,7 @@ namespace SBE
         }
         else
         {
-            SBE::log->info("Created Vulkan Instance.");
+            SBE::log->debug("Created Vulkan Instance.");
         }
         // this->allocationInfo=nullptr;
     }

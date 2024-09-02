@@ -306,7 +306,7 @@ namespace SBE
                 &imageIndex
             ));
         toLog<<"\tReturned index: "<<imageIndex;
-        SBE::log->info(&toLog);
+        SBE::log->debug(&toLog);
 
         // Return all the information we could possibly want for the actual rendering
         return std::tuple<uint32_t, VkImage, VkImageView, VkFramebuffer>

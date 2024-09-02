@@ -53,7 +53,7 @@ std::string testSetup(int argc, char* argv[], std::string possibleName)
 
     //Write a long line for visual clarity.
     std::string tmp="";
-    int i = 100;
+    int i = 60;
     while(i>0)
     {
         tmp+="-";
@@ -100,7 +100,8 @@ int main(int argc, char* argv[])
     //----------------------------------
 
     SBE::logger = new SBE::LogManager("./log.txt");
-    SBE::log = SBE::logger->allocateHandle(0b11111);
+    unsigned int logLevel = SBE::DEBUG | SBE::INFO | SBE::WARNING | SBE::ERROR | SBE::CRITICAL;
+    SBE::log = SBE::logger->allocateHandle(logLevel);
 
     //  Unit Test Setup
     //----------------------------------
@@ -130,7 +131,7 @@ int main(int argc, char* argv[])
                 (n.getAttribs()[1].first=="preload") ? (n.getAttribs()[1].second=="true") : false
             );
 
-            SBE::log->info("Resource created.");
+            SBE::log->debug("Resource created.");
 
             return datum;
         }
@@ -166,11 +167,11 @@ int main(int argc, char* argv[])
     // Vulkan Environment Setup
     //----------------------------------
 
-    
-    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName);
+
+    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName, configs.getConfig("./assets/config/graphicsOptions.xml"));
 
     SBE::log->info("Shutting down...");
     std::cout<<std::endl;
-
+    abort();
     return 1;
 }

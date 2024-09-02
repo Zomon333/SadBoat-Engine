@@ -96,7 +96,7 @@ namespace SBE
         std::stringstream tmpstream;
         tmpstream << "Choosing queueFamily number " << result.first << ", which supports ";
         tmpstream << result.second.getProps()->queueCount << " queues.";
-        SBE::log->info(&tmpstream);
+        SBE::log->debug(&tmpstream);
 
         tmpstream<<"QueueFamily Capabilities: ";
         tmpstream<<"VK_QUEUE_GRAPHICS_BIT: "<<(((result.second.getProps()->queueFlags & VK_QUEUE_GRAPHICS_BIT) > 0) ? "TRUE" : "FALSE")<<", ";

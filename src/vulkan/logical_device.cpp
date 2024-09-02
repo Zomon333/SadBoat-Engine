@@ -119,7 +119,7 @@ namespace SBE
         auto result = vkCreateDevice(parent->getDevice(), creationInfo, host->getAllocationInfo(), &self);
         std::stringstream info;
         info << "LogicalDevice created with result: " << VkResultLookup(result);
-        SBE::log->info(&info);
+        SBE::log->debug(&info);
     }
 
     // Deconstructors

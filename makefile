@@ -39,7 +39,7 @@ LOG_NAME = "compile_log.txt"
 .PHONY: all clean
 
 all:
-	make -j64 clean engine game
+	${MAKE} -j32 clean engine game
 
 game: vulkan_env
 	$(CC) $(FLAGS) $(INCLUDE_DIRS) $(LIBRARY_DIR) $(OBJ_DIR)/* $(SRC_DIR)/main.cpp $(LIBS) -o $(OUT_DIR)/$(NAME)$(VERSION)

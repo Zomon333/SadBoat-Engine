@@ -47,7 +47,7 @@ namespace SBE
         // Verify we're even *able* to allocate more memory types.
         unsigned int allocs = parent->incAllocs();
         unsigned int maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
-        SBE::log->info(std::string("Allocating memory for image, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
+        SBE::log->debug(std::string("Allocating memory for image, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
         if (allocs > maxAllocs)
         {
             parent->decAllocs();
@@ -73,7 +73,7 @@ namespace SBE
 
         // Attempt to allocate, output result, throw if invalid.
         auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
-        SBE::log->info(std::string("Image memory allocated with size of ").append(std::to_string((this->memReqs.size))).append(", resulting: ").append(VkResultLookup(result)));
+        SBE::log->debug(std::string("Image memory allocated with size of ").append(std::to_string((this->memReqs.size))).append(", resulting: ").append(VkResultLookup(result)));
         if (result != VK_SUCCESS)
             throw new std::bad_alloc();
     }
@@ -105,7 +105,7 @@ namespace SBE
         // Verify we're even *able* to allocate more memory types.
         unsigned int allocs = parent->incAllocs();
         unsigned int maxAllocs = parent->getParent()->getProperties()->limits.maxMemoryAllocationCount;
-        SBE::log->info(std::string("Allocating memory for image, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
+        SBE::log->debug(std::string("Allocating memory for image, allocation number ").append(std::to_string(allocs)).append(" / ").append(std::to_string(maxAllocs)));
         if (allocs > maxAllocs)
         {
             parent->decAllocs();
@@ -123,7 +123,7 @@ namespace SBE
 
         // Attempt to allocate, output result, throw if invalid.
         auto result = vkAllocateMemory((parent->getSelf()), &allocationInfo, (parent->getHost()->getAllocationInfo()), &internalBacking);
-        SBE::log->info(std::string("Image memory allocated with size of ").append(std::to_string((imageSize))).append(", resulting: ").append(VkResultLookup(result)));
+        SBE::log->debug(std::string("Image memory allocated with size of ").append(std::to_string((imageSize))).append(", resulting: ").append(VkResultLookup(result)));
         if (result != 0)
             throw new std::bad_alloc();
     }
@@ -135,7 +135,7 @@ namespace SBE
 
         std::stringstream tmpStream;
         tmpStream << "Binding image memory to image. Bitcheck is not currently functional. Bind result: " << VkResultLookup(result);
-        SBE::log->info(&tmpStream);
+        SBE::log->debug(&tmpStream);
 
         mapped = false;
     }
@@ -173,7 +173,7 @@ namespace SBE
             creationInfo->flags,
             &imageProperties);
         debuglog << "Querying device format properties. Result from creationInfo: " << VkResultLookup(result);
-        SBE::log->info(&debuglog);
+        SBE::log->debug(&debuglog);
 
         if (creationInfo->extent.depth > imageProperties.maxExtent.depth || creationInfo->extent.width > imageProperties.maxExtent.width || creationInfo->extent.height > imageProperties.maxExtent.height)
         {
@@ -202,7 +202,7 @@ namespace SBE
         }
 
         result = vkCreateImage(parent->getSelf(), creationInfo, parent->getHost()->getAllocationInfo(), &self);
-        SBE::log->info(std::string("Attempted to create an image with result: ").append(VkResultLookup(result)));
+        SBE::log->debug(std::string("Attempted to create an image with result: ").append(VkResultLookup(result)));
 
         if (result != VK_SUCCESS)
         {
