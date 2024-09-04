@@ -62,7 +62,7 @@ namespace SBE
 
             void setPresentMode(VkPresentModeKHR newPresentMode);
 
-            void recreate();
+            void recreate(VkSurfaceKHR surface, int width, int height);
     };
 };
 #endif

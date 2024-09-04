@@ -323,8 +323,241 @@ namespace SBE
         SBE::log->critical("NEED TO IMPLEMENT: Swapchain::setPresentMode");
     }
 
-    void Swapchain::recreate()
+    void Swapchain::recreate(VkSurfaceKHR surface, int width, int height)
     {
-        SBE::log->critical("NEED TO IMPLEMENT: Swapchain::recreate");
+        // Update the class's internal data
+        this->queues = queues;
+        this->renderPass = renderPass;
+        this->surface = &surface;
+
+        // Declared for logging convenience
+        std::stringstream toLog;
+        std::stringstream* msg = &toLog;
+
+        // Get the capabilities of our presentation surface
+        VkSurfaceCapabilitiesKHR surfaceCapabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(parent->getDevice(), surface, &surfaceCapabilities);
+
+        // Get the number of available formats for the surface
+        uint32_t formatCount = 0;
+        toLog<<"Getting format count for surface formats supported by physical device. Result: ";toLog<<SBE::VkResultLookup(
+            vkGetPhysicalDeviceSurfaceFormatsKHR(
+                parent->getDevice(), 
+                surface, 
+                &formatCount, 
+                nullptr
+            ));
+        toLog<<"\tCount: "<<formatCount;
+        SBE::log->debug(msg);
+
+        // Get the array of available formats for the surface
+        std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
+        toLog<<"Getting formats supported by physical device for surface. Result: ";
+        toLog<<SBE::VkResultLookup(
+            vkGetPhysicalDeviceSurfaceFormatsKHR(
+                parent->getDevice(), 
+                surface, 
+                &formatCount, 
+                surfaceFormats.data()
+            ));
+        SBE::log->debug(msg);
+
+        // Get the number of presentation modes available for the surface
+        uint32_t presentModeCount = 0;
+        toLog<<"Getting presentation mode count for surface. Result: ";
+        toLog<<SBE::VkResultLookup(
+            vkGetPhysicalDeviceSurfacePresentModesKHR(
+                parent->getDevice(), 
+                surface, 
+                &presentModeCount, 
+                nullptr
+            ));
+        SBE::log->debug(msg);
+
+        // Get the array of available presentation modes for the surface
+        std::vector<VkPresentModeKHR> presentModes(presentModeCount);
+        toLog<<"Getting presentation modes supported by surface. Result: ";
+        toLog<<SBE::VkResultLookup(
+            vkGetPhysicalDeviceSurfacePresentModesKHR(
+                parent->getDevice(), 
+                surface, 
+                &presentModeCount, 
+                presentModes.data()
+            ));
+        SBE::log->debug(msg);
+
+        // Verify valid surface format exists for swapchain
+        if(surfaceFormats.size() == 1 && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
+        {
+            // swapchainFormat = { VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
+            swapchainFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
+            swapchainFormat.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        } 
+        else
+        {
+            bool found = false;
+            for (const auto& format : surfaceFormats)
+            {
+                if (format.format == VK_FORMAT_B8G8R8A8_UNORM && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) 
+                {
+                    swapchainFormat = format;
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                SBE::log->critical("Unable to find compatible surface format.");
+                abort();
+            }
+        }
+
+        // The default presentation mode is First In First Out
+        this->swapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+        // Unless mailbox presentation mode is supported
+        for (const auto& mode : presentModes) {
+            if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+                this->swapchainPresentMode = mode;
+                break;
+            }
+        }
+
+        // Get the extent of the swapchain
+        // IF THE RENDERABLE AREA CHANGES, THE EXTENT WILL TOO!
+        // WE WILL NEED TO RECREATE THE SWAPCHAIN WITH A NEW EXTENT IF THAT OCCURS!
+        VkExtent2D swapchainExtent;
+        swapchainExtent.width = width;
+        swapchainExtent.height = height;
+        // VkExtent2D swapchainExtent = surfaceCapabilities.currentExtent;
+        // if (surfaceCapabilities.currentExtent.width == UINT32_MAX) 
+        // {
+        //     swapchainExtent.width = std::max(surfaceCapabilities.minImageExtent.width,
+        //                                     std::min(surfaceCapabilities.maxImageExtent.width, swapchainExtent.width));
+        //     swapchainExtent.height = std::max(surfaceCapabilities.minImageExtent.height,
+        //                                     std::min(surfaceCapabilities.maxImageExtent.height, swapchainExtent.height));
+        // }
+
+        swapchainInfo = {};
+        swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        swapchainInfo.surface = surface;
+        swapchainInfo.minImageCount = surfaceCapabilities.minImageCount + 1;
+        swapchainInfo.imageFormat = swapchainFormat.format;
+        swapchainInfo.imageColorSpace = swapchainFormat.colorSpace;
+        swapchainInfo.imageExtent = swapchainExtent;
+        swapchainInfo.imageArrayLayers = 1;
+        swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+        // This should practically always be true, I think?
+        swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        uint32_t queueFamilyIndices[] = {(queues->getFamily()->getIndex())};
+
+        swapchainInfo.queueFamilyIndexCount = 1;
+        swapchainInfo.pQueueFamilyIndices = queueFamilyIndices;
+
+        swapchainInfo.preTransform = surfaceCapabilities.currentTransform;
+        swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        swapchainInfo.presentMode = swapchainPresentMode;
+        swapchainInfo.clipped = VK_TRUE;
+
+        // IF WE'RE RESIZING, I'M PRETTY SURE WE'LL WANT THIS TO BE DIFFERENT
+        // IT IS NOW :)
+        swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
+
+        // Create the swapchain
+        toLog<<"Attempting to create swapchain. Result: ";
+        toLog<<SBE::VkResultLookup(vkCreateSwapchainKHR(logicalDevice->getSelf(), &swapchainInfo, nullptr, &swapchain));
+        SBE::log->debug(msg);
+
+        for(unsigned int i = 0; i < swapchainFramebuffers.size(); i++)
+        {
+            vkDestroyFramebuffer(logicalDevice->getSelf(), swapchainFramebuffers[i], nullptr);
+        }
+        for(unsigned int i = 0; i < swapchainImageViews.size(); i++)
+        {
+            vkDestroyImageView(logicalDevice->getSelf(), swapchainImageViews[i], nullptr);
+        }
+        for(unsigned int i = 0; i < swapchainImages.size(); i++)
+        {
+            vkDestroyImage(logicalDevice->getSelf(), swapchainImages[i], nullptr);
+        }
+
+
+        // Query the number of images we should have in the swapchain
+        uint32_t imageCount = 0;
+        toLog<< "Attempting to get swapchain image count: ";
+        toLog<<SBE::VkResultLookup(
+            vkGetSwapchainImagesKHR(
+                logicalDevice->getSelf(), 
+                swapchain, 
+                &imageCount, 
+                nullptr
+            ));
+        toLog<<"\tSwapchain image count: "<<imageCount;
+        SBE::log->debug(msg);
+
+        // Resize the swapchainImages array to match the queried size
+        // And then attempt to get the actual swapchain images
+        swapchainImages.resize(imageCount);
+        toLog<< "Attempting to get swapchain images: ";
+        toLog<<SBE::VkResultLookup(
+            vkGetSwapchainImagesKHR(
+                logicalDevice->getSelf(),
+                swapchain,
+                &imageCount,
+                swapchainImages.data()
+            ));
+        SBE::log->debug(&toLog);
+
+        // Now that we have the images, we need to get the VkImageViews
+        // So resize the image view array...
+        // And then, per each image, create a view.
+        swapchainImageViews.resize(imageCount);
+        for(unsigned int i = 0; i < imageCount; i++)
+        {
+            VkImageViewCreateInfo viewCreateInfo = {};
+            viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewCreateInfo.image = swapchainImages[i];
+            viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewCreateInfo.format = swapchainFormat.format;
+            viewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            viewCreateInfo.subresourceRange.baseMipLevel = 0;
+            viewCreateInfo.subresourceRange.levelCount = 1;
+            viewCreateInfo.subresourceRange.baseArrayLayer = 0;
+            viewCreateInfo.subresourceRange.layerCount = 1;
+
+            toLog<<"Creating VkImageView for swapchain image #"<<i<<". Result: ";toLog<<SBE::VkResultLookup(
+                vkCreateImageView(
+                    logicalDevice->getSelf(), 
+                    &viewCreateInfo, 
+                    nullptr, 
+                    &swapchainImageViews.data()[i]
+                ));
+            SBE::log->debug(msg);
+        }
+
+        // Do the same for framebuffers now
+        swapchainFramebuffers.resize(imageCount);
+        for(unsigned int i = 0; i < imageCount; i++)
+        {
+            VkFramebufferCreateInfo framebufferCreateInfo = {};
+            framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebufferCreateInfo.renderPass = *renderPass;
+            framebufferCreateInfo.attachmentCount = 1;
+            framebufferCreateInfo.pAttachments = &swapchainImageViews.data()[i];
+            framebufferCreateInfo.width = swapchainExtent.width;
+            framebufferCreateInfo.height = swapchainExtent.height;
+            framebufferCreateInfo.layers = 1;
+
+            toLog<<"Creating VkFramebuffer for swapchain image #"<<i<<": ";
+            toLog<<SBE::VkResultLookup(
+                vkCreateFramebuffer(
+                    logicalDevice->getSelf(),
+                    &framebufferCreateInfo,
+                    nullptr,
+                    &swapchainFramebuffers.data()[i]
+                ));
+            SBE::log->debug(msg);
+        }
     }
 };
