@@ -17,6 +17,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
 #include "glfw/include/GLFW/glfw3.h"
+#include <signal.h>
+#include <pthread.h>
 
 #include <iostream>
 
@@ -43,7 +45,7 @@ SBE::LogHandle* SBE::log;
 #include "vulkan.hpp"
 
 #include "vulkan/vulkan_environment.hpp"
-
+SBE::VulkanEnvironment* SBE::windowEnvironment;
 
 //A short test driver to determine window name and whether to boot Catch.
 std::string testSetup(int argc, char* argv[], std::string possibleName)
@@ -168,10 +170,21 @@ int main(int argc, char* argv[])
     //----------------------------------
 
 
-    SBE::VulkanEnvironment windowEnvironment = SBE::VulkanEnvironment(gameName, configs.getConfig("./assets/config/graphicsOptions.xml"));
+    SBE::windowEnvironment = new SBE::VulkanEnvironment(gameName, configs.getConfig("./assets/config/graphicsOptions.xml"));
 
     SBE::log->info("Shutting down...");
     std::cout<<std::endl;
-    abort();
-    return 1;
+    
+    // We have something that is hanging and preventing termination of the program upon a return.
+    // This shouldn't happen since we're using jthreads; all jthreads should automatically join when
+    // the main thread ends. But, that's not happening for some reason. So instead we're doing this;
+    // We're not returning a value, but instead manually calling a termination of the main thread 
+    // through the GNU C library / Windows threading header.
+    #ifdef WINDOWS
+        signal(SIGTERM, SIG_DFL);
+    #else
+        pthread_kill(pthread_self(), SIGTERM);
+    #endif
+    
+    return 0;
 }

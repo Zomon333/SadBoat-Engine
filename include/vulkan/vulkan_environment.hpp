@@ -26,6 +26,8 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 
 #include "utilities/configs/config.hpp"
 
+#include "events/recurring_event.hpp"
+
 #include "vulkan/instance.hpp"
 #include "vulkan/extension_collection.hpp"
 #include "vulkan/layer_collection.hpp"
@@ -43,8 +45,9 @@ namespace SBE
     class VulkanEnvironment
     {
     private:
-
         std::queue<std::any> deletionQueue;
+        std::mutex resizingWindow;
+        SBE::RecurringEvent<int>* renderLoop;
 
         Config* deviceConfig;
         ExtensionCollection* extensions;
@@ -70,8 +73,6 @@ namespace SBE
 
         Swapchain* swapchain;
         Renderpass* renderPass;
-
-
     public:
         VulkanEnvironment(std::string gameName, Config* deviceConfig = nullptr);
 
@@ -94,13 +95,12 @@ namespace SBE
 
         GLFWwindow* getWindow();
         VkSurfaceKHR* getSurface();
-        void setupSwapchain();
-        uint32_t getSwapchainIndex();
+        std::mutex* getResizing();
 
-        void test();
-
-        void setupRenderpass();
+        void handleResize(GLFWwindow* window, int width, int height);
 
     };
+
+    extern VulkanEnvironment* windowEnvironment;
 };
 #endif
