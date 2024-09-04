@@ -188,7 +188,7 @@ namespace SBE
                 int result = 0;
 
                 //Loop continuously
-                while(true)
+                while(stopSignal.wait_for(std::chrono::microseconds(1)) != std::future_status::ready)
                 {
                     //Run a same-threaded defer of the stored function, and save it's result
                     if(this->getSuppressed()==false)
