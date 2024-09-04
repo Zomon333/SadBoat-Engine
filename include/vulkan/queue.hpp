@@ -26,6 +26,7 @@ namespace SBE
         int queueNumber;
 
         VkQueue self;
+        VkFence fence;
         std::mutex queueSync;
 
     public:
@@ -50,6 +51,7 @@ namespace SBE
         int getQueueNumber();
 
         VkQueue getSelf();
+        VkFence* getFence();
 
         // Operators
         //----------------------------------

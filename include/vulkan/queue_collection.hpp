@@ -53,6 +53,8 @@ namespace SBE
 
         Queue *getQueue(int i);
 
+        Queue* getFree();
+
         // Operators
         //----------------------------------
         Queue *operator[](int rhs);

@@ -75,6 +75,21 @@ namespace SBE
         return queues.at(i);
     }
 
+    Queue* QueueCollection::getFree()
+    {
+        while(true)
+        {
+            for(unsigned int i = 0; i < queues.size(); i++)
+            {
+                if (vkGetFenceStatus(parent->getSelf(), *(queues[i]->getFence())) == VK_NOT_READY)
+                {
+                    return queues[i];
+                }
+            }
+        }
+        
+    }
+
     // Operators
     //----------------------------------
     Queue *QueueCollection::operator[](int rhs)

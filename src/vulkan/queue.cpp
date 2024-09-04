@@ -16,6 +16,7 @@ Copyright 2024 Dagan Poulin, Justice Guillory
 #include <mutex>
 
 #include "utilities/logging/startup_logger.hpp"
+#include "vulkan/vulkan_result_lookup.hpp"
 #include "vulkan/logical_device.hpp"
 #include "vulkan/queue_family.hpp"
 #include "vulkan/queue.hpp"
@@ -31,6 +32,18 @@ namespace SBE
         this->queueNumber = queueNumber;
 
         this->log = logger->allocateHandle(0b11111);
+
+        VkFenceCreateInfo fenceInfo;
+        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fenceInfo.pNext = nullptr;
+        fenceInfo.flags = 0;
+
+        std::stringstream toLog;
+        auto msg = &toLog;
+        
+        toLog<<"Attempting creation of VkFence for queue # "<<queueNumber<<": ";
+        toLog<<SBE::VkResultLookup(vkCreateFence(parent->getSelf(), &fenceInfo, nullptr, &fence));
+        SBE::log->debug(msg);        
 
         vkGetDeviceQueue(parent->getSelf(), family->getIndex(), queueNumber, &self);
     }
@@ -75,6 +88,11 @@ namespace SBE
     VkQueue Queue::getSelf()
     {
         return self;
+    }
+
+    VkFence* Queue::getFence()
+    {
+        return &fence;
     }
 
     // Operators
